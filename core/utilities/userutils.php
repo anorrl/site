@@ -229,7 +229,6 @@
 				"Thinking of downloading ANORRL..." => "/download/index.php",
 				"Browsing games on mobile"		    => "/mobile/games.php",
 				"Looking at their friends"			=> "/my/friends.php",
-				"Admin stuff possibly"				=> "/RENDERALL.php",
 				"Looking at <b>THE</b> contributors"=> "/info/credits.php",
 				"Home (on mobile)"					=> "/mobile/home.php",
 			];

@@ -80,11 +80,7 @@
 							<tr>
 								<?php CreateProfile(
 									22,
-									"Created splash screen #19 for the studio and also with Julianne, made Amberly's apartment which is the first non-grace game to get 100 visits!"
-								); ?>
-								<?php CreateProfile(
-									30,
-									"Created Amberly's apartment with Gamma!!!!"
+									"Created splash screen #19 for the studio!"
 								); ?>
 								<?php CreateProfile(
 									17,
