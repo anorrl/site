@@ -29,7 +29,7 @@
 				if(!isset($_GET['dontcall'])) {
 					if($row['server_year'] == "2016") {
 						$data = json_encode([
-							"pid" => $row['server_pid']
+							"pid" => intval($row['server_pid'])
 						]);
 
 						$ch = curl_init("http://$arbiter_ip/api/v1/gameserver/kill");
@@ -44,6 +44,12 @@
 						$response = curl_exec($ch);
 						$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 						curl_close($ch);
+						
+						echo $data;
+
+						$stmt_createnewserver = $con->prepare("DELETE FROM `active_servers` WHERE `server_jobid` = ?;");
+						$stmt_createnewserver->bind_param("s", $_GET['jobID']);
+						$stmt_createnewserver->execute();
 
 						if($code != 200) {
 							die(http_response_code(503));
