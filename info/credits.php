@@ -80,22 +80,18 @@
 							<tr>
 								<?php CreateProfile(
 									22,
-									"Created splash screen #19 for the studio and also with Julianne, made Amberly's apartment which is the first non-grace game to get 100 visits!"
-								); ?>
-								<?php CreateProfile(
-									30,
-									"Created Amberly's apartment with Gamma!!!!"
+									"Created splash screen #19 for the studio!"
 								); ?>
 								<?php CreateProfile(
 									17,
 									"Created splash screen #18 for the studio!"
 								); ?>
-							</tr>
-							<tr>
 								<?php CreateProfile(
 									46,
 									"Created most of the client icons that aren't 2016 !!!!!"
 								); ?>
+							</tr>
+							<tr>
 								<?php CreateProfile(
 									5,
 									"Created the emote music for dywec, californiagurls and caramelldansen!!!"
@@ -104,11 +100,15 @@
 									48,
 									"Created the badge icons you see on the site!"
 								); ?>
-							</tr>
-							<tr>
 								<?php CreateProfile(
 									72,
 									"Created the topbar icons you see in the client!"
+								); ?>
+							</tr>
+							<tr>
+								<?php CreateProfile(
+									60,
+									"Contributed to the website's development!"
 								); ?>
 							</tr>
 						</table>

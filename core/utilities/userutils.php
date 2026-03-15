@@ -229,7 +229,6 @@
 				"Thinking of downloading ANORRL..." => "/download/index.php",
 				"Browsing games on mobile"		    => "/mobile/games.php",
 				"Looking at their friends"			=> "/my/friends.php",
-				"Admin stuff possibly"				=> "/RENDERALL.php",
 				"Looking at <b>THE</b> contributors"=> "/info/credits.php",
 				"Home (on mobile)"					=> "/mobile/home.php",
 			];
@@ -241,7 +240,7 @@
 				"/core/gamescripts/"
 			];
 
-			if($user != null && $user->id != 1) {
+			if($user != null) {
 				if(!in_array($_SERVER['SCRIPT_NAME'], $pages) && !self::StringContainsFromArray($dont_catalog_ever, $_SERVER['SCRIPT_NAME']) && !str_starts_with($_SERVER['SCRIPT_NAME'], "/Admi/")) {
 					die($_SERVER['SCRIPT_NAME']);
 				} else {

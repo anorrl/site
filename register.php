@@ -100,6 +100,7 @@
 				height: 21px;
 				background-blend-mode: difference;
 				background-image: linear-gradient(#ffb300,#ffb300),url(/images/header/navbar.jpg);
+				overflow: hidden;
 			}
 		</style>
 	</head>

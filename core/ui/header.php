@@ -8,6 +8,14 @@
 	$header_user_settings = UserSettings::Get($header_check_user);
 
 	// 99999999 max
+	//very true -skyler
+	
+	$signsplashes = [
+		"Thank you for trying this!",
+		"Thank you for using ANORRL!",
+		"Thank you for playing!",
+		"Thank you for your support!"
+	];
 	
 	function getImagesList() {
 		$array = [
@@ -73,6 +81,7 @@
 		$splashes = file($_SERVER["DOCUMENT_ROOT"]."/core/splashes.txt");
 		return $splashes[array_rand($splashes)];
 	}
+	$randomsignsplash = $signsplashes[array_rand($signsplashes)];
 ?>
 <?php if($badAppled): ?>
 <style>
@@ -117,7 +126,7 @@
 			<span title="Your pending requests"><a href="/my/friends"><img src="/images/icons/messages<?= $pendingreqscount == 0 ? "" : "_notify" ?>.png"> <?= $pendingreqscount ?></a></span> <span class="Separator">|</span>
 			<span title="Your friends"><a href="/my/friends"><img src="/images/icons/friends.png"> <?= $header_check_user->GetFriendsCount() ?></a></span>
 			<hr>
-			<span title="Message" style="width:auto">Thank you for trying this!<a href="/images/anorrl-smile.png" target="_blank" style="display: block;"><img src="/images/anorrl-smile.png" style="width: 42px;margin: 2px 0px;"></a></span>
+			<span title="Message" style="width:auto"><?= $randomsignsplash ?><a href="/images/anorrl-smile.png" target="_blank" style="display: block;"><img src="/images/anorrl-smile.png" style="width: 42px;margin: 2px 0px;"></a></span>
 		</div>
 	</div>
 	<a id="LogoutSign" href="javascript:ANORRL.Logout()">LOGOUT</a>
