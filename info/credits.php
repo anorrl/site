@@ -105,6 +105,12 @@
 									"Created the topbar icons you see in the client!"
 								); ?>
 							</tr>
+							<tr>
+								<?php CreateProfile(
+									60,
+									"Contributed to the website's development!"
+								); ?>
+							</tr>
 						</table>
 						<hr>
 						<p>But these aren't the only ones, no.</p>

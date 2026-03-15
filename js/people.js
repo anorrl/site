@@ -91,18 +91,25 @@ ANORRL.People = {
 		}
 
 		var feedscontainer = $("#UsersDataTable");
-
-		feedscontainer.find("tbody").children().each(function() {
+		var tbody = feedscontainer.find("tbody");
+		
+		tbody.children().each(function() {
 			if(!$(this).html().includes("</th>"))
 				$(this).remove();
 		});
 
 		var pagercontainer = $("#Users #UsersNavLinks");
+		var fetchingRow = $("<tr></tr>");
+		var fetchingCell = $("<td colspan='4' style='text-align:center;padding:20px;font-weight:bold;'></td>");
+		fetchingCell.text("Loading vandals...");
+		fetchingRow.append(fetchingCell);
+		tbody.append(fetchingRow);;
 		
 		var backPager = pagercontainer.find("#BackPager");
 		var nextPager = pagercontainer.find("#NextPager");
 
 		$.get("/api/people", {q: query, p : page}, function(data) {
+			fetchingRow.remove();
 			if(pagercontainer.css("display") == "none") {
 				pagercontainer.css("display", "block");
 			}

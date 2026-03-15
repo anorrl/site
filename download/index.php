@@ -15,7 +15,11 @@
 		"Smells like malware in here...",
 		"Will be detected by all antiviruses (I'm coming for you.)",
 		"Download RIGHT NOW!",
-		"Now with 100% the fun or something"
+		"Now with 100% the fun or something",
+		"ANORRL FREE DOWNLOAD 100% 2026 UPDATED HAPPYMOD!",
+		"Better than anything else",
+		"Defender crying in the corner guranteed!",
+		"0.00$, Awesome deal!"
 	];
 
 	$randomclientsplash = $randomclientsplashes[array_rand($randomclientsplashes)];
