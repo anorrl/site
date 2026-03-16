@@ -57,7 +57,7 @@
 		<?php include $_SERVER['DOCUMENT_ROOT'].'/core/ui/header.php'; ?>
 			<div id="Body">
 				<div id="BodyContainer">
-					<h2 style="margin: 0px"><?php echo $randomcatalogsplash ?></h2>
+					<h2 style="margin: 0px"><?= $randomcatalogsplash ?></h2>
 					<div id="CatalogContainer">
 						<div id="OptionsPanel">
 							<div id="CategoriesChooser">
