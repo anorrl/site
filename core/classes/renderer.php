@@ -28,8 +28,8 @@
 			self::UpdateAndSetConfig();
 			$arb_ip = self::$arbiter_ip;
 			$arb_token = self::$arbiter_token;
-			$ch = curl_init("http://$arb_ip:7000" . $endpoint);//37.114.46.52
-			error_log("http://$arb_ip:7000" . $endpoint);
+			$ch = curl_init("http://$arb_ip" . $endpoint);//37.114.46.52
+			error_log("http://$arb_ip" . $endpoint);
 
 			curl_setopt_array($ch, [
 				CURLOPT_RETURNTRANSFER => true,

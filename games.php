@@ -30,7 +30,7 @@
 		
 		<script src="/js/core/jquery.js"></script>
 		<script src="/js/main.js?t=1771413807"></script>
-		<script src="/js/games.js?t=1771413807"></script>
+		<script src="/js/games.js?t=1773595203"></script>
 	</head>
 	<body>
 		<div class="Game" template>

@@ -29,10 +29,10 @@
 				if(!isset($_GET['dontcall'])) {
 					if($row['server_year'] == "2016") {
 						$data = json_encode([
-							"pid" => $row['server_pid']
+							"pid" => intval($row['server_pid'])
 						]);
 
-						$ch = curl_init("http://$arbiter_ip:7000/api/v1/gameserver/kill");
+						$ch = curl_init("http://$arbiter_ip/api/v1/gameserver/kill");
 						curl_setopt($ch, CURLOPT_HTTPHEADER, [
 							"Authorization: Bearer $arbiter_token",
 							"Content-Type: application/json",

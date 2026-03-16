@@ -1,0 +1,48 @@
+h2, h4 {
+	margin: 0;
+}
+
+h4 {
+	margin-top: 5px;
+}
+
+h1 {
+	background: none;
+	text-align: center;
+	padding: 0;
+}
+
+#ErrorContainer {
+	border: 2px solid black;
+	background: #222;
+	padding: 3px;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#ErrorContainer > table {
+	width: 100%;
+}
+
+#ErrorContainer > table td {
+	vertical-align: top;
+}
+
+#ErrorContainer .buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	margin-top: 10px;
+    gap: 10px;
+}
+
+#ErrorContainer #HomeSubmit, #ErrorContainer #BackSubmit {
+	border: 2px solid black;
+	background: black;
+	color: white;
+	padding: 4px 8px;
+	font-weight: bold;
+	font-family: punk;
+}

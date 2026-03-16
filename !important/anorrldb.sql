@@ -407,7 +407,8 @@ CREATE TABLE `users_settings` (
   `settings_teto` int(1) NOT NULL DEFAULT 1,
   `settings_emotesounds` int(1) NOT NULL DEFAULT 1,
   `settings_accessbility` int(1) NOT NULL DEFAULT 0,
-  `settings_headshots` int(1) NOT NULL DEFAULT 1
+  `settings_headshots` int(1) NOT NULL DEFAULT 1,
+  `settings_nightbg` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

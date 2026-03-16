@@ -187,7 +187,7 @@
 							"TeamCreate" => false
 						]);
 
-						$ch = curl_init("http://$arbiter_ip:7000/api/v1/gameserver");
+						$ch = curl_init("http://$arbiter_ip/api/v1/gameserver");
 
 						curl_setopt($ch, CURLOPT_HTTPHEADER, [
 							"Authorization: Bearer $arbiter_token",
@@ -308,7 +308,7 @@
 							"TeamCreate" => true
 						]);
 
-						$ch = curl_init("http://$arbiter_ip:7000/api/v1/gameserver");
+						$ch = curl_init("http://$arbiter_ip/api/v1/gameserver");
 
 						curl_setopt($ch, CURLOPT_HTTPHEADER, [
 							"Authorization: Bearer $arbiter_token",
@@ -445,7 +445,7 @@
 							"TeamCreate" => false
 						]);
 
-						$ch = curl_init("http://$arbiter_ip:7000/api/v1/gameserver");
+						$ch = curl_init("http://$arbiter_ip/api/v1/gameserver");
 
 						curl_setopt($ch, CURLOPT_HTTPHEADER, [
 							"Authorization: Bearer $arbiter_token",

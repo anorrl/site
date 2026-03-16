@@ -1297,6 +1297,7 @@ EOT;
 		public bool $emotesounds_enabled;
 		public bool $accessibility_enabled;
 		public bool $headshots_enabled;
+		public bool $nightbg_enabled;
 
 		public static function Get(User|null $user = null) {
 			if($user == null) {
@@ -1307,6 +1308,7 @@ EOT;
 					"settings_emotesounds" => 1,
 					"settings_accessbility" => 0,
 					"settings_headshots" => 0,
+					"settings_nightbg" => 0,
 				]);
 			}
 
@@ -1333,6 +1335,7 @@ EOT;
 			$this->emotesounds_enabled = boolval($rowdata['settings_emotesounds']);
 			$this->accessibility_enabled = boolval($rowdata['settings_accessbility']);
 			$this->headshots_enabled = boolval($rowdata['settings_headshots']);
+			$this->nightbg_enabled = boolval($rowdata['settings_nightbg']);
 		}
 
 		function SetRandomsEnabled(bool $value) {
@@ -1353,6 +1356,16 @@ EOT;
 			$stmt_updatesetting->bind_param('ii', $stmt_value, $this->user->id);
 			$stmt_updatesetting->execute();
 			$this->teto_enabled = $value;
+		}
+
+		function SetNightBGEnabled(bool $value) {
+			$stmt_value = $value ? 1 : 0;
+			
+			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
+			$stmt_updatesetting = $con->prepare("UPDATE `users_settings` SET `settings_nightbg` = ? WHERE `settings_userid` = ?;");
+			$stmt_updatesetting->bind_param('ii', $stmt_value, $this->user->id);
+			$stmt_updatesetting->execute();
+			$this->nightbg_enabled = $value;
 		}
 
 		function SetEmoteSoundsEnabled(bool $value) {

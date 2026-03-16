@@ -134,8 +134,13 @@ ANORRL.Games = {
 					if(asset['original'] && !original) {
 						template.find("#OriginalArea").css("display", "block");
 					}
-
-					template.find("#YearArea > span").html(asset['year']);
+					
+					if(asset['year'] == "2013") {
+						template.find("#YearArea > span").html(asset['year']);
+					} else {
+						template.find("#YearArea").remove();
+					}
+					
 					
 					template.find("#FavouritesArea > span").html(asset['favouritescount']);
 

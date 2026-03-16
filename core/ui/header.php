@@ -90,6 +90,13 @@
 	}
 </style>
 <?php endif ?>
+<?php if($header_user_settings->nightbg_enabled): ?>
+<style>
+	body {
+		background: url('/images/bkg_night.png') !important;
+	}
+</style>
+<?php endif ?>
 <?php if($header_user_settings->randoms_enabled): ?>
 <img src="/images/randoms/<?= $rand_pic ?>.png" style="position: fixed;bottom: 0px;left: 0px;width: 250px;z-index: 9999;">
 <?php endif ?>

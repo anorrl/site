@@ -96,7 +96,7 @@ game:GetService("Players").PlayerAdded:connect(function(player)
 	shouldCountDown = false
 
 	if jobID ~= nil and url ~= nil and access ~= nil then
-		local playerResult = game:HttpGet(url .. "/api/a_gameservers/validateplayer?jobID="..jobID .. "&access=" .. access .."&userID=" .. tostring(player.userId), true)
+		local playerResult = game:HttpGet(url .. "/api/gameservers/validateplayer?jobID="..jobID .. "&access=" .. access .."&userID=" .. tostring(player.userId), true)
 
 		if playerResult ~= "OK" then
 			player:Kick("Hey wait something ain't right here...")
@@ -113,11 +113,11 @@ game:GetService("Players").PlayerRemoving:connect(function(player)
 	print("Player " .. player.userId .. " leaving")	
 
 	if jobID ~= nil and url ~= nil and access ~= nil then
-		game:HttpGet(url .. "/api/a_gameservers/removeplayer?jobID="..jobID .. "&access="..access.."&userID=" .. tostring(player.userId))
+		game:HttpGet(url .. "/api/gameservers/removeplayer?jobID="..jobID .. "&access="..access.."&userID=" .. tostring(player.userId))
 
 		if #game:GetService("Players"):GetPlayers() == 0 then
 			print("CLOSING THE SERVER.")
-			game:HttpGet(url .. "/api/a_gameservers/close?jobID="..jobID .. "&access="..access)
+			game:HttpGet(url .. "/api/gameservers/close?jobID="..jobID .. "&access="..access)
 		end
 	end
 end)
@@ -148,7 +148,7 @@ if placeId and url and access and jobID then
 
 			if shouldCountDown and countdownTimer <= 0 then
 				print("CLOSING THE SERVER.")
-				game:HttpGet(url .. "/api/a_gameservers/close?jobID="..jobID .. "&access="..access)
+				game:HttpGet(url .. "/api/gameservers/close?jobID="..jobID .. "&access="..access)
 				break
 			end
 		else

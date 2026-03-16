@@ -6,6 +6,5 @@
         $key = base64_decode($_GET['suggest']);
 
         UserUtils::SetCookies($key);
-		echo "true";
     }
 ?>

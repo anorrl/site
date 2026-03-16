@@ -62,12 +62,14 @@
 		$emotesounds_enabled = isset($_POST['ANORRL$Update$Settings$EmoteSoundsEnabled']);
 		$accessibility_enabled = isset($_POST['ANORRL$Update$Settings$AccessibilityEnabled']);
 		$headshots_enabled = isset($_POST['ANORRL$Update$Settings$HeadshotsEnabled']);
+		$nightbg_enabled = isset($_POST['ANORRL$Update$Settings$NightBGEnabled']);
 
 		$settings->SetRandomsEnabled($randoms_enabled);
 		$settings->SetTetoEnabled($teto_enabled);
 		$settings->SetEmoteSoundsEnabled($emotesounds_enabled);
 		$settings->SetAccessibilityEnabled($accessibility_enabled);
 		$settings->SetHeadshotsEnabled($headshots_enabled);
+		$settings->SetNightBGEnabled($nightbg_enabled);
 
 		die(header("Location: /my/profile"));
 	}
@@ -158,6 +160,12 @@
 										<td>Headshots</td>
 										<td>
 											<input name="ANORRL$Update$Settings$HeadshotsEnabled" type="checkbox" <?php if($settings->headshots_enabled): ?>checked<?php endif ?>>
+										</td>
+									</tr>
+									<tr>
+										<td>Night Background</td>
+										<td>
+											<input name="ANORRL$Update$Settings$NightBGEnabled" type="checkbox" <?php if($settings->nightbg_enabled): ?>checked<?php endif ?>>
 										</td>
 									</tr>
 								</table>
