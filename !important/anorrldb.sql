@@ -153,7 +153,8 @@ CREATE TABLE `asset_places` (
   `place_currently_playing` int(11) NOT NULL DEFAULT 0,
   `place_teamcreate_enabled` int(1) NOT NULL DEFAULT 0,
   `place_original` int(1) NOT NULL DEFAULT 0,
-  `place_gears_enabled` int(1) NOT NULL DEFAULT 0
+  `place_gears_enabled` int(1) NOT NULL DEFAULT 0,
+  `place_youtube_id` VARCHAR(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
