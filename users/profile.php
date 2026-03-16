@@ -338,7 +338,7 @@
 					</div>
 					<div id="CommentsContainer" style="margin: 10px">
 						<?php if($user == null): ?>
-						<h3>Comments</h3>
+						<h3 style="margin-bottom: 0px">Comments</h3>
 						<div id="CommentSection">
 							<div id="CommentsDisabled">You need to be logged in to comment on this profile!</div>
 						</div>
@@ -350,7 +350,7 @@
 							<?php endif ?>
 							<form method="POST">
 								<h4 style="margin: 0; letter-spacing: 5px;">Post a comment or something</h4>
-								<textarea placeholder="Write a wonderful comment about this place!" name="ANORRL$Comment$Post$Contents" maxlength="256" minlength="4"></textarea>
+								<textarea placeholder="Write a nice comment about <?= $get_user->name ?>!" name="ANORRL$Comment$Post$Contents" maxlength="256" minlength="4"></textarea>
 								<input type="submit" value="Submit!" name="ANORRL$Comment$Post$Submit">
 							</form>
 						</div>
