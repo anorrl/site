@@ -7,6 +7,16 @@
 	if($user == null) {
 		die(header("Location: /login"));
 	}
+	// very unfortunate skid situation, sorry skylerclock
+	$randomcatalogsplashes = [
+		"Teh Catalog",
+		"Buy Somethin' Will Ya!", // earthbound reference
+		"smoke shop",
+		"Everything is free here somehow",
+		"BUY MY MERCH"
+	];
+
+	$randomvandalsplash = $randomvandalsplashes[array_rand($randomvandalsplashes)];
 ?>
 <!DOCTYPE html>
 <html>
@@ -47,7 +57,7 @@
 		<?php include $_SERVER['DOCUMENT_ROOT'].'/core/ui/header.php'; ?>
 			<div id="Body">
 				<div id="BodyContainer">
-					<h2 style="margin: 0px">Catalog</h2>
+					<h2 style="margin: 0px"><?php $randomcatalogsplash ?></h2>
 					<div id="CatalogContainer">
 						<div id="OptionsPanel">
 							<div id="CategoriesChooser">
