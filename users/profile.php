@@ -116,7 +116,7 @@
 				$("#bgm")[0].play();
 			})
 
-			$("#bgm")[0].volume = 0.25;
+			$("#bgm")[0].volume = 0.50;
 			$("#MusicPlayer #VolumeBar").val($("#bgm")[0].volume);
 
 			$("#bgm").on("play", function() {
