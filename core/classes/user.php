@@ -367,171 +367,12 @@
 			}
 		}
 
-		function GetAllOwnedAssetsOfTypePagedExcluding(AssetType $type, array $excludedids = [], int $pagenum, int $count): array {
-			if(count($excludedids) == 0) {
-				return $this->GetAllOwnedAssetsOfTypePaged($type, $pagenum, $count);
-			}
-
-			$processedids = "AND `ta_asset` NOT IN (";
-			foreach($excludedids as $id) {
-				$processedids .= $id.",";
-			}
-			$processedids = substr($processedids, 0, strlen($processedids)-1);
-			$processedids .= ")";
-
-			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
-			$stmt_getuser = $con->prepare("SELECT * FROM `transactions` WHERE `ta_assettype` = ? AND `ta_userid` = ? $processedids ORDER BY `ta_date` DESC LIMIT ?, ?");
-			$page = (($pagenum-1)*$count);
-			$ordinal = $type->ordinal();
-			
-			$stmt_getuser->bind_param('iiii', $ordinal, $this->id, $page, $count);
-			$stmt_getuser->execute();
-
-			$result = $stmt_getuser->get_result();
-
-			$result_array = [];
-
-
-			if($result->num_rows != 0) {
-				while($row = $result->fetch_assoc()) {
-					$asset = Asset::FromID($row['ta_asset']);
-					if($asset != null) {
-						if($asset->type == $type) {
-							array_push($result_array, $asset);
-						}
-					} else {
-						$stmt = $con->prepare('DELETE FROM `transactions` WHERE `ta_asset` = ?');
-						$stmt -> bind_param("i", $row['ta_asset']);
-						$stmt->execute();
-					}
-					
-				}
-				return $result_array;
-			}
-
-			return $result_array;
-		}
-
-		function GetAllOwnedAssetsOfTypeExcluding(AssetType $type, array $excludedids = []): array {
-			if(count($excludedids) == 0) {
-				return $this->GetAllOwnedAssetsOfType($type);
-			}
-
-			$processedids = "AND `ta_asset` NOT IN (";
-			foreach($excludedids as $id) {
-				$processedids .= $id.",";
-			}
-			$processedids = substr($processedids, 0, strlen($processedids)-1);
-			$processedids .= ")";
-
-			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
-			$stmt_getuser = $con->prepare("SELECT * FROM `transactions` WHERE `ta_assettype` = ? AND `ta_userid` = ? $processedids ORDER BY `ta_date` DESC");
-			$ordinal = $type->ordinal();
-			$stmt_getuser->bind_param('ii', $ordinal, $this->id);
-			$stmt_getuser->execute();
-
-			$result = $stmt_getuser->get_result();
-
-			$result_array = [];
-			
-			if($result->num_rows != 0) {
-				while($row = $result->fetch_assoc()) {
-					$asset = Asset::FromID($row['ta_asset']);
-					if($asset != null) {
-						array_push($result_array, $asset);
-					} else {
-						$stmt = $con->prepare('DELETE FROM `transactions` WHERE `ta_asset` = ?');
-						$stmt -> bind_param("i", $row['ta_asset']);
-						$stmt->execute();
-					}
-				}
-			}
-
-			return $result_array;
-		}
-
-		function GetAllOwnedAssetsOfTypePaged(AssetType $type, int $pagenum, int $count, bool $owned = false): array {
-			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
-
-			if($owned) {
-				$stmt_getuser = $con->prepare("SELECT * FROM `transactions` WHERE `ta_assettype` = ? AND `ta_userid` = ? AND `ta_assetcreator` = ? ORDER BY `ta_date` DESC LIMIT ?, ?");
-				$page = (($pagenum-1)*$count);
-				$ordinal = $type->ordinal();
-				$stmt_getuser->bind_param('iiiii', $ordinal, $this->id, $this->id, $page, $count);
-			} else {
-				$stmt_getuser = $con->prepare("SELECT * FROM `transactions` WHERE `ta_assettype` = ? AND `ta_userid` = ? ORDER BY `ta_date` DESC LIMIT ?, ?");
-				$page = (($pagenum-1)*$count);
-				$ordinal = $type->ordinal();
-				$stmt_getuser->bind_param('iiii', $ordinal, $this->id, $page, $count);
-			}
-
-			
-			$stmt_getuser->execute();
-
-			$result = $stmt_getuser->get_result();
-
-			$result_array = [];
-
-
-			if($result->num_rows != 0) {
-				while($row = $result->fetch_assoc()) {
-					$asset = Asset::FromID($row['ta_asset']);
-					if($asset != null) {
-						array_push($result_array, $asset);
-					} else {
-						$stmt = $con->prepare('DELETE FROM `transactions` WHERE `ta_asset` = ?');
-						$stmt -> bind_param("i", $row['ta_asset']);
-						$stmt->execute();
-					}
-				}
-				return $result_array;
-			}
-
-			return $result_array;
-		}
-
-		function GetAllOwnedAssetsOfType(AssetType $type, bool $showAll = true, bool $owned = false): array {
-			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
-			
-			if($owned) {
-				$stmt_getuser = $con->prepare("SELECT * FROM `transactions` WHERE `ta_assettype` = ? AND `ta_userid` = ? AND `ta_assetcreator` = ? ORDER BY `ta_date` DESC");
-				$ordinal = $type->ordinal();
-				$stmt_getuser->bind_param('iii', $ordinal, $this->id, $this->id);
-			} else {
-				$stmt_getuser = $con->prepare("SELECT * FROM `transactions` WHERE `ta_assettype` = ? AND `ta_userid` = ? ORDER BY `ta_date` DESC");
-				$ordinal = $type->ordinal();
-				$stmt_getuser->bind_param('ii', $ordinal, $this->id);
-			}
-			
-			$stmt_getuser->execute();
-
-			$result = $stmt_getuser->get_result();
-
-			$result_array = [];
-			
-			if($result->num_rows != 0) {
-				while($row = $result->fetch_assoc()) {
-					$asset = Asset::FromID($row['ta_asset']);
-					if($asset == null) {
-						$stmt = $con->prepare('DELETE FROM `transactions` WHERE `ta_asset` = ?');
-						$stmt -> bind_param("i", $row['ta_asset']);
-						$stmt->execute();
-					} else {
-						if($asset->public || $showAll) {
-							array_push($result_array, $asset);
-						}
-						
-					}
-					
-				}
-			}
-
-			return $result_array;
-		}
-
 		/**
-		 * TODO: Implement and remove the other shitty functions.
-		 * @param AssetType|null $type
+		 * This is a catch all function to grab the user's owned assets.
+		 * 
+		 * Should be easier to do shit now...
+		 * 
+		 * @param AssetType $type
 		 * @param string $query
 		 * @param bool $creator_only
 		 * @param array $excludedids
@@ -539,8 +380,120 @@
 		 * @param int $count
 		 * @return void
 		 */
-		function GetOwnedAssets(AssetType|null $type = null, string $query = "", bool $creator_only = false, array $excludedids = [], int $page = -1, int $count = -1): array {
+		function GetOwnedAssets(AssetType $type, string $query = "", bool $creator_only = false, array $excludedids = [], int $page = -1, int $count = -1): array {
+			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
+		
+			$sql_assettype = $type->ordinal();
+			$sql_query = "%$query%";
+
+			$sql_extra = "";
+
+			// this could DEF be done better.
+			if(count($excludedids) > 0) {
+				$processedids = "AND `asset_id` NOT IN (";
+				foreach($excludedids as $id) {
+					$processedids .= $id.",";
+				}
+				$processedids = substr($processedids, 0, strlen($processedids)-1);
+				$processedids .= ")";
+
+				$sql_extra = $processedids;
+			}
+
+			if($creator_only) {
+				$sql_extra .= " AND `ta_creator` = ?";
+			}
+			
+			$sql = "SELECT assets.* FROM `transactions`, `assets` WHERE `transactions`.`ta_asset` = `assets`.`asset_id` AND `ta_userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `ta_date` DESC";
+
+			if($page <= -1 || $count <= 0) {
+				$stmt_getassets = $con->prepare("$sql");
+				
+				if($creator_only) {
+					$stmt_getassets->bind_param('iisi', $this->id, $sql_assettype, $sql_query, $this->id);
+				} else {
+					$stmt_getassets->bind_param('ii', $this->id, $sql_assettype);
+				}
+			} else {
+				$sql_page = (($page-1)*$count);
+				$stmt_getassets = $con->prepare("$sql LIMIT ?, ?");
+				
+				if($creator_only) {
+					$stmt_getassets->bind_param('iisiii', $this->id, $sql_assettype, $sql_query, $this->id, $sql_page, $count);
+				} else {
+					$stmt_getassets->bind_param('iisii', $this->id, $sql_assettype, $sql_query, $sql_page, $count);
+				}
+			}
+
+			$stmt_getassets->execute();
+
+			$result = $stmt_getassets->get_result();
+
+			$result_array = [];
+
+			if($result->num_rows != 0) {
+				while($row = $result->fetch_assoc()) {
+					array_push($result_array, Asset::FromID($row['asset_id']));
+				}
+				return $result_array;
+			}
+
 			return [];
+		}
+
+		/**
+		 * This is a catch all function to grab the user's owned assets.
+		 * 
+		 * Should be easier to do shit now...
+		 * 
+		 * @param AssetType $type
+		 * @param string $query
+		 * @param bool $creator_only
+		 * @param array $excludedids
+		 * @param int $page
+		 * @param int $count
+		 * @return void
+		 */
+		function GetOwnedAssetsCount(AssetType $type, string $query = "", bool $creator_only = false, array $excludedids = []): int {
+			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
+		
+			$sql_assettype = $type->ordinal();
+			$sql_query = "%$query%";
+
+			$sql_extra = "";
+
+			// this could DEF be done better.
+			if(count($excludedids) > 0) {
+				$processedids = "AND `asset_id` NOT IN (";
+				foreach($excludedids as $id) {
+					$processedids .= $id.",";
+				}
+				$processedids = substr($processedids, 0, strlen($processedids)-1);
+				$processedids .= ")";
+
+				$sql_extra = $processedids;
+			}
+
+			if($creator_only) {
+				$sql_extra .= " AND `ta_creator` = ?";
+			}
+			
+			$sql = "SELECT COUNT(`asset_id`) FROM `transactions`, `assets` WHERE `transactions`.`ta_asset` = `assets`.`asset_id` AND `ta_userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `ta_date` DESC";
+
+			$stmt_getassets = $con->prepare("$sql");
+				
+			if($creator_only) {
+				$stmt_getassets->bind_param('iisi', $this->id, $sql_assettype, $sql_query, $this->id);
+			} else {
+				$stmt_getassets->bind_param('ii', $this->id, $sql_assettype);
+			}
+
+			$stmt_getassets->execute();
+
+			$result = $stmt_getassets->get_result();
+			$row = $result->fetch_assoc();
+
+			return $row['COUNT(`asset_id`)'];
 		}
 
 		function GetAllOwnedAssets(): array {

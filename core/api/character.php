@@ -185,11 +185,14 @@
 					die(header("Location: /api/character?r=getwardrobe&c=$type&p=1"));
 				}
 
+				// REWRITE.
 				if($_GET['c'] != "outfits") {
 					$wearing_array = $user->GetWearingArray();
-					$total_pages = floor(count($user->GetAllOwnedAssetsOfTypeExcluding(AssetType::index($type), $wearing_array))/8)+1;
 
-					if(count($user->GetAllOwnedAssetsOfTypePagedExcluding(AssetType::index($type),$wearing_array, $total_pages, 8)) == 0 && $page != 1) {
+					$total_assets = $user->GetOwnedAssetsCount(AssetType::index($type), "", false, $wearing_array);
+					$total_pages = floor($total_assets/8)+1;
+
+					if(count($user->GetOwnedAssets(AssetType::index($type), "", false, $wearing_array, $total_pages, 8)) == 0 && $page != 1) {
 						$total_pages--;
 					}
 
@@ -197,7 +200,7 @@
 						die(header("Location: /api/character?r=getwardrobe&c=$type&p=1"));
 					}
 
-					$assets = $user->GetAllOwnedAssetsOfTypePagedExcluding(AssetType::index($type),$wearing_array, $page, 8);
+					$assets = $user->GetOwnedAssets(AssetType::index($type), "", false, $wearing_array, $page, 8);
 
 					$assets_raw = [];
 
@@ -220,33 +223,19 @@
 					die(json_encode(["assets" => [], "page" => 1, "total_pages" => 1, "comment"=> "Hi, outfits haven't been added yet (congrats on finding this lol)"]));
 				}
 			} else if($request == "search") {
-				//coded by skylerclock
+				// coded by skylerclock
+				// rewritten by grace (18/03/2026)
 				$query = isset($_GET['q']) ? trim($_GET['q']) : "";
-				$category = $_GET['c'] ?? AssetType::HAT;
+				$category = AssetType::index(intval($_GET['c'])) ?? AssetType::HAT;
 				$page = isset($_GET['p']) ? intval($_GET['p']) : 1;
 				if($page < 1) $page = 1;
+				
 				$wearing_array = $user->GetWearingArray();
-				$query = strtolower($query);
-				$matched_assets = [];
-				$all_assets = $user->GetAllOwnedAssets();
-				foreach($all_assets as $asset) {
-					if(!($asset instanceof Asset)) continue;
-					if(in_array($asset->id, $wearing_array)) continue;
-					if($category !== null && $category !== "outfits") {
-						if($asset->type->ordinal() != intval($category)) continue;
-					}
-					if($query !== "" && strpos(strtolower($asset->name), $query) === false) continue;
-					array_push($matched_assets,$asset);
-				}
-
-				$per_page = 8;
-				$total_pages = max(1, ceil(count($matched_assets) / $per_page));
-				if($page > $total_pages) $page = 1;
-				$offset = ($page - 1) * $per_page;
-				$paged_assets = array_slice($matched_assets, $offset, $per_page);
+				$all_assets = $user->GetOwnedAssets($category, $query, false, $wearing_array, $page, 8);
+				$total_pages = $user->GetOwnedAssetsCount($category, $query, false, $wearing_array);
 				$assets_raw = [];
 
-				foreach($paged_assets as $asset) {
+				foreach($all_assets as $asset) {
 					array_push($assets_raw, [
 						"id" => $asset->id,
 						"name" => $asset->name,
