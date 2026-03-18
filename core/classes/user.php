@@ -531,7 +531,7 @@
 
 		/**
 		 * TODO: Implement and remove the other shitty functions.
-		 * @param AssetType $type
+		 * @param AssetType|null $type
 		 * @param string $query
 		 * @param bool $creator_only
 		 * @param array $excludedids
@@ -539,7 +539,7 @@
 		 * @param int $count
 		 * @return void
 		 */
-		function GetOwnedAssets(AssetType $type, string $query = "", bool $creator_only = false, array $excludedids = [], int $page = -1, int $count = -1): array {
+		function GetOwnedAssets(AssetType|null $type = null, string $query = "", bool $creator_only = false, array $excludedids = [], int $page = -1, int $count = -1): array {
 			return [];
 		}
 
