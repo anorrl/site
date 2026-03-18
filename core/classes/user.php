@@ -529,6 +529,18 @@
 			return $result_array;
 		}
 
+		/**
+		 * TODO: Implement and remove the other shitty functions.
+		 * @param AssetType $type
+		 * @param string $query
+		 * @param bool $creator_only
+		 * @param array $excludedids
+		 * @param int $page
+		 * @param int $count
+		 * @return void
+		 */
+		function GetOwnedAssets(AssetType $type, string $query = "", bool $creator_only = false, array $excludedids = [], int $page = -1, int $count = -1) {}
+
 		function GetAllOwnedAssets(): array {
 			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
 			$stmt_getuser = $con->prepare("SELECT * FROM `transactions` WHERE `ta_userid` = ? ORDER BY `ta_date` DESC");
