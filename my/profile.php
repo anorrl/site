@@ -132,7 +132,7 @@
 						</div>
 					</form>
 					<form method="POST" class="FormBox">
-						<div id="DetailsBox">
+						<div id="DetailsBox" style="margin-top: 5px;">
 							<h3>User Profile CSS</h3>
 							<div id="FormStuff">
 								<span>Ok so this is where you can change your profile stuff... have a go i guess?</span>
@@ -142,7 +142,7 @@
 						</div>
 					</form>
 					<form method="POST" class="FormBox">
-						<div id="DetailsBox">
+						<div id="DetailsBox" style="margin-top: 5px;">
 							<h3>Profile Music</h3>
 							<div id="FormStuff">
 								<span>Here you can input the id of a sound asset and it'll just play when someone views your profile ig</span>
