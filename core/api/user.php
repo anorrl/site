@@ -23,7 +23,7 @@
 					die(header("Location: /api/user?id=$id&request=getuserbadges&p=1"));
 				}
 				
-				$badges = $user->GetAllOwnedAssetsOfTypePaged(AssetType::BADGE,$page, 12);
+				$badges = $user->GetOwnedAssets(AssetType::BADGE,"", false, true, [], $page, 12);
 				$badges_raw = [];
 		
 				if(count($badges) != 0) {
@@ -37,7 +37,7 @@
 					}
 				}
 		
-				die(json_encode(["badges" => $badges_raw, "page" => $page, "total_pages" => floor(count($user->GetAllOwnedAssetsOfType(AssetType::BADGE))/12)+1]));
+				die(json_encode(["badges" => $badges_raw, "page" => $page, "total_pages" => ceil(count($user->GetOwnedAssets(AssetType::BADGE))/12)]));
 			}
 			else if($_GET['request'] == "isadmin") {
 				die(json_encode(['error' => false, 'isadmin' => $user->IsAdmin()]));

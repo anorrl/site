@@ -40,7 +40,7 @@
 
 	$header_data = $get_user;
 
-	$games = $get_user->GetAllOwnedAssetsOfType(AssetType::PLACE, false);
+	$games = $get_user->GetOwnedAssets(AssetType::PLACE, "", true, $get_user->id == $user->id);
 
 	if(
 		isset($_POST['ANORRL$Comment$Post$Contents']) &&

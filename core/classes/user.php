@@ -255,7 +255,7 @@
 		 * @return void
 		 */
 		function GetPlaces(bool $teamcreate = false): array {
-			$grabbedplaces = $this->GetAllOwnedAssetsOfType(AssetType::PLACE, true);
+			$grabbedplaces = $this->GetOwnedAssets(AssetType::PLACE, "", true);
 			$result = [];
 
 			$teamcreatedplaces = [];
@@ -380,12 +380,11 @@
 		 * @param int $count
 		 * @return void
 		 */
-		function GetOwnedAssets(AssetType $type, string $query = "", bool $creator_only = false, array $excludedids = [], int $page = -1, int $count = -1): array {
+		function GetOwnedAssets(AssetType $type, string $query = "", bool $creator_only = false, bool $show_all = true, array $excludedids = [], int $page = -1, int $count = -1): array {
 			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
 		
 			$sql_assettype = $type->ordinal();
 			$sql_query = "%$query%";
-
 			$sql_extra = "";
 
 			// this could DEF be done better.
@@ -400,8 +399,17 @@
 				$sql_extra = $processedids;
 			}
 
+			// places are not buyable and never should be!
+			if($type == AssetType::PLACE) {
+				$creator_only = true;
+			}
+
 			if($creator_only) {
 				$sql_extra .= " AND `ta_creator` = ?";
+			}
+
+			if(!$show_all) {
+				$sql_extra .= " AND `asset_public` = 1";
 			}
 			
 			$sql = "SELECT assets.* FROM `transactions`, `assets` WHERE `transactions`.`ta_asset` = `assets`.`asset_id` AND `ta_userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `ta_date` DESC";
@@ -412,7 +420,7 @@
 				if($creator_only) {
 					$stmt_getassets->bind_param('iisi', $this->id, $sql_assettype, $sql_query, $this->id);
 				} else {
-					$stmt_getassets->bind_param('ii', $this->id, $sql_assettype);
+					$stmt_getassets->bind_param('iis', $this->id, $sql_assettype, $sql_query);
 				}
 			} else {
 				$sql_page = (($page-1)*$count);
@@ -454,7 +462,7 @@
 		 * @param int $count
 		 * @return void
 		 */
-		function GetOwnedAssetsCount(AssetType $type, string $query = "", bool $creator_only = false, array $excludedids = []): int {
+		function GetOwnedAssetsCount(AssetType $type, string $query = "", bool $creator_only = false, bool $show_all = true, array $excludedids = []): int {
 			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
 		
 			$sql_assettype = $type->ordinal();
@@ -477,6 +485,10 @@
 			if($creator_only) {
 				$sql_extra .= " AND `ta_creator` = ?";
 			}
+
+			if(!$show_all) {
+				$sql_extra .= " AND `asset_public` = 1";
+			}
 			
 			$sql = "SELECT COUNT(`asset_id`) FROM `transactions`, `assets` WHERE `transactions`.`ta_asset` = `assets`.`asset_id` AND `ta_userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `ta_date` DESC";
 
@@ -485,7 +497,7 @@
 			if($creator_only) {
 				$stmt_getassets->bind_param('iisi', $this->id, $sql_assettype, $sql_query, $this->id);
 			} else {
-				$stmt_getassets->bind_param('ii', $this->id, $sql_assettype);
+				$stmt_getassets->bind_param('iis', $this->id, $sql_assettype, $sql_query);
 			}
 
 			$stmt_getassets->execute();

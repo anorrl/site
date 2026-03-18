@@ -189,10 +189,10 @@
 				if($_GET['c'] != "outfits") {
 					$wearing_array = $user->GetWearingArray();
 
-					$total_assets = $user->GetOwnedAssetsCount(AssetType::index($type), "", false, $wearing_array);
-					$total_pages = floor($total_assets/8)+1;
+					$total_assets = $user->GetOwnedAssetsCount(AssetType::index($type), "", false, true, $wearing_array);
+					$total_pages = ceil($total_assets/8)+1;
 
-					if(count($user->GetOwnedAssets(AssetType::index($type), "", false, $wearing_array, $total_pages, 8)) == 0 && $page != 1) {
+					if(count($user->GetOwnedAssets(AssetType::index($type), "", false, true, $wearing_array, $total_pages, 8)) == 0 && $page != 1) {
 						$total_pages--;
 					}
 
@@ -200,7 +200,7 @@
 						die(header("Location: /api/character?r=getwardrobe&c=$type&p=1"));
 					}
 
-					$assets = $user->GetOwnedAssets(AssetType::index($type), "", false, $wearing_array, $page, 8);
+					$assets = $user->GetOwnedAssets(AssetType::index($type), "", false, true, $wearing_array, $page, 8);
 
 					$assets_raw = [];
 
@@ -231,8 +231,8 @@
 				if($page < 1) $page = 1;
 				
 				$wearing_array = $user->GetWearingArray();
-				$all_assets = $user->GetOwnedAssets($category, $query, false, $wearing_array, $page, 8);
-				$total_pages = $user->GetOwnedAssetsCount($category, $query, false, $wearing_array);
+				$all_assets = $user->GetOwnedAssets($category, $query, false, true, $wearing_array, $page, 8);
+				$total_pages = ceil($user->GetOwnedAssetsCount($category, $query, false, true, $wearing_array)/8);
 				$assets_raw = [];
 
 				foreach($all_assets as $asset) {

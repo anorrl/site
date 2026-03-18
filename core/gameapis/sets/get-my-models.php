@@ -7,7 +7,7 @@
 	$result = [];
 
 	if($user != null) {
-		$models = $user->GetAllOwnedAssetsOfType(AssetType::MODEL, true, true);
+		$models = $user->GetOwnedAssets(AssetType::MODEL, "", true);
 		foreach($models as $model) {
 			array_push($result,
 				[
