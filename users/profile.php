@@ -57,7 +57,7 @@
 
 	$comments = Comment::GetCommentsOn($get_user);
 	$comments_count = count($comments);
-    $bgm = htmlspecialchars($get_user->profilebgm);
+    $bgm = Asset::FromID($get_user->profilebgm);
 ?>
 <!DOCTYPE html>
 <html>
@@ -75,11 +75,12 @@
 		<script src="/js/main.js?t=1771413807"></script>
 		<script src="/js/placelauncher.js?t=1771413807"></script>
 		<script src="/js/user.js?t=1771413807"></script>
-		<?php if ($bgm): ?>
-		<audio id="bgm" autoplay loop muted>
-		    <source src="/asset/?id=<?= htmlspecialchars($bgm) ?>" type="audio/mpeg">
+		<?php if ($bgm != null): ?>
+		<audio id="bgm" loop muted> <!-- autoplay m.i.a -->
+		    <source src="/asset/?id=<?= $bgm->GetAssetIDSafe() ?>" type="audio/mpeg">
 		</audio>
 		<script>
+		/*
 	    //fuck modern browsers for ruining AutoPlay :sob: -skylerclock
 		const bgm = document.getElementById("bgm");
 		bgm.play();
@@ -87,6 +88,16 @@
  		   bgm.muted = false;
 		    bgm.play();
 		}, { once: true });
+		*/
+		
+		// rewrite of skylers autoplay thing
+		$(function() {
+			if (confirm("This profile uses music... Play it?")) {
+				$("#bgm")[0].muted = false;
+				$("#bgm")[0].play();
+			}
+		});
+
 		</script>
 		<?php endif; ?>
 		<script>

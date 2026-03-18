@@ -100,11 +100,7 @@
 		AssetType::GEAR,
 	];
 
-	$get_related_assets = $asset->GetRelatedAssets();
-	$get_related_id = $asset->id;
-	if(count($get_related_assets) != 0) {
-		$get_related_id = $get_related_assets[0]->id;
-	}
+	$get_related_id = $asset->GetAssetIDSafe();
 
 
 	$header_data = $asset;

@@ -695,6 +695,16 @@
 			return $result;
 		}
 
+		function GetAssetIDSafe() : int {
+			$assets = $this->GetRelatedAssets();
+
+			if(count($assets) > 0) {
+				return $assets[0]->id;
+			}
+
+			return $this->id;
+		}
+
 		function SetThumbnailTo(Asset $asset) {
 			if($this->type == AssetType::AUDIO && ($asset->type == AssetType::DECAL || $asset->type == AssetType::IMAGE)) {
 				AssetVersion::GetLatestVersionOf($this)->SetThumbnail($asset);
