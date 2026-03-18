@@ -7,7 +7,7 @@
 	$result = [];
 
 	if($user != null) {
-		$decals = $user->GetOwnedAssets(AssetType::DECAL, "", true);
+		$decals = $user->GetOwnedAssets(AssetType::DECAL, $_GET['query'] ?? "", true);
 		foreach($decals as $decal) {
 			array_push($result,
 				[

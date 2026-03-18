@@ -384,7 +384,13 @@
 			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
 		
 			$sql_assettype = $type->ordinal();
-			$sql_query = "%$query%";
+			$sql_query = trim($query);
+			if(strlen($sql_query) > 0) {
+				$sql_query = "%$sql_query%";
+			} else {
+				$sql_query = "%";
+			}
+			
 			$sql_extra = "";
 
 			// this could DEF be done better.
@@ -466,7 +472,12 @@
 			include $_SERVER["DOCUMENT_ROOT"]."/core/connection.php";
 		
 			$sql_assettype = $type->ordinal();
-			$sql_query = "%$query%";
+			$sql_query = trim($query);
+			if(strlen($sql_query) > 0) {
+				$sql_query = "%$sql_query%";
+			} else {
+				$sql_query = "%";
+			}
 
 			$sql_extra = "";
 
