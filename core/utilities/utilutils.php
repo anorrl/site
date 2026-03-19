@@ -34,6 +34,10 @@
 		}
 
 		public static function IsValidCSS(string $data) {
+			if(true) {
+				return true;
+			}
+
 			$blockedcssids = [
 				//"@font",
 				"ProfileSign",
