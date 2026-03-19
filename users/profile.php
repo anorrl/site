@@ -68,7 +68,9 @@
 		<link rel="stylesheet" href="/css/new/stuff.css?v=1">
 		<link rel="stylesheet" href="/css/new/my/profile.css?v=11">
 		<link rel="stylesheet" href="/css/new/main.css?v=6">
+		<?php if($user != null && $user->id != $get_user->id): ?>
 		<link rel="stylesheet" href="/users/<?= $get_user->id ?>/css?t=<?= time() ?>">
+		<?php endif ?>
 	
 	
 		<script src="/js/core/jquery.js"></script>
