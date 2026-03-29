@@ -207,6 +207,10 @@
 				$user = User::FromSecurityKey($_SESSION['SESSION_TOKEN_YAA']);	
 			}
 
+			if((isset($_COOKIE['ANORRLSECURITY']) || isset($_SESSION['SESSION_TOKEN_YAA'])) && $user == null) {
+				self::RemoveCookies();
+			}
+
 			$pages = [
 				"Home"                              => "/my/home.php",
 				"Looking at {username}'s profile"   => "/users/profile.php",
