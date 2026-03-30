@@ -15,6 +15,8 @@ Why? It makes your life easier by allowing a local copy of anorrl on your machin
 
 It reduces the chance of errors occuring when creating a pull request.
 
+Also in your pull requests, mention WHAT you have done and provide screenshots of what you CHANGED.
+
 ### arch/cachyos tutorial
 [https://www.youtube.com/watch?v=Mb_xV2qz_J8](https://www.youtube.com/watch?v=Mb_xV2qz_J8)
 
