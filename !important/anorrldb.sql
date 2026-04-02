@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 18, 2026 at 12:34 AM
--- Server version: 10.11.14-MariaDB-0+deb12u2
--- PHP Version: 8.4.17
+-- Generation Time: Apr 02, 2026 at 06:37 PM
+-- Server version: 12.2.2-MariaDB
+-- PHP Version: 8.5.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -110,23 +110,6 @@ CREATE TABLE `assets` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `asset_versions`
---
-
-DROP TABLE IF EXISTS `asset_versions`;
-CREATE TABLE `asset_versions` (
-  `version_id` int(11) NOT NULL,
-  `version_assetid` int(11) NOT NULL,
-  `version_md5sig` varchar(50) NOT NULL,
-  `version_md5thumb` varchar(50) NOT NULL DEFAULT 'sound',
-  `version_subid` int(11) NOT NULL DEFAULT 1,
-  `version_assettype` int(11) NOT NULL DEFAULT 1,
-  `version_publishdate` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `asset_packages`
 --
 
@@ -152,6 +135,23 @@ CREATE TABLE `asset_places` (
   `place_teamcreate_enabled` int(1) NOT NULL DEFAULT 0,
   `place_original` int(1) NOT NULL DEFAULT 0,
   `place_gears_enabled` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `asset_versions`
+--
+
+DROP TABLE IF EXISTS `asset_versions`;
+CREATE TABLE `asset_versions` (
+  `version_id` int(11) NOT NULL,
+  `version_assetid` int(11) NOT NULL,
+  `version_md5sig` varchar(50) NOT NULL,
+  `version_md5thumb` varchar(50) NOT NULL DEFAULT 'sound',
+  `version_subid` int(11) NOT NULL DEFAULT 1,
+  `version_assettype` int(11) NOT NULL DEFAULT 1,
+  `version_publishdate` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -198,6 +198,22 @@ CREATE TABLE `comments` (
   `comment_poster` int(11) NOT NULL,
   `comment_content` varchar(256) NOT NULL,
   `comment_postdate` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `datastores`
+--
+
+DROP TABLE IF EXISTS `datastores`;
+CREATE TABLE `datastores` (
+  `dkey` text NOT NULL,
+  `universeId` int(11) NOT NULL,
+  `type` text NOT NULL,
+  `scope` text NOT NULL,
+  `target` text NOT NULL,
+  `value` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -409,12 +425,6 @@ ALTER TABLE `assets`
   ADD PRIMARY KEY (`asset_id`);
 
 --
--- Indexes for table `asset_versions`
---
-ALTER TABLE `asset_versions`
-  ADD PRIMARY KEY (`version_id`);
-
---
 -- Indexes for table `asset_packages`
 --
 ALTER TABLE `asset_packages`
@@ -425,6 +435,12 @@ ALTER TABLE `asset_packages`
 --
 ALTER TABLE `asset_places`
   ADD PRIMARY KEY (`place_id`);
+
+--
+-- Indexes for table `asset_versions`
+--
+ALTER TABLE `asset_versions`
+  ADD PRIMARY KEY (`version_id`);
 
 --
 -- Indexes for table `bodycolours`
@@ -443,6 +459,12 @@ ALTER TABLE `cloudeditors`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`comment_id`);
+
+--
+-- Indexes for table `datastores`
+--
+ALTER TABLE `datastores`
+  ADD PRIMARY KEY (`dkey`(100));
 
 --
 -- Indexes for table `profilebadges_info`
