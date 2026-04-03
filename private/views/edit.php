@@ -2,6 +2,7 @@
 
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\AssetTypeUtils;
+	use anorrl\utilities\AssetUploader;
 	use anorrl\utilities\UserUtils;
 
 	use anorrl\Asset;

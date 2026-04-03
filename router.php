@@ -58,6 +58,9 @@
 	route('GET',      '/thumbs/headshot', '/core/thumbs/headshot.php');
 	route('GET',      '/thumbs/', '/core/thumbs/index.php');
 
+	route('GET',      '/asset/', '/core/utilities/assetdeliverer.php');
+	route('GET',      '/Asset/', '/core/utilities/assetdeliverer.php');
+
 	route_api('GET', 'logout');
 	route_api('GET', 'games');
 	route_api('GET', 'catalog');

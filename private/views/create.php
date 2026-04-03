@@ -2,6 +2,7 @@
 	use anorrl\Asset;
 	use anorrl\Page;
 	use anorrl\enums\AssetType;
+	use anorrl\utilities\AssetUploader;
 
 	if(isset($type)) {
 		$type = trim(strtolower($type));

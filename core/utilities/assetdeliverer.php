@@ -1,4 +1,8 @@
 <?php
+	use anorrl\Asset;
+	use anorrl\Place;
+	use anorrl\enums\AssetType;
+
 	if(!isset($_GET['id']) && !isset($_GET['ID']) && !isset($_GET['Id'])) {
 		die(http_response_code(500));
 	}
@@ -16,28 +20,6 @@
 		return $file_info->buffer($contents);
 	}
 
-	$sign_ids = [
-		2610,
-		2611,
-		2612,
-		2613,
-		2614,
-		2615,
-		3396,
-		3397,
-		3398,
-		3399,
-		3400,
-		3401,
-		3402,
-		3403,
-		3404,
-		3405,
-		3406,
-		3407,
-		3408
-	];
-
 	$settings = parse_ini_file($_SERVER['DOCUMENT_ROOT']."/../settings.env", true);
 
 	$access = $settings['asset']['ACCESSKEY'];
@@ -47,7 +29,7 @@
 	require_once $_SERVER["DOCUMENT_ROOT"] . "/core/utilities/assetutils.php";
 	require_once $_SERVER["DOCUMENT_ROOT"] . "/core/utilities/imageutils.php";
 	
-	$user = UserUtils::RetrieveUser();
+	$user = SESSION ? SESSION->user : null;
 
 	$asset = Asset::FromID($id);
 	if($asset != null) {
@@ -104,13 +86,6 @@
 						}
 					}*/
 				}
-
-				if($asset->type == AssetType::LUA && in_array($id, $sign_ids)) {
-					$contents = "%$id%\r\n" . $contents;
-					openssl_sign($contents, $signature, file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/../PrivateKey.pem"), OPENSSL_ALGO_SHA1);
-					$signature = base64_encode($signature);
-					echo "%$signature%";
-				}
 			}
 
 			header("Content-Type: application/octet-stream");
@@ -120,61 +95,64 @@
 			die(http_response_code(404));
 		}
 	} else {
-		error_reporting(0);
-
-		if(isset($_GET['version'])) {
-			$version = intval($_GET['version']);
-		}
-
-		if(!file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""))) {
-			$url = "https://assetdelivery.roblox.com/v1/asset/?id=".$id.(isset($_GET['version']) ? '&version='.$version : "");
-			$ch = curl_init ($url);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie: .ROBLOSECURITY=$roblosec"));
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-			$output = curl_exec($ch);
-			curl_close($ch);
-
-			if(strlen(gzdecode($output)) != 0) {
-				$output = gzdecode($output);
-			}
-
-			$mimetype = checkMimeType($output);
-
-			if(str_contains($mimetype, "json")) {
-				$contents = "";
-
-				if(!isset($_GET['version'])) {
-					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id, $contents);
-				} else {
-					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id."_".$version, $contents);
-				}
-
-				die(http_response_code(500));
-			} else {
-				header("Content-Type: $mimetype");
-
-				$contents = str_replace("www.roblox.com", "arl.lambda.cam",$output);
-
-				if(!isset($_GET['version'])) {
-					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id, $contents);
-				} else {
-					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id."_".$version, $contents);
-				}
-			}
-			
-		} else {
-			$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""));
-			header("Content-Type: ".checkMimeType($contents));
-			if(str_contains(checkMimeType($contents), "json")) {
-				echo "Unauthorised access to this roblox asset!";
-				file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""), "");
-				die(http_response_code(500));
-			}
-		}
 		
+		if(CONFIG->asset->canforward) {
+
+			if(isset($_GET['version'])) {
+				$version = intval($_GET['version']);
+			}
+
+			if(!file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""))) {
+				$url = "https://assetdelivery.roblox.com/v1/asset/?id=".$id.(isset($_GET['version']) ? '&version='.$version : "");
+				$ch = curl_init ($url);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Cookie: .ROBLOSECURITY=$roblosec"));
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+				$output = curl_exec($ch);
+				curl_close($ch);
+
+				if(strlen(gzdecode($output)) != 0) {
+					$output = gzdecode($output);
+				}
+
+				$mimetype = checkMimeType($output);
+
+				if(str_contains($mimetype, "json")) {
+					$contents = "";
+
+					if(!isset($_GET['version'])) {
+						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id, $contents);
+					} else {
+						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id."_".$version, $contents);
+					}
+
+					die(http_response_code(500));
+				} else {
+					header("Content-Type: $mimetype");
+
+					$contents = str_replace("www.roblox.com", "arl.lambda.cam",$output);
+
+					if(!isset($_GET['version'])) {
+						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id, $contents);
+					} else {
+						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id."_".$version, $contents);
+					}
+				}
+				
+			} else {
+				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""));
+				header("Content-Type: ".checkMimeType($contents));
+				if(str_contains(checkMimeType($contents), "json")) {
+					echo "Unauthorised access to this roblox asset!";
+					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""), "");
+					die(http_response_code(500));
+				}
+			}
+		
+		}
+
 		echo $contents;	
 	}
 ?>
