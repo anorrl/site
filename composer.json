@@ -1,0 +1,12 @@
+{
+	"name": "grace/anorrl",
+    "require": {
+       	"gemorroj/cssvalidator": "^3.6",
+        "altorouter/altorouter": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "anorrl\\": "private/lib/anorrl/"
+        }
+    }
+}

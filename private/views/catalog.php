@@ -1,0 +1,102 @@
+<?php
+
+	use anorrl\Page;
+	use anorrl\utilities\Splasher;
+	use anorrl\utilities\UserUtils;
+
+	$user = UserUtils::RetrieveUser();
+
+	if($user == null) {
+		die(header("Location: /login"));
+	}
+
+	$randomsplash = new Splasher("catalog")->getRandomSplash();
+
+	$page = new Page("Catalog");
+
+	$page->addScript("/js/catalog.js?t=1771413807");
+
+	$page->addStylesheet("/css/new/forms.css");
+	$page->addStylesheet("/css/new/stuff.css?v=1");
+	$page->addStylesheet("/css/new/catalog.css");
+	
+	$page->loadHeader();
+?>
+					<style>
+						h5 {
+							font-family: punk;
+							text-align: center;
+							background: black;
+							padding: 8px 0px;
+							margin: 0px;
+						}
+					</style>
+					<div class="Asset" template>
+						<a id="NameAndThumbs">
+							<div id="FavouritesArea"><img src="/images/favourite_star.gif"> <span>0</span></div>
+							<img src="">
+							<div id="Pricing">
+								<span id="Cones" ><img src="/images/icons/traffic_cone.png" > <span id="Costing"></span></span>
+								<span id="Lights"><img src="/images/icons/traffic_light.png"> <span id="Costing"></span></span>
+							</div>
+							<span>AssetName</span>
+						</a>
+						<a id="Creator"><span>AssetCreator</span></a>
+					</div>
+					<h2 style="margin: 0px"><?= $randomsplash ?></h2>
+					<div id="CatalogContainer">
+						<div id="OptionsPanel">
+							<div id="CategoriesChooser">
+								<h4>Categories</h4>
+								<h5 style="margin-top: 5px">Accoutrement</h5>
+								<ul>
+									<li data_category="8" ><a>Hats</a></li>
+									<li data_category="18"><a>Faces</a></li>
+									<li data_category="11"><a>Shirts</a></li>
+									<li data_category="2" ><a>T-Shirts</a></li>
+									<li data_category="12"><a>Pants</a></li>
+									<li data_category="19"><a>Gears</a></li>
+									<li data_category="17"><a>Heads</a></li>
+								</ul>
+								<h5>Development</h5>
+								<ul>
+									<li data_category="3" ><a>Audio</a></li>
+									<li data_category="4" ><a>Meshes</a></li>
+									<li data_category="24"><a>Animations</a></li>
+									<li data_category="13"><a>Decals</a></li>
+									<li data_category="10"><a>Models</a></li>
+								</ul>
+							</div>
+							<div id="FiltersChooser" style="margin-top: 10px;">
+								<h4>Filters</h4>
+								<ul>
+									<li data_filter="1"><a>Recently Uploaded</a></li>
+									<li data_filter="2"><a>Recently Updated</a></li>
+									<li data_filter="5"><a>Most Sold</a></li>
+									<li data_filter="6"><a>Most Favourited</a></li>
+									<li data_filter="3"><a>Oldest Uploaded</a></li>
+									<li data_filter="4"><a>Oldest Updated</a></li>
+								</ul>
+							</div>
+						</div>
+						<div id="AssetsContainer">
+							<div method="GET" id="FormPanel" style="margin: 5px auto;">
+								<input id="SearchBox" name="query" type="text" placeholder="Look for awesome items!!!" style="width: 460px;">
+								<input id="Submit" type="submit" value="Search" onclick="ANORRL.Catalog.Submit(); return false;">
+							</div>
+							<div id="StatusText">
+								<b id="Loading" style="display: none">Loading assets...</b>
+								<b id="NoAssets" style="display: none"><img src="/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">No <span id="AssetType"></span> like that here!</b>
+							</div>
+						
+							<table id="Assets">
+								
+							</table>
+							
+							<div id="Paginator" style="display: block;">
+								<a id="PrevPager" href="javascript:ANORRL.Catalog.PrevPage()" style="display: none;">&lt;&lt; Back</a> <input type="text" id="NumberPutter" maxlength="3"> of <span id="Counter">1</span> <a id="NextPager" href="javascript:ANORRL.Catalog.NextPage()" style="display: none;">Next &gt;&gt;</a>
+							</div>
+						</div>
+						<br style="display:block; clear: both;">
+					</div>
+<?php $page->loadFooter(); ?>

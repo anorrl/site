@@ -106,15 +106,15 @@
 					$type = $asset->type;
 
 					if($type == AssetType::SHIRT || $type == AssetType::PANTS) {
-						$render = TheFuckingRenderer::RenderPlayer($id);	
+						$render = Renderer::RenderPlayer($id);	
 					} else if($type == AssetType::PLACE) {
-						$render = TheFuckingRenderer::RenderPlace($id);
+						$render = Renderer::RenderPlace($id);
 					} else if($type == AssetType::MESH) {
-						$render = TheFuckingRenderer::RenderMesh($id);
+						$render = Renderer::RenderMesh($id);
 					} else if($type == AssetType::MODEL || $type == AssetType::HAT || $type == AssetType::GEAR) {
-						$render = TheFuckingRenderer::RenderModel($id);
+						$render = Renderer::RenderModel($id);
 					} else if($type == AssetType::TORSO) {
-						$render = TheFuckingRenderer::RenderPlayer($id);
+						$render = Renderer::RenderPlayer($id);
 					}
 
 					if($render != null) {

@@ -1,0 +1,22 @@
+{
+	"mysql": {
+		"hostname": "localhost",
+		"username": "sqluser",
+		"password": "sqlpassword",
+		"database": "anorrldb"
+	},
+	"asset": {
+		"key": "uuid or something",
+		"webhook": "discord webhook for catalog drops",
+		"canforward": false,
+		"roblosec": "this should be filled in if using forwarding system."
+	},
+	"arbiter": {
+		"location": {
+			"private": "private ip to the arbiter location",
+			"public": "private ip to the arbiter location for players to join thru"
+		},
+		"token": "sha256 for ANSRAL",
+		"disabled": false
+	}
+}

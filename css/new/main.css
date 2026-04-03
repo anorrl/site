@@ -27,6 +27,14 @@ body {
 	font-size: 12px;
 }
 
+body[night] {
+	background: url("/images/bkg_night.png") top center repeat-x #000444;
+}
+
+body[badapple] {
+	background: url("/images/badapple.gif");
+}
+
 a {
 	text-decoration: none;
 	color: #ffa634;

@@ -1,4 +1,8 @@
 <?php
+	/*
+		REWRITE TO USE PDO AND ALSO LIKE DATABASE CLASS MAYBEEEE
+	*/
+
 	$settings = parse_ini_file($_SERVER['DOCUMENT_ROOT']."/../settings.env", true);
 
 	$database_settings = $settings['mysql'];

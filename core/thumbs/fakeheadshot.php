@@ -1,7 +1,7 @@
 <?php
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
+	use anorrl\User;
 
-	$user = User::FromID(1);
+	$user = null;
 
 	if(isset($_GET['userid'])) {
 		$user = User::FromID(intval($_GET['userid']));

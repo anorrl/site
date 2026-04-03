@@ -1,12 +1,11 @@
 <?php
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/assetutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/imageutils.php";
+	use anorrl\enums\AssetType;
+	use anorrl\Asset;
+	use anorrl\AssetVersion;
+	use anorrl\utilities\ImageUtils;
 	
 	// this could be moved to some GetThumbs function or something...
-
-	$user = UserUtils::RetrieveUser();
 
 	if(isset($_GET['id'])) {
 		$id = intval($_GET['id']);

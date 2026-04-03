@@ -1,7 +1,6 @@
 <?php
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/assetutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
+	use anorrl\User;
 
 	if(isset($_GET['headshot'])) {
 		die(include $_SERVER['DOCUMENT_ROOT']."/core/thumbs/headshot.php");

@@ -26,7 +26,7 @@
 		$charactermd5 = md5($characterinfo);
 
 		if(!file_exists("$mediadir/$charactermd5.png")) {
-			$render = TheFuckingRenderer::RenderUser($user->id);
+			$render = Renderer::RenderUser($user->id);
 			if($render != null) {
 				$data = "data:image/png;base64,$render";
 				list($type, $data) = explode(';', $data);
@@ -45,7 +45,7 @@
 		}
 
 		if(!file_exists("$mediadir/headshot_$charactermd5.png")) {
-			$render = TheFuckingRenderer::RenderUser($user->id, true);
+			$render = Renderer::RenderUser($user->id, true);
 			if($render != null) {
 				$data = "data:image/png;base64,$render";
 				list($type, $data) = explode(';', $data);

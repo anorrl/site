@@ -67,11 +67,11 @@
 
 		private static function GetRender(int $id, AssetType $type): string|null {
 			return match($type) {
-				AssetType::SHIRT => TheFuckingRenderer::RenderPlayer($id),
-				AssetType::PANTS => TheFuckingRenderer::RenderPlayer($id),
-				AssetType::PLACE => TheFuckingRenderer::RenderPlace($id),
-				AssetType::MESH => TheFuckingRenderer::RenderMesh($id),
-				AssetType::MODEL => TheFuckingRenderer::RenderModel($id),
+				AssetType::SHIRT => Renderer::RenderPlayer($id),
+				AssetType::PANTS => Renderer::RenderPlayer($id),
+				AssetType::PLACE => Renderer::RenderPlace($id),
+				AssetType::MESH => Renderer::RenderMesh($id),
+				AssetType::MODEL => Renderer::RenderModel($id),
 				default => null
 			};
 			 

@@ -1,11 +1,8 @@
 <?php
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/assetutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/imageutils.php";
-
-	$user = UserUtils::RetrieveUser();
-
+	use anorrl\User;
+	use anorrl\utilities\ImageUtils;
+	
 	if(isset($_GET['id']) || isset($_GET['userId'])) {
 		if(isset($_GET['id'])) {
 			$id = intval($_GET['id']);

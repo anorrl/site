@@ -1,0 +1,30 @@
+#TetoContainer {
+	position: fixed;
+	bottom: 0px;
+	right: 10px;
+	width: 250px;
+	z-index: 9999;
+}
+
+#TetoContainer #TetoSplashContainer {
+	width: 210px;
+	background: white;
+	padding: 10px;
+	height: 100px;
+	margin: 0 auto;
+	margin-bottom: -93px;
+	border: 6px solid black;
+}
+
+#TetoContainer #TetoSplashContainer #TetoSplash {
+	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
+	width: 210px;
+	height: 100px;
+}
+
+#TetoContainer #Teto {
+	position: relative;
+	width: 250px;
+}
