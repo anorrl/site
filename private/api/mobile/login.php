@@ -1,7 +1,9 @@
 
 <?php 
+	use anorrl\utilities\UserUtils;
+	
 	header("Content-Type: application/json"); 
-	require_once $_SERVER['DOCUMENT_ROOT'].'/core/utilities/userutils.php';
+	
 	$user = UserUtils::RetrieveUser();
 	if(isset($_POST['username']) && isset($_POST['password'])) {
 		$result = UserUtils::LoginUser($_POST['username'], $_POST['password']);

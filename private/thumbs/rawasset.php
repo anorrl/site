@@ -1,10 +1,11 @@
 <?php
 
 	// Width=60&Height=62&ImageFormat=png&AssetID=8
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/assetutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/imageutils.php";
 	
+	use anorrl\Asset;
+	use anorrl\AssetVersion;
+	use anorrl\enums\AssetType;
+	use anorrl\utilities\ImageUtils;
 
 	if(isset($_GET['format']) && $_GET['format'] == "png") {
 	

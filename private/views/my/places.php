@@ -1,15 +1,11 @@
 <?php
-	session_start();
+	use anorrl\utilities\ClientDetector;
 
-	require_once $_SERVER['DOCUMENT_ROOT'].'/core/classes/asset.php';
-	require_once $_SERVER['DOCUMENT_ROOT'].'/core/utilities/userutils.php';
-	require_once $_SERVER['DOCUMENT_ROOT'].'/core/utilities/clientdetect.php';
-	$user = UserUtils::RetrieveUser();
-
-
-	if($user == null) {
+	if(!SESSION) {
 		die(header("Location: /login"));
 	}
+
+	$user = SESSION->user;
 
 	$isclient = ClientDetector::IsAClient();
 	if(!$isclient)

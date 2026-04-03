@@ -7,8 +7,6 @@
 	header("Pragma: no-cache");
 	header("Content-Type: text/plain");
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/classes/user.php";
-
 	$userId = (int)$_GET['userId'];
 
 	$user = User::FromID($userId);

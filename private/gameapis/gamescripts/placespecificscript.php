@@ -18,8 +18,6 @@ end)
 		return base64_encode($signature);
 	}
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/classes/asset.php";
-
 	if(isset($_GET['PlaceId']) && isset($_GET['access'])) {
 		header("Content-Type: text/plain");
 

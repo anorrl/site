@@ -8,9 +8,8 @@
 	[email] => penis@lambda.cam
 */
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/slurutils.php";
-
+	use anorrl\utilities\UserUtils;
+	use anorrl\utilities\SlurUtils;
 
 	if(
 		isset($_POST['userName']) &&

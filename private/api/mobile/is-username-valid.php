@@ -1,7 +1,7 @@
 <?php
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/slurutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
+	use anorrl\utilities\UserUtils;
+	use anorrl\utilities\SlurUtils;
 
 	$isValid = false;
 	$errorCode = 2;

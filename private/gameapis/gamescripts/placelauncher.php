@@ -1,15 +1,8 @@
 <?php
 
-	/**
-	 * I dont fucking know bruh this is like cancer in a way
-	 * 
-	 * GOOD THING THIS IS FRIENDS ONLY OTHER WISE I WOULD BE COOKED. 
-	 * I CANNOT BE ASKED TO DO SECURITY STUFF AS MUCH AS I WANT TO.
-	 */
-
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/assetutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/classes/renderer.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
+	use anorrl\Place;
+	use anorrl\User;
+	use anorrl\utilities\UserUtils;
 
 	$settings = parse_ini_file($_SERVER['DOCUMENT_ROOT']."/../settings.env", true);
 	$rcc_settings = $settings['renderer'];

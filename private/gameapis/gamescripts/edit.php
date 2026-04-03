@@ -1,4 +1,7 @@
-<?php ob_start(); ?>
+<?php 
+	use anorrl\Place;
+	ob_start(); 
+?>
 -- Prepended to Edit.lua and Visit.lua and Studio.lua--
 
 pcall(function() game:SetPlaceID({placeid}) end)
@@ -64,10 +67,7 @@ game:GetService("ChangeHistoryService"):SetEnabled(true)
 
 	header("Content-Type: text/plain");
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/assetutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
-
-	$user = UserUtils::RetrieveUser();
+	$user = SESSION ? SESSION->user : null;
 
 	if($user != null) {
 		if(isset($_GET['placeId'])) {

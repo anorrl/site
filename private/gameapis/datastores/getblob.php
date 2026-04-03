@@ -63,10 +63,7 @@
 
 		return null;
 	}
-
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/classes/asset.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/classes/user.php";
-
+	
 	$settings = parse_ini_file($_SERVER['DOCUMENT_ROOT']."/../settings.env", true);
 	$access = $settings['asset']['ACCESSKEY'];
 	//placeid={id}&userid=%d&access={access}

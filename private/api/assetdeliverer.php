@@ -24,10 +24,6 @@
 
 	$access = $settings['asset']['ACCESSKEY'];
 	$roblosec = $settings['asset']['ROBLOSEC'];
-
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
-	require_once $_SERVER["DOCUMENT_ROOT"] . "/core/utilities/assetutils.php";
-	require_once $_SERVER["DOCUMENT_ROOT"] . "/core/utilities/imageutils.php";
 	
 	$user = SESSION ? SESSION->user : null;
 

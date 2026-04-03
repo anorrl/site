@@ -1,10 +1,7 @@
 <?php
 	session_start();
-
-	require_once $_SERVER['DOCUMENT_ROOT'].'/core/utilities/userutils.php';
-	$user = UserUtils::RetrieveUser();
-
-	if($user == null) {
+	
+	if(!SESSION) {
 		die(header("Location: /login"));
 	}
 ?>

@@ -1,7 +1,10 @@
 <?php
 	
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/assetutils.php";
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
+	// rewrite to use proper json formatting#
+
+	use anorrl\Place;
+	use anorrl\User;
+	use anorrl\utilities\UserUtils;
 
 	function getSessionDetails(string $sessionID): array|null {
 		include $_SERVER['DOCUMENT_ROOT']."/core/connection.php";
@@ -37,47 +40,47 @@
 
 	ob_start();
 ?>
-<?php if(!isset($_GET['serverToken']) && !isset($_GET['sessionToken']) && !isset($_GET['server'])): ?>
-{
-	"ClientPort":0,
-	"MachineAddress":"localhost",
-	"ServerPort":53640,
-	"PingUrl":"",
-	"PingInterval":120,
-	"UserName":"Player",
-	"SeleniumTestMode":true,
-	"UserId":0,
-	"SuperSafeChat":false,
-	"CharacterAppearance":"http://arl.lambda.cam/Asset/CharacterFetch.ashx?userId=1&placeId=0",
-	"ClientTicket":"",
-	"GameId":"00000000-0000-0000-0000-000000000000",
-	"PlaceId":0,
-	"MeasurementUrl":"",
-	"WaitingForCharacterGuid":"16be1dd8-5462-4ca5-a997-0725d997708b",
-	"BaseUrl":"http://arl.lambda.cam/",
-	"ChatStyle":"ClassicAndBubble",
-	"VendorId":0,
-	"ScreenShotInfo":"",
-	"VideoInfo":"",
-	"CreatorId":0,
-	"CreatorTypeEnum":"User",
-	"MembershipType":"None",
-	"AccountAge":0,
-	"CookieStoreFirstTimePlayKey":"rbx_evt_ftp",
-	"CookieStoreFiveMinutePlayKey":"rbx_evt_fmp",
-	"CookieStoreEnabled":true,
-	"IsRobloxPlace":true,
-	"GenerateTeleportJoin":false,
-	"IsUnknownOrUnder13":false,
-	"SessionId":"",
-	"DataCenterId":0,
-	"UniverseId":0,
-	"BrowserTrackerId":0,
-	"UsePortraitMode":false,
-	"FollowUserId":0,
-	"characterAppearanceId":1
-}
-<?php
+<?php if(!isset($_GET['serverToken']) && !isset($_GET['sessionToken']) && !isset($_GET['server'])):
+	$joinscript = [
+		"ClientPort" => 0,
+		"MachineAddress" => "localhost",
+		"ServerPort" => 53640,
+		"PingUrl" => "",
+		"PingInterval" => 120,
+		"UserName" => "Player",
+		"SeleniumTestMode" => true,
+		"UserId" => 0,
+		"SuperSafeChat" => false,
+		"CharacterAppearance" => "http://arl.lambda.cam/Asset/CharacterFetch.ashx?userId=1&placeId=0",
+		"ClientTicket" => "",
+		"GameId" => "00000000-0000-0000-0000-000000000000",
+		"PlaceId" => 0,
+		"MeasurementUrl" => "",
+		"WaitingForCharacterGuid" => "16be1dd8-5462-4ca5-a997-0725d997708b",
+		"BaseUrl" => "http://arl.lambda.cam/",
+		"ChatStyle" => "ClassicAndBubble",
+		"VendorId" => 0,
+		"ScreenShotInfo" => "",
+		"VideoInfo" => "",
+		"CreatorId" => 0,
+		"CreatorTypeEnum" => "User",
+		"MembershipType" => "None",
+		"AccountAge" => 0,
+		"CookieStoreFirstTimePlayKey" => "rbx_evt_ftp",
+		"CookieStoreFiveMinutePlayKey" => "rbx_evt_fmp",
+		"CookieStoreEnabled" => true,
+		"IsRobloxPlace" => true,
+		"GenerateTeleportJoin" => false,
+		"IsUnknownOrUnder13" => false,
+		"SessionId" => "",
+		"DataCenterId" => 0,
+		"UniverseId" => 0,
+		"BrowserTrackerId" => 0,
+		"UsePortraitMode" => false,
+		"FollowUserId" => 0,
+		"characterAppearanceId" => 1
+	];
+
 	function get_signature($script)
 	{
 		$signature = "";
@@ -86,7 +89,7 @@
 	}    
 	header("Content-Type: application/json");
 
-	$script = "\r\n" . ob_get_clean();
+	$script = "\r\n" . json_encode($joinscript);
 	$script = str_replace("arl.lambda.cam",$_SERVER['SERVER_NAME'], $script);
 	$signature = get_signature($script);
 
@@ -94,44 +97,44 @@
 ?>
 <?php else: ?>
 {
-	"ClientPort":0,
-	"MachineAddress":"{server}",
-	"ServerPort":{serverport},
-	"PingUrl":"",
-	"PingInterval":120,
-	"UserName":"{playername}",
-	"SeleniumTestMode":false,
-	"UserId": {playerid},
-	"SuperSafeChat":{SuperSafeChat},
-	"CharacterAppearance":"http://arl.lambda.cam/Asset/CharacterFetch.ashx?userId={playerid}",
-	"ClientTicket":"{sessionid}",
-	"GameId":"00000000-0000-0000-0000-000000000000",
-	"PlaceId":{placeid},
-	"MeasurementUrl":"",
-	"WaitingForCharacterGuid":
+	"ClientPort" => 0,
+	"MachineAddress" => "{server}",
+	"ServerPort" => {serverport},
+	"PingUrl" => "",
+	"PingInterval" => 120,
+	"UserName" => "{playername}",
+	"SeleniumTestMode" => false,
+	"UserId" =>  {playerid},
+	"SuperSafeChat" => {SuperSafeChat},
+	"CharacterAppearance" => "http://arl.lambda.cam/Asset/CharacterFetch.ashx?userId={playerid}",
+	"ClientTicket" => "{sessionid}",
+	"GameId" => "00000000-0000-0000-0000-000000000000",
+	"PlaceId" => {placeid},
+	"MeasurementUrl" => "",
+	"WaitingForCharacterGuid" => 
 	"16be1dd8-5462-4ca5-a997-0725d997708b",
-	"BaseUrl":"http://arl.lambda.cam/",
-	"ChatStyle":"ClassicAndBubble",
-	"VendorId":0,
-	"ScreenShotInfo":"",
-	"VideoInfo":"",
-	"CreatorId":{placecreator},
-	"CreatorTypeEnum":"User",
-	"MembershipType":"None",
-	"AccountAge":{playerage},
-	"CookieStoreFirstTimePlayKey":"rbx_evt_ftp",
-	"CookieStoreFiveMinutePlayKey":"rbx_evt_fmp",
-	"CookieStoreEnabled":true,
-	"IsRobloxPlace":true,
-	"GenerateTeleportJoin":false,
-	"IsUnknownOrUnder13":false,
-	"SessionId":"{sessionid}",
-	"DataCenterId":0,
-	"UniverseId":0,
-	"BrowserTrackerId":0,
-	"UsePortraitMode":false,
-	"FollowUserId":0,
-	"characterAppearanceId":{playerid}
+	"BaseUrl" => "http://arl.lambda.cam/",
+	"ChatStyle" => "ClassicAndBubble",
+	"VendorId" => 0,
+	"ScreenShotInfo" => "",
+	"VideoInfo" => "",
+	"CreatorId" => {placecreator},
+	"CreatorTypeEnum" => "User",
+	"MembershipType" => "None",
+	"AccountAge" => {playerage},
+	"CookieStoreFirstTimePlayKey" => "rbx_evt_ftp",
+	"CookieStoreFiveMinutePlayKey" => "rbx_evt_fmp",
+	"CookieStoreEnabled" => true,
+	"IsRobloxPlace" => true,
+	"GenerateTeleportJoin" => false,
+	"IsUnknownOrUnder13" => false,
+	"SessionId" => "{sessionid}",
+	"DataCenterId" => 0,
+	"UniverseId" => 0,
+	"BrowserTrackerId" => 0,
+	"UsePortraitMode" => false,
+	"FollowUserId" => 0,
+	"characterAppearanceId" => {playerid}
 }
 <?php
 	function get_signature($script)

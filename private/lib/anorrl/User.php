@@ -1215,7 +1215,6 @@ EOT;
 		}
 
 		function SetProfilePicture(array $file): array {
-			require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/imageutils.php";
 			if($file['error'] == 0 && $file['size'] > 0 && $file['size'] <= 524288) { // 512kb cap
 				$file_contents = file_get_contents($file['tmp_name']);
 				$file_type = ImageUtils::checkMimeType($file_contents);

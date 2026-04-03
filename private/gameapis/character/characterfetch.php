@@ -11,8 +11,6 @@
 http://arl.lambda.cam/Asset/BodyColors.ashx?clothing;http://arl.lambda.cam/asset/?id=<?= $_GET['assetId'] ?>
 <?php else: 
 
-require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
-
 $userId = intval($_GET['userId']) ?? 1;
 
 $user = User::FromID($userId);

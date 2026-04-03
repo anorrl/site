@@ -28,7 +28,6 @@ if(isset($_GET['clothing'])): ?>
 <?php else:
 	header("Content-Type: text/plain"); 
 	// grab body colours of character
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
 	if(isset($_GET['userId'])) {
 		$user = User::FromID(intval($_GET['userId']));
 		if($user != null) {

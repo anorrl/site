@@ -130,8 +130,6 @@ end
 	}    
 	header("Content-Type: text/plain");
 
-	require_once $_SERVER['DOCUMENT_ROOT']."/core/utilities/userutils.php";
-
 	$user = SESSION ? SESSION->user : null;
 	$username = "Player";
 	$userid = 1;
