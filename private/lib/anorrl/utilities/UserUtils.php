@@ -396,8 +396,8 @@
 				
 			}
 
-			return $users;
-			//return $result_array;
+			//return $users;
+			return $result_array;
 		}
 
 		public static function GetAllUsers(string $query = ""): array|null {

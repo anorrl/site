@@ -1,16 +1,10 @@
 <?php
-	/*
-		REWRITE TO USE PDO AND ALSO LIKE DATABASE CLASS MAYBEEEE
-	*/
-
-	$settings = parse_ini_file($_SERVER['DOCUMENT_ROOT']."/../settings.env", true);
-
-	$database_settings = $settings['mysql'];
-
+	
+	$CONFIG = json_decode(file_get_contents($_SERVER['DOCUMENT_ROOT']."/../settings.json"));
 	$con = mysqli_connect(
-		$database_settings['HOSTNAME'],
-		$database_settings['USERNAME'],
-		$database_settings['PASSWORD'],
-		$database_settings['DATABASE']
+		$CONFIG->database->hostname,
+		$CONFIG->database->username,
+		$CONFIG->database->password,
+		$CONFIG->database->name
 	);
 ?>
