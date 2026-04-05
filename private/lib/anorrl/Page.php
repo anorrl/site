@@ -22,7 +22,7 @@
 			$this->bad_apple = $this->lucky_number > 6500 && $this->lucky_number < 6515;
 
 			$this->addScript("/js/core/jquery.js");
-			$this->addScript("/js/main.js?t=1234557801");
+			$this->addScript("/js/main.js?t=123123401");
 			$this->addStylesheet("/css/new/main.css");
 
 			if(SESSION) {

@@ -1,13 +1,11 @@
 @font-face {
 	font-family: 'punk';
-	src: url('/css/Punktype.ttf');
-	src: url('/css/Punktype.eot')\9;
+	src: url('/public/css/Punktype.ttf');
 }
 
 @font-face {
 	font-family: 'road';
-	src: url('/css/TransportMedium.ttf');
-	src: url('/css/TransportMedium.eot')\9;
+	src: url('/public/css/TransportMedium.ttf');
 }
 
 #Footer > * {
