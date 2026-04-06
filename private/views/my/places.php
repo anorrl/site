@@ -27,13 +27,32 @@
 	$page->addStylesheet("/css/new/my/places.css");
 	$page->loadBasicHeader();
 ?>
-
 <script>
 	$(function() {
 		$(".Place").on("click", function() {
 			var placeid = $(this).attr("data-place-id");
 			window.external.startGame("http://<?= $domain ?>/","http://<?= $domain ?>/","http://<?= $domain ?>/game/edit.ashx?placeId=" + placeid);
 		});
+		
+		$("#Sidebar a").each(function() {
+			$(this).attr("href", "#");
+
+			$(this).on("click", function() {
+				var view = $(this).attr("data-view");
+
+				$("#Places > div").each(function() {
+					$(this).css("display", "none");
+				});
+
+				$("#Sidebar a").each(function() {
+					$(this).removeAttr("selected");
+				})
+
+				$(this).attr("selected", "true");
+
+				$("#"+view+"ProjectsView").css("display", "block");
+			})
+		})
 	});
 </script>
 <div id="Header">
@@ -44,8 +63,8 @@
 	<div id="Sidebar">
 		<div id="SidewaySeparator"></div>
 		<ul>
-			<li><a href="" selected>Your Projects</a></li>
-			<li><a href="">Collaborated Projects</a></li>
+			<li><a href="" data-view="Main" selected>Your Projects</a></li>
+			<li><a href="" data-view="Collaborative">Collaborated Projects</a></li>
 		</ul>
 		<div id="DidYouKnow">
 			<p style="font-size: 16px"><b>Did you know?</b></p>

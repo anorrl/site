@@ -3,6 +3,7 @@
 	namespace anorrl;
 
 	use anorrl\Asset;
+	use anorrl\Database;
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\AssetUtils;
 
@@ -21,30 +22,29 @@
 			$place = Place::FromID($placeID);
 
 			if($place != null) {
-				include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-				$stmt_checkserver = $con->prepare("SELECT * FROM `active_servers` WHERE `server_placeid` = ? AND `server_teamcreate` = 0;");
-				$stmt_checkserver->bind_param("i", $place->id);
-				$stmt_checkserver->execute();
-
-				$result_checkserver = $stmt_checkserver->get_result();
-
-				$data = [];
+				$fetch_servers = Database::singleton()->run(
+					"SELECT * FROM `active_servers` WHERE `server_placeid` = :placeid AND `server_teamcreate` = 0;",
+					[ ":placeid" => $place->id ]
+				)->fetchAll(\PDO::FETCH_OBJ);
 
 				$concurrentplayers = 0;
 
-				while($server_row = $result_checkserver->fetch_assoc()) {
-					$stmt_checkplayersfromserver = $con->prepare("SELECT * FROM `active_players` WHERE `session_serverid` = ? AND `session_status` = 1;");
-					$stmt_checkplayersfromserver->bind_param("s", $server_row['server_id']);
-					$stmt_checkplayersfromserver->execute();
+				foreach($fetch_servers as $server_row) {
+					$fetch_players = Database::singleton()->run(
+						"SELECT COUNT(`session_id`) FROM `active_players` WHERE `session_serverid` = :serverid AND `session_status` = 1;",
+						[ ":serverid" => $server_row->server_id ]
+					)->fetch(\PDO::FETCH_ASSOC);
 
-					$result_checkplayersfromserver = $stmt_checkplayersfromserver->get_result();
-					
-					$concurrentplayers += $result_checkplayersfromserver->num_rows;
+					$concurrentplayers += $fetch_players['COUNT(`session_id`)'];
 				}
 
-				$stmt_updateplayercount = $con->prepare("UPDATE `asset_places` SET `place_currently_playing` = ? WHERE `place_id` = ?");
-				$stmt_updateplayercount->bind_param("ii", $concurrentplayers, $place->id);
-				$stmt_updateplayercount->execute();
+				$fetch_servers = Database::singleton()->run(
+					"UPDATE `asset_places` SET `place_currently_playing` = :playerscount WHERE `place_id` = :placeid",
+					[
+						":placeid" => $place->id,
+						":playerscount" => $concurrentplayers
+					]
+				);
 			}
 		}
 

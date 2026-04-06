@@ -42,6 +42,8 @@
 			require __DIR__.$file;
 		});
 	}
+
+	//route('GET',      '/test', '/private/views/test.php');
  
 	route('GET',      '/', '/private/views/index.php');
 	route('GET',      '/index', '/private/views/index.php');
@@ -61,7 +63,6 @@
 
 	$router->map('GET', '/game/[i:id]', function($id) {
 		$name = "a";
-		$id = $id;
 		require __DIR__.'/private/views/place.php';
 	});
 	
@@ -200,13 +201,7 @@
 	route('GET',      '/user/request-friendship', '/private/gameapis/social/request-friendship.php');
 	route('GET',      '/user/decline-friend-request', '/private/gameapis/social/decline-friend-request.php');
 	route('GET|POST', '/Game/AreFriends', '/private/gameapis/social/arefriends.php');
-	
-	        route('GET',      '/places/[i:placeId]/settings', '/private/gameapis/places/settings.php');
-        route('GET',      '/universes/get-info', '/private/gameapis/universes/get-info.php');
-        route('GET',      '/universes/validate-place-join', '/private/gameapis/universes/validate-place-join.php');
-        route('GET',      '/universes/get-universe-places', '/private/gameapis/universes/get-universe-places.php');
-        route('GET',      '/universes/get-aliases', '/private/gameapis/universes/get-aliases.php');
-        route('GET',      '/developerproducts/list', '/private/gameapis/universes/developerproducts.php');
+
 	route('GET',      '/universes/get-universe-containing-place', '/private/gameapis/universes/get-universe-containing-place.php');
 	route('GET',      '/universes/[i:universeId]/cloudeditenabled', '/private/gameapis/universes/cloudeditenabled.php');
 	route('GET',      '/universes/[i:universeId]/game-start-info', '/private/gameapis/universes/game-start-info.php');
@@ -216,6 +211,12 @@
 	route('GET',      '/universes/[i:universeId]/addcloudeditor', '/private/gameapis/universes/addcloudeditor.php');
 	route('GET',      '/universes/[i:universeId]/removecloudeditor', '/private/gameapis/universes/removecloudeditor.php');
 	route('GET',      '/places/[i:placeId]/settings', '/private/gameapis/places/settings.php');
+	route('GET',      '/places/[i:placeId]/settings', '/private/gameapis/places/settings.php');
+	route('GET',      '/universes/get-info', '/private/gameapis/universes/get-info.php');
+	route('GET',      '/universes/validate-place-join', '/private/gameapis/universes/validate-place-join.php');
+	route('GET',      '/universes/get-universe-places', '/private/gameapis/universes/get-universe-places.php');
+	route('GET',      '/universes/get-aliases', '/private/gameapis/universes/get-aliases.php');
+	route('GET',      '/developerproducts/list', '/private/gameapis/universes/developerproducts.php');
 	
 	route('GET',      '/Asset/BodyColors.ashx', '/private/gameapis/character/bodycolors.php');
 	route('GET',      '/Asset/CharacterFetch.ashx', '/private/gameapis/character/characterfetch.php');
