@@ -108,13 +108,20 @@
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 				$output = curl_exec($ch);
 				curl_close($ch);
+				
+				
 
 				/*if(strlen(gzdecode($output)) != 0) {
 					$output = gzdecode($output);
 				}*/
 
 				$mimetype = checkMimeType($output);
-
+				
+				if($mimetype == "application/gzip") {
+					$output = gzdecode($output);
+					$mimetype = checkMimeType($contents);
+				}
+				
 				if(str_contains($mimetype, "json")) {
 					$contents = "";
 
@@ -141,7 +148,13 @@
 			} else {
 				if($id > 10420) {
 					$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""));
-					header("Content-Type: ".checkMimeType($contents));
+					$mimetype = checkMimeType($contents);
+					
+					if($mimetype == "application/gzip") {
+						$contents = gzdecode($contents);
+						$mimetype = checkMimeType($contents);
+					}
+					header("Content-Type: $mimetype");
 					if(str_contains(checkMimeType($contents), "json")) {
 						echo "Unauthorised access to this roblox asset!";
 						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""), "");
