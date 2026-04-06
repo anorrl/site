@@ -14,7 +14,6 @@
 		else
 			return false;
 	}
-
 	if(!IsRewrite()) {
 		die(header("Location: /my/home"));
 	}
@@ -30,11 +29,11 @@
 		die(header("Location: /my/home"));
 	}
 
-	$user = UserUtils::RetrieveUser($get_user);
-
-	if($user == null) {
+	if(!SESSION) {
 		die(header("Location: /login"));
 	}
+
+	$user = SESSION->user;
 
 	$header_data = $get_user;
 
@@ -45,57 +44,61 @@
 
 	$page->loadHeader();
 ?>
-					<h2><?= $get_user->name ?>'s Followers</h2>
-					<div id="FriendsContainer">
-						<?php if(count($followers) != 0): ?>
-						<table>
-						<?php 
-							$count = 0;
-							foreach($followers as $friendo) {
-								if($count == 0) {
-									echo "<tr>";
-								}
+<h2><?= $get_user->name ?>'s Followers</h2>
+<div id="FriendsContainer">
+	<?php if(count($followers) != 0): ?>
+	<table>
+	<?php 
+		$count = 0;
+		foreach($followers as $friendo) {
+			if($count == 0) {
+				echo "<tr>";
+			}
 
-								$controlPanel = "";
+			$controlPanel = "";
 
-								$fid = $friendo->id;
-								
-								$profile = $friendo->setprofilepicture ? "profile" : "headshot";
+			$fid = $friendo->id;
+			
+			$profile = $friendo->setprofilepicture ? "profile" : "headshot";
 
-								if(UserSettings::Get($user)->headshots_enabled) {
-									$profile = "headshot";
-								}
+			if(UserSettings::Get($user)->headshots_enabled) {
+				$profile = "headshot";
+			}
 
-								$status = $friendo->IsOnline() ? "Online" : "Offline";
-								
-								$fname = $friendo->name;
-								echo <<<EOT
-								<td>
-									<div class="Friend">
-										<a href="/users/$fid/profile" title="$fname" target="_blank">
-											<img src="/thumbs/$profile?id=$fid&sxy=100">
-											<span><img src="/images/OnlineStatusIndicator_Is$status.png"> $fname</span>
-										</a>
-									</div>
-								</td>
-								EOT;
+			$status = $friendo->IsOnline() ? "Online" : "Offline";
+			
+			$fname = $friendo->name;
+			echo <<<EOT
+			<td>
+				<div class="Friend">
+					<a href="/users/$fid/profile" title="$fname" target="_blank">
+						<img src="/thumbs/$profile?id=$fid&sxy=100">
+						<span><img src="/images/OnlineStatusIndicator_Is$status.png"> $fname</span>
+					</a>
+				</div>
+			</td>
+			EOT;
 
-								$count++;
+			$count++;
 
-								if($count == count($followers) && $count%6 < 6) {
-									for($i = 0; $i < 6-($count%6); $i++) {
-										echo "<td style=\"width:142px;\"></td>";
-									}
-								}
+			if($count == count($followers) && $count%6 < 6) {
+				for($i = 0; $i < 6-($count%6); $i++) {
+					echo "<td style=\"width:142px;\"></td>";
+				}
+			}
 
-								if($count%6 == 0) {
-									echo "</tr>";
-								}
-							}
-						?>
-						</table>
-						<?php endif ?>
-					</div>
+			if($count%6 == 0) {
+				echo "</tr>";
+			}
+		}
+	?>
+	</table>
+	<?php else: ?>
+		<center>
+			<p style="font-size: 16px">Seems like <?= $get_user->id != $user->id ? "{$get_user->name} has" : "you have" ?>  no followers! :[</p>
+		</center>
+	<?php endif ?>
+</div>
 <?php
 	$page->loadFooter();
 ?>

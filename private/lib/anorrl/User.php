@@ -4,6 +4,7 @@
 	
 	use CSSValidator\CSSValidator;
 	use anorrl\Asset;
+	use anorrl\Database;
 	use anorrl\Place;
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\UtilUtils;
@@ -179,32 +180,32 @@
 		}
 		
 		function GetFollowers(): array {
-			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-			$stmt_getuser = $con->prepare("SELECT * FROM `follows` WHERE `followed` = ?;");
-			$stmt_getuser->bind_param('i', $this->id);
-			$stmt_getuser->execute();
-			$result = $stmt_getuser->get_result();
+			$fetch = Database::singleton()->run(
+				"SELECT * FROM `follows` WHERE `followed` = :id",
+				[ ":id" => $this->id ]
+			)->fetchAll(\PDO::FETCH_OBJ);
 
 			$followers = [];
 
-			while($row = $result->fetch_assoc()) {
-				array_push($followers, User::FromID($row['follower']));
+			foreach($fetch as $row) {
+				$followers[] = User::FromID($row->follower);
 			}
+
 			return $followers;
 		}
 		
 		function GetFollowing(): array {
-			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-			$stmt_getuser = $con->prepare("SELECT * FROM `follows` WHERE `follower` = ?;");
-			$stmt_getuser->bind_param('i', $this->id);
-			$stmt_getuser->execute();
-			$result = $stmt_getuser->get_result();
+			$fetch = Database::singleton()->run(
+				"SELECT * FROM `follows` WHERE `follower` = :id",
+				[ ":id" => $this->id ]
+			)->fetchAll(\PDO::FETCH_OBJ);
 
 			$following = [];
 
-			while($row = $result->fetch_assoc()) {
-				array_push($following, User::FromID($row['followed']));
+			foreach($fetch as $row) {
+				$following[] = User::FromID($row->followed);
 			}
+
 			return $following;
 		}
 
@@ -286,13 +287,8 @@
 			foreach($grabbedplaces as $asset) {
 				$place = Place::FromID($asset->id);
 				if($place instanceof Place) {
-					if($teamcreate && $place->teamcreate_enabled && $place->IsCloudEditor($this)) {
-						array_push($result, $place);
-					}
-
-					if(!$teamcreate && !$place->teamcreate_enabled) {
-						
-						array_push($result, $place);
+					if(($teamcreate && $place->teamcreate_enabled && $place->IsCloudEditor($this)) || (!$teamcreate && !$place->teamcreate_enabled)) {
+						$result[] = $place;
 					}
 				}
 			}
@@ -421,7 +417,7 @@
 				$sql_extra .= " AND `asset_public` = 1";
 			}
 			
-			$sql = "SELECT assets.* FROM `transactions`, `assets` WHERE `transactions`.`ta_asset` = `assets`.`asset_id` AND `ta_userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `ta_date` DESC";
+			$sql = "SELECT assets.* FROM `transactions`, `assets` WHERE `transactions`.`ta_asset` = `assets`.`asset_id` AND `ta_userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `asset_lastedited` DESC";
 
 			if($page <= -1 || $count <= 0) {
 				$stmt_getassets = $con->prepare("$sql");

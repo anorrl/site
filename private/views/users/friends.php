@@ -101,6 +101,10 @@
 		}
 	?>
 	</table>
+	<?php else: ?>
+		<center>
+			<p style="font-size: 16px">Seems like <?= $get_user->id != $user->id ? "{$get_user->name} has" : "you have" ?> no friends! :[</p>
+		</center>
 	<?php endif ?>
 </div>
 <?php $page->loadFooter(); ?>

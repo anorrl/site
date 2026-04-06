@@ -92,6 +92,10 @@
 		}
 	?>
 	</table>
+	<?php else: ?>
+		<center>
+			<p style="font-size: 16px">Seems like <?= $get_user->id != $user->id ? "{$get_user->name} isn't" : "you aren't" ?> following anyone! :[</p>
+		</center>
 	<?php endif ?>
 </div>
 <?php $page->loadFooter() ?>

@@ -40,16 +40,34 @@
 				$user_id = SESSION->user->id;
 				$time = time();
 
-				$this->addStylesheet("/users/$user_id/css?t=$time");
+				$this->addStylesheet("/users/$user_id/css?t=$time", false);
 			}
 		}
 
-		function addStylesheet(string $path) {
-			$this->addResource('stylesheet', $path);
+		function clearAll() {
+			$this->clearStylesheets();
+			$this->clearScripts();
+			$this->clearMetas();
 		}
 
-		function addScript(string $path) {
-			$this->addResource('script', $path);
+		function clearMetas() {
+			$this->metas = [];
+		}
+		
+		function clearScripts() {
+			$this->scripts = [];
+		}
+
+		function clearStylesheets() {
+			$this->stylesheets = [];
+		}
+
+		function addStylesheet(string $path, bool $public = true) {
+			$this->addResource('stylesheet', $path, $public);
+		}
+
+		function addScript(string $path, bool $public = true) {
+			$this->addResource('script', $path, $public);
 		}
 
 		function addMeta(string $type, string $path) {
@@ -59,17 +77,25 @@
 			];
 		}
 
-		function addResource(string $type, string $path) {
+		function addResource(string $type, string $path, bool $public = true) {
 			if($type == "script") {
-				$this->scripts[] = "/public$path";
+				$this->scripts[] = ($public ? "/public":"").$path;
 			}
 			if($type == "stylesheet") {
-				$this->stylesheets[] = "/public$path";
+				$this->stylesheets[] = ($public ? "/public":"").$path;
 			}
 		}
 
 		function loadTemplate(string $template) {
 			include $_SERVER['DOCUMENT_ROOT'] . "/private/templates/{$template}.php";
+		}
+
+		function loadBasicHeader() {
+			$this->loadTemplate("basicheader");
+		}
+
+		function loadBasicFooter() {
+			$this->loadTemplate("basicfooter");
 		}
 
 		function loadHeader() {

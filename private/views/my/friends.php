@@ -1,6 +1,7 @@
 <?php
 	use anorrl\Page;
 	use anorrl\User;
+	use anorrl\Database;
 
 	if(!SESSION) {
 		die(header("Location: /login"));
@@ -8,13 +9,12 @@
 
 	$user = SESSION->user;
 
-	include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
+	$fetch = Database::singleton()->run(
+		"SELECT * FROM `friends` WHERE (`sender` = :id OR `reciever` = :id) ORDER BY `status` ASC",
+		[ ":id" => $user->id ]
+	)->fetchAll(\PDO::FETCH_OBJ);
 
-	$stmt = $con->prepare("SELECT * FROM `friends` WHERE (`sender` = ? OR `reciever` = ?) ORDER BY `status` ASC");
-	$stmt->bind_param("ii", $user->id, $user->id);
-	$stmt->execute();
-
-	$result_stmt = $stmt->get_result();
+	$number_of_friends = count($fetch);
 
 	$page = new Page("Your Friends");
 	$page->addStylesheet("/css/new/my/friends.css?v=1");
@@ -25,18 +25,18 @@
 
 <h2>Your Friends</h2>
 <div id="FriendsContainer">
-	<?php if($result_stmt->num_rows != 0): ?>
+	<?php if($number_of_friends != 0): ?>
 	<table>
 	<?php 
 		$count = 0;
-		while($row = $result_stmt->fetch_assoc()) {
+		foreach($fetch as $row) {
 			if($count == 0) {
 				echo "<tr>";
 			}
 
 			$controlPanel = "";
 
-			$friendo = $row['reciever'] == $user->id ? User::FromID($row['sender']) : User::FromID($row['reciever']);
+			$friendo = User::FromID($row->reciever == $user->id ? $row->sender : $row->reciever);
 			
 			if($friendo == null) {
 				// There's a person that's non existent somehow!
@@ -45,7 +45,7 @@
 
 			$fid = $friendo->id;
 
-			if($row['status'] == 1) {
+			if($row->status == 1) {
 				$controlPanel = <<<EOT
 				<hr>
 				<div id="ControlPanel" style="font-size: 11px">
@@ -53,7 +53,7 @@
 				</div>
 				EOT;
 			} else {
-				if($row['reciever'] == $user->id) {
+				if($row->reciever == $user->id) {
 					$controlPanel = <<<EOT
 					<hr>
 					<div id="ControlPanel" style="font-weight: bold;font-size: 13px">
@@ -97,7 +97,7 @@
 
 			$count++;
 
-			if($count == $result_stmt->num_rows && $count%6 < 6) {
+			if($count == $number_of_friends && $count%6 < 6) {
 				for($i = 0; $i < 6-($count%6); $i++) {
 					echo "<td style=\"width:142px;\"></td>";
 				}
@@ -109,6 +109,10 @@
 		}
 	?>
 	</table>
+	<?php else: ?>
+		<center>
+			<p style="font-size: 16px">Seems like you have no friends! :[</p>
+		</center>
 	<?php endif ?>
 </div>
 <?php $page->loadFooter(); ?>

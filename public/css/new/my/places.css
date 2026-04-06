@@ -1,0 +1,134 @@
+body {
+	background: url('/images/bkg.png');
+	margin: 0px;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 14px;
+}
+
+#Header {
+	background-image: url('/images/ide/cardboard.png?v=4');
+	text-align: center;
+	height: 72px;
+}
+
+#Header img {
+	height: 72px;
+}
+
+#Separator {
+	background-image: url('/images/header/navbar.jpg');
+	background-size: 46px;
+	width: 100%;
+	border: 6px solid black;
+	border-left: transparent;
+	border-right: transparent;
+	height: 30px;
+	position:relative;
+}
+
+#SidewaySeparator {
+	background-image: url('/images/header/navbar_sideways.jpg');
+	background-size: 30px;
+	width: 30px;
+	border: 6px solid black;
+	border-top: transparent;
+	border-bottom: transparent;
+	height: 100%;
+	float: right;
+	top: 0px;
+}
+
+#Sidebar {
+	width: 250px;
+	height: calc(100vh - 114px);
+	background: #222;
+	float: left;
+}
+
+#Sidebar ul {
+	float: left;
+	font-weight: bold;
+	list-style: none;
+	padding: 0px;
+	text-align: center;
+	width: 205px;
+}
+
+#Sidebar ul > li {
+	padding: 5px 0px;
+}
+
+a {
+	text-decoration: none;
+	color: #ffa634;
+	letter-spacing: 1px;
+}
+
+a:hover, a[selected] {
+	text-decoration: underline;
+	color: #ffc63f;
+}
+
+#DidYouKnow {
+	border: 2px solid black;
+	background: #1a1a1a;
+	color: white;
+	float: left;
+	text-align: center;
+	padding: 5px;
+	width: 180px;
+	margin-left: 8px;
+}
+
+#Places {
+	float: left;
+	padding: 15px;
+}
+
+.Place {
+	background: #222;
+	padding: 10px;
+	border: 2px solid black;
+	text-align: center;
+	font-weight: bold;
+	border-radius: 4px;
+
+	float: left;
+}
+
+.Place > * {
+	letter-spacing: 0px;
+}
+
+.Place a:hover {
+	text-decoration: none;
+}
+
+.Place:hover {
+	background: #333;
+}
+
+.Place img {
+	height: 128px;
+	border: 2px solid black;
+}
+
+.Place:hover {
+	color: #ffc63f;
+}
+
+.Place #Name {
+	margin-top: 5px;
+}
+
+.Place #LastEdited {
+	color: #999;
+	font-weight: none;
+	font-size: 12px;
+	font-style: italic;
+}
+
+#Places td {
+	margin: 0 auto;
+	justify-items: center
+}
