@@ -3,6 +3,9 @@
 	namespace anorrl;
 
 	use anorrl\enums\AssetType;
+	use anorrl\enums\TransactionType;
+	use anorrl\utilities\AssetTypeUtils;
+	use anorrl\utilities\TransactionUtils;
 	use anorrl\utilities\UtilUtils;
 	use anorrl\User;
 	use anorrl\AssetVersion;
@@ -153,7 +156,45 @@
 			}
 		}
 
-		function GetFileContents(int $version = -1) {
+		function purchase(TransactionType $type, User|null $user = \SESSION->user): array {
+			
+			if(!$user)
+				return ["error" => true, "reason" => "User not authorised to perform this action!"];
+
+			if(!($this->onsale && AssetTypeUtils::IsSellable($this->type)))
+				return ["error" => true, "reason" => "Item is not purchasable!"];
+			
+
+			$successful_navigation = false;
+
+			switch($type) {
+				case TransactionType::FREE:
+					//if($this->cones_cost == 0 && $this->lights_cost == 0)
+					$successful_navigation = true;
+					//else
+					//successful_navigation = false
+					break;
+				case TransactionType::CONES:
+					break;
+				case TransactionType::LIGHTS:
+					break;
+				default:
+					$successful_navigation = false;
+			}
+
+			if(!$successful_navigation)
+				return ["error" => true, "reason" => "Invalid purchasing method!"];
+
+			// transact and shiiit (TransactionUtils be useful)
+
+			$cost = 0; // free since i need to implement the rest
+
+			TransactionUtils::CommitTransaction($this, $user, $type, $cost);
+
+			return ["error" => false];
+		}
+
+		function getFileContents(int $version = -1) {
 			if($version > 0) {
 				$asset_version = AssetVersion::GetVersionOf($this, $version);
 
@@ -186,10 +227,11 @@
 		}
 
 		function IsUsable(): bool {
-			if(AssetVersion::GetLatestVersionOf($this) == null || self::GetFileContents() == null) {
+			$contents = $this->getFileContents();
+			if(AssetVersion::GetLatestVersionOf($this) == null || !$contents) {
 				return false;
 			}
-			return strlen(trim(self::GetFileContents())) > 0;
+			return strlen(trim($contents)) > 0;
 		}
 
 		function GetURLTitle() {

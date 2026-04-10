@@ -28,7 +28,7 @@
 	$asset = Asset::FromID($id);
 	if($asset != null) {
 		$version = isset($_GET['version']) ? intval($_GET['version']) : -1;
-		$contents = $asset->GetFileContents($version);
+		$contents = $asset->getFileContents($version);
 
 		if($contents != null) {
 			if($asset->type == AssetType::PLACE) {

@@ -3,15 +3,10 @@
 	namespace anorrl\utilities;
 
 	use anorrl\Asset;
+	use anorrl\Database;
+	use anorrl\User;
+	use anorrl\enums\TransactionType;
 
-	// this could also be moved to a function like Buy() or something idk
-	// PDO needed too!
-
-	enum TransactionType {
-		case CONES;
-		case LIGHTS;
-		case FREE;
-	}
 
 	class TransactionUtils {
 		private static function getRandomString($length = 15): string {
@@ -28,14 +23,12 @@
 
 		
 		public static function GenerateID() {
-			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-			$id = self::getRandomString(); //id
-			$stmt = $con->prepare('SELECT * FROM `transactions` WHERE `ta_id` LIKE ?');
-			$stmt->bind_param('s', $id);
-			$stmt->execute();
-			$stmt->store_result();
-			
-			$instances = $stmt->num_rows;
+			$id = self::getRandomString();
+
+			$instances = Database::singleton()->run(
+				"SELECT `ta_id` FROM `transactions` WHERE `ta_id` LIKE :id",
+				[ ":id" => $id ]
+			)->rowCount();
 			
 			if($instances != 0) {
 				return self::GenerateID();
@@ -44,7 +37,7 @@
 			}
 		}
 
-		public static function BuyItem(int|string $asset_id): string {
+		/*public static function BuyItem(int|string $asset_id): string {
 			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
 			
 			$get_user = SESSION ? SESSION->user : null;
@@ -91,6 +84,10 @@
 			} else {
 				return "User is not authorised to perform this action!";
 			}
+		}*/
+
+		public static function CommitTransaction(Asset $asset, User $user, TransactionType|null $type = null, int $cost = 0) {
+			
 		}
 	}
 ?>
