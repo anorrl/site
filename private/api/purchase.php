@@ -20,7 +20,7 @@
 		if(!$asset)
 			die(json_encode(["error" => true, "message" => "Invalid purchase method."]));
 		
-		die(json_encode($asset->purchase($type)));
+		die(json_encode($asset->purchase($type, $user)));
 	} else {
 		die(json_encode(["error" => true, "message" => "User is not authorised to perform this action."]));
 	}

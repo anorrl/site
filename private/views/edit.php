@@ -96,7 +96,9 @@
 	}
 
 	if(isset($_POST['ANORRL$EditItem$Name']) &&
-	   isset($_POST['ANORRL$EditItem$Description'])
+	   isset($_POST['ANORRL$EditItem$Description']) && 
+	   isset($_POST['ANORRL$EditItem$Cost$Cones']) && 
+	   isset($_POST['ANORRL$EditItem$Cost$Lights'])
 	) {
 
 		include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
@@ -106,8 +108,15 @@
 		$public = isset($_POST['ANORRL$EditItem$PublicBox']);
 		$comments_enabled = isset($_POST['ANORRL$EditItem$CommentsBox']);
 		$on_sale = isset($_POST['ANORRL$EditItem$OnSaleBox']);
+		$cones = intval($_POST['ANORRL$EditItem$Cost$Cones']);
+		$lights = intval($_POST['ANORRL$EditItem$Cost$Lights']);
 
-		$result = AssetUploader::EditAsset($asset, $name, $description, $public, $on_sale, $comments_enabled);
+		if($cones < 0) { $cones = 0; }
+		if($cones > 99999) { $cones = 99999; }
+		if($lights < 0) { $lights = 0; }
+		if($lights > 99999) { $lights = 99999; }
+
+		$result = AssetUploader::EditAsset($asset, $name, $description, $public, $on_sale, $comments_enabled, $cones, $lights);
 		
 		if($result['error']) {
 			$_SESSION['ANORRL$EditItem$Error'] = $result['reason'];
@@ -247,12 +256,6 @@
 							<td>Public</td>
 							<td><input type="checkbox" name="ANORRL$EditItem$PublicBox" <?php if($asset->public): ?>checked<?php endif ?>></td>
 						</tr>
-						<?php if(AssetTypeUtils::IsSellable($asset->type)): ?>
-						<tr>
-							<td><label for="OnSaleCheckbox">On Sale</label></td>
-							<td><input id="OnSaleCheckbox" name="ANORRL$EditItem$OnSaleBox" type="checkbox" <?php if($asset->onsale): ?>checked<?php endif ?>></td>
-						</tr>
-						<?php endif ?>
 						<tr>
 							<td>Enable Comments</td>
 							<td><input type="checkbox" name="ANORRL$EditItem$CommentsBox" <?php if($asset->comments_enabled): ?>checked<?php endif ?>></td>
@@ -261,6 +264,23 @@
 				</div>
 				
 			</div>
+
+			<?php if(AssetTypeUtils::IsSellable($asset->type)): ?>
+			<div id="DetailStack">
+				<h4 style="margin-top: 10px">Money&nbsp;&nbsp;money&nbsp;&nbsp;money...</h4>
+				<table id="Table">
+					<tr>
+						<td><span style="font-size:11px; color:lightgray;font-weight: bold;">Set currency to 0 to make it not use that currency...</span></td>
+					</tr>
+					<tr>
+						<td><label for="OnSaleCheckbox">On Sale</label><input id="OnSaleCheckbox" name="ANORRL$EditItem$OnSaleBox" type="checkbox" <?php if($asset->onsale): ?>checked<?php endif ?>></td>
+
+						<td class="ThePricing" id="TrafficCones">Traffic Cones<input type="number" name="ANORRL$EditItem$Cost$Cones" value="<?= $asset->cones ?>" min="0"></td>
+						<td class="ThePricing" id="TrafficLights">Traffic Lights<input type="number" name="ANORRL$EditItem$Cost$Lights" value="<?= $asset->lights ?>" min="0"></td>
+					</tr>
+				</table>
+			</div>
+			<?php endif ?>
 			
 			<?php if($asset->type == AssetType::PLACE): ?>
 			<div id="DetailStack">

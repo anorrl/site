@@ -206,6 +206,8 @@
 			bool $public = true,
 			bool $on_sale = true,
 			bool $comments_enabled = true,
+			int $cones = 0,
+			int $lights = 0,
 			User|null $user = null
 		): array {
 
@@ -214,7 +216,7 @@
 			}
 
 			if($user != null && !$user->IsBanned()) {
-				return self::CommitUpdateAsset($asset, null, $name, $description, $public, $on_sale, $comments_enabled, $user);
+				return self::CommitUpdateAsset($asset, null, $name, $description, $public, $on_sale, $comments_enabled, $cones, $lights, $user);
 			}
 
 			return ["error" => true, "reason" => "User is not authorised to perform this action!"];
@@ -228,6 +230,8 @@
 			bool $public = true,
 			bool $on_sale = true,
 			bool $comments_enabled = true,
+			int $cones = 0,
+			int $lights = 0,
 			User $user
 		): array {
 			if($user->id != $asset->creator->id && !$user->isAdmin()) {
@@ -303,6 +307,8 @@
 				$public = $asset->public;
 				$on_sale = $asset->onsale;
 				$comments_enabled = $asset->comments_enabled;
+				$cones = $asset->cones;
+				$lights = $asset->lights;
 				
 				if($asset->type == AssetType::IMAGE && $asset->type == AssetType::LUA) {
 					if(!$user->isAdmin()) {
@@ -354,7 +360,7 @@
 						return INVALIDFILE;
 					}
 
-					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
+					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $cones, $lights, $user);
 					
 					if(!$result['error']) {
 						self::ExecuteRender($asset->id, $type, $data);
@@ -366,7 +372,7 @@
 						return INVALIDFILE;
 					}
 
-					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
+					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $cones, $lights, $user);
 
 					if(!$result['error']) {
 						if(AssetTypeUtils::IsRenderable($type)) {
@@ -377,7 +383,7 @@
 					return $result;
 
 				} else if($asset->type == AssetType::LUA) {
-					return self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
+					return self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $cones, $lights, $user);
 
 				} else {
 					return ["error" => true, "reason" => "Invalid asset type found!"];

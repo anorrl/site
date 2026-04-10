@@ -1330,7 +1330,7 @@ EOT;
 						":id" => $this->id,
 						":css" => $data
 					]
-				)->execute();
+				);
 
 				return true;
 			}
@@ -1407,7 +1407,7 @@ EOT;
 						":id" => $this->id,
 						":action" => $action,
 					]
-				)->execute();
+				);
 			} else {
 				// Else, Update row
 				$db->run(
@@ -1416,7 +1416,7 @@ EOT;
 						":id" => $this->id,
 						":action" => $action,
 					]
-				)->execute();
+				);
 			}
 		}
 

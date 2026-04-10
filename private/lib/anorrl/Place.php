@@ -110,7 +110,7 @@
 
 			$db = Database::singleton();
 
-			$db->run("UPDATE `asset_places` SET `place_teamcreate_enabled` = 0 WHERE `place_id` = :placeid", [":placeid" => $this->id])->execute();
+			$db->run("UPDATE `asset_places` SET `place_teamcreate_enabled` = 0 WHERE `place_id` = :placeid", [":placeid" => $this->id]);
 
 			if($this->teamcreate_enabled) {
 				$db->run(
@@ -119,7 +119,7 @@
 						":creator" => $this->creator->id,
 						":placeid" => $this->id
 					]
-				)->execute();
+				);
 
 				// rewrite to pdo later
 				include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
@@ -158,7 +158,7 @@
 						die(http_response_code(503));
 					}
 
-					$db->run("DELETE FROM `active_servers` WHERE `server_jobid` = :jobid;", [ ":jobid" => $jobID ])->execute();
+					$db->run("DELETE FROM `active_servers` WHERE `server_jobid` = :jobid;", [ ":jobid" => $jobID ]);
 				}
 			}
 		}

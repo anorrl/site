@@ -75,6 +75,9 @@
 				$this->onsale = boolval($rowdata['asset_onsale']);
 				$this->sales_count = intval($rowdata['asset_sales_count']);
 
+				$this->lights = intval($rowdata['asset_lights']);
+				$this->cones = intval($rowdata['asset_cones']);
+
 				$this->notcatalogueable = boolval($rowdata['asset_nevershow']);
 				$this->relatedasset = Asset::FromID(intval($rowdata['asset_relatedid']));
 				$this->current_version = intval($rowdata['asset_currentversion']);
@@ -97,6 +100,9 @@
 	
 				$this->onsale = $asset_data->onsale;
 				$this->sales_count = $asset_data->sales_count;
+
+				$this->lights = $asset_data->lights;
+				$this->cones = $asset_data->cones;
 				
 				$this->notcatalogueable = $asset_data->notcatalogueable;
 				$this->relatedasset = $asset_data->relatedasset;
@@ -107,7 +113,7 @@
 			}
 		}
 
-		function purchase(TransactionType $type, User|null $user = \SESSION->user): array {
+		function purchase(TransactionType $type, User|null $user = null): array {
 			
 			if(!$user)
 				return ["error" => true, "reason" => "User not authorised to perform this action!"];
@@ -188,7 +194,7 @@
 
 		function isUsable(): bool {
 			return true;
-			
+
 			$contents = $this->getFileContents();
 			if(AssetVersion::GetLatestVersionOf($this) == null || !$contents) {
 				return false;
@@ -287,7 +293,7 @@
 						":uid" => $userid,
 						":type" => $this->type->ordinal()
 					]
-				)->execute();
+				);
 
 				$this->updateFavouritesCount();
 			}
@@ -304,7 +310,7 @@
 			$db->run(
 				"UPDATE `assets` SET `asset_favourites_count` = :favcount WHERE `asset_id` = :id",
 				[":id" => $this->id, ":favcount" => $favcount]
-			)->execute();
+			);
 		}
 
 		function unfavourite(User|int $user) {
@@ -321,7 +327,7 @@
 						":id" => $this->id,
 						":uid" => $userid
 					]
-				)->execute();
+				);
 
 				$this->updateFavouritesCount();
 			}

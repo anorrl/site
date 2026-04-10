@@ -136,7 +136,7 @@ ANORRL.Catalog  = {
 						$(this).remove();
 					});
 					
-					if(asset['onsale']) {
+					/*if(asset['onsale']) {
 						var salecount = asset['sales_count']+" times";
 						if(asset['sales_count'] == 1) {
 							salecount = asset['sales_count']+" time";
@@ -144,6 +144,43 @@ ANORRL.Catalog  = {
 
 						template.find("#Pricing").append($("<span id=\"FreeTag\">Sold: "+ salecount +"</span>"));
 					} else {
+						template.find("#Pricing").append($("<span id=\"NotOnSaleTag\">Not on sale</span>"))
+					}*/
+
+					if(asset['onsale']) {
+						if(asset['cost']['cones'] + asset['cost']['lights'] == 0) {
+							template.find("#Pricing").attr("oneprice", "true");
+							template.find("#Pricing").children().each(function() {
+								$(this).remove();
+							});
+							template.find("#Pricing").append($("<span id=\"FreeTag\">Free</span>"))
+						} else {
+
+							if(asset['cost']['cones'] == 0) {
+								template.find("#Pricing #Cones").remove();
+							} else {
+								template.find("#Pricing #Cones #Costing").html(asset['cost']['cones']);
+							}
+
+							if(asset['cost']['lights'] == 0) {
+								template.find("#Pricing #Lights").remove();
+							} else {
+								template.find("#Pricing #Lights #Costing").html(asset['cost']['lights']);
+							}
+
+
+							if(asset['cost']['lights'] != 0 && asset['cost']['cones'] != 0) {
+								template.find("#Pricing").removeAttr("oneprice");
+							} else {
+								template.find("#Pricing").attr("oneprice", "true");
+							}
+
+						}
+					} else {
+						template.find("#Pricing").attr("oneprice", "true");
+						template.find("#Pricing").children().each(function() {
+							$(this).remove();
+						});
 						template.find("#Pricing").append($("<span id=\"NotOnSaleTag\">Not on sale</span>"))
 					}
 

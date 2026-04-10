@@ -102,7 +102,7 @@
 						":method" => $type->ordinal(),
 						":cost"   => $cost
 					]
-				)->execute();
+				);
 			} else {
 				Database::singleton()->run(
 					"INSERT INTO `transactions`(`id`, `userid`, `method`, `cost`) VALUES (?, ?, ?, ?)",
@@ -112,7 +112,7 @@
 						":method" => $type->ordinal(),
 						":cost"   => $cost
 					]
-				)->execute();
+				);
 			}
 		}
 

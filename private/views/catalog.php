@@ -14,7 +14,7 @@
 
 	$page = new Page("Catalog");
 
-	$page->addScript("/js/catalog.js?t=1771413807");
+	$page->addScript("/js/catalog.js?t=1771417807");
 
 	$page->addStylesheet("/css/new/forms.css");
 	$page->addStylesheet("/css/new/stuff.css?v=1");

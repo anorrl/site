@@ -61,7 +61,12 @@
 					],
 					"onsale" => $asset->onsale,
 					"favourites" => $asset->favourites_count,
-					"sales_count" => $asset->sales_count
+					"sales_count" => $asset->sales_count,
+					"cost" => [
+						"cones" => $asset->cones,
+						"lights" => $asset->lights
+					]
+					
 				]);
 			}
 		}
