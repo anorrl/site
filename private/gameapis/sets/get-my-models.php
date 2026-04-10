@@ -12,7 +12,7 @@
 				[
 					"AssetSetID" => 1,
 					"AssetTypeID" => $model->type->ordinal(),
-					"AssetVersionID" => $model->GetVersionID(),
+					"AssetVersionID" => $model->getVersionID(),
 					"ID" => $model->id,
 					"Name" => $model->name,
 					"SortOrder" => 2147483647,

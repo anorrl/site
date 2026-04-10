@@ -52,7 +52,7 @@
 				isset($_FILES['ANORRL$CreateAsset$File'])
 			) {
 				
-				//if($user->IsAdmin()) {
+				//if($user->isAdmin()) {
 				$result = null;
 				$name = trim($_POST['ANORRL$CreateAsset$Name']);
 
@@ -126,7 +126,7 @@
 			
 			<hr>
 			<li data_category="19"><a>Gears</a></li>
-			<?php if($user->IsAdmin()): ?>
+			<?php if($user->isAdmin()): ?>
 			<li data_category="32"><a>Packages</a></li>
 			<hr>
 			<li data_category="1"><a>Images</a></li>
@@ -143,7 +143,7 @@
 				<?php if($_SESSION['ANORRL$CreateAsset$Error']): ?>
 				<div id="ErrorTime">Error: <span id="Message"><?= $_SESSION['ANORRL$CreateAsset$Result'] ?></span></div>
 				<?php else: ?>
-				<div id="SuccessTime">Success! <span id="Message"><?= "Check it out <a href=\"/".Asset::FromID($_SESSION['ANORRL$CreateAsset$Result'])->GetURLTitle()."-item?id=". $_SESSION['ANORRL$CreateAsset$Result']."\">here!</a>"?></span></div>
+				<div id="SuccessTime">Success! <span id="Message"><?= "Check it out <a href=\"/".Asset::FromID($_SESSION['ANORRL$CreateAsset$Result'])->getURLTitle()."-item?id=". $_SESSION['ANORRL$CreateAsset$Result']."\">here!</a>"?></span></div>
 				<?php endif ?>
 			<?php endif ?>
 			<style>

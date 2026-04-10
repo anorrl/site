@@ -20,6 +20,7 @@ ANORRL.Item = {
 			"Cones",
 			"FreeItem"
 		],
+		
 		OpenPurchasePanel: function(panel) {
 			$("#PurchasePanel").css("display", "block");
 			if(panel == "cones") {
@@ -35,12 +36,17 @@ ANORRL.Item = {
 				prompt.css("display","none");
 				
 				var id = prompt.attr("id").replaceAll("Purchase", "");
+				var AllowedShittyIDsID = {
+					"Cones": 1,
+					"Lights": 2,
+					"FreeItem": 3
+				};
 
 				if(this.AllowedShittyIDs.includes(id)) {
 					ANORRL.Item.State = 1;
 					$("#ModalPopup #PurchaseProcessing").css("display", "block");
 					window.setTimeout(function() {
-						$.post("/api/purchase", { asset_id: Number($("#ModalPopup").attr("data-assetid")), typatransaction: id }, function(data) {
+						$.post("/api/purchase", { asset_id: Number($("#ModalPopup").attr("data-assetid")), typatransaction: AllowedShittyIDsID[id] }, function(data) {
 							if(data['error']) {
 								ANORRL.Item.Purchasing.PresentError(data['message']);
 							} else {

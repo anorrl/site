@@ -66,7 +66,7 @@
     //because the night background can override the user's background
 	$hasBackground = false;
 	/*if (isset($get_user)) {
-   		$userCss = $header_data->GetUserCSS();
+   		$userCss = $header_data->getUserCSS();
     	if (!empty($userCss) && preg_match('/background\s*:/i', $userCss)) {
         	$hasBackground = true;
     	}
@@ -130,6 +130,10 @@
 					</div>
 					<hr>
 					<div id="CreditsRow">
+						<span title="Traffic Cones (ROBUX)"><img src="/images/icons/traffic_cone.png"> <?= $header_check_user->getNetCones() ?></span> <span class="Separator">|</span>
+						<span title="Traffic Lights (TIX)"><img src="/images/icons/traffic_light.png"> <?= $header_check_user->getNetLights() ?></span>
+
+						<hr>
 						<span title="Your pending requests"><a href="/my/friends"><img src="/images/icons/messages<?= $pendingreqscount == 0 ? "" : "_notify" ?>.png"> <?= $pendingreqscount ?></a></span> <span class="Separator">|</span>
 						<span title="Your friends"><a href="/my/friends"><img src="/images/icons/friends.png"> <?= $header_check_user->GetFriendsCount() ?></a></span>
 						<hr>

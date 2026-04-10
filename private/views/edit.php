@@ -25,7 +25,7 @@
 		if($asset->type == AssetType::PLACE) {
 			$asset = Place::FromID($id);
 		}
-		$is_creator = $user->id == $asset->creator->id || $user->IsAdmin();
+		$is_creator = $user->id == $asset->creator->id || $user->isAdmin();
 
 		if(!$is_creator) {
 			die(header("Location: /catalog"));
@@ -66,7 +66,7 @@
 
 		if($version != null && $version->asset->id == $asset->id) {
 			header("Content-Type: application/json");
-			die(json_encode($asset->SetVersion($version)));
+			die(json_encode($asset->setVersion($version)));
 		}
 	}
 
@@ -82,7 +82,7 @@
 			$thumbasset->type == AssetType::DECAL ||
 			$thumbasset->type == AssetType::IMAGE
 		) {
-			$asset->SetThumbnailTo($thumbasset);
+			$asset->setThumbnailTo($thumbasset);
 
 			$_SESSION['ANORRL$EditItem$Success'] = true;
 
@@ -166,7 +166,7 @@
 			}
 		}
 
-		die(header("Location: /".$asset->GetURLTitle()."-item?id=$id"));
+		die(header("Location: /".$asset->getURLTitle()."-item?id=$id"));
 	
 
 		
@@ -182,7 +182,7 @@
 
 				die(header("Location: /edit?id=$id"));
 			} else {
-				die(header("Location: /".$asset->GetURLTitle()."-item?id=$id"));
+				die(header("Location: /".$asset->getURLTitle()."-item?id=$id"));
 			}
 		} else {
 			die("Yo, what are you doing??");
@@ -356,7 +356,7 @@
 					</tr>
 
 					<?php
-						$versions = $asset->GetAllVersions();
+						$versions = $asset->getAllVersions();
 						
 						$version_id = count($versions);
 						$current_version = $asset->current_version;
@@ -394,7 +394,7 @@
 		</div>
 		<?php endif ?>
 	
-		<a type="submit" href="/<?= $asset->GetURLTitle() ?>-item?id=<?= $id ?>" style="width:50px">Go Back</a>
+		<a type="submit" href="/<?= $asset->getURLTitle() ?>-item?id=<?= $id ?>" style="width:50px">Go Back</a>
 	</div>
 	
 </div>

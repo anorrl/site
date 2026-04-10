@@ -15,15 +15,15 @@
 	$domain = CONFIG->domain;
 
 	if($asset != null) {
-		$urlname = $asset->GetURLTitle();
+		$urlname = $asset->getURLTitle();
 		
 		if($urlname != $name) {
 			die(header("Location: /$urlname-place?id=$id"));
 		}
 
 		if($user != null) {
-			$is_creator = $user->id == $asset->creator->id || $user->IsAdmin();
-			$is_favourited = $asset->HasUserFavourited($user);
+			$is_creator = $user->id == $asset->creator->id || $user->isAdmin();
+			$is_favourited = $asset->hasUserFavourited($user);
 			$is_bought = $user->Owns($asset);
 			
 			if(
@@ -61,7 +61,7 @@
 		if($new_asset == null) {
 			die(header("Location: /my/stuff"));
 		} else {
-			$urlname = $new_asset->GetURLTitle();
+			$urlname = $new_asset->getURLTitle();
 			die(header("Location: /$urlname-item?id=$id"));
 		}
 	}
@@ -82,7 +82,7 @@
 	$page->addMeta("description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
 	$page->addMeta("og:type", "website");
 	$page->addMeta("og:site_name", "ANORRL");
-	$page->addMeta("og:url", "https://$domain/{$asset->GetURLTitle()}-place?id={$asset->id}");
+	$page->addMeta("og:url", "https://$domain/{$asset->getURLTitle()}-place?id={$asset->id}");
 	$page->addMeta("og:title", htmlspecialchars($asset->name, ENT_QUOTES));
 	$page->addMeta("og:description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
 	$page->addMeta("og:image", "https://$domain/thumbs/?id={$asset->id}");
@@ -181,7 +181,7 @@
 					<?php endif ?>
 				</div>
 				<hr>
-				<?php if($asset->IsUsable()): ?>
+				<?php if($asset->isUsable()): ?>
 					<button class="PlaceButton" onclick="ANORRL.PlaceLauncher.LetsJoinAndPlay(<?= $id ?>)" Play></button>
 					<?php if($is_creator || !$asset->copylocked): ?>
 					<button class="PlaceButton" onclick="ANORRL.PlaceLauncher.EditPlace(<?= $id ?>)" Edit></button>
@@ -193,7 +193,7 @@
 				<div id="ManageOptions">
 					<?php if($is_creator): ?>
 					<a href="/edit?id=<?= $asset->id ?>">Configure</a>
-					<?php if($asset->IsUsable()): ?>
+					<?php if($asset->isUsable()): ?>
 					<a href="javascript:Render()" id="RenderButton">Render this asset</a>
 					<?php endif ?>
 					<a href="javascript:Delete()">Delete this asset</a>

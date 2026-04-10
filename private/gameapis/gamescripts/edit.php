@@ -75,7 +75,7 @@ game:GetService("ChangeHistoryService"):SetEnabled(true)
 			$place = Place::FromID(intval($_GET['placeId']));
 
 			if($place != null) {
-				if($place->creator->id == $user->id || $user->IsAdmin() || !$place->copylocked || ($place->teamcreate_enabled && $place->IsCloudEditor($user))) {	
+				if($place->creator->id == $user->id || $user->isAdmin() || !$place->copylocked || ($place->teamcreate_enabled && $place->IsCloudEditor($user))) {	
 					$script = "\r\n" . ob_get_clean();
 				
 					$uploadurl = "http://{$domain}/Data/Upload.ashx?assetid=".$place->id;

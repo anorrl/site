@@ -3,7 +3,7 @@
 
 	$user = UserUtils::RetrieveUser();
 
-	if($user != null && $user->IsAdmin()) {
+	if($user != null && $user->isAdmin()) {
 
 	} else {
 		die("Hey... You're not an admin I don't think...");

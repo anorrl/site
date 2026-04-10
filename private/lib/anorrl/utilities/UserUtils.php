@@ -214,118 +214,12 @@
 				self::RemoveCookies();
 			}
 
-			$pages = [
-				"Home"                              => "/my/home.php",
-				"Looking at {username}'s profile"   => "/users/profile.php",
-				"Looking at {username}'s friends"   => "/users/friends.php",
-				"Looking at {username}'s followers" => "/users/following.php",
-				"Looking at {username}'s following" => "/users/followers.php",
-				"Stuff"                             => "/my/stuff.php",
-				"Create Panel"                      => "/create.php",
-				"Changing their profile info"       => "/my/profile.php",
-				"Vandals"                           => "/vandals.php",
-				"Browsing games"                    => "/games.php",
-				"Catalog"						    => "/catalog.php",
-				"Frontpage"                  	    => "/index.php",
-				"Looking at {item}"					=> "/item.php",
-				"Looking at {place}"			    => "/place.php",
-				"Editing an item"				    => "/edit.php",
-				"Editing their character"		    => "/my/character.php",
-				"In Studio"						    => "/my/places.php",
-				"Downloaded ANORRL!"			    => "/download/thankyou.php",
-				"Thinking of downloading ANORRL..." => "/download/index.php",
-				"Browsing games on mobile"		    => "/mobile/games.php",
-				"Looking at their friends"			=> "/my/friends.php",
-				"Looking at <b>THE</b> contributors"=> "/info/credits.php",
-				"Home (on mobile)"					=> "/mobile/home.php",
-			];
-
-			$dont_catalog_ever = [
-				"/api/",
-				"/core/",
-				"/Admin/",
-				"/core/gamescripts/",
-				"/login.php",
-				"/register.php"
-			];
-
-			if($user != null) {
-				if(!in_array($_SERVER['SCRIPT_NAME'], $pages) && !self::StringContainsFromArray($dont_catalog_ever, $_SERVER['SCRIPT_NAME']) && !str_starts_with($_SERVER['SCRIPT_NAME'], "/Admi/")) {
-					die($_SERVER['SCRIPT_NAME']);
-				} else {
-					if(str_ends_with($_SERVER['SCRIPT_NAME'], "/Admi/")) {
-						$page = "Doing secret admin stuff...";
-					} else {
-						if(!self::StringContainsFromArray($dont_catalog_ever, $_SERVER['SCRIPT_NAME'])) {
-							$page = array_search($_SERVER['SCRIPT_NAME'], $pages);
-							if($data instanceof User) {
-								if($data->id != $user->id) {
-									$user_id = $data->id;
-									$user_name = $data->name;
-									$page = str_replace("{username}", "<a href='/users/$user_id/profile'>$user_name</a>", $page);
-								} else {
-									$page = "Looking at their own profile";
-								}
-							}
-
-							if($data instanceof anorrl\Asset) {
-								$asset_id = $data->id;
-								$asset_name = $data->name;
-								$asset_urlname = $data->GetURLTitle();
-								$asset_link = "<a href='/$asset_urlname-item?id=$asset_id'>$asset_name</a>";
-
-								$page = str_replace("{item}", $asset_link, $page);
-								
-							}
-
-							if($data instanceof anorrl\Place) {
-								$asset_id = $data->id;
-								$asset_name = $data->name;
-								$asset_urlname = $data->GetURLTitle();
-								$asset_link = "<a href='/$asset_urlname-place?id=$asset_id'>$asset_name</a>";
-
-								$page = str_replace("{place}", $asset_link, $page);
-								
-							}
-
-							self::RegisterAction($user, $page);
-						}
-					}
-					
-					
-				}
+			if($user) {
+				$user->registerAction("Website");
 				
 			}
 			
 			return $user;
-		}
-
-		/**
-		 * Track user activity (aka set current time when they entered new page)
-		 * @param mixed $action What action took place?
-		 * @return void
-		 */
-		public static function RegisterAction(User $reg_user, string $action = "Website"): void {
-			if($reg_user != null) {
-				include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-				// Check if row exists
-				$stmt_check_row = $con->prepare('SELECT * FROM `activity` WHERE `userid` = ?');
-				$stmt_check_row->bind_param('i', $reg_user->id);
-				$stmt_check_row->execute();
-				$stmt_check_row->store_result();
-
-				// If it doesn't then create one
-				if($stmt_check_row->num_rows == 0) {
-					$stmt_insert_row = $con->prepare('INSERT INTO `activity`(`userid`, `action`, `action_time`) VALUES (?, ?, now())');
-					$stmt_insert_row->bind_param('is', $reg_user->id, $action);
-					$stmt_insert_row->execute();
-				} else {
-					// Else, Update row
-					$stmt_update_row = $con->prepare('UPDATE `activity` SET `action` = ?,`action_time` = now() WHERE `userid` = ?');
-					$stmt_update_row->bind_param('si', $action, $reg_user->id);
-					$stmt_update_row->execute();
-				}
-			}
 		}
 
 		static function SetCookies(string $security): void {

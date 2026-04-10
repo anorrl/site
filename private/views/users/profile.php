@@ -63,7 +63,7 @@
 	$comments = Comment::GetCommentsOn($get_user);
 	$comments_count = count($comments);
     $bgm = Asset::FromID($get_user->profilebgm);
-	if($bgm && !$bgm->IsUsable()) {
+	if($bgm && !$bgm->isUsable()) {
 		$bgm = null;
 	}
 
@@ -96,7 +96,7 @@
 </script>
 <?php if($bgm != null): ?>
 <audio id="bgm" loop muted volume="0.25"> <!-- autoplay m.i.a -->
-	<source src="/asset/?id=<?= $bgm->GetAssetIDSafe() ?>">
+	<source src="/asset/?id=<?= $bgm->getAssetIDSafe() ?>">
 </audio>
 <script>
 /*
@@ -186,7 +186,7 @@ $(function() {
 		<img src="/thumbs/?id=<?= $bgm->id ?>&sxy=128">
 	</div>
 	<div>Playing: </div>
-	<div id="PlayingLink"><a href="/<?= $bgm->GetURLTitle() ?>-item?id=<?= $bgm->id ?>"><?= $bgm->name ?></a></div>
+	<div id="PlayingLink"><a href="/<?= $bgm->getURLTitle() ?>-item?id=<?= $bgm->id ?>"><?= $bgm->name ?></a></div>
 	<!--<div id="ProgressBarContainer">
 		<input id="ProgressBar" type="range" min="0" max="0" step="0">
 	</div>-->
@@ -295,7 +295,7 @@ $(function() {
 
 				if($asset instanceof anorrl\Asset) {
 					$asset_id = $asset->id;
-					$asset_urlname = $asset->GetURLTitle();
+					$asset_urlname = $asset->getURLTitle();
 					$asset_name = $asset->name;
 					$asset_creator_id = $asset->creator->id;
 					$asset_creator_name = $asset->creator->name;

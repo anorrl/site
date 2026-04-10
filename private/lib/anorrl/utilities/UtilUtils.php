@@ -35,6 +35,15 @@
 
 			return $result;
 		}
+		/**
+		 * Summary of GetTimeDifference
+		 * @param \DateTime $time
+		 * @param string $format %a by default (days)
+		 * @return int
+		 */
+		public static function GetTimeDifference(\DateTime $time, string $format = "%a"): int {
+			return intval(new \DateTime()->diff($time)->format($format));
+		}
 
 		public static function IsValidCSS(string $data) {
 			$blockedcssids = [

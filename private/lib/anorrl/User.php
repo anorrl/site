@@ -2,6 +2,7 @@
 
 	namespace anorrl;
 	
+	use anorrl\enums\TransactionType;
 	use CSSValidator\CSSValidator;
 	use anorrl\Asset;
 	use anorrl\Database;
@@ -417,7 +418,7 @@
 				$sql_extra .= " AND `asset_public` = 1";
 			}
 			
-			$sql = "SELECT assets.* FROM `transactions`, `assets` WHERE `transactions`.`ta_asset` = `assets`.`asset_id` AND `ta_userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `asset_lastedited` DESC";
+			$sql = "SELECT assets.* FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`asset_id` AND `userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `asset_lastedited` DESC";
 
 			if($page <= -1 || $count <= 0) {
 				$stmt_getassets = $con->prepare("$sql");
@@ -463,8 +464,6 @@
 		 * @param string $query
 		 * @param bool $creator_only
 		 * @param array $excludedids
-		 * @param int $page
-		 * @param int $count
 		 * @return void
 		 */
 		function GetOwnedAssetsCount(AssetType $type, string $query = "", bool $creator_only = false, bool $show_all = true, array $excludedids = []): int {
@@ -500,7 +499,7 @@
 				$sql_extra .= " AND `asset_public` = 1";
 			}
 			
-			$sql = "SELECT COUNT(`asset_id`) FROM `transactions`, `assets` WHERE `transactions`.`ta_asset` = `assets`.`asset_id` AND `ta_userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `ta_date` DESC";
+			$sql = "SELECT COUNT(`asset_id`) FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`asset_id` AND `userid` = ? AND `asset_type` = ? AND `asset_name` LIKE ? $sql_extra ORDER BY `date` DESC";
 
 			$stmt_getassets = $con->prepare("$sql");
 				
@@ -520,7 +519,7 @@
 
 		function GetAllOwnedAssets(): array {
 			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-			$stmt_getuser = $con->prepare("SELECT * FROM `transactions` WHERE `ta_userid` = ? ORDER BY `ta_date` DESC");
+			$stmt_getuser = $con->prepare("SELECT * FROM `transactions` WHERE `userid` = ? ORDER BY `date` DESC");
 			$stmt_getuser->bind_param('i', $this->id);
 			$stmt_getuser->execute();
 
@@ -530,7 +529,7 @@
 
 			if($result->num_rows != 0) {
 				while($row = $result->fetch_assoc()) {
-					array_push($result_array, Asset::FromID($row['ta_asset']));
+					array_push($result_array, Asset::FromID($row['asset']));
 				}
 				return $result_array;
 			}
@@ -754,7 +753,7 @@ EOT;
 					$version = $asset->current_version;
 					$parsedshit .= "http://$domain/asset/?id=$id&version=$version;";
 
-					$relatedassets = $asset->GetRelatedAssets();
+					$relatedassets = $asset->getRelatedAssets();
 
 					if(count($relatedassets) != 0) {
 						foreach($relatedassets as $relatedasset) {
@@ -1084,14 +1083,14 @@ EOT;
 				$assetid = $asset->id;
 			}
 			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-			$stmt = $con->prepare('SELECT * FROM `transactions` WHERE `ta_userid` = ? AND `ta_asset` = ?;');
+			$stmt = $con->prepare('SELECT * FROM `transactions` WHERE `userid` = ? AND `asset` = ?;');
 			$stmt -> bind_param('ii', $this->id, $assetid);
 			$stmt -> execute();
 
 			return $stmt->get_result()->num_rows != 0;
 		}
 
-		function IsAdmin(): bool {
+		function isAdmin(): bool {
 			return $this->HasProfileBadgeOf(ANORRLBadge::ADMINISTRATOR);
 		}
 
@@ -1167,7 +1166,7 @@ EOT;
 					$place = Place::FromID(intval($server_details['server_placeid']));
 
 					if($place != null) {
-						$place_stubname = $place->GetURLTitle();
+						$place_stubname = $place->getURLTitle();
 						$place_name = $place->name;
 						$place_id = $place->id;
 
@@ -1311,13 +1310,10 @@ EOT;
 		}
 
 		function GetAccountAge(): int {
-			$earlier = $this->join_date;
-			$later = new \DateTime();
-
-			return intval($later->diff($earlier)->format("%a"));
+			return UtilUtils::GetTimeDifference($this->join_date);
 		}
 
-		function SetUserCSS(string $data) {
+		function setUserCSS(string $data) {
 			$validator = new CSSValidator();
 
 			$result = $validator->validateFragment($data);
@@ -1328,11 +1324,13 @@ EOT;
 					return false;
 				}
 
-				include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-
-				$stmt_updateuser = $con->prepare("UPDATE `users` SET `user_css` = ? WHERE `user_id` = ?;");
-				$stmt_updateuser->bind_param("si", $data, $this->id);
-				$stmt_updateuser->execute();
+				Database::singleton()->run(
+					"UPDATE `users` SET `user_css` = :css WHERE `user_id` = :id;",
+					[
+						":id" => $this->id,
+						":css" => $data
+					]
+				)->execute();
 
 				return true;
 			}
@@ -1340,9 +1338,88 @@ EOT;
 			return false;
 		}
 
-		function GetUserCSS() {
+		function getUserCSS() {
 			return $this->usercss;
 		}
+
+		function getNetLights(): int {
+			return $this->getNetAmount(TransactionType::LIGHTS);
+		}
+
+		function getNetCones(): int {
+			return $this->getNetAmount(TransactionType::CONES);
+		}
+
+		function getNetAmount(TransactionType $type): int {
+			
+			$fetch = Database::singleton()->run(
+				"SELECT * FROM `transactions` WHERE (`userid` = :id OR `assetcreator` = :id) AND `method` LIKE :type",
+				[
+					":id" => $this->id,
+					":type" => $type->ordinal()
+				]
+			)->fetchAll(\PDO::FETCH_OBJ);
+
+			$result_sum = 0;
+			
+			foreach($fetch as $row) {
+				if(!$row->asset || $row->userid != $this->id)
+					$result_sum += $row->cost;
+
+				if($row->userid == $this->id)
+					$result_sum -= $row->cost;
+			}
+
+			return $result_sum;
+		}
+
+		function canAfford(Asset $asset, TransactionType $type) {
+			switch($type) {
+				case TransactionType::LIGHTS:
+					return $this->getNetLights() - $asset->lights >= 0;
+				case TransactionType::CONES:
+					return $this->getNetLights() - $asset->cones >= 0;
+				default:
+					return true;
+			}
+		}
+
+		/**
+		 * Track user activity (aka set current time when they entered new page)
+		 * @param mixed $action What action took place?
+		 * @return void
+		 */
+		function registerAction(string $action = "Website"): void {
+			$db = Database::singleton();
+			// Check if row exists
+			
+			$num_rows = $db->run(
+				"SELECT * FROM `activity` WHERE `userid` = :id LIMIT 1",
+				[":id" => $this->id]
+			)->rowCount();
+			
+
+			// If it doesn't then create one
+			if($num_rows == 0) {
+				$db->run(
+					"INSERT INTO `activity`(`userid`, `action`, `action_time`) VALUES (:id, :action, now())",
+					[
+						":id" => $this->id,
+						":action" => $action,
+					]
+				)->execute();
+			} else {
+				// Else, Update row
+				$db->run(
+					"UPDATE `activity` SET `action` = :action,`action_time` = now() WHERE `userid` = :id",
+					[
+						":id" => $this->id,
+						":action" => $action,
+					]
+				)->execute();
+			}
+		}
+
 	}
 
 	class ProfileBadge {

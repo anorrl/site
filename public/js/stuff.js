@@ -34,7 +34,7 @@ var shouldnotbeallowedatallcategories = {
 const regex = /[^A-Za-z0-9 ]/g;
 
 ANORRL.Stuff  = {
-	IsAdmin: false,
+	isAdmin: false,
 	CurrentPage: 1,
 	CurrentCategory: 8,
 	CurrentlyLoadingCrapBruh: false,
@@ -96,7 +96,7 @@ ANORRL.Stuff  = {
 		var categorylabel = $("li[data_category="+category+"]").find("a").html().toLowerCase().replaceAll("-", "");
 
 		$("li[data_category="+category+"]").attr("selected", "");
-		if(shouldnotbeallowedatallcategories[categorylabel] == undefined && (allowedcategories[categorylabel] != undefined || this.IsAdmin)) {
+		if(shouldnotbeallowedatallcategories[categorylabel] == undefined && (allowedcategories[categorylabel] != undefined || this.isAdmin)) {
 			if(categorylabel == "places") {
 				$($("#CreateArea").find("a")[0]).attr("href","javascript:alert('Use ANORRL Studio for this!')");
 			} else {
@@ -244,6 +244,6 @@ $(function(){
 	});
 
 	$.get("/api/user?id=0&request=isadmin", function(data) {
-		ANORRL.Stuff.IsAdmin = data['isadmin'];
+		ANORRL.Stuff.isAdmin = data['isadmin'];
 	});
 });

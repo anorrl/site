@@ -40,7 +40,7 @@
 	if(isset($_POST['ANORRL$Update$Profile$CSS']) &&
 	   isset($_POST['ANORRL$Update$Profile$CSS$Submit'])) {
 		
-		$result = $user->SetUserCSS(trim($_POST['ANORRL$Update$Profile$CSS']));
+		$result = $user->setUserCSS(trim($_POST['ANORRL$Update$Profile$CSS']));
 
 		if(!$result) {
 			$_SESSION['ANORRL$Update$ProfileError'] = true;
@@ -87,7 +87,7 @@
 
 	$bgm = Asset::FromID($user->profilebgm);
 
-	if($bgm && !$bgm->IsUsable()) {
+	if($bgm && !$bgm->isUsable()) {
 		$bgm = null;
 	}
 
@@ -129,7 +129,7 @@
 		<h3>User Profile CSS</h3>
 		<div id="FormStuff">
 			<span>Ok so this is where you can change your profile stuff... have a go i guess?</span>
-			<textarea name="ANORRL$Update$Profile$CSS"><?= $user->GetUserCSS() ?></textarea>
+			<textarea name="ANORRL$Update$Profile$CSS"><?= $user->getUserCSS() ?></textarea>
 			<input type="submit" value="Update" name="ANORRL$Update$Profile$CSS$Submit">
 		</div>
 	</div>
@@ -143,7 +143,7 @@
 			<div style="border: 2px solid black; margin: 10px auto; width: 320px; text-align: center;">
 				<img src="/thumbs/?id=<?= $bgm->id ?>&sxy=320">
 				<div style="padding: 5px; background: #333;">
-					<a href="/<?= $bgm->GetURLTitle() ?>-item?id=<?= $bgm->id ?>"><?= $bgm->name ?></a>
+					<a href="/<?= $bgm->getURLTitle() ?>-item?id=<?= $bgm->id ?>"><?= $bgm->name ?></a>
 				</div>
 			</div>
 			<?php endif ?>

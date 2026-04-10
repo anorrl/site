@@ -21,5 +21,13 @@
 				TransactionType::FREE => 3,
 			};
 		}
+
+		function label(): string {
+			return match($this) {
+				TransactionType::CONES => "cones",
+				TransactionType::LIGHTS => "lights",
+				TransactionType::FREE => "free"
+			};
+		}
 	}
 ?>

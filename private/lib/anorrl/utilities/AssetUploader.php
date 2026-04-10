@@ -2,6 +2,7 @@
 	namespace anorrl\utilities;
 
 	use anorrl\Asset;
+	use anorrl\enums\TransactionType;
 	use anorrl\User;
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\AssetTypeUtils;
@@ -112,7 +113,7 @@
 					[
 						"title" => $asset->name,
 						"description" => "Uploaded by: ".$asset->creator->name,
-						"url" => "https://$domain/".$asset->GetURLTitle()."-item?id=".$asset->id,
+						"url" => "https://$domain/".$asset->getURLTitle()."-item?id=".$asset->id,
 						"author" => [
 							"name" => "ANORRL",
 							"url" => "https://$domain/",
@@ -188,11 +189,7 @@
 				}
 			}
 
-
-			$ta_id = TransactionUtils::GenerateID();
-			$stmt_processtransaction = $con->prepare("INSERT INTO `transactions`(`ta_id`, `ta_userid`, `ta_asset`, `ta_assetcreator`) VALUES (?, ?, ?, ?)");
-			$stmt_processtransaction->bind_param('siii', $ta_id, $user->id, $id, $user->id);
-			$stmt_processtransaction->execute();
+			TransactionUtils::CommitAssetTransaction(TransactionType::FREE, new Asset($id), $user);
 
 			if($public && $on_sale && !$hidden) {
 				$asset = Asset::FromID($id);
@@ -233,7 +230,7 @@
 			bool $comments_enabled = true,
 			User $user
 		): array {
-			if($user->id != $asset->creator->id && !$user->IsAdmin()) {
+			if($user->id != $asset->creator->id && !$user->isAdmin()) {
 				return ["error" => true, "reason" => "User is not authorised to perform this action!"];
 			}
 			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
@@ -249,11 +246,11 @@
 			if($data != null) {
 				$md5 = self::GetMD5OfData($data);
 
-				if($md5 == $asset->GetLatestVersionDetails()->md5sig) { 
+				if($md5 == $asset->getLatestVersionDetails()->md5sig) { 
 					return ["error" => true, "reason" => "I'm pretty sure you've already uploaded this?"];
 				}
 
-				$new_versionid = count($asset->GetAllVersions())+1;
+				$new_versionid = count($asset->getAllVersions())+1;
 
 				$stmt = $con->prepare('INSERT INTO `asset_versions`(`version_assetid`, `version_md5sig`, `version_md5thumb`, `version_assettype`, `version_subid`) VALUES (?, ?, ?, ?, ?)');
 				$stmt->bind_param('issii', $id, $md5, $md5, $parsed_type, $new_versionid);
@@ -300,7 +297,7 @@
 				$user = UserUtils::RetrieveUser();
 			}
 
-			if($user != null && !$user->IsBanned() && ($asset->creator->id == $user->id || $user->IsAdmin())) {
+			if($user != null && !$user->IsBanned() && ($asset->creator->id == $user->id || $user->isAdmin())) {
 				$name = $asset->name;
 				$description = $asset->description;
 				$public = $asset->public;
@@ -308,7 +305,7 @@
 				$comments_enabled = $asset->comments_enabled;
 				
 				if($asset->type == AssetType::IMAGE && $asset->type == AssetType::LUA) {
-					if(!$user->IsAdmin()) {
+					if(!$user->isAdmin()) {
 						return ['error' => true, 'reason' => "You are not authorised to perform this action!"];
 					}
 				}
@@ -444,7 +441,7 @@
 			if($user != null && !$user->IsBanned()) {
 
 				if($type == AssetType::IMAGE && $type == AssetType::LUA) {
-					if(!$user->IsAdmin()) {
+					if(!$user->isAdmin()) {
 						return ['error' => true, 'reason' => "You are not authorised to perform this action!"];
 					}
 				}

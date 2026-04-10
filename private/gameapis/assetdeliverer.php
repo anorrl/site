@@ -44,7 +44,7 @@
 						$error = true;
 					}
 
-					if(!$error && $user != null && $place->creator->id != $user->id && !$user->IsAdmin()) {
+					if(!$error && $user != null && $place->creator->id != $user->id && !$user->isAdmin()) {
 						$error = true;
 					}
 

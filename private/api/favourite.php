@@ -11,13 +11,13 @@
 
 			if($asset != null) {
 
-				if(!$asset->HasUserFavourited($user)) {
-					$asset->Favourite($user);
+				if(!$asset->hasUserFavourited($user)) {
+					$asset->favourite($user);
 				} else {
-					$asset->Unfavourite($user);
+					$asset->unfavourite($user);
 				}
 
-				die(json_encode(["error" => false, "favourited" => $asset->HasUserFavourited($user)]));
+				die(json_encode(["error" => false, "favourited" => $asset->hasUserFavourited($user)]));
 			}
 		} else {
 			die(json_encode(["error" => true, "reason" => "Invalid request."]));

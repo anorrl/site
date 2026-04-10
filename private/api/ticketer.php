@@ -94,7 +94,7 @@
 		if(isset($_POST['editID'])) {
 			$place = Place::FromID(intval($_POST['editID']));
 
-			if($place != null && ($user->id == $place->creator->id || !$place->copylocked || ($place->teamcreate_enabled && $place->IsCloudEditor($user)) || $user->IsAdmin())) {
+			if($place != null && ($user->id == $place->creator->id || !$place->copylocked || ($place->teamcreate_enabled && $place->IsCloudEditor($user)) || $user->isAdmin())) {
 				$placeID = $place->id;
 				$clientticket = base64_encode(string: $user->security_key);
 				die("anorrl-studio:1+script:http%3A%2F%2F{$domain}%2Fgame%2Fedit.ashx?placeId=$placeID+placeid:$placeID+launchmode:edit+gameinfo:$clientticket");	

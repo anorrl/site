@@ -12,7 +12,7 @@
 				[
 					"AssetSetID" => 1,
 					"AssetTypeID" => $decal->type->ordinal(),
-					"AssetVersionID" => $decal->GetVersionID(),
+					"AssetVersionID" => $decal->getVersionID(),
 					"ID" => $decal->id,
 					"Name" => $decal->name,
 					"SortOrder" => 2147483647,

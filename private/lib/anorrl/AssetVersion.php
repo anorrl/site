@@ -90,10 +90,10 @@
 			}
 		}
 
-		function SetThumbnail(Asset $asset) {
+		function setThumbnail(Asset $asset) {
 
 			if($asset->type == AssetType::DECAL) {
-				$asset = $asset->GetRelatedAssets()[0];
+				$asset = $asset->getRelatedAssets()[0];
 			}
 
 			$version = AssetVersion::GetLatestVersionOf($asset);

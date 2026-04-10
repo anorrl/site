@@ -16,7 +16,7 @@
 				return [];
 			
 			$query_filter = "AND `asset_public` = 1 AND `asset_nevershow` = 0";
-			if($user->IsAdmin()) {
+			if($user->isAdmin()) {
 				$query_filter = "AND `asset_nevershow` = 0";
 			}
 			
@@ -49,7 +49,7 @@
 						$asset = new Asset($row);
 					}
 
-					if($user->IsAdmin() || !$asset->notcatalogueable && $asset->public) {
+					if($user->isAdmin() || !$asset->notcatalogueable && $asset->public) {
 						array_push($result_array, $asset);
 					}
 				}
@@ -74,7 +74,7 @@
 				return [];
 			
 			$query_filter = "AND `asset_public` = 1 AND `asset_nevershow` = 0";
-			if($user->IsAdmin()) {
+			if($user->isAdmin()) {
 				$query_filter = "AND `asset_nevershow` = 0";
 			}
 
@@ -121,8 +121,7 @@
 						$asset = new Asset($row);
 					}
 
-					if($user->IsAdmin() || !$asset->notcatalogueable && $asset->public) {
-						
+					if($user->isAdmin() || !$asset->notcatalogueable && $asset->public) {
 						array_push($result_array, $asset);
 					}
 				}
@@ -147,7 +146,7 @@
 				return [];
 			
 			$query_filter = "AND `asset_public` = 1 AND `asset_nevershow` = 0";
-			if($user->IsAdmin()) {
+			if($user->isAdmin()) {
 				$query_filter = "AND `asset_nevershow` = 0";
 			}
 

@@ -7,62 +7,9 @@
 	use anorrl\utilities\AssetTypeUtils;
 	use anorrl\utilities\TransactionUtils;
 	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Renderer;
 	use anorrl\User;
 	use anorrl\AssetVersion;
-
-	enum CharacterMeshType {
-		case HEAD;
-		case TORSO;
-		case RIGHTARM;
-		case LEFTARM;
-		case LEFTLEG;
-		case RIGHTLEG;
-
-		public static function index(int $ordinal): CharacterMeshType {
-			return match($ordinal) {
-				0 => CharacterMeshType::HEAD,
-				1 => CharacterMeshType::TORSO,
-				2 => CharacterMeshType::LEFTARM,
-				3 => CharacterMeshType::RIGHTARM,
-				4 => CharacterMeshType::LEFTLEG,
-				5 => CharacterMeshType::RIGHTLEG,
-			};
-		}
-
-		public function ordinal(): int {
-			return match($this) {
-				CharacterMeshType::HEAD 	    => 0,
-				CharacterMeshType::TORSO 		=> 1,
-				CharacterMeshType::LEFTARM 		=> 2,
-				CharacterMeshType::RIGHTARM 	=> 3,
-				CharacterMeshType::LEFTLEG 		=> 4,			
-				CharacterMeshType::RIGHTLEG 	=> 5,
-			};
-		}
-
-		public function assettype(): AssetType {
-			return match($this) {
-				CharacterMeshType::HEAD 	    => AssetType::HEAD,
-				CharacterMeshType::TORSO 		=> AssetType::HEAD,
-				CharacterMeshType::RIGHTARM 	=> AssetType::HEAD,
-				CharacterMeshType::LEFTARM 		=> AssetType::HEAD,
-				CharacterMeshType::LEFTLEG 		=> AssetType::HEAD,
-				CharacterMeshType::RIGHTLEG 	=> AssetType::HEAD,
-				default => false
-			};
-		}
-
-		public function label(): string {
-			return match($this) {
-				CharacterMeshType::HEAD 	    => "Head",
-				CharacterMeshType::TORSO 		=> "Torso",
-				CharacterMeshType::RIGHTARM 	=> "Right Arm",
-				CharacterMeshType::LEFTARM 		=> "Left Arm",
-				CharacterMeshType::LEFTLEG 		=> "Left Leg",
-				CharacterMeshType::RIGHTLEG 	=> "Right Leg",
-			};
-		}
-	}
 
 	/**
 	 * Abstract class for assets
@@ -80,6 +27,10 @@
 
 		public bool        $onsale;
 		public int         $sales_count;
+		/** cost */
+		public int         $cones;
+		/** cost */
+		public int         $lights;
 
 		public Asset|null  $relatedasset;
 		public bool        $notcatalogueable;
@@ -97,7 +48,7 @@
 		 */
 		public static function FromID(int $id): Asset|null {
 			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-			$stmt_getuser = $con->prepare("SELECT * FROM `assets` WHERE `asset_id` = ?");
+			$stmt_getuser = $con->prepare("SELECT * FROM `assets` WHERE `asset_id` = ? LIMIT 1");
 			$stmt_getuser->bind_param('i', $id);
 			$stmt_getuser->execute();
 			$result = $stmt_getuser->get_result();
@@ -113,7 +64,7 @@
 			if(is_array($rowdata)) {
 				$this->id = intval($rowdata['asset_id']);
 				$this->creator = User::FromID($rowdata['asset_creator']);
-				$this->type = AssetType::index(intval($rowdata['asset_type'])); // temp
+				$this->type = AssetType::index(intval($rowdata['asset_type']));
 				$this->name = str_replace("<", "&lt;", str_replace(">", "&gt;", $rowdata['asset_name']));
 				$this->description = str_replace("<", "&lt;", str_replace(">", "&gt;", $rowdata['asset_description']));
 				$this->public = boolval($rowdata['asset_public']);
@@ -161,35 +112,44 @@
 			if(!$user)
 				return ["error" => true, "reason" => "User not authorised to perform this action!"];
 
-			if(!($this->onsale && AssetTypeUtils::IsSellable($this->type)))
-				return ["error" => true, "reason" => "Item is not purchasable!"];
+			if($user->Owns($this))
+				if(!$this->onsale)
+					return ["error" => true, "reason" => "Item is off-sale and beside you already own this?!"];
+				else
+					return ["error" => true, "reason" => "You already own this item!"];
 			
+			if(!$this->isUsable())
+				return ["error" => true, "reason" => "Item is unusable at this time!"];
 
+			if(!$this->onsale || !AssetTypeUtils::IsSellable($this->type))
+				if(!$this->onsale)
+					return ["error" => true, "reason" => "Item is off-sale sorry not sorry..."];
+				else
+					return ["error" => true, "reason" => "Item is not purchasable!"];
+			
 			$successful_navigation = false;
 
 			switch($type) {
-				case TransactionType::FREE:
-					//if($this->cones_cost == 0 && $this->lights_cost == 0)
-					$successful_navigation = true;
-					//else
-					//successful_navigation = false
+				case TransactionType::FREE:					
+					$successful_navigation = $this->cones == 0 && $this->lights == 0;
 					break;
 				case TransactionType::CONES:
+					$successful_navigation = $this->cones > 0;
 					break;
 				case TransactionType::LIGHTS:
+					$successful_navigation = $this->lights > 0;
 					break;
 				default:
 					$successful_navigation = false;
 			}
-
+			
 			if(!$successful_navigation)
 				return ["error" => true, "reason" => "Invalid purchasing method!"];
+			
+			if(!$user->canAfford($this, $type))
+				return ["error" => true, "reason" => "Hey wait you can't buy this item! YOU'RE FUCKING BROOKEEE!!!"];
 
-			// transact and shiiit (TransactionUtils be useful)
-
-			$cost = 0; // free since i need to implement the rest
-
-			TransactionUtils::CommitTransaction($this, $user, $type, $cost);
+			TransactionUtils::CommitAssetTransaction($type, $this, $user);
 
 			return ["error" => false];
 		}
@@ -204,10 +164,10 @@
 					return null;
 				}
 			} else {
-				if($this->GetLatestVersionDetails() == null) {
+				if($this->getLatestVersionDetails() == null) {
 					return null;
 				}
-				$filename = $_SERVER['DOCUMENT_ROOT']."/../assets/".$this->GetLatestVersionDetails()->md5sig;
+				$filename = $_SERVER['DOCUMENT_ROOT']."/../assets/".$this->getLatestVersionDetails()->md5sig;
 			}
 
 			if(file_exists($filename)) {
@@ -226,7 +186,9 @@
 			return null;
 		}
 
-		function IsUsable(): bool {
+		function isUsable(): bool {
+			return true;
+			
 			$contents = $this->getFileContents();
 			if(AssetVersion::GetLatestVersionOf($this) == null || !$contents) {
 				return false;
@@ -234,7 +196,7 @@
 			return strlen(trim($contents)) > 0;
 		}
 
-		function GetURLTitle() {
+		function getURLTitle() {
 			$result = strtolower(trim(preg_replace('/[^a-zA-Z0-9 ]/', "", $this->name)));
 			$result = UtilUtils::RecurseRemove($result, "  ", " ");
 			$result = str_replace(" ", "-", $result);
@@ -245,7 +207,7 @@
 			return $result;
 		}
 
-		function GetAllVersions(): array {
+		function getAllVersions(): array {
 			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
 			$stmt_getuser = $con->prepare("SELECT * FROM `asset_versions` WHERE `version_assetid` = ? ORDER BY `version_id` DESC");
 			$stmt_getuser->bind_param('i', $this->id);
@@ -264,11 +226,11 @@
 			return $result_array;
 		}
 
-		function GetLatestVersionDetails(): AssetVersion|null {
+		function getLatestVersionDetails(): AssetVersion|null {
 			return AssetVersion::GetLatestVersionOf($this);
 		}
 
-		function GetVersionID(): int {
+		function getVersionID(): int {
 			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
 			$stmt = $con->prepare("SELECT * FROM `asset_versions` WHERE `version_assetid` = ? ORDER BY `version_id`");
 			$stmt->bind_param("i", $this->id);
@@ -279,11 +241,11 @@
 			return $row["version_id"];
 		}
 
-		function GetMD5HashCurrent(): string {
-			return $this->GetMD5Hash($this->GetVersionID());
+		function getMD5HashCurrent(): string {
+			return $this->getMD5Hash($this->getVersionID());
 		}
 
-		function GetMD5Hash(int $version): string {
+		function getMD5Hash(int $version): string {
 			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
 			$stmt = $con->prepare("SELECT * FROM `asset_versions` WHERE `version_id` = ?");
 			$stmt->bind_param("i", $version);
@@ -294,7 +256,7 @@
 			return $row["version_md5sig"];
 		}
 
-		function SetVersion(AssetVersion|null $version) {
+		function setVersion(AssetVersion|null $version) {
 			if($version != null && $version->asset->id == $this->id) {
 				if($version->sub_id != $this->current_version) {
 					include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
@@ -311,55 +273,61 @@
 			return ["error" => true, "reason" => "Version was not found and cannot be applied!"];
 		}
 
-		function Favourite(User|int $user) {
-			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-
+		function favourite(User|int $user) {
 			$userid = $user;
 			if($user instanceof User) {
 				$userid = $user->id;
 			}
 
-			if(!$this->HasUserFavourited($user)) {
-				$stmt = $con->prepare("INSERT INTO `favourites`(`fav_assetid`, `fav_userid`, `fav_assettype`) VALUES (?, ?, ?);");
-				$type = $this->type->ordinal();
-				$stmt->bind_param("iii", $this->id, $userid, $type);
-				$stmt->execute();
+			if(!$this->hasUserFavourited($user)) {
+				Database::singleton()->run(
+					"INSERT INTO `favourites`(`fav_assetid`, `fav_userid`, `fav_assettype`) VALUES (:id, :uid, :type);",
+					[
+						":id" => $this->id,
+						":uid" => $userid,
+						":type" => $this->type->ordinal()
+					]
+				)->execute();
 
-				$this->UpdateFavouritesCount();
+				$this->updateFavouritesCount();
 			}
 		}
 
-		private function UpdateFavouritesCount() {
-			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-			$stmt = $con->prepare("SELECT * FROM `favourites` WHERE `fav_assetid` = ?;");
-			$stmt->bind_param("i", $this->id);
-			$stmt->execute();
+		private function updateFavouritesCount() {
+			$db = Database::singleton();
 
-			$favcount = $stmt->get_result()->num_rows;
+			$favcount = $db->run(
+				"SELECT * FROM `favourites` WHERE `fav_assetid` = :id",
+				[":id" => $this->id]
+			)->rowCount();
 
-			$stmt = $con->prepare("UPDATE `assets` SET `asset_favourites_count` = ? WHERE `asset_id` = ?");
-			$stmt->bind_param("ii", $favcount, $this->id);
-			$stmt->execute();
+			$db->run(
+				"UPDATE `assets` SET `asset_favourites_count` = :favcount WHERE `asset_id` = :id",
+				[":id" => $this->id, ":favcount" => $favcount]
+			)->execute();
 		}
 
-		function Unfavourite(User|int $user) {
-			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-
+		function unfavourite(User|int $user) {
+			
 			$userid = $user;
 			if($user instanceof User) {
 				$userid = $user->id;
 			}
 
-			if($this->HasUserFavourited($user)) {
-				$stmt = $con->prepare("DELETE FROM `favourites` WHERE `fav_assetid` = ? AND `fav_userid` = ?;");
-				$stmt->bind_param("ii", $this->id, $userid);
-				$stmt->execute();
+			if($this->hasUserFavourited($user)) {
+				Database::singleton()->run(
+					"DELETE FROM `favourites` WHERE `fav_assetid` = :id AND `fav_userid` = :uid;",
+					[
+						":id" => $this->id,
+						":uid" => $userid
+					]
+				)->execute();
 
-				$this->UpdateFavouritesCount();
+				$this->updateFavouritesCount();
 			}
 		}
 
-		function HasUserFavourited(User|int $user) {
+		function hasUserFavourited(User|int $user) {
 			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
 
 			$userid = $user;
@@ -374,9 +342,9 @@
 			return $stmt->get_result()->num_rows != 0;
 		}
 
-		function GetSales(): array {
+		function getSales(): array {
 			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-			$stmt = $con->prepare("SELECT * FROM `transactions` WHERE `ta_userid` != `ta_assetcreator` AND `ta_asset` = ?;");
+			$stmt = $con->prepare("SELECT * FROM `transactions` WHERE `userid` != `assetcreator` AND `asset` = ?;");
 			$stmt->bind_param("i", $this->id);
 			$stmt->execute();
 
@@ -385,7 +353,7 @@
 			$result = [];
 			
 			while($row = $sales->fetch_assoc()) {
-				$user = User::FromID(intval($row['ta_userid']));
+				$user = User::FromID(intval($row['userid']));
 
 				if($user != null && !$user->IsBanned()) {
 					array_push($result, $user);
@@ -395,9 +363,9 @@
 			return $result;
 		}
 
-		function UpdateSalesCount() {
+		function updateSalesCount() {
 			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-			$stmt = $con->prepare("SELECT * FROM `transactions` WHERE `ta_userid` != `ta_assetcreator` AND `ta_asset` = ?;");
+			$stmt = $con->prepare("SELECT * FROM `transactions` WHERE `userid` != `assetcreator` AND `asset` = ?;");
 			$stmt->bind_param("i", $this->id);
 			$stmt->execute();
 
@@ -408,7 +376,7 @@
 			$stmt->execute();
 		}
 
-		function GetRelatedAssets() {
+		function getRelatedAssets() {
 			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
 
 			$stmt = $con->prepare("SELECT `asset_id` FROM `assets` WHERE `asset_relatedid` = ?");
@@ -429,8 +397,8 @@
 			return $result;
 		}
 
-		function GetAssetIDSafe() : int {
-			$assets = $this->GetRelatedAssets();
+		function getAssetIDSafe() : int {
+			$assets = $this->getRelatedAssets();
 
 			if(count($assets) > 0) {
 				return $assets[0]->id;
@@ -439,10 +407,143 @@
 			return $this->id;
 		}
 
-		function SetThumbnailTo(Asset $asset) {
+		function setThumbnailTo(Asset $asset) {
 			if($this->type == AssetType::AUDIO && ($asset->type == AssetType::DECAL || $asset->type == AssetType::IMAGE)) {
-				AssetVersion::GetLatestVersionOf($this)->SetThumbnail($asset);
+				AssetVersion::GetLatestVersionOf($this)->setThumbnail($asset);
 			}
 		}
+
+		function render() {
+			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
+
+			$id = $this->id;
+			$type = $this->type;
+
+			if($type == AssetType::SHIRT || $type == AssetType::PANTS) {
+				$render = Renderer::RenderPlayer($id);	
+			} else if($type == AssetType::PLACE) {
+				$render = Renderer::RenderPlace($id);
+			} else if($type == AssetType::MESH) {
+				$render = Renderer::RenderMesh($id);
+			} else if($type == AssetType::MODEL || $type == AssetType::HAT || $type == AssetType::GEAR) {
+				$render = Renderer::RenderModel($id);
+			} else if($type == AssetType::TORSO) {
+				$render = Renderer::RenderPlayer($id);
+			}
+
+			if($render != null) {
+				$data = base64_decode($render);
+				
+				AssetVersion::GetLatestVersionOf($this)->setThumbnail($this);
+
+				file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/".AssetVersion::GetLatestVersionOf($this)->md5sig, $data);
+			} else {
+				if(file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/".AssetVersion::GetLatestVersionOf($this)->md5thumb)) {
+
+				} else {
+					$stmt = $con->prepare("UPDATE `asset_versions` SET `version_md5thumb` = 'placeholder' WHERE `version_id` = ?");
+					$stmt->bind_param('i', AssetVersion::GetLatestVersionOf($this)->id);
+					$stmt->execute();
+				}
+			}
+		}
+
+		function delete() {
+			if(\SESSION) {
+				if(\SESSION->user->isAdmin()) {
+					include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
+					$stmt = $con->prepare('DELETE FROM `inventory` WHERE `inv_assetid` = ?');
+					$stmt -> bind_param("i", $id);
+					$stmt->execute();
+
+					// update name to [Content Deleted]
+					// update description to [Content Deleted]
+					// update noncatalogable to true
+					// update status to private
+
+					/*$stmt = $con->prepare('DELETE FROM `transactions` WHERE `asset` = ?');
+					$stmt -> bind_param("i", $id);
+					$stmt->execute();
+
+					$stmt = $con->prepare('DELETE FROM `visit` WHERE `visit_place` = ?');
+					$stmt -> bind_param("i", $id);
+					$stmt->execute();
+
+					$stmt = $con->prepare('DELETE FROM `favourites` WHERE `fav_assetid` = ?');
+					$stmt -> bind_param("i", $id);
+					$stmt->execute();
+					
+					$this->checkAndDeleteFiles();
+
+					$stmt = $con->prepare('DELETE FROM `assets` WHERE `asset_id` = ?');
+					$stmt -> bind_param("i", $id);
+					$stmt->execute();
+
+					if($asset->type == AssetType::PLACE) {
+						$stmt = $con->prepare('DELETE FROM `asset_places` WHERE `place_id` = ?');
+						$stmt -> bind_param("i", $id);
+						$stmt->execute();
+					}*/
+				}
+			}
+
+			
+
+		}
+
+		/**
+		 * I'm probably going to remove this completely
+		 * @return void
+		 */
+		private function checkAndDeleteFiles() {
+			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
+			if($asset != null) {
+				$stmt = $con->prepare("SELECT * FROM `assets` WHERE `asset_id` = ? OR `asset_relatedid` = ?;");
+				$stmt->bind_param("ii", $this->id, $this->id);
+				$stmt->execute();
+
+				$result = $stmt->get_result();
+
+				$ids = [];
+				while($row = $result->fetch_assoc()) {
+					array_push($ids, $row['asset_id']);
+				}
+
+				$md5s = [];
+
+				foreach($ids as $key => $value) {
+					$stmt = $con->prepare("SELECT * FROM `asset_versions` WHERE `version_assetid` = ? ORDER BY `version_id` DESC;");
+					$stmt->bind_param("i", $value);
+					$stmt->execute();
+
+					$result = $stmt->get_result();
+					if($result->num_rows != 0) {
+						$row = $result->fetch_assoc();
+
+						$md5s["$value"] = $row['version_md5sig'];
+					}
+				}
+
+				foreach($md5s as $key => $value) {
+					$stmt = $con->prepare("SELECT * FROM `asset_versions` WHERE `version_md5sig` = ? AND `version_assetid` != ? ORDER BY `version_id` DESC;");
+					$stmt->bind_param("si", $value, $key);
+					$stmt->execute();
+
+					$result = $stmt->get_result();
+					if($result->num_rows == 0) {
+						$row = $result->fetch_assoc();
+
+						if(file_exists("$assetsdir/$value")){
+							unlink("$assetsdir/$value");
+						}
+
+						if(file_exists("$assetsdir/thumbs/$value")){
+							unlink("$assetsdir/thumbs/$value");
+						}
+					}
+				}
+			}
+		}
+
 	}
 ?>

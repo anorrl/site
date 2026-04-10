@@ -18,13 +18,13 @@
 	if($asset != null) {
 
 		if($asset->notcatalogueable && $asset->type == AssetType::AUDIO) {
-			$urlname = $asset->relatedasset->GetURLTitle();
+			$urlname = $asset->relatedasset->getURLTitle();
 			$id = $asset->relatedasset->id;
 			die(header("Location: /$urlname-item?id=$id"));
 		}
 
-		$urlname = $asset->GetURLTitle();
-		if($asset->GetURLTitle() != $name) {
+		$urlname = $asset->getURLTitle();
+		if($asset->getURLTitle() != $name) {
 			if($asset->type == AssetType::PLACE) {
 				die(header("Location: /$urlname-place?id=$id"));
 			}
@@ -50,8 +50,8 @@
 		}
 
 		if($user != null) {
-			$is_creator = $user->id == $asset->creator->id || $user->IsAdmin();
-			$is_favourited = $asset->HasUserFavourited($user);
+			$is_creator = $user->id == $asset->creator->id || $user->isAdmin();
+			$is_favourited = $asset->hasUserFavourited($user);
 			$is_bought = $user->Owns($asset);
 			
 			if(
@@ -88,7 +88,7 @@
 		die(header("Location: /my/stuff"));
 	}
 
-	$get_related_id = $asset->GetAssetIDSafe();
+	$get_related_id = $asset->getAssetIDSafe();
 
 
 	$header_data = $asset;
@@ -98,13 +98,13 @@
 	$page->addStylesheet("/css/new/comments.css?v=1");
 	$page->addStylesheet("/css/new/my/home.css?v=2");
 
-	$page->addScript("/js/item.js?t=1771413807");
+	$page->addScript("/js/item.js?t=1771418807");
 
 	$page->addMeta("title", htmlspecialchars($asset->name, ENT_QUOTES));
 	$page->addMeta("description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
 	$page->addMeta("og:type", "website");
 	$page->addMeta("og:site_name", "ANORRL");
-	$page->addMeta("og:url", "https://{$domain}/{$asset->GetURLTitle()}-item?id={$asset->id}");
+	$page->addMeta("og:url", "https://{$domain}/{$asset->getURLTitle()}-item?id={$asset->id}");
 	$page->addMeta("og:title", htmlspecialchars($asset->name, ENT_QUOTES));
 	$page->addMeta("og:description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
 	$page->addMeta("og:image", "https://{$domain}/thumbs/?id={$asset->id}");
@@ -121,7 +121,7 @@
 		margin: 0;
 	}
 </style>
-<?php if($user != null && $user->IsAdmin()  || $is_creator): ?>
+<?php if($user != null && $user->isAdmin()  || $is_creator): ?>
 <script>
 	var rendering = false;
 	function Render() {
@@ -280,7 +280,7 @@
 			<?php if($user == null): ?>
 				<div id="NotOnSale">You need to be logged in to purchase this!</div>
 			<?php else: ?>
-				<?php if(!$asset->IsUsable()): ?>
+				<?php if(!$asset->isUsable()): ?>
 					<div id="NotOnSale">This <?= strtolower($asset->type->label()) ?> is broken and needs to be republished.</div>
 				<?php else: ?>
 					<?php if($asset->onsale): ?>
@@ -303,7 +303,7 @@
 			<div id="ManageOptions">
 				<?php if($is_creator): ?>
 				<a href="/edit?id=<?= $asset->id ?>">Configure</a>
-				<?php if($asset->IsUsable()): ?>
+				<?php if($asset->isUsable()): ?>
 				<?php if(AssetTypeUtils::IsRenderable($asset->type)): ?><a href="javascript:Render()" id="RenderButton">Render this asset</a><?php endif?>
 				<?php endif ?>
 				<a href="javascript:Delete()">Delete this asset</a>
@@ -320,7 +320,7 @@
 				<div id="FriendsContainer">
 					<ul id="Friends" style="width: 848px;border: 0px;background: none;padding: 0px;">
 						<?php 
-							$users = $asset->GetSales();
+							$users = $asset->getSales();
 
 							foreach($users as $u) {
 								if($u instanceof User) {

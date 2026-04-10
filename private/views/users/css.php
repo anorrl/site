@@ -32,8 +32,8 @@
 
 	header("Content-Type: text/css");
 	
-	if(UtilUtils::IsValidCSS($get_user->GetUserCSS()) || isset($_GET['force'])) {
-		die($get_user->GetUserCSS());
+	if(UtilUtils::IsValidCSS($get_user->getUserCSS()) || isset($_GET['force'])) {
+		die($get_user->getUserCSS());
 	}
 
 	die();
