@@ -172,6 +172,10 @@
 					<li>if you are adding particle effects, DO NOT HAVE IT BE SUPER OBSTRUCTIVE</li>
 					<li>don't use the uploader to upload character meshes</li>
 				</ol>
+				<div style="margin: 15px;white-space: normal;">
+					<p><b>clarification on the 3rd rule:</b></p>	
+					<p>stuff like <a href="/images/hatuploaderexample.png" target="_blank">this</a> is fine, what i meant was if the sparkles were like super massive and blocked the view of everything and everyone </p>
+				</div>
 			</div>
 			<div id="GearUploadRules" class="Rules">
 				<h4>Gear Uploading Rules:</h4>

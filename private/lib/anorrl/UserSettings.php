@@ -52,15 +52,26 @@
 			}
 		}
 
-		function __construct($rowdata) {
-			$this->user = User::FromID(intval($rowdata->userid));
-			$this->randoms_enabled = boolval($rowdata->randoms);
-			$this->teto_enabled = boolval($rowdata->teto);
-			$this->accessibility_enabled = boolval($rowdata->accessbility);
-			$this->headshots_enabled = boolval($rowdata->headshots);
-			$this->nightbg_enabled = boolval($rowdata->nightbg);
-			$this->background_music = $rowdata->bgm <= 0 ? null : Asset::FromID($rowdata->bgm);
-			$this->css = $rowdata->css;
+		function __construct(array|Object $rowdata) {
+			if(is_array($rowdata)) {
+				$this->user = User::FromID(intval($rowdata['userid']));
+				$this->randoms_enabled = boolval($rowdata['randoms']);
+				$this->teto_enabled = boolval($rowdata['teto']);
+				$this->accessibility_enabled = boolval($rowdata['accessbility']);
+				$this->headshots_enabled = boolval($rowdata['headshots']);
+				$this->nightbg_enabled = boolval($rowdata['nightbg']);
+				$this->background_music = $rowdata['bgm'] <= 0 ? null : Asset::FromID($rowdata['bgm']);
+				$this->css = $rowdata['css'];
+			} else {
+				$this->user = User::FromID(intval($rowdata->userid));
+				$this->randoms_enabled = boolval($rowdata->randoms);
+				$this->teto_enabled = boolval($rowdata->teto);
+				$this->accessibility_enabled = boolval($rowdata->accessbility);
+				$this->headshots_enabled = boolval($rowdata->headshots);
+				$this->nightbg_enabled = boolval($rowdata->nightbg);
+				$this->background_music = $rowdata->bgm <= 0 ? null : Asset::FromID($rowdata->bgm);
+				$this->css = $rowdata->css;
+			}
 			
 			if($this->background_music && $this->background_music->type != AssetType::AUDIO)
 				$this->background_music = null;
