@@ -488,7 +488,7 @@
 					$stmt->execute();
 
 					if($asset->type == AssetType::PLACE) {
-						$stmt = $con->prepare('DELETE FROM `asset_places` WHERE `id` = ?');
+						$stmt = $con->prepare('DELETE FROM `places` WHERE `id` = ?');
 						$stmt -> bind_param("i", $id);
 						$stmt->execute();
 					}*/

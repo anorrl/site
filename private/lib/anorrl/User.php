@@ -1202,6 +1202,18 @@
 			else
 				$settings = UserSettings::Get();
 
+			return $this->getThumbsUrlService(
+				($this->setprofilepicture ? 
+					($settings->headshots_enabled ? "headshot" : "profile")
+					: "headshot"),
+				
+				$size_x,
+				$size_y
+			);
+		}
+
+		function getThumbsUrlService(string $service = "headshot", int $size_x = -1, int $size_y = -1): string {
+
 			$size_params = "";
 			if($size_x > 0 && $size_y <= 0)
 				$size_params = "&sxy=$size_x";
@@ -1209,11 +1221,7 @@
 			else if($size_x > 0 && $size_y > 0)
 				$size_params = "&sx=$size_x&sy=$size_y";
 
-			return "/thumbs/".
-				($this->setprofilepicture ? 
-					($settings->headshots_enabled ? "headshot" : "profile")
-					: "headshot")
-				."?id=".$this->id . $size_params;
+			return "/thumbs/$service?id={$this->id}{$size_params}";
 		}
 
 		function getAccountAge(): int {

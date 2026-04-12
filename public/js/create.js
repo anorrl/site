@@ -167,7 +167,7 @@ ANORRL.Create = {
 					template.find("#Pricing").remove();
 					
 
-					template.find("#NameAndThumbs > img").attr("src", "/thumbs/?id="+asset['id']+"&sxy=130");
+					template.find("#NameAndThumbs > img").attr("src", asset['thumbnail']);
 
 					template.find("#NameAndThumbs > span").html(asset['name']);
 					template.find("#NameAndThumbs").attr("href", "/"+asset['name'].replaceAll(regex,"").trim().replaceAll(" ", "-").toLowerCase()+"-item?id="+asset['id']);

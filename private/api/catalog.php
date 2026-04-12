@@ -65,8 +65,8 @@
 					"cost" => [
 						"cones" => $asset->cones,
 						"lights" => $asset->lights
-					]
-					
+					],
+					"thumbnail" => $asset->getThumbsUrl(130)					
 				];
 			}
 		}

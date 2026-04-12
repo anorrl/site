@@ -14,7 +14,7 @@
 
 	$page = new Page("Your Friends", "my/friends");
 	$page->addStylesheet("/css/new/my/friends.css?v=1");
-	$page->addScript("/js/friends.js?t=1771413807");
+	$page->addScript("/js/friends.js?t=1776011774");
 
 	$page->loadHeader();
 ?>
@@ -68,22 +68,15 @@
 				}
 				
 			}
-			
-			$profile = $friendo->setprofilepicture ? "profile" : "headshot";
-
-			if(SESSION->settings->headshots_enabled) {
-				$profile = "headshot";
-			}
 
 			$status = $friendo->isOnline() ? "Online" : "Offline";
 			
-			$fname = $friendo->name;
 			echo <<<EOT
 			<td>
 				<div class="Friend">
-					<a href="/users/$fid/profile" title="$fname" target="_blank">
-						<img src="/thumbs/$profile?id=$fid&sxy=100">
-						<span><img src="/images/OnlineStatusIndicator_Is$status.png"> $fname</span>
+					<a href="/users/{$friendo->id}/profile" title="{$friendo->name}" target="_blank">
+						<img src="{$friendo->getThumbsUrl(100)}">
+						<span><img src="/images/OnlineStatusIndicator_Is$status.png"> {$friendo->name}</span>
 					</a>
 					$controlPanel
 				</div>

@@ -121,7 +121,7 @@
 						<td>
 							<div class="Place" data-place-id="{$place->id}">
 								<a href="#">
-									<img src="/thumbs/?id={$place->id}&sx=229&sy=132">
+									<img src="{$place->getThumbsUrl(229, 132)}">
 									<div id="Name">{$place->name}</div>
 									<div id="LastEdited">Last edited: {$place_timeago}</div>
 								</a>

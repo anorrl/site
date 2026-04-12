@@ -4,7 +4,7 @@
 	$page = new Page("Your Stuff", "my/stuff");
 	$page->addStylesheet("/css/new/stuff.css?v=1");
 	$page->addStylesheet("/css/new/forms.css");
-	$page->addScript("/js/stuff.js?t=177112345");
+	$page->addScript("/js/stuff.js?t=1776011774");
 	$page->loadHeader();
 ?>
 <div class="Asset" template>

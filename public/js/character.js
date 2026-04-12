@@ -279,7 +279,7 @@ ANORRL.Character  = {
 						urlname = "unnamed";
 					}
 
-					template.find("#NameAndThumbs > img").attr("src", "/thumbs/?id="+asset['id']+"&sxy=130");
+					template.find("#NameAndThumbs > img").attr("src", asset['thumbnail']);
 
 					template.find("#NameAndThumbs > span").html(asset['name']);
 					template.find("#NameAndThumbs").attr("href", "/"+urlname+"-item?id="+asset['id']);
@@ -365,7 +365,7 @@ ANORRL.Character  = {
 						urlname = "unnamed";
 					}
 
-					template.find("#NameAndThumbs > img").attr("src", "/thumbs/?id="+asset['id']+"&sxy=130");
+					template.find("#NameAndThumbs > img").attr("src", asset['thumbnail']);
 
 					template.find("#NameAndThumbs > span").html(asset['name']);
 					template.find("#NameAndThumbs").attr("href", "/"+urlname+"-item?id="+asset['id']);
@@ -580,7 +580,7 @@ ANORRL.Character  = {
             	if(urlname === "") urlname = "unnamed";
 
             	template.find("#NameAndThumbs > img")
-                	.attr("src", "/thumbs/?id="+asset['id']+"&sxy=130");
+                	.attr("src", asset['thumbnail']);
 
             	template.find("#NameAndThumbs > span")
                 	.html(asset['name']);

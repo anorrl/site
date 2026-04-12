@@ -117,7 +117,7 @@ ANORRL.Games = {
 						
 					});
 
-					template.find("#ImageContainer > img").attr("src", "/thumbs/?id="+asset['id']+"&sx=189&sy=106");
+					template.find("#ImageContainer > img").attr("src", asset['thumbnail']);
 					if(ANORRL.Games.MobileEnabled) {
 						template.find("#GameName").attr("href", "/games/start?placeid="+asset['id']);
 					} else {

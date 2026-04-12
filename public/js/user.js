@@ -23,7 +23,7 @@ ANORRL.User = {
 
 				$("#NameAndCreator > a").html(place['name']);
 				$("#NameAndCreator > a").attr("href","/game/"+place['id']);
-				$("#ShowcaseBigImages > img").attr("src", "/thumbs/?id="+place['id']+"&sx=300&sy=169");
+				$("#ShowcaseBigImages > img").attr("src", place['thumbnail']);
 				$("a#Play").attr("data-placejoinid", place['id']);
 
 				if(place['description'].trim() == "") {

@@ -40,7 +40,7 @@
 				}
 
 				$fetch_servers = Database::singleton()->run(
-					"UPDATE `asset_places` SET `currently_playing_count` = :playerscount WHERE `id` = :placeid",
+					"UPDATE `places` SET `currently_playing_count` = :playerscount WHERE `id` = :placeid",
 					[
 						":placeid" => $place->id,
 						":playerscount" => $concurrentplayers
@@ -70,7 +70,7 @@
 
 		public static function FromID(int $id): Place|null {
 			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-			$stmt_getuser = $con->prepare("SELECT * FROM `asset_places` WHERE `id` = ?");
+			$stmt_getuser = $con->prepare("SELECT * FROM `places` WHERE `id` = ?");
 			$stmt_getuser->bind_param('i', $id);
 			$stmt_getuser->execute();
 			$result = $stmt_getuser->get_result();
@@ -98,7 +98,7 @@
 
 		function enableTeamCreate() {
 			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-			$stmt_enableteamcreate = $con->prepare('UPDATE `asset_places` SET `teamcreate_enabled` = 1 WHERE `id` = ?');
+			$stmt_enableteamcreate = $con->prepare('UPDATE `places` SET `teamcreate_enabled` = 1 WHERE `id` = ?');
 			$stmt_enableteamcreate->bind_param('i', $this->id);
 			$stmt_enableteamcreate->execute();
 
@@ -111,7 +111,7 @@
 
 			$db = Database::singleton();
 
-			$db->run("UPDATE `asset_places` SET `teamcreate_enabled` = 0 WHERE `id` = :placeid", [":placeid" => $this->id]);
+			$db->run("UPDATE `places` SET `teamcreate_enabled` = 0 WHERE `id` = :placeid", [":placeid" => $this->id]);
 
 			if($this->teamcreate_enabled) {
 				$db->run(
@@ -227,7 +227,7 @@
 			)->rowCount();
 
 			$db->run(
-				'UPDATE `asset_places` SET `visit_count` = :visits WHERE `id` = :id',
+				'UPDATE `places` SET `visit_count` = :visits WHERE `id` = :id',
 				[
 					":visits" => $visits,
 					":id" => $this->id

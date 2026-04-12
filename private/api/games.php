@@ -55,7 +55,8 @@
 						"favouritescount" => $asset->favourites_count,
 						"activeplayercount" => $asset->current_playing_count,
 						"visitcount" => $asset->visit_count,
-						"original" => $asset->is_original
+						"original" => $asset->is_original,
+						"thumbnail" => $asset->getThumbsUrl(189, 106)
 					];
 				}
 			}
@@ -85,26 +86,17 @@
 
 		$place = Place::FromID($placeid);
 		if($place == null) {
-			die(json_encode(
-				[
-					"error" => true
-				]
-			));
+			die(json_encode(["error" => true, "reason" => "Place not found!"]));
 		} else {
-			die(json_encode(
-				[
-					"error" => false,
-					"place" => [
-						"id" => $place->id,
-						"name" => $place->name,
-						"description" => $place->description,
-					]
+			die(json_encode([
+				"error" => false,
+				"place" => [
+					"id" => $place->id,
+					"name" => $place->name,
+					"description" => $place->description,
+					"thumbnail" => $asset->getThumbsUrl(300, 169)
 				]
-			));
+			]));
 		}
-
-		
-	}
-
-	
+	}	
 ?>

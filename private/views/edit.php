@@ -140,7 +140,7 @@
 				$server_size = $allUsersCount;
 			}
 
-			$stmt = $con->prepare('UPDATE `asset_places` SET `copylocked` = ?, `serversize` = ?, `original` = ?, `gears_enabled` = ? WHERE `id` = ?;');
+			$stmt = $con->prepare('UPDATE `places` SET `copylocked` = ?, `serversize` = ?, `original` = ?, `gears_enabled` = ? WHERE `id` = ?;');
 			$stmt->bind_param('iiiii', $copylocked, $server_size, $original, $gears, $id);
 			$stmt->execute();
 
@@ -196,7 +196,7 @@
 	$page->addStylesheet("/css/new/forms.css");
 	$page->addStylesheet("/css/new/item/edit.css?v=1");
 
-	$page->addScript("/js/edit.js?t=1771413807");
+	$page->addScript("/js/edit.js?t=1776011774");
 
 	$page->loadHeader();
 ?>

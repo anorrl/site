@@ -70,8 +70,6 @@
 					}
 				}
 
-				
-
 				ob_clean();
 
 				if(isset($_GET['sxy'])) {

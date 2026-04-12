@@ -195,7 +195,7 @@
 			<span style="display: block;margin-bottom: 10px;font-size: 10px;color: #999;font-style: italic;">Thanks gamma for the template and letting my ass scrutinise it :sob:</span>
 			<div style="width:294px;margin: 0 auto;">
 				<h4 style="margin: 0;width: 254px;">This what you look like right now...</h4>
-				<img style="width: 290px;border: 2px solid black;background: #1a1a1a;" src="/thumbs/profile?id=<?= $user->id ?>&sxy=290&nocompress">
+				<img style="width: 290px;border: 2px solid black;background: #1a1a1a;" src="<?= $user->getThumbsUrlService("profile", 290) ?>&nocompress">
 				<div class="FilePicker" style="display: block;margin-top: 10px;">
 					<label for="thumbfiles">Choose file</label>
 					<input id="thumbfiles" type="file" name="ANORRL$Update$Profile$Picture" accept="image/*">

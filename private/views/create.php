@@ -92,7 +92,7 @@
 	$page->addStylesheet("/css/new/create.css");
 	$page->addStylesheet("/css/new/stuff.css?v=1");
 
-	$page->addScript("/js/create.js?t=1771701183");
+	$page->addScript("/js/create.js?t=1776011774");
 	$page->loadHeader();
 ?>
 <div class="Asset" template>

@@ -63,7 +63,7 @@
 						],
 						"Thumbnail" => [
 							"Final" => true,
-							"Url" => "https://{$domain}/thumbs/?id=".$asset->id."&sxy=75"
+							"Url" => "https://{$domain}{$asset->getThumbsUrl(75)}"
 						],
 						"Voting" => [
 							"ShowVotes" => false

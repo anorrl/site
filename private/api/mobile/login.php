@@ -11,22 +11,21 @@
 	}
 
 	$domain = CONFIG->domain;
-?>
 
-<?php 
-ob_clean();
-if($result["login"] != "Incorrect details provided!"): ?>
-{
-	"Status":"OK", 
-	"UserInfo": {
-		"UserID": <?= $user->id ?>,
-		"UserName": "<?= trim($user->name) ?>",
-		"RobuxBalance": 69,
-		"TicketsBalance": 420,
-		"IsAnyBuildersClubMember": false,
-		"ThumbnailUrl": "http://<?= $domain ?>/thumbs/player?id=<?= $user->id ?>"
+	if($result["login"] != "Incorrect details provided!") {
+		echo json_encode([
+			"Status" => "OK", 
+			"UserInfo" => [
+				"UserID" => $user->id,
+				"UserName" => trim($user->name),
+				"RobuxBalance" => 69,
+				"TicketsBalance" => 420,
+				"IsAnyBuildersClubMember" => false,
+				"ThumbnailUrl" => "http://{$domain}{$user->getThumbsUrlService("player")}"
+			]
+		]);
+	} else {
+		echo json_encode(["Status" => print_r($result)]);
 	}
-}
-<?php else: ?>
-{ "Status":"<?php print_r($result) ?>" }
-<?php endif ?>
+
+?>

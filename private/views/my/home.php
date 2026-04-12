@@ -22,7 +22,7 @@
 	$page = new Page("Home", "my/home");
 
 	$page->addStylesheet("/css/new/my/home.css?v=2");
-	$page->addScript("/js/home.js?t=1771413807");
+	$page->addScript("/js/home.js?t=1776011774");
 
 	$page->loadHeader();
 ?>
@@ -45,7 +45,7 @@
 			<marquee scrollamount="15" behavior="alternate" style="display: block;margin-top: -33px;z-index: 9;" direction="left"><?= $user->name ?></marquee>
 		</h1>
 		<div id="UserProfile">
-			<a href="/users/<?= $user->id ?>/profile"><img id="ProfilePicture" src="/thumbs/player?id=<?= $user->id ?>&sxy=200"></a>
+			<a href="/users/<?= $user->id ?>/profile"><img id="ProfilePicture" src="<?= $user->getThumbsUrlService($user->setprofilepicture ? "profile" : "player", 200) ?>"></a>
 			<div id="StatusContainer">
 			<?php 
 				if($user->getLatestStatus() != null) {
@@ -81,22 +81,16 @@
 					$friends = $new_friends;
 				}
 
-				foreach($friends as $friend) {
-					if($friend instanceof anorrl\User) {
-						$fID = $friend->id;
-						$fName = $friend->name;
-						echo <<<EOT
-						<li class="Friend">
-							<a id="ProfileLink" href="/users/$fID/profile">
-								<img id="Profile" src="/thumbs/headshot?id=$fID&sxy=100">
-								<div id="Name">$fName</div>
-							</a>
-						</li>
-						EOT;
-					}
-					
-				}
-			?>
+				foreach($friends as $friend): ?>
+
+					<li class="Friend">
+						<a id="ProfileLink" href="/users/<?= $friend->id ?>/profile">
+							<img id="Profile" src="<?= $friend->getThumbsUrl(100) ?>">
+							<div id="Name"><?= $friend->name ?></div>
+						</a>
+					</li>
+
+				<?php endforeach ?>
 			</ul>
 			<?php else: ?>
 			<ul id="Friends" style="display: table">

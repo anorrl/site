@@ -75,7 +75,7 @@
 		<link rel="stylesheet" href="/public/css/new/main.css">
 		<link rel="stylesheet" href="/public/css/new/publish.css">
 		<script src="/public/js/core/jquery.js"></script>
-		<script src="/public/js/main.js?t=1771413807"></script>
+		<script src="/public/js/main.js?t=1776011774"></script>
 	</head>
 	<body>
 		<div id="Container">

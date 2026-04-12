@@ -42,7 +42,7 @@
 			<div class="Comment">
 				<div id="CommenterAvatar">
 					<a href="/users/$user_id/profile">
-						<img src="/thumbs/$profileurl?id=$user_id">
+						<img src="{$this->poster->getThumbsUrl()}">
 					</a>
 				</div>
 				<div id="CommentPartArea">

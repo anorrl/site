@@ -52,7 +52,8 @@
 						"creator" => [
 							"id" => $asset->creator->id,
 							"name" => $asset->creator->name
-						]
+						],
+						"thumbnail" => $asset->getThumbsUrl(130)
 					];
 				}
 			}

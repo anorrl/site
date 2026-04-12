@@ -150,24 +150,27 @@
 			bool $comments_enabled = true,
 			User $user
 		): array {
-			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
+			$db = Database::singleton();
 
 			$hidden = AssetTypeUtils::IsHidden($type);
 
-			$parsed_userid          = $user->id;
-			$parsed_type            = $type->ordinal();
-			$parsed_public          = intval($public);
-			$parsed_onsale          = intval($on_sale);
-			$parsed_commentsenabled = intval($comments_enabled);
-			$parsed_hidden          = intval($hidden);
+			$db->run(
+				"INSERT INTO `assets`
+					(`name`, `description`, `creator`, `type`, `public`, `onsale`, `comments_enabled`, `nevershow`) 
+					VALUES (:name, :desc, :uid, :type, :public, :onsale, :commentsenabled, :hidden);",
+				[
+					":name" => $name,
+					":desc" => $description,
+					":uid" => $user->id,
+					":type" => $type->ordinal(),
+					":public" => intval($public),
+					":onsale" => intval($on_sale),
+					":commentsenabled" => intval($comments_enabled),
+					":hidden" => intval($hidden)
+				]
+			);
 
-			$stmt = $con->prepare("INSERT INTO `assets`(`name`, `description`, `creator`, `type`, `public`, `onsale`, `comments_enabled`, `nevershow`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
-			$stmt->bind_param('ssiiiiii', $name, $description, $parsed_userid, $parsed_type, $parsed_public, $parsed_onsale, $parsed_commentsenabled, $parsed_hidden);
-			if(!$stmt->execute()) {
-				return INTERNALSQLERROR;
-			}
-
-			$id = $con->insert_id;
+			$id = (int)$db->lastInsertId();
 
 			if($data != null) {
 				$md5 = self::GetMD5OfData($data);
@@ -179,12 +182,22 @@
 					file_put_contents($filepath, $data);
 				}
 
-				$stmt = $con->prepare('INSERT INTO `asset_versions`(`assetid`, `md5sig`, `md5thumb`) VALUES (?, ?, ?)');
-				$stmt->bind_param('iss', $id, $md5, $md5);
-				if(!$stmt->execute()) {
-					$stmt = $con->prepare('DELETE FROM `assets` WHERE `id` = ?;');
-					$stmt->bind_param('i', $id);
-					$stmt->execute();
+				$exec = $db->run(
+					'INSERT INTO `asset_versions`(`assetid`, `md5sig`, `md5thumb`) VALUES (?, ?, ?)',
+					[
+						":aid" => $id,
+						":md5" => $md5
+					]
+				);
+
+				if($exec->errorCode()) {
+					if(filesize($filepath) == 0)
+						unlink($filepath);
+
+					$db->run(
+						'DELETE FROM `assets` WHERE `id` = :aid',
+						[":aid" => $id]
+					);
 
 					return INTERNALSQLERROR;
 				}
@@ -238,7 +251,7 @@
 			if($user->id != $asset->creator->id && !$user->isAdmin()) {
 				return ["error" => true, "reason" => "User is not authorised to perform this action!"];
 			}
-			include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
+			$db = Database::singleton();
 
 			$id = $asset->id;
 			$parsed_public          = intval($public);
@@ -257,16 +270,14 @@
 
 				$new_versionid = count($asset->getAllVersions())+1;
 
-				$stmt = $con->prepare('INSERT INTO `asset_versions`(`assetid`, `md5sig`, `md5thumb`, `subid`) VALUES (?, ?, ?, ?)');
-				$stmt->bind_param('issi', $id, $md5, $md5, $new_versionid);
-				try {
-					if(!$stmt->execute()) {
-						return INTERNALSQLERROR;
-					}
-				} catch(\mysqli_sql_exception $e) {
-					return INTERNALSQLERROR;
-				}
-				
+				$db->run(
+					'INSERT INTO `asset_versions`(`assetid`, `md5sig`, `md5thumb`, `subid`) VALUES (:assetid, :md5, :md5, :subid)',
+					[
+						":assetid" => $id,
+						":md5" => $md5,
+						":subid" => $new_versionid
+					]
+				);
 
 				$directory = $_SERVER['DOCUMENT_ROOT'];
 				$assetsdir = "$directory/../assets/";
@@ -275,12 +286,10 @@
 					file_put_contents($filepath, $data);
 				}
 			}
-
 			
-
-			$versionid = $con->insert_id;
-
-			Database::singleton()->run(
+			$versionid = $db->lastInsertId();
+			
+			$db->run(
 				"UPDATE `assets` SET `currentversion` = :curver, `lastedited` = now(), `name` = :name, `description` = :desc, `public` = :public, `onsale` = :onsale, `cones` = :cones, `lights` = :lights, `comments_enabled` = :commentsenabled WHERE `id` = :assetid",
 				[
 					":curver" => $new_versionid,
@@ -414,7 +423,7 @@
 
 			if(!$result['error']) {
 				include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-				$stmt_addplace = $con->prepare("INSERT INTO `asset_places`(`id`, `copylocked`, `serversize`, `gears_enabled`, `original`) VALUES (?, ?, ?, ?, ?)");
+				$stmt_addplace = $con->prepare("INSERT INTO `places`(`id`, `copylocked`, `serversize`, `gears_enabled`, `original`) VALUES (?, ?, ?, ?, ?)");
 				
 				$place_copylocked = $copylocked ? 1 : 0;
 				$place_gears = $gears_enabled ? 1 : 0;

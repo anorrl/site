@@ -80,7 +80,7 @@
 
 			$base_sql_query = "SELECT * FROM `assets` WHERE `name` LIKE ? AND `type` = ? $query_filter";
 			if($type == AssetType::PLACE) {
-				$base_sql_query = "SELECT asset_places.* FROM `asset_places`, `assets` WHERE assets.id = asset_places.id AND `name` LIKE ? AND `type` = ? $query_filter ".($_SESSION['ANORRL$Games$OriginalOnly'] ? " AND `original` = 1 " : "");
+				$base_sql_query = "SELECT places.* FROM `places`, `assets` WHERE assets.id = places.id AND `name` LIKE ? AND `type` = ? $query_filter ".($_SESSION['ANORRL$Games$OriginalOnly'] ? " AND `original` = 1 " : "");
 			}
 			
 			$filter = match($filter) {
@@ -143,7 +143,7 @@
 			
 			$user = UserUtils::RetrieveUser();
 			if($user == null) 
-				return [];
+				return 0;
 			
 			$query_filter = "AND `public` = 1 AND `nevershow` = 0";
 			if($user->isAdmin()) {
@@ -152,7 +152,7 @@
 
 			$base_sql_query = "SELECT COUNT(`id`) FROM `assets` WHERE `name` LIKE ? AND `type` = ? $query_filter";
 			if($type == AssetType::PLACE) {
-				$base_sql_query = "SELECT COUNT(`asset_places`.`id`) FROM `asset_places`, `assets` WHERE assets.id = asset_places.id AND `name` LIKE ? AND `type` = ? $query_filter ".($_SESSION['ANORRL$Games$OriginalOnly'] ? " AND `original` = 1 " : "");
+				$base_sql_query = "SELECT COUNT(`places`.`id`) FROM `places`, `assets` WHERE assets.id = places.id AND `name` LIKE ? AND `type` = ? $query_filter ".($_SESSION['ANORRL$Games$OriginalOnly'] ? " AND `original` = 1 " : "");
 			}
 			
 			$filter = match($filter) {
@@ -190,7 +190,7 @@
 			}
 			
 			if($type == AssetType::PLACE) {
-				return $row['COUNT(`asset_places`.`id`)'];
+				return $row['COUNT(`places`.`id`)'];
 			}
 			
 			return $row['COUNT(`id`)'];

@@ -11,7 +11,7 @@
 	$page->addStylesheet("/css/new/forms.css");
 	$page->addStylesheet("/css/new/people.css");
 
-	$page->addScript("/js/people.js?t=1771933381");
+	$page->addScript("/js/people.js?t=1776011774");
 
 	$page->loadHeader();
 ?>

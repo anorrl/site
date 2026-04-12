@@ -36,19 +36,13 @@
 	if(count($users) != 0) {
 		foreach($users as $user) {
 			if($user instanceof User) {
-				$profile = ($user->setprofilepicture ? "profile":"headshot");
-
-				if(SESSION->settings->headshots_enabled) {
-					$profile = "headshot";
-				}
-
 				$users_raw[] = [
 					"id" => $user->id,
 					"name" => $user->name,
 					"blurb" => htmlspecialchars($user->blurb, ENT_QUOTES),
 					"online" => $user->isOnline(),
 					"status" => $user->getOnlineActivity(),
-					"thumbnail" => "/thumbs/$profile?id=".$user->id."&sxy=64"
+					"thumbnail" => $user->getThumbsUrl(64)
 				];
 			}
 		}

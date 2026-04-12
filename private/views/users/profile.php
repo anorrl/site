@@ -61,8 +61,8 @@
 	$page->addStylesheet("/css/new/my/profile.css?v=11");
 	$page->addStylesheet("/users/{$get_user->id}/css?t=".time());
 
-	$page->addScript("/js/placelauncher.js?t=1771413807");
-	$page->addScript("/js/user.js?t=1771413807");
+	$page->addScript("/js/placelauncher.js?t=1776011774");
+	$page->addScript("/js/user.js?t=1776011774");
 
 	$page->loadHeader();
 ?>
@@ -75,9 +75,9 @@
 		render = !render;
 
 		if(render) {
-			$("#AvatarRenderYeah").attr("src", "/thumbs/player?id=<?= $get_user->id ?>&sxy=200");
+			$("#AvatarRenderYeah").attr("src", "<?= $get_user->getThumbsUrlService("player", 200) ?>");
 		} else {
-			$("#AvatarRenderYeah").attr("src", "/thumbs/headshot?id=<?= $get_user->id ?>&sxy=200");
+			$("#AvatarRenderYeah").attr("src", "<?= $get_user->getThumbsUrlService("headshot", 200) ?>");
 		}
 	}
 </script>
@@ -190,7 +190,7 @@ $(function() {
 	<h2 style="margin: 5px 0px; width: 825px;"><?= $get_user->name ?>'s Profile</h2>
 	<div id="ProfileImage">
 		<div id="ImageContainer">
-			<img id="ProfilePictureYeah" src="/thumbs/<?= $get_user->setprofilepicture ? "profile" : "headshot" ?>?id=<?= $get_user->id ?>&nocompress">
+			<img id="ProfilePictureYeah" src="<?= $get_user->getThumbsUrlService($get_user->setprofilepicture ? "profile" : "headshot") ?>&nocompress">
 		</div>
 		
 		<div id="Controls">
@@ -301,7 +301,7 @@ $(function() {
 	<div id="AvatarRender">
 		<a href="javascript:flipRenders()" style="position: absolute;z-index: 2;bottom: 5px;right: 5px;"><img src="/images/icons/switch.png" style="width: 30px;image-rendering: pixelated;"></a>
 			
-		<img id="AvatarRenderYeah" src="/thumbs/player?id=<?= $get_user->id ?>&sxy=200&nocompress">
+		<img id="AvatarRenderYeah" src="<?= $get_user->getThumbsUrlService("player") ?>&nocompress">
 	</div>
 	<br id="Clearer">
 </div>

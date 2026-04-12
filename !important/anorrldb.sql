@@ -112,11 +112,11 @@ CREATE TABLE `assets` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `asset_places`
+-- Table structure for table `places`
 --
 
-DROP TABLE IF EXISTS `asset_places`;
-CREATE TABLE `asset_places` (
+DROP TABLE IF EXISTS `places`;
+CREATE TABLE `places` (
   `id` int(11) NOT NULL,
   `copylocked` int(11) NOT NULL DEFAULT 1,
   `serversize` int(11) NOT NULL DEFAULT 12,
@@ -421,9 +421,9 @@ ALTER TABLE `assets`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `asset_places`
+-- Indexes for table `places`
 --
-ALTER TABLE `asset_places`
+ALTER TABLE `places`
   ADD PRIMARY KEY (`id`);
 
 --

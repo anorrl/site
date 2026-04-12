@@ -73,17 +73,17 @@
 	$page->addStylesheet("/css/new/my/home.css?v=2");
 	
 
-	$page->addScript("/js/item.js?t=1771413807");
-	$page->addScript("/js/placelauncher.js?t=1771413807");
+	$page->addScript("/js/item.js?t=1776011774");
+	$page->addScript("/js/placelauncher.js?t=1776011774");
 
 	$page->addMeta("title", htmlspecialchars($asset->name, ENT_QUOTES));
 	$page->addMeta("description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
 	$page->addMeta("og:type", "website");
 	$page->addMeta("og:site_name", "ANORRL");
-	$page->addMeta("og:url", "https://$domain{$asset->getUrl()}");
+	$page->addMeta("og:url", "https://{$domain}{$asset->getUrl()}");
 	$page->addMeta("og:title", htmlspecialchars($asset->name, ENT_QUOTES));
 	$page->addMeta("og:description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
-	$page->addMeta("og:image", "https://$domain{$asset->getThumbsUrl()}");
+	$page->addMeta("og:image", "https://{$domain}{$asset->getThumbsUrl()}");
 
 	$page->loadHeader();
 
@@ -161,7 +161,7 @@
 	<div id="PlaceDetails">
 		<div id="Content">
 			<div id="PlaceImageContainer">
-				<img src="/thumbs/?id=<?= $asset->id ?>&sx=623&sy=350&nocompress">
+				<img src="<?= $asset->getThumbsUrl(623, 350) ?>&nocompress">
 				<?php if($asset->is_original): ?>
 				<div id="OriginalLabel">Original</div>
 				<?php endif ?>
@@ -169,7 +169,7 @@
 		</div>
 		<div id="Information">
 			<div id="UserCard">
-				<a href="/users/<?= $asset->creator->id ?>/profile"><img src="/thumbs/player?id=<?= $asset->creator->id ?>" style="width: 110px;display:block;margin:0 auto;"></a>
+				<a href="/users/<?= $asset->creator->id ?>/profile"><img src="<?= $asset->creator->getThumbsUrlService("player", 110)?>" style="width: 110px;display:block;margin:0 auto;"></a>
 				<div id="AssetInfoStuff">
 					<span>Created by <a href="/users/<?= $asset->creator->id ?>/profile"><?= $asset_creator_name ?></a></span>
 					<span><b>Favourited</b>: <?= $favourites_label ?></span>
@@ -208,26 +208,14 @@
 		<div id="CommentSection">
 				<div id="FriendsContainer">
 					<ul id="Friends" style="width: 848px;border: 0px;background: none;padding: 0px;text-align: center;height: 140px;">
-						<?php 
-							$users = $asset->getCloudEditors();
-
-							foreach($users as $u) {
-								if($u instanceof User) {
-									
-									$fID = $u->id;
-									$fName = $u->name;
-									echo <<<EOT
-									<li class="Friend">
-										<a id="ProfileLink" href="/users/$fID/profile">
-											<img id="Profile" src="/thumbs/headshot?id=$fID&sxy=100">
-											<div id="Name">$fName</div>
-										</a>
-									</li>
-									EOT;
-								}
-								
-							}
-						?>
+						<?php $users = $asset->getCloudEditors(); foreach($users as $u): ?>
+							<li class="Friend">
+								<a id="ProfileLink" href="/users/<?= $u->id ?>/profile">
+									<img id="Profile" src="<?= $u->getThumbsUrl(100) ?>">
+									<div id="Name"><?= $u->name ?></div>
+								</a>
+							</li>							
+						<?php endforeach ?>
 					</ul>
 				</div>
 		</div>

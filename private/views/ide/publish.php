@@ -14,7 +14,7 @@
 		<link rel="stylesheet" href="/public/css/new/main.css">
 		<link rel="stylesheet" href="/public/css/new/publish.css">
 		<script src="/public/js/core/jquery.js"></script>
-		<script src="/public/js/main.js?t=1771413807"></script>
+		<script src="/public/js/main.js?t=1776011774"></script>
 		<script src="/public/js/publish.js"></script>
 	</head>
 	<body domain="<?= CONFIG->domain ?>">
@@ -31,22 +31,12 @@
 										<img src="/images/ide/createnewplace.png">
 										<span>Create a New Place</span>
 									</div>
-									<?php 
-										$places = $user->getOwnedAssets(AssetType::PLACE);
-										
-										if(count($places) != 0) {
-											foreach($places as $place) {
-												$place_id = $place->id;
-												$place_name = $place->name;
-												echo <<<EOT
-												<div class="Place" data-placeid="$place_id">
-													<img src="/thumbs/?id=$place_id&sx=261&sy=149">
-													<span>$place_name</span>
-												</div>
-												EOT;
-											}
-										}
-									?>
+									<?php $places = $user->getOwnedAssets(AssetType::PLACE); foreach($places as $place): ?>
+										<div class="Place" data-placeid="<?= $place->id ?>">
+											<img src="<?= $place->getThumbsUrl(261, 149) ?>">
+											<span><?= $place->name ?></span>
+										</div>
+									<?php endforeach ?>
 								</div>
 							</form>
 						</div>

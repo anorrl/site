@@ -84,7 +84,7 @@
 	$page->addStylesheet("/css/new/comments.css?v=1");
 	$page->addStylesheet("/css/new/my/home.css?v=2");
 
-	$page->addScript("/js/item.js?t=1771418807");
+	$page->addScript("/js/item.js?t=1776011774");
 
 	$page->addMeta("title", htmlspecialchars($asset->name, ENT_QUOTES));
 	$page->addMeta("description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
@@ -247,7 +247,7 @@
 		</div>
 		<div id="Information">
 			<div id="UserCard">
-				<a href="/users/<?= $asset->creator->id ?>/profile"><img src="/thumbs/player?id=<?= $asset->creator->id ?>" style="width: 100px;"></a>
+				<a href="/users/<?= $asset->creator->id ?>/profile"><img src="<?= $asset->creator->getThumbsUrlService("player", 100) ?>" style="width: 100px;"></a>
 				<div id="AssetInfoStuff">
 					<span>Created by <a href="/users/<?= $asset->creator->id ?>/profile"><?= $asset_creator_name ?></a></span>
 					<span><b>Created on</b>: <?= $asset->created_at->format('d/m/Y H:i'); ?></span>
@@ -304,26 +304,14 @@
 			<?php if($asset->sales_count > 0): ?>
 				<div id="FriendsContainer">
 					<ul id="Friends" style="width: 848px;border: 0px;background: none;padding: 0px;">
-						<?php 
-							$users = $asset->getSales();
-
-							foreach($users as $u) {
-								if($u instanceof User) {
-									
-									$fID = $u->id;
-									$fName = $u->name;
-									echo <<<EOT
-									<li class="Friend">
-										<a id="ProfileLink" href="/users/$fID/profile">
-											<img id="Profile" src="/thumbs/headshot?id=$fID&sxy=100">
-											<div id="Name">$fName</div>
-										</a>
-									</li>
-									EOT;
-								}
-								
-							}
-						?>
+						<?php $sales = $asset->getSales(); foreach($sales as $u): ?>
+							<li class="Friend">
+								<a id="ProfileLink" href="/users/<?= $u->id ?>/profile">
+									<img id="Profile" src="<?= $u->getThumbsUrl(100) ?>">
+									<div id="Name"><?= $u->name ?></div>
+								</a>
+							</li>							
+						<?php endforeach ?>
 					</ul>
 				</div>
 			<?php else: ?>

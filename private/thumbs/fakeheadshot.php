@@ -1,6 +1,8 @@
 <?php
 	use anorrl\User;
 
+	header("Content-Type: application/json");
+
 	$user = null;
 
 	if(isset($_GET['userid'])) {
@@ -12,19 +14,12 @@
 	}
 
 	$domain = CONFIG->domain;
+	$thumbsurl = $user->getThumbsUrlService($user->setprofilepicture ? "profile" : "headshot");
 
-	if($user->setprofilepicture) {
-		die(json_encode([
-			"Final" => true,
-			"Url" => "http://$domain/thumbs/profile?id=".$user->id."&nocompress",
-			"RetryUrl" => "http://$domain/thumbs/profile?id=".$user->id."&nocompress",
-		]));
-	} else {
-		die(json_encode([
-			"Final" => true,
-			"Url" => "http://$domain/thumbs/headshot?id=".$user->id."&nocompress",
-			"RetryUrl" => "http://$domain/thumbs/headshot?id=".$user->id."&nocompress",
-		]));
-	}
+	die(json_encode([
+		"Final" => true,
+		"Url" => "http://{$domain}{$thumbsurl}&nocompress",
+		"RetryUrl" => "http://{$domain}{$thumbsurl}&nocompress",
+	]));
 
 ?>

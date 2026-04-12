@@ -57,15 +57,11 @@
 				$users_count = count($users);
 			?>
 			<tr>
-				<?php foreach($users as $user): 
-					// uh yeah.
-					// i hate you
-					$thumbs_type = $user->setprofilepicture ? ($settings->headshots_enabled ? "headshot" : "profile") : "headshot";
-				?>
+				<?php foreach($users as $user): ?>
 				<td>
 					<div class="User" title="<?= $user->name ?>">
 						<a href="/users/<?= $user->id ?>/profile">
-							<img src="/thumbs/<?= $thumbs_type ?>?id=<?= $user->id ?>&sxy=100">
+							<img src="<?= $user->getThumbsUrl(100) ?>">
 							<span><?= $user->name ?></span>
 						</a>
 					</div>

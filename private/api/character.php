@@ -213,6 +213,7 @@
 										"id" => $asset->creator->id,
 										"name" => $asset->creator->name
 									],
+									"thumbnail" => $asset->getThumbsUrl(130)
 								];
 							}
 						}
@@ -241,7 +242,8 @@
 						"creator" => [
 							"id" => $asset->creator->id,
 							"name" => $asset->creator->name
-						]
+						],
+						"thumbnail" => $asset->getThumbsUrl(130)
 					];
 				}
 				die(json_encode([
@@ -277,6 +279,7 @@
 									"id" => $asset->creator->id,
 									"name" => $asset->creator->name
 								],
+								"thumbnail" => $asset->getThumbsUrl(130)
 							];
 						}
 					}

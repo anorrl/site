@@ -3,7 +3,7 @@
 
 	$page = new Page("Your Character", "my/character");
 	$page->addScript("/js/core/jquery-modal.js");
-	$page->addScript("/js/character.js?t=1771413909");
+	$page->addScript("/js/character.js?t=1776011774");
 
 	$page->addStylesheet("/css/new/stuff.css?v=1");
 	$page->addStylesheet("/css/new/my/character.css");
@@ -81,7 +81,7 @@
 		<div id="AvatarRender">
 			<h4>Avatar Render</h4>
 			<div id="RenderContainer">
-				<img id="PlayerRender" src="/thumbs/player?id=<?= SESSION->user->id ?>" width="260">
+				<img id="PlayerRender" src="<?= SESSION->user->getThumbsUrlService("player", 260) ?>" width="260">
 				<div style="margin-top: -10px;margin-bottom: 5px">
 					<!--<button style="width: 105px;">Create Outfit</button>-->
 					<button style="width: 90px;" onclick="ANORRL.Character.RenderPlayer(true);">Re-Render</button>
