@@ -141,7 +141,7 @@
 				}
 			});
 
-			wait(1000).then(() => {
+			wait(500).then(() => {
 				if(!hasLoaded) {
 					setVisible('#LoadingScreen', true);
 					initiateLoading = true;
