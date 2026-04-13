@@ -2,7 +2,7 @@
 	use anorrl\User;
 	use anorrl\utilities\UserUtils;
 	use anorrl\enums\AssetType;
-	use anorrl\enums\ANORRLBadges;
+	use anorrl\enums\ANORRLBadge;
 	use anorrl\Comment;
 	use anorrl\Asset;
 	use anorrl\Page;
@@ -365,11 +365,11 @@ $(function() {
 							EOT;
 						}
 
-						if(!($badge instanceof ProfileBadge)) {
+						if(!($badge instanceof anorrl\enums\ANORRLBadge)) {
 							continue;
 						}
 
-						$badgeid = $badge->id->ordinal();
+						$badgeid = $badge->ordinal();
 						$badgename = $badge->name();
 						$badgenamefile = str_replace(" ", "", $badge->name());
 						$badgedesc = $badge->description();
