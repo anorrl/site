@@ -8,8 +8,9 @@
 	function route($method, $path, $file) {
 		global $router;
 		$router->map($method, $path, function(...$params) use ($path, $file) {
+			// todo: make this optional - this is just for actual anorrl.
 			if(
-				str_starts_with($path, "/private/views/") &&
+				str_starts_with($file, "/private/views/") &&
 				(!isset($_COOKIE['ANORRL$Hidden$Cookie$yaya']) || 
 				(isset($_COOKIE['ANORRL$Hidden$Cookie$yaya']) && $_COOKIE['ANORRL$Hidden$Cookie$yaya'] != CONFIG->secret->token))) {
 						
