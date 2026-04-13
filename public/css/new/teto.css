@@ -4,7 +4,6 @@
 	right: 10px;
 	width: 250px;
 	z-index: 9999;
-	pointer-events: none;
 }
 
 #TetoContainer #TetoSplashContainer {
@@ -28,4 +27,5 @@
 #TetoContainer #Teto {
 	position: relative;
 	width: 250px;
+	pointer-events: none;
 }

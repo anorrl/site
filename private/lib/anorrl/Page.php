@@ -38,7 +38,7 @@
 			}
 
 			if($this->settings->teto_enabled) {
-				$this->addStylesheet("/css/new/teto.css");
+				$this->addStylesheet("/css/new/teto.css?v=1");
 			}
 
 			if(SESSION && SESSION->user && $_SERVER['SCRIPT_NAME'] != "/users/profile.php") {

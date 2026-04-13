@@ -18,7 +18,7 @@
 		<h1>Goodbye ANORRL!</h1>
 		<p>I leave you with this! <a href="https://www.lambda.cam/blogs/04/26/26-goodbye-anorrl">Blog post here</a></p>
 		<hr>
-		<p><audio src="/teenage_robot.mp3" controls></audio></p>
+		<p><audio src="/public/teenage_robot.mp3" controls></audio></p>
 		<hr>
 <p>thought about going outside</p>
 <p>soon, i lost my appetite</p>
