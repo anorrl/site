@@ -139,10 +139,19 @@ hr {
 }
 
 .Badge img {
-	height: 75px;
-	width: 75px;
-	border: 2px solid black;
-	background: #555;
+	height: 100px;
+	width: 100px;
+
+	margin-bottom: -15px;
+	margin-left: -7px;
+	margin-top: -4px;
+	z-index: 2;
+	transition: transform 0.5s;
+}
+
+.Badge:hover img {
+	transform: rotate(2deg) scale(1.125);
+	z-index: 9999;
 }
 
 .Badge span {

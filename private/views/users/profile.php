@@ -58,7 +58,7 @@
 
 	$page->addStylesheet("/css/new/stuff.css?v=1");
 	$page->addStylesheet("/css/new/comments.css");
-	$page->addStylesheet("/css/new/my/profile.css?v=12");
+	$page->addStylesheet("/css/new/my/profile.css?v=13");
 	$page->addStylesheet("/users/{$get_user->id}/css?t=".time());
 
 	$page->addScript("/js/placelauncher.js?t=1776011774");
@@ -378,7 +378,7 @@ $(function() {
 						<td>
 							<div class="Badge">
 								<a href="/badges#Badge$badgeid" title="$badgedesc">
-									<img src="/images/Badges/$badgenamefile.png?v=2" title="icon made by grace">
+									<img src="/images/Badges/$badgenamefile.png?v=2" title="$badgename">
 									<span>$badgename</span>
 								</a>
 							</div>
