@@ -88,9 +88,9 @@
 
 			function setVisible(element, visible) {
 				if(element == "#LoadingScreen")
-					document.querySelector(element).style.opacity = visible ? 1 : 0;
+					$(element).css("opacity", visible ? 1 : 0);
 				else
-					document.querySelector(element).style.display = visible ? "block" : "none";
+					$(element).css("display", visible ? "block" : "none");
 			}
 
 			// do loading screen if the page hasn't loaded in a second.
@@ -99,7 +99,6 @@
 			var initiateLoading = false;
 
 			$(window).load(function() {
-				console.log("hi");
 				hasLoaded = true;
 				setVisible("#Container", true);
 				if(initiateLoading) {
@@ -164,7 +163,7 @@
 			}
 		</style>
 		<?php endif ?>
-		<div id="Container" style="display: none">
+		<div id="Container">
 			<div id="Header">
 				<?php if($header_check_user != null): 
 					$pendingreqscount = $header_check_user->GetPendingFriendRequestsCount();	
