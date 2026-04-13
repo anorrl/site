@@ -88,6 +88,7 @@
 			<?php
 				createBadge(ANORRLBadge::ADMINISTRATOR);
 				createBadge(ANORRLBadge::VETERAN);
+				createBadge(ANORRLBadge::TESTER);
 				/*createBadge(ANORRLBadge::FORUM_MOD);
 				createBadge(ANORRLBadge::IMAGE_MOD);*/
 			?>
