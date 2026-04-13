@@ -8,8 +8,9 @@
 	function route($method, $path, $file) {
 		global $router;
 		$router->map($method, $path, function(...$params) use ($path, $file) {
-			// todo: make this optional - this is just for actual anorrl.
+			$secret_enabled = isset(CONFIG->secret);
 			if(
+				$secret_enabled &&
 				str_starts_with($file, "/private/views/") &&
 				(!isset($_COOKIE['ANORRL$Hidden$Cookie$yaya']) || 
 				(isset($_COOKIE['ANORRL$Hidden$Cookie$yaya']) && $_COOKIE['ANORRL$Hidden$Cookie$yaya'] != CONFIG->secret->token))) {
@@ -17,21 +18,22 @@
 					if($path != "/goodbye")
 						die(header("Location: /goodbye"));
 			} else {
-				// yeah i just dont feel like it
+				$secret_enabled = false;
+			}
+			
+			// yeah i just dont feel like it
+			if(!$secret_enabled) {
 				if(
 					$path != "/login" &&
 					$path != "/register" &&
 					$path != "/" &&
 					$path != "/index" &&
-					!str_starts_with($file, "/private/thumbs/") &&
-					$file != "/private/gameapis/assetdeliverer.php" &&
+					str_starts_with($file, "/private/views/") &&
 					!SESSION
 				) {
 					die(header("Location: /login"));
 				}
 			}
-
-			
 
 			foreach ($params as $key => $value) {
 				$$key = $value;
@@ -71,7 +73,9 @@
 	//route('GET',      '/test', '/private/views/test.php');
  
 	route('GET',      '/', '/private/views/index.php');
-	route('GET',      '/goodbye', '/private/views/goodbye.php');
+	if(isset(CONFIG->secret))
+		route('GET',      '/goodbye', '/private/views/goodbye.php');
+
 	route('GET',      '/index', '/private/views/index.php');
 	route('GET|POST', '/login', '/private/views/login.php');
 	route('GET|POST', '/register', '/private/views/register.php');

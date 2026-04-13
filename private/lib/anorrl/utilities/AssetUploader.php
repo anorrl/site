@@ -62,7 +62,18 @@
 		}
 
 		private static function IsValidMesh(string $data): bool {
-			return str_starts_with(trim($data), "version 1.0") || str_starts_with(trim($data), "version 2.0");
+			return 
+				str_starts_with(trim($data), "version 1.0") || 
+				str_starts_with(trim($data), "version 2.0") ||
+				str_starts_with(trim($data), "version 3.0") ||
+				str_starts_with(trim($data), "version 4.0") ||
+				str_starts_with(trim($data), "version 5.0");
+		}
+
+		private static function IsSupportedMesh(string $data): bool {
+			return 
+				str_starts_with(trim($data), "version 1.0") || 
+				str_starts_with(trim($data), "version 2.0");
 		}
 
 		private static function GetMD5OfData(mixed $data) {
@@ -387,6 +398,16 @@
 						return INVALIDFILE;
 					}
 
+					if(!self::IsSupportedMesh($data)) {
+						$mesh_result = MeshConverter::Convert($data);
+
+						if(!$mesh_result['error'])
+							$data = $mesh_result['mesh'];
+						else
+							return $mesh_result;
+					}
+					
+
 					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $cones, $lights, $user);
 
 					if(!$result['error']) {
@@ -688,6 +709,15 @@
 							} else if($type == AssetType::MESH) {
 								if(!self::IsValidMesh($data)) {
 									return INVALIDFILE;
+								}
+
+								if(!self::IsSupportedMesh($data)) {
+									$mesh_result = MeshConverter::Convert($data);
+
+									if(!$mesh_result['error'])
+										$data = $mesh_result['mesh'];
+									else
+										return $mesh_result;
 								}
 
 								$result = self::CommitAsset($data, $type, $name, $description, $public, $on_sale, $comments_enabled, $user);

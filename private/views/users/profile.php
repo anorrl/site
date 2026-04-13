@@ -58,7 +58,7 @@
 
 	$page->addStylesheet("/css/new/stuff.css?v=1");
 	$page->addStylesheet("/css/new/comments.css");
-	$page->addStylesheet("/css/new/my/profile.css?v=11");
+	$page->addStylesheet("/css/new/my/profile.css?v=12");
 	$page->addStylesheet("/users/{$get_user->id}/css?t=".time());
 
 	$page->addScript("/js/placelauncher.js?t=1776011774");
