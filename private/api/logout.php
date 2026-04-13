@@ -2,7 +2,8 @@
 	
 	use anorrl\utilities\UserUtils;
 	
-	$user = UserUtils::RetrieveUser();
+	$user = SESSION ? SESSION->user : null;
+	
 	if($user != null) {
 		UserUtils::RemoveCookies();
 		session_destroy();

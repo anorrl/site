@@ -1,4 +1,2 @@
-<?php
-header("content-type:application/json");
-?>
+<?php header("content-type:application/json"); ?>
 {"data":[""]}

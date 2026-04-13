@@ -83,7 +83,7 @@
 				width: 100px;
 			}
 		</style>
-		<script>
+		<script defer>
 			const wait = (delay = 0) =>	new Promise(resolve => setTimeout(resolve, delay));
 
 			function waitForElm(selector) {

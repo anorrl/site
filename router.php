@@ -213,9 +213,7 @@
 	route('GET',      '/game/players/[i:id]', '/private/api/users/players.php');
 	route('GET',      '//game/players/[i:id]', '/private/api/users/players.php');
 	route('GET',      '/game/players/[i:id]/', '/private/api/users/players.php');
-
-	route('GET',      '/my/settings/json', '/private/gameapis/authentication/settings.php');
-
+	
 	route('GET|POST', '/persistence/getV2.aspx', '/private/gameapis/persistence/getv2.php');
 	route('GET|POST', '/persistence/getV2', '/private/gameapis/persistence/getv2.php');
 	route('GET|POST', '/persistence/getSortedValues', '/private/gameapis/persistence/getv2.php');
