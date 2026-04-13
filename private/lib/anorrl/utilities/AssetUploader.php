@@ -201,7 +201,7 @@
 					]
 				);
 				$error = $exec->errorCode();
-				if($error) {
+				if($error && $error != "00000") {
 					if(filesize($filepath) == 0)
 						unlink($filepath);
 
