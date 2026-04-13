@@ -88,9 +88,9 @@
 
 			function setVisible(element, visible) {
 				if(element == "#LoadingScreen")
-					$(element).css("display", visible ? "flex" : "none");
+					document.querySelector(element).style.display = visible ? "flex" : "none";
 				else
-					$(element).css("display", visible ? "block" : "none");
+					document.querySelector(element).style.display = visible ? "block" : "none";
 			}
 
 			// do loading screen if the page hasn't loaded in a second.
