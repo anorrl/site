@@ -99,13 +99,6 @@
 			var initiateLoading = false;
 			setVisible("#Container", false);
 
-			wait(000).then(() => {
-				if(!hasLoaded) {
-					setVisible('#LoadingScreen', true);
-					initiateLoading = true;
-				}
-			})
-
 			document.addEventListener('DOMContentLoaded', function() {
 				hasLoaded = true;
 				setVisible("#Container", true);
@@ -121,6 +114,15 @@
 					});
 				}
 			});
+
+			wait(1000).then(() => {
+				if(!hasLoaded) {
+					setVisible('#LoadingScreen', true);
+					initiateLoading = true;
+				}
+			})
+
+			
 		</script>
 		<?php endif ?>
 	</head>

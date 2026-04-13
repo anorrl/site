@@ -5,7 +5,7 @@
 	use anorrl\Page;
 
 	$page = new Page("Welcome to ANORRL!");
-	$page->addStylesheet("/css/new/frontpage.css?v=4");
+	$page->addStylesheet("/css/new/frontpage.css?v=5");
 	$page->loadHeader();
 
 	$settings = SESSION ? SESSION->settings : UserSettings::Get();
