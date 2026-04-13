@@ -62,11 +62,15 @@
 
 		$file = "/private/api/$path.php";
 
-		$router->map($method, "/api/$path", function(...$params) use ($file) {
-			foreach ($params as $key => $value) {
-				$$key = $value;
+		$router->map($method, "/api/$path", function(...$params) use ($path, $file) {
+			if(SESSION || str_starts_with($file, "gameserver")) {
+				foreach ($params as $key => $value) {
+					$$key = $value;
+				}
+				require __DIR__.$file;
+			} else {
+				die(http_response_code(401));
 			}
-			require __DIR__.$file;
 		});
 	}
 
@@ -121,6 +125,8 @@
 	route('GET|POST', '/my/stuff', '/private/views/my/stuff.php');
 	route('GET|POST', '/my/friends', '/private/views/my/friends.php');
 	route('GET|POST', '/my/', '/private/views/my/index.php');
+
+	route('GET', '/badges', '/private/views/badges.php');
 
 	// Apis!
 	route_api('GET|POST', 'catalog');
