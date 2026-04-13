@@ -194,7 +194,7 @@
 				}
 
 				$exec = $db->run(
-					'INSERT INTO `asset_versions`(`assetid`, `md5sig`, `md5thumb`) VALUES (?, ?, ?)',
+					'INSERT INTO `asset_versions`(`assetid`, `md5sig`, `md5thumb`) VALUES (:aid, :md5, :md5)',
 					[
 						":aid" => $id,
 						":md5" => $md5
