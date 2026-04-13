@@ -13,7 +13,7 @@
 				<div class="BadgePadding">&nbsp;</div>
 				<div class="BadgeContent">
 					<div class="BadgeImage">
-						<img src="/images/Badges/$badgenamefile.png" alt="{$badge->name()}" width="100" height="100">
+						<img src="/images/Badges/$badgenamefile.png?v=2" alt="{$badge->name()}" width="100" height="100">
 					</div>
 					<div class="BadgeDescription">
 						<h3>{$badge->name()} Badge</h3>

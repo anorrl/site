@@ -17,6 +17,7 @@
 		case WARRIOR;
 		case BLOXXER;
 		case VETERAN;
+		case TESTER;
 
 		public function ordinal(): int {
 			return match($this) {
@@ -30,7 +31,8 @@
 				ANORRLBadge::COMBAT_INITIATION => 8,
 				ANORRLBadge::WARRIOR => 9,
 				ANORRLBadge::BLOXXER => 10,
-				ANORRLBadge::VETERAN => 11
+				ANORRLBadge::VETERAN => 11,
+				ANORRLBadge::TESTER => 12
 			};
 		}
 
@@ -46,7 +48,8 @@
 				8 => ANORRLBadge::COMBAT_INITIATION,
 				9 => ANORRLBadge::WARRIOR,
 				10 => ANORRLBadge::BLOXXER,
-				11 => ANORRLBadge::VETERAN
+				11 => ANORRLBadge::VETERAN,
+				12 => ANORRLBadge::TESTER,
 			};
 		}
 
@@ -62,7 +65,8 @@
 				ANORRLBadge::COMBAT_INITIATION => "Combat Initiation",
 				ANORRLBadge::WARRIOR => "Warrior",
 				ANORRLBadge::BLOXXER => "Bloxxer",
-				ANORRLBadge::VETERAN => "Veteran"
+				ANORRLBadge::VETERAN => "Veteran",
+				ANORRLBadge::TESTER => "Tester",
 			};
 		}
 
@@ -78,7 +82,8 @@
 				ANORRLBadge::COMBAT_INITIATION => "This badge is given to any player who has proven his or her combat abilities by accumulating 10 victories in battle. Players who have this badge are not complete newbies and probably know how to handle their weapons.",
 				ANORRLBadge::WARRIOR => "This badge is given to the warriors of ANORRL, who have time and time again overwhelmed their foes in battle. To earn this badge, you must rack up 100 knockouts. Anyone with this badge knows what to do in a fight!",
 				ANORRLBadge::BLOXXER => "Anyone who has earned this badge is a very dangerous player indeed. Those Vandals who excel at combat can one day hope to achieve this honor, the Bloxxer Badge. It is given to the warrior who has bloxxed at least 250 enemies and who has tasted victory more times than he or she has suffered defeat. Salute!",
-				ANORRLBadge::VETERAN => "This decoration is awarded to all citizens who have played ANORRL for at least a year. It recognizes stalwart community members who have stuck with us over countless releases and have helped shape ANORRL into the game that it is today. These medalists are the true steel, the core of the ANORRL history ... and its future."
+				ANORRLBadge::VETERAN => "This decoration is awarded to all citizens who have played ANORRL for at least a year. It recognizes stalwart community members who have stuck with us over countless releases and have helped shape ANORRL into the game that it is today. These medalists are the true steel, the core of the ANORRL history ... and its future.",
+				ANORRLBadge::TESTER => "These fellas helped make ANORRL better during its gametest period! Thank you all!"
 			};
 		}
 	}

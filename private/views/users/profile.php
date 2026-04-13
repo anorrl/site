@@ -378,7 +378,7 @@ $(function() {
 						<td>
 							<div class="Badge">
 								<a href="/badges#Badge$badgeid" title="$badgedesc">
-									<img src="/images/Badges/$badgenamefile.png?v=1" title="icon made by ignisole">
+									<img src="/images/Badges/$badgenamefile.png?v=2" title="icon made by grace">
 									<span>$badgename</span>
 								</a>
 							</div>
