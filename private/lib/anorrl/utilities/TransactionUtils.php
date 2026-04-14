@@ -36,32 +36,20 @@
 		}
 
 
-		public static function CommitTransaction(User $user, Asset|null $asset = null) {
+		public static function CommitTransaction(User $user, Asset $asset) {
 			$ta_id = self::GenerateID();
 
-			if($asset) {
-				Database::singleton()->run(
-					"INSERT INTO `transactions`(`id`, `userid`, `assetcreator`, `asset`) VALUES (:id, :uid, :auid, :aid)",
-					[
-						":id"     => $ta_id,
-						":uid"    => $user->id,
-						":auid"   => $asset->creator->id,
-						":aid"    => $asset->id,
-					]
-				);
-			} else {
-				Database::singleton()->run(
-					"INSERT INTO `transactions`(`id`, `userid`) VALUES (:id, :uid)",
-					[
-						":id"     => $ta_id,
-						":uid"    => $user->id,
-					]
-				);
-			}
-		}
+			Database::singleton()->run(
+				"INSERT INTO `transactions`(`id`, `userid`, `assetcreator`, `asset`) VALUES (:id, :uid, :auid, :aid)",
+				[
+					":id"     => $ta_id,
+					":uid"    => $user->id,
+					":auid"   => $asset->creator->id,
+					":aid"    => $asset->id,
+				]
+			);
 
-		public static function CommitAssetTransaction(Asset $asset, User $user) {
-			self::CommitTransaction($user, $asset);
+			$asset->updateSalesCount();
 		}
 	}
 ?>

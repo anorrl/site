@@ -122,7 +122,7 @@
 				else
 					return ["error" => true, "reason" => "Item is not purchasable!"];
 
-			TransactionUtils::CommitAssetTransaction($this, $user);
+			TransactionUtils::CommitTransaction($user, $this);
 
 			return ["error" => false];
 		}

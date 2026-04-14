@@ -213,10 +213,12 @@
 				}
 			}
 
-			TransactionUtils::CommitAssetTransaction(new Asset($id), $user);
+			$asset = Asset::FromID($id);
+
+			TransactionUtils::CommitTransaction($user, $asset);
 
 			if($public && $on_sale && !$hidden) {
-				$asset = Asset::FromID($id);
+				
 				self::PushWebhook($asset);
 			}
 			

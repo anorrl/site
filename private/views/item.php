@@ -304,7 +304,7 @@
 			<?php if($asset->sales_count > 0): ?>
 				<div id="FriendsContainer">
 					<ul id="Friends" style="width: 848px;border: 0px;background: none;padding: 0px;">
-						<?php $sales = $asset->getSales(); foreach($sales as $u): ?>
+						<?php foreach($sales as $u): ?>
 							<li class="Friend">
 								<a id="ProfileLink" href="/users/<?= $u->id ?>/profile">
 									<img id="Profile" src="<?= $u->getThumbsUrl(100) ?>">
