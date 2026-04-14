@@ -7,6 +7,20 @@
 
 	class MeshConverter {
 
+
+		public static function ConvertFromOBJ(string $contents): array {
+
+			if(
+				str_contains("v ", $contents) && 
+				str_contains("vn ", $contents) && 
+				str_contains("vt ", $contents)
+			) {
+				// could be a valid obj
+			}
+
+			return ["error" => true, "reason" => "Unimplemented"];
+		}
+
 		/**
 		 * Converts a newer roblox mesh to version 2.00
 		 * 
@@ -21,8 +35,6 @@
 		 * @return array{error: bool, mesh: string|array{error: bool, reason: string}}
 		 */
 		public static function Convert(string $contents): array {
-			// todo: rewrite this if possible.
-
 			$reader = new ByteReader();
 			$reader->buffer = $contents;
 
