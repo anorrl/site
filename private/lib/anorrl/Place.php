@@ -33,7 +33,7 @@
 				foreach($fetch_servers as $server_row) {
 					$fetch_players = Database::singleton()->run(
 						"SELECT COUNT(`id`) FROM `active_players` WHERE `serverid` = :serverid AND `status` = 1;",
-						[ ":serverid" => $server_row->server_id ]
+						[ ":serverid" => $server_row->id ]
 					)->fetch(\PDO::FETCH_ASSOC);
 
 					$concurrentplayers += $fetch_players['COUNT(`id`)'];

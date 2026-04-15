@@ -63,7 +63,7 @@
 		$file = "/private/api/$path.php";
 
 		$router->map($method, "/api/$path", function(...$params) use ($path, $file) {
-			if(SESSION || str_starts_with($file, "gameserver")) {
+			if(SESSION || str_starts_with($path, "gameserver")) {
 				foreach ($params as $key => $value) {
 					$$key = $value;
 				}
@@ -266,7 +266,7 @@
 	route('GET',      '/UploadMedia/UploadVideo.aspx', '/private/gameapis/uploadmedia/uploadvideo.php');
 
 	route('GET|POST', '/moderation/v2/filtertext', '/private/gameapis/moderation/filtertext.php');
-	route('GET|POST', '/moderation/v2/filtertext/', '/private/gameapis/moderation/filtertext.php');
+	route('GET|POST', '//moderation/filtertext/', '/private/gameapis/moderation/filtertext.php');
 
 	route('GET',      '/marketplace/productinfo', '/private/gameapis/marketplace/productinfo.php');
 	route('GET',      '/marketplace/productDetails', '/private/gameapis/marketplace/productinfo.php');
