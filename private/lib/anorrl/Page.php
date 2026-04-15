@@ -28,7 +28,7 @@
 
 			$this->addScript("/js/core/jquery.js");
 			$this->addScript("/js/main.js?t=1776250887");
-			$this->addStylesheet("/css/new/main.css?v=1");
+			$this->addStylesheet("/css/new/main.css?v=3");
 
 			if(SESSION) {
 				$this->settings = SESSION->settings;

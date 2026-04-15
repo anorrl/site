@@ -81,9 +81,6 @@
 		}
 	}
 
-	$_SESSION['ANORRL$CreateAsset$Error'] = false;
-	$_SESSION['ANORRL$CreateAsset$Result'] = 2;
-
 	$page = new Page("Create", "my/create");
 
 	$page->addStylesheet("/css/new/create.css?v=2");
