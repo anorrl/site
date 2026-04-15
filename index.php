@@ -1,12 +1,14 @@
 <?php
 	// lifted from pixie - by parakeet
 
+	define('CONFIG', json_decode(file_get_contents(__DIR__."/../settings.json")));
+
 	require __DIR__ . "/vendor/autoload.php";
 
 	use anorrl\utilities\UserUtils;
 	use anorrl\Session;
 	
-	define('CONFIG', json_decode(file_get_contents(__DIR__."/../settings.json")));
+	
 	
 	$session_user = UserUtils::RetrieveUser();
 

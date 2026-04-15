@@ -81,6 +81,9 @@
 		}
 	}
 
+	$_SESSION['ANORRL$CreateAsset$Error'] = false;
+	$_SESSION['ANORRL$CreateAsset$Result'] = 2;
+
 	$page = new Page("Create", "my/create");
 
 	$page->addStylesheet("/css/new/create.css?v=2");
@@ -220,7 +223,8 @@
 		<marquee scrollamount="20" direction="right" behavior="alternate">Creation Panel</marquee>
 		<marquee scrollamount="20" behavior="alternate" style="display: block;margin-top: -33px;z-index: 9;" direction="left">Creation Panel</marquee>
 	</h1>
-	<div id="StuffNavigation">							
+	<div id="StuffNavigation">	
+		<h4>Categories</h4>						
 		<ul>
 			<li data_category="8" ><a>Hats</a></li>
 			<li data_category="18"><a>Faces</a></li>
@@ -229,10 +233,10 @@
 			<li data_category="12"><a>Pants</a></li>
 			<li data_category="19"><a>Gears</a></li>
 			<hr>
-			<li data_category="3" ><a>Audio</a></li>
 			<li data_category="13"><a>Decals</a></li>
-			<li data_category="10"><a>Models</a></li>
+			<li data_category="3"><a>Audio</a></li>
 			<li data_category="4"><a>Meshes</a></li>
+			<li data_category="10"><a>Models</a></li>
 			<li data_category="24"><a>Animations</a></li>
 			
 			<?php if($user->isAdmin()): ?>
@@ -244,15 +248,6 @@
 		</ul>
 	</div><div id="CreationPanel">	
 		<div id="UploadPanel">
-			
-			<?php if(isset($_SESSION['ANORRL$CreateAsset$Error']) && isset($_SESSION['ANORRL$CreateAsset$Result'])): ?>
-				<?php if($_SESSION['ANORRL$CreateAsset$Error']): ?>
-				<div id="ErrorTime">Error: <span id="Message"><?= $_SESSION['ANORRL$CreateAsset$Result'] ?></span></div>
-				<?php else: ?>
-				<div id="SuccessTime">Success! <span id="Message"><?= "Check it out <a href=\"/".Asset::FromID($_SESSION['ANORRL$CreateAsset$Result'])->getUrl()."\">here!</a>"?></span></div>
-				<?php endif ?>
-			<?php endif ?>
-
 			<div class="Window" id="HatUploadRules" style="width: 100%;">
 				<div id="Name">Hat Uploading Rules</div>
 				<div id="Contents">
@@ -284,7 +279,23 @@
 			<form method="POST" enctype="multipart/form-data" style="">
 				<div class="Window" style="width: 100%;">
 					<div id="Name">Upload <span id="TypaLabel"></span></div>
+					
 					<div id="Contents">
+						<?php if(isset($_SESSION['ANORRL$CreateAsset$Error']) && isset($_SESSION['ANORRL$CreateAsset$Result'])): ?>
+							<?php if($_SESSION['ANORRL$CreateAsset$Error']): ?>
+							<div id="ErrorTime" style="margin: -10px;margin-bottom: 10px;">Error: <span id="Message"><?= $_SESSION['ANORRL$CreateAsset$Result'] ?></span></div>
+							<?php else: 
+								$uploaded_asset = Asset::FromID($_SESSION['ANORRL$CreateAsset$Result']);
+								?>
+								<?php if(true): ?>
+									<div id="SuccessTime" style="margin: -10px;margin-bottom: 10px;">You've successfully uploaded &quot;<?= $uploaded_asset->name ?>&quot;! <span id="Message">Check it out <a href="/"<?= $uploaded_asset->getUrl() ?>">here</a>!  <a href="javascript:copyToClipboard(<?= $uploaded_asset->getAssetIDSafe() ?>)">(Copy Asset ID)</a></div>
+								<?php else: ?>
+									<!-- Other iterations. -->
+									<div id="SuccessTime" style="margin: -10px;margin-bottom: 10px;">You've successfully uploaded &quot;<a href="/"<?= $uploaded_asset->getUrl() ?>"><?= $uploaded_asset->name ?></a>&quot;! <span id="Message">(<a href="javascript:copyToClipboard(<?= $uploaded_asset->getAssetIDSafe() ?>)">Copy Asset ID</a>)</div>
+									<div id="SuccessTime" style="margin: -10px;margin-bottom: 10px;">You've successfully uploaded a <?= $uploaded_asset->type->label() ?>! <span id="Message">Check it out <a href="/"<?= $uploaded_asset->getUrl() ?>">here!</a></span> (<a href="javascript:copyToClipboard(<?= $uploaded_asset->getAssetIDSafe() ?>)">Copy Asset ID</a>)</div>
+								<?php endif ?>
+							<?php endif ?>
+						<?php endif ?>
 						<table style="width: 100%">
 							<tr>
 								<td style="width: 70px;">Name <span class="RequiredThing">*</span></td>
