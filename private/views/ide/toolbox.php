@@ -86,7 +86,7 @@
 				noVotesYet: "No votes yet",
 				endorsedAsset: "A high-quality item",
 				//</sl:translate>
-				endorsedIcon: "/images/ide/endorsed.png"
+				endorsedIcon: "/public/images/ide/endorsed.png"
 			};
 		</script>
 	</body>

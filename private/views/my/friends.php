@@ -76,7 +76,7 @@
 				<div class="Friend">
 					<a href="/users/{$friendo->id}/profile" title="{$friendo->name}" target="_blank">
 						<img src="{$friendo->getThumbsUrl(100)}">
-						<span><img src="/images/OnlineStatusIndicator_Is$status.png"> {$friendo->name}</span>
+						<span><img src="/public/images/OnlineStatusIndicator_Is$status.png"> {$friendo->name}</span>
 					</a>
 					$controlPanel
 				</div>

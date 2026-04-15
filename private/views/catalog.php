@@ -26,7 +26,7 @@
 </style>
 <div class="Asset" template>
 	<a id="NameAndThumbs">
-		<div id="FavouritesArea"><img src="/images/favourite_star.gif"> <span>0</span></div>
+		<div id="FavouritesArea"><img src="/public/images/favourite_star.gif"> <span>0</span></div>
 		<img src="">
 		<div id="Pricing"></div>
 		<span>AssetName</span>
@@ -76,7 +76,7 @@
 		</div>
 		<div id="StatusText">
 			<b id="Loading" style="display: none">Loading assets...</b>
-			<b id="NoAssets" style="display: none"><img src="/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">No <span id="AssetType"></span> like that here!</b>
+			<b id="NoAssets" style="display: none"><img src="/public/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">No <span id="AssetType"></span> like that here!</b>
 		</div>
 	
 		<table id="Assets">

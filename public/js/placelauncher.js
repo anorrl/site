@@ -17,7 +17,7 @@ if (!Object.keys) {
 /*
 <table class="Server">
 	<td id="PlayersBox">
-		<a title="Player" id="Player" href="/"><img src="/images/avatar.png"></a>
+		<a title="Player" id="Player" href="/"><img src="/public/images/avatar.png"></a>
 		
 	</td>
 	<td id="JoinBox" width="150">

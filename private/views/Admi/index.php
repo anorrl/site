@@ -80,7 +80,7 @@
 						<div style="padding-right: 11px; padding-top: 11px;">
 							<div class="logo_spacer" style="width: auto; height: 50px; padding-right: 4px;">
 								<a href="/" style="display: block;margin-left: auto;margin-right: auto;width: 106px;height: 28px;">
-									<img width="106px" height="28px" src="/images/roblox_logo.png">
+									<img width="106px" height="28px" src="/public/images/roblox_logo.png">
 								</a>
 							</div>
 							<div>

@@ -9,7 +9,7 @@
 ?>
 
 <div id="ErrorContainer">
-	<img src="/images/noassets.png" alt="Error">
+	<img src="/public/images/noassets.png" alt="Error">
 	<h1>Ahhh Shucks!</h1>
 	<b><?php echo "You tried to access \"" . $_SERVER['REQUEST_URI'] . "\" and that failed."; ?></b>
 	<div class="buttons">

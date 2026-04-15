@@ -11,7 +11,7 @@
 	<head>
 		<title>Publish to a Place - ANORRL</title>
 		<link rel="icon" type="image/x-icon" href="/favicon.ico">
-		<link rel="stylesheet" href="/public/css/new/main.css">
+		<link rel="stylesheet" href="/public/css/new/main.css?v=1">
 		<link rel="stylesheet" href="/public/css/new/publish.css">
 		<script src="/public/js/core/jquery.js"></script>
 		<script src="/public/js/main.js?t=1776250887"></script>
@@ -28,7 +28,7 @@
 								<input name="ANORRL$IDE$Publish$Place$Action" hidden>
 								<div id="PublishPlaces">
 									<div class="Place" data-placeid="createnew">
-										<img src="/images/ide/createnewplace.png">
+										<img src="/public/images/ide/createnewplace.png">
 										<span>Create a New Place</span>
 									</div>
 									<?php $places = $user->getOwnedAssets(AssetType::PLACE); foreach($places as $place): ?>

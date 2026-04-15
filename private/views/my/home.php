@@ -106,7 +106,7 @@
 					<div id="Games">
 						<!--<div class="Game">
 							<a href="/game/1000" title="Whats up guys im gonna rob a store">
-								<img src="/images/review-pending.png">
+								<img src="/public/images/review-pending.png">
 								<span id="Name">aaaaaaaaaaaaaaaaaaaaa...</span>
 							</a>
 							<div id="Stats">

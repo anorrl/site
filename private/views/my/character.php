@@ -3,7 +3,7 @@
 
 	$page = new Page("Your Character", "my/character");
 	$page->addScript("/js/core/jquery-modal.js");
-	$page->addScript("/js/character.js?t=1776011774");
+	$page->addScript("/js/character.js?t=1776253537");
 
 	$page->addStylesheet("/css/new/stuff.css?v=2");
 	$page->addStylesheet("/css/new/my/character.css");
@@ -55,7 +55,7 @@
 				</div>
 				<div id="StatusText">
 					<b id="Loading" style="">Loading assets...</b>
-					<b id="NoAssets" style="display: none"><img src="/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">Seems barren, try buying some stuff!</b>
+					<b id="NoAssets" style="display: none"><img src="/public/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">Seems barren, try buying some stuff!</b>
 				</div>
 				<table id="Assets" hidden>										
 				</table>
@@ -70,7 +70,7 @@
 			<div id="AssetsContainer">
 				<div id="StatusText">
 					<b id="Loading" style="">Loading assets...</b>
-					<b id="NoAssets" style="display: none"><img src="/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">Seems barren, try buying some stuff!</b>
+					<b id="NoAssets" style="display: none"><img src="/public/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">Seems barren, try buying some stuff!</b>
 				</div>
 				<table id="Assets" hidden>										
 				</table>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html> 
 	<head>
-		<link rel="stylesheet" href="/public/css/new/main.css">
+		<link rel="stylesheet" href="/public/css/new/main.css?v=1">
 		<link rel="stylesheet" href="/public/css/new/forms.css">
 		<link rel="stylesheet" href="/public/css/new/stuff.css?v=2">
 		<title>Games - ANORRL</title>
@@ -34,7 +34,7 @@
 	<body>
 		<div class="Game" template>
 			<div id="ImageContainer">
-				<!--<div id="FavouritesArea"><img src="/images/favourite_star.gif" style="width:16px; margin-bottom: -2px;"> <span>0</span></div>-->
+				<!--<div id="FavouritesArea"><img src="/public/images/favourite_star.gif" style="width:16px; margin-bottom: -2px;"> <span>0</span></div>-->
 				<img src="" style="width: 100%">
 			</div>
 			<div id="Info">
@@ -57,7 +57,7 @@
 				</div>
 				<div id="StatusText">
 					<b id="Loading" style="display: none">Loading assets...</b>
-					<b id="NoAssets" style="display: none"><img src="/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">No games like that here!</b>
+					<b id="NoAssets" style="display: none"><img src="/public/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">No games like that here!</b>
 				</div>
 			
 				<div id="ContainerThingy">

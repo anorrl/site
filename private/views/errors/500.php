@@ -9,7 +9,7 @@
 ?>
 
 <div id="ErrorContainer">
-	<img src="/images/icons/img-alert-transparent.png" alt="Error">
+	<img src="/public/images/icons/img-alert-transparent.png" alt="Error">
 	<h1>Uh oh!</h1>
 	<b><?php echo "A fucky wucky occurred! (Do NOT spam refresh). Tell grace to FIX IT!"; ?></b>
 	<div class="buttons">

@@ -19,18 +19,18 @@
 body {
 	margin: 0;
 	padding: 0;
-	background: url("/images/bkg.png") top center repeat-x #000444;
+	background: url("/public/images/bkg.png") top center repeat-x #000444;
 	font-family: Arial,Helvetica,sans-serif;
 	color: black;
 	font-size: 12px;
 }
 
 body[night] {
-	background: url("/images/bkg_night.png") top center repeat-x #000444;
+	background: url("/public/images/bkg_night.png") top center repeat-x #000444;
 }
 
 body[badapple] {
-	background: url("/images/badapple.gif");
+	background: url("/public/images/badapple.gif");
 }
 
 a {

@@ -22,11 +22,11 @@
 			if(file_exists($_SERVER['DOCUMENT_ROOT']."/../users/profile_$id.png")) {
 				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../users/profile_$id.png");
 			} else {
-				$pictures = UtilUtils::GetFilesArray("/images/profile_pictures/");
+				$pictures = UtilUtils::GetFilesArray("/public/images/profile_pictures/");
 				 
 				$rand_pic = 1+rand(0, count($pictures) - 1);
 				
-				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/profile_pictures/pfp_$rand_pic.png");
+				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/profile_pictures/pfp_$rand_pic.png");
 			}
 
 			ob_clean();

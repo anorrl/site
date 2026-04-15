@@ -16,7 +16,7 @@
 	<h2>&nbsp;</h2>
 	<div id="FirstRow">
 		<div id="LogoPitch">
-			<a href="/images/header/logo.png" target="_blank"><img src="/images/header/logo.png" title="welcome to anorrl!"></a>
+			<a href="/public/images/header/logo.png" target="_blank"><img src="/public/images/header/logo.png" title="welcome to anorrl!"></a>
 		</div>
 		<div id="TeapotsMayhem">
 			<iframe width="480" height="280" src="<?= $video_splash ?>" title="I CANT LET THESE BITCHES" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
@@ -25,7 +25,7 @@
 	
 	<div id="SecondRow">
 		<div id="GracingIt">
-			<a href="/images/frontpage/grace_clean.png" target="_blank"><img src="/images/frontpage/grace.png" title="what a bitch!"></a>
+			<a href="/public/images/frontpage/grace_clean.png" target="_blank"><img src="/public/images/frontpage/grace.png" title="what a bitch!"></a>
 			<div id="Label">
 				<span>Grace</span>
 				<div id="Notice">
@@ -78,5 +78,5 @@
 	</div>
 	<h2>&nbsp;</h2>
 </div>
-<div style="margin: 10px auto;width: 60%;"><img src="/images/epicbazookaquote.png" style="width: 100%;border: 2px solid black;"></div>
+<div style="margin: 10px auto;width: 60%;"><img src="/public/images/epicbazookaquote.png" style="width: 100%;border: 2px solid black;"></div>
 <?php $page->loadFooter() ?>

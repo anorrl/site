@@ -76,8 +76,8 @@
 </style>
 <h2>&nbsp;</h2>
 
-<img class="FormImage" src="/images/login/left.png" style="float: left;" >
-<img class="FormImage" src="/images/login/right.png" style="float: right;" >
+<img class="FormImage" src="/public/images/login/left.png" style="float: left;" >
+<img class="FormImage" src="/public/images/login/right.png" style="float: right;" >
 
 <div id="FormPanel" style="width: 240px;">
 	<form method="POST">

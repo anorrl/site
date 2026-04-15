@@ -113,21 +113,21 @@
 	margin-bottom: -7px;
 	margin-left: -16px;
 	margin-right: 10px;
-	background-image: url("/images/favourite_star.gif");
+	background-image: url("/public/images/favourite_star.gif");
 	background-size: 32px;
 	display: inline-block;
 }
 
 #ItemContainer .FavouriteButton[favourited=true]{
-	background-image: url("/images/favourited_star.gif");
+	background-image: url("/public/images/favourited_star.gif");
 }
 
 #ItemContainer .FavouriteButton[favourited=true]:hover {
-	background-image: url("/images/favourited_hover_star.gif");
+	background-image: url("/public/images/favourited_hover_star.gif");
 }
 
 #ItemContainer .FavouriteButton:hover {
-	background-image: url("/images/favourite_hover_star.gif");
+	background-image: url("/public/images/favourite_hover_star.gif");
 }
 
 #PurchasePanel {

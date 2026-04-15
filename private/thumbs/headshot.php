@@ -24,7 +24,7 @@
 			if(file_exists($_SERVER['DOCUMENT_ROOT']."/../renders/headshot_$md5hash.png")) {
 				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../renders/headshot_$md5hash.png");
 			} else {
-				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/unavailable.jpg");
+				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.jpg");
 			}
 
 			ob_clean();

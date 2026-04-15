@@ -111,7 +111,7 @@ ANORRL.Create = {
 		$("#TypaLabel").html(categorylabel);
 		if(categorylabel == "Pants" || categorylabel == "Shirt") {
 			var template_name = categorylabel+"Template";
-			var template_image_path = "/images/"+template_name+".png";
+			var template_image_path = "/public/images/"+template_name+".png";
 			
 			var template_window = $(".Window#ShirtPantsTemplate");
 			var template_link = template_window.find("#Contents a");

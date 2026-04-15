@@ -48,7 +48,7 @@
 				</div>
 		<div id="StatusText">
 			<b id="Loading" style="display: none">Loading assets...</b>
-			<b id="NoAssets" style="display: none"><img src="/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">You have no <span id="AssetType"></span>!</b>
+			<b id="NoAssets" style="display: none"><img src="/public/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">You have no <span id="AssetType"></span>!</b>
 		</div>
 	
 		<table hidden></table>

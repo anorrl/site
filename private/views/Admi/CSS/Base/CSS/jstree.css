@@ -350,7 +350,7 @@
   background-position: 0 0;
 }
 .jstree-default > .jstree-container-ul .jstree-loading > .jstree-ocl {
-  background: url("/Images/Spinners/spinner16x16.gif") center center no-repeat;
+  background: url("/public/images/Spinners/spinner16x16.gif") center center no-repeat;
 }
 .jstree-default .jstree-bullet-grey {
   background: url("/Admi/bullet_grey.png") no-repeat;

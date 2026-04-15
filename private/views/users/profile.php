@@ -299,7 +299,7 @@ $(function() {
 		<?php endif ?>
 	</ul>
 	<div id="AvatarRender">
-		<a href="javascript:flipRenders()" style="position: absolute;z-index: 2;bottom: 5px;right: 5px;"><img src="/images/icons/switch.png" style="width: 30px;image-rendering: pixelated;"></a>
+		<a href="javascript:flipRenders()" style="position: absolute;z-index: 2;bottom: 5px;right: 5px;"><img src="/public/images/icons/switch.png" style="width: 30px;image-rendering: pixelated;"></a>
 			
 		<img id="AvatarRenderYeah" src="<?= $get_user->getThumbsUrlService("player") ?>&nocompress">
 	</div>
@@ -378,7 +378,7 @@ $(function() {
 						<td>
 							<div class="Badge">
 								<a href="/badges#Badge$badgeid" title="$badgedesc">
-									<img src="/images/Badges/$badgenamefile.png?v=2" title="$badgename">
+									<img src="/public/images/Badges/$badgenamefile.png?v=2" title="$badgename">
 									<span>$badgename</span>
 								</a>
 							</div>

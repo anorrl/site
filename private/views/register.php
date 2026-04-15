@@ -93,8 +93,8 @@
 	}
 </style>
 <h2>&nbsp;</h2>
-<img class="FormImage" src="/images/register/left.png" style="float: left;" >
-<img class="FormImage" src="/images/register/right.png" style="float: right;" >
+<img class="FormImage" src="/public/images/register/left.png" style="float: left;" >
+<img class="FormImage" src="/public/images/register/right.png" style="float: right;" >
 <div id="FormPanel" style="width: 240px;">
 	<form method="POST">
 		<div>

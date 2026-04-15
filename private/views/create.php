@@ -90,7 +90,7 @@
 	$page->addStylesheet("/css/new/stuff.css?v=2");
 	$page->addStylesheet("/css/new/forms.css?v=1");
 
-	$page->addScript("/js/create.js?t=1776187959");
+	$page->addScript("/js/create.js?t=1776253537");
 	$page->loadHeader();
 ?>
 <div class="Asset" template>
@@ -261,7 +261,7 @@
 					
 					<div style="margin: 15px;">
 						<p><b>clarification on the 3rd rule:</b></p>	
-						<p>stuff like <a href="/images/hatuploaderexample.png" target="_blank">this</a> is fine, what i meant was if the sparkles were like super massive and blocked the view of everything and everyone </p>
+						<p>stuff like <a href="/public/images/hatuploaderexample.png" target="_blank">this</a> is fine, what i meant was if the sparkles were like super massive and blocked the view of everything and everyone </p>
 					</div>
 				</div>
 			</div>
@@ -335,7 +335,7 @@
 											</table>
 											
 											<div style="display: inline;">
-												<img src="/images/jane.png" style="width: 70px;margin-left: 10px;border: 2px solid black;">
+												<img src="/public/images/jane.png" style="width: 70px;margin-left: 10px;border: 2px solid black;">
 											</div>
 											
 											<div style="clear: both;"></div>
@@ -377,7 +377,7 @@
 		<div id="AssetsContainer" style="border-top: 2px solid black">
 			<div id="StatusText">
 				<b id="Loading" style="display: none">Loading assets...</b>
-				<b id="NoAssets" style="display: none"><img src="/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">You have no <span id="AssetType"></span>!</b>
+				<b id="NoAssets" style="display: none"><img src="/public/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">You have no <span id="AssetType"></span>!</b>
 			</div>
 		
 			<table hidden></table>

@@ -495,7 +495,7 @@ ANORRL.Character  = {
 		if(ANORRL.Character.IsRendering) {
 			return;
 		}
-		$("#PlayerRender").attr("src","/images/ProgressIndicator4White.gif");
+		$("#PlayerRender").attr("src","/public/images/ProgressIndicator4White.gif");
 		ANORRL.Character.IsRendering = true;
 
 

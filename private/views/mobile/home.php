@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html> 
 	<head>
-		<link rel="stylesheet" href="/public/css/new/main.css">
+		<link rel="stylesheet" href="/public/css/new/main.css?v=1">
 		<title>Home - ANORRL</title>
 		<link rel="icon" type="image/x-icon" href="/favicon.ico">
 		<script src="/public/js/core/jquery.js"></script>

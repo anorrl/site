@@ -20,19 +20,19 @@
 				$version = AssetVersion::GetLatestVersionOf($asset);
 
 				if($version == null && $asset->type == AssetType::PLACE) {
-					$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/noassets.png");
+					$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/noassets.png");
 				} else {
 					$md5hash = $version->md5sig;
 					$thumbsmd5hash = $version->md5thumb;
 
 					if($asset->type == AssetType::AUDIO && ($thumbsmd5hash == "sound" || $md5hash == $thumbsmd5hash)) {
-						$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/audio.png");
+						$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/audio.png");
 					} else if($asset->type == AssetType::LUA) {
-						$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/script.png");
+						$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/script.png");
 					} else if($asset->type == AssetType::ANIMATION) {
-						$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/animation.png");
+						$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/animation.png");
 					} else if($thumbsmd5hash == "placeholder" || !$asset->isUsable()) {
-						$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/unavailable.png");
+						$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.png");
 					} else {
 						// TODO: rewrite this abomination.
 						if($asset->type == AssetType::AUDIO && $md5hash != $thumbsmd5hash) {
@@ -40,7 +40,7 @@
 								$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/$thumbsmd5hash");
 								$specialcase = true;
 							} else {
-								$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/unavailable.png");
+								$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.png");
 							}
 						} else {
 							if(count($asset->getRelatedAssets()) != 0 && ($asset->type == AssetType::DECAL || $asset->type == AssetType::FACE) || $asset->type == AssetType::IMAGE) {
@@ -52,7 +52,7 @@
 									$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/$thumbsmd5hash");
 									$specialcase = true;
 								} else {
-									$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/unavailable.png");
+									$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.png");
 								}
 							} else {
 								if(file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/$id")) {
@@ -62,7 +62,7 @@
 									$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/$thumbsmd5hash");
 								}
 								else {
-									$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/unavailable.png");
+									$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.png");
 								}
 							}
 						}
@@ -164,7 +164,7 @@
 					echo $contents;
 				}
 			} else {
-				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/images/unavailable.jpg");
+				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.jpg");
 
 				if(isset($_GET['width']) && isset($_GET['height'])) {
 					$sizex = intval($_GET['width']);

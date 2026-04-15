@@ -6,8 +6,8 @@
 
 	$header_check_user = SESSION ? SESSION->user : null;
 
-	$rand_pic = new Splasher(UtilUtils::GetFilesArray("/images/randoms/"), false, "RandomImages")->getRandomSplash();
-	$rand_splash_pic = new Splasher(UtilUtils::GetFilesArray("/images/splashes/"), false, "SplashScreen")->getRandomSplash();
+	$rand_pic = new Splasher(UtilUtils::GetFilesArray("/public/images/randoms/"), false, "RandomImages")->getRandomSplash();
+	$rand_splash_pic = new Splasher(UtilUtils::GetFilesArray("/public/images/splashes/"), false, "SplashScreen")->getRandomSplash();
 
 	$randomsignsplash = new FileSplasher("sign")->getRandomSplash();
 
@@ -141,10 +141,10 @@
 		<?php if($this->settings->loadingscreens_enabled): ?>
 		<div id="LoadingScreen">
 			<div>
-				<img src="/images/splashes/<?= $rand_splash_pic ?>" splash>
+				<img src="/public/images/splashes/<?= $rand_splash_pic ?>" splash>
 				<p caption><?= $splashscreencaption?></p>
 				<p id="LoadingText">Loading <?= $this->title ?>...</p>
-				<img src="/images/spinner100x100_white.gif" loading>
+				<img src="/public/images/spinner100x100_white.gif" loading>
 			</div>
 		</div>
 		<?php endif ?>
@@ -156,14 +156,14 @@
 		</style>
 		<?php endif ?>
 		<?php if($this->settings->randoms_enabled): ?>
-		<img src="/images/randoms/<?= $rand_pic ?>" style="position: fixed;bottom: 0px;left: 0px;width: 250px;z-index: 9999;pointer-events: none;">
+		<img src="/public/images/randoms/<?= $rand_pic ?>" style="position: fixed;bottom: 0px;left: 0px;width: 250px;z-index: 9999;pointer-events: none;">
 		<?php endif ?>
 		<?php if($this->settings->teto_enabled): ?>
 		<div id="TetoContainer">
 			<div id="TetoSplashContainer">
 				<p id="TetoSplash"><?= new FileSplasher("teto")->getRandomSplash(); ?></p>
 			</div>
-			<img id="Teto" src="/images/tetospeech.png">
+			<img id="Teto" src="/public/images/tetospeech.png">
 		</div>
 		<?php endif ?>
 		<?php if($this->settings->accessibility_enabled): ?>
@@ -180,31 +180,31 @@
 					$pendingreqscount = $header_check_user->GetPendingFriendRequestsCount();	
 				?>
 				<div id="ProfileSign" logged="true">
-					<img id="background" src="/images/header/signs/profile.png"> <!-- DO NOT FUCKING REMOVE -->
+					<img id="background" src="/public/images/header/signs/profile.png"> <!-- DO NOT FUCKING REMOVE -->
 					<div id="UsernameRow">
 						YOU ARE: <br>
 						<a href="/users/<?= $header_check_user->id ?>/profile"><?= $header_check_user->name ?></a>
 					</div>
 					<hr>
 					<div id="CreditsRow">
-						<span title="Your pending requests"><a href="/my/friends"><img src="/images/icons/messages<?= $pendingreqscount == 0 ? "" : "_notify" ?>.png"> <?= $pendingreqscount ?></a></span> <span class="Separator">|</span>
-						<span title="Your friends"><a href="/my/friends"><img src="/images/icons/friends.png"> <?= $header_check_user->getFriendsCount() ?></a></span>
+						<span title="Your pending requests"><a href="/my/friends"><img src="/public/images/icons/messages<?= $pendingreqscount == 0 ? "" : "_notify" ?>.png"> <?= $pendingreqscount ?></a></span> <span class="Separator">|</span>
+						<span title="Your friends"><a href="/my/friends"><img src="/public/images/icons/friends.png"> <?= $header_check_user->getFriendsCount() ?></a></span>
 						<hr>
-						<span title="Message" style="width:auto"><?= $randomsignsplash ?><a href="/images/anorrl-smile.png" target="_blank" style="display: block;"><img src="/images/anorrl-smile.png" style="width: 42px;margin: 2px 0px;"></a></span>
+						<span title="Message" style="width:auto"><?= $randomsignsplash ?><a href="/public/images/anorrl-smile.png" target="_blank" style="display: block;"><img src="/public/images/anorrl-smile.png" style="width: 42px;margin: 2px 0px;"></a></span>
 					</div>
 				</div>
 				<a id="LogoutSign" href="javascript:ANORRL.Logout()">LOGOUT</a>
 				<?php else: ?>
 				<div id="ProfileSign" logged="false">
-					<img id="background" src="/images/header/signs/profile.png"> <!-- DO NOT FUCKING REMOVE -->
+					<img id="background" src="/public/images/header/signs/profile.png"> <!-- DO NOT FUCKING REMOVE -->
 					<a href="/register" id="RegisterSign">Register</a>
-					<img src="/images/sign_2way.png" style="width: 72px;padding: 10px 0;padding-top: 30px;padding-bottom:5px;z-index: 2;position: relative;">
+					<img src="/public/images/sign_2way.png" style="width: 72px;padding: 10px 0;padding-top: 30px;padding-bottom:5px;z-index: 2;position: relative;">
 					<a href="/login" id="LoginSign">Login</a>
 				</div>
 				<?php endif ?>
 				<div id="Logo">
 					<a href="/">
-						<img src="/images/header/logo.png">
+						<img src="/public/images/header/logo.png">
 					</a>
 				</div>
 				

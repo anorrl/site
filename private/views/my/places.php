@@ -52,7 +52,7 @@
 	});
 </script>
 <div id="Header">
-	<img src="/images/ide/studio_title.png">
+	<img src="/public/images/ide/studio_title.png">
 </div>
 <div id="Separator"></div>
 <div id="PlacesContainer">
