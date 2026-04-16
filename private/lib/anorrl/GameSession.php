@@ -6,7 +6,6 @@
 	use anorrl\User;
 
 	class GameSession {
-
 		public string $id;
 		public GameServer|null $server = null;
 		public User|null $player = null;
@@ -16,7 +15,7 @@
 
 		public static function Get(string $id, bool $teamcreate = false): self|null {
 			$row = Database::singleton()->run(
-				"SELECT * FROM `active_players` WHERE `id` = ? AND `teamcreate` = ?",
+				"SELECT * FROM `active_players` WHERE `id` = :id AND `teamcreate` = :teamcreate",
 				[
 					":id" => $id,
 					":teamcreate" => $teamcreate
@@ -31,7 +30,7 @@
 
 		public static function GetPlayerInServer(int $id, string $serverID): self|null {
 			$row = Database::singleton()->run(
-				"SELECT * FROM `active_players` WHERE `playerid` = ? AND `serverid` = ?",
+				"SELECT * FROM `active_players` WHERE `playerid` = :playerid AND `serverid` = :serverid",
 				[
 					":playerid" => $id,
 					":serverid" => $serverID
