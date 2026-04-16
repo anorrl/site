@@ -7,6 +7,7 @@
 	use anorrl\enums\AssetType;
 	use anorrl\enums\ANORRLBadge;
 	use anorrl\utilities\AssetUtils;
+	use anorrl\utilities\Arbiter;
 
 	class Place extends Asset {
 		/** is the same as Asset::public */
@@ -133,33 +134,9 @@
 				if($result_getactiveservers->num_rows != 0) {
 					$row = $result_getactiveservers->fetch_assoc();
 
-					$jobID = $row['jobid'];
+					Arbiter::singleton()->request("gameserver/kill", ["pid" => $row['pid']]);
 
-					$data = json_encode([
-						"pid" => $row['pid']
-					]);
-
-					$arbiter_ip = \CONFIG->arbiter->location->private;
-					$arbiter_token = \CONFIG->arbiter->token;
-
-					$ch = curl_init("http://$arbiter_ip/api/v1/gameserver/kill");
-					curl_setopt($ch, CURLOPT_HTTPHEADER, [
-						"Authorization: Bearer $arbiter_token",
-						"Content-Type: application/json",
-						"User-Agent: ANORRL/1.0"
-					]);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					curl_setopt($ch, CURLOPT_POST, true);
-					curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-					$response = curl_exec($ch);
-					$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-					curl_close($ch);
-
-					if($code != 200) {
-						die(http_response_code(503));
-					}
-
-					$db->run("DELETE FROM `active_servers` WHERE `jobid` = :jobid;", [ ":jobid" => $jobID ]);
+					$db->run("DELETE FROM `active_servers` WHERE `jobid` = :jobid;", [ ":jobid" => $row['jobid'] ]);
 				}
 			}
 		}

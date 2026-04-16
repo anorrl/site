@@ -139,8 +139,7 @@
 
 			$headers = ['Content-Type: application/json'];
 
-			$ch = curl_init();
-			curl_setopt( $ch,CURLOPT_URL, $webhook_url );
+			$ch = curl_init($webhook_url);
 			curl_setopt( $ch,CURLOPT_POST, true );
 			curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
 			curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
