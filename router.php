@@ -151,6 +151,7 @@
 	// game apis
 	route('GET',      '/asset/', '/private/gameapis/assetdeliverer.php');
 	route('GET',      '/Asset/', '/private/gameapis/assetdeliverer.php');
+	
 	route('GET',      '/users/[i:userId]/canmanage/[i:placeId]', '/private/api/users/canmanage.php');
 	route('GET',      '//users/[i:userId]/canmanage/[i:placeId]', '/private/api/users/canmanage.php');
 	route('GET',      '/users/[i:userId]/canmanage/[i:placeId]/', '/private/api/users/canmanage.php');
@@ -293,6 +294,7 @@
 	route('GET',      '/UserCheck/getrecommendedusername', '/private/api/mobile/getrecommendedusername.php');
 	
 	route('GET|POST', '/[*:name]-place', '/private/views/place.php');
+	route('GET',      '/asset', '/private/gameapis/assetdeliverer.php');
 
 	$match = $router->match();
 
