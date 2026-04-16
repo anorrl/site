@@ -34,6 +34,8 @@
 				$endpoint = substr($endpoint, 1);
 				
 			$ch = curl_init("http://{$this->location}:{$this->port}{$this->api_prefix}$endpoint");
+
+			error_log("http://{$this->location}:{$this->port}{$this->api_prefix}$endpoint");
 			
 			curl_setopt_array($ch, [
 				CURLOPT_RETURNTRANSFER => true,
