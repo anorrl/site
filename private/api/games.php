@@ -94,7 +94,7 @@
 					"id" => $place->id,
 					"name" => $place->name,
 					"description" => $place->description,
-					"thumbnail" => $asset->getThumbsUrl(300, 169)
+					"thumbnail" => $place->getThumbsUrl(300, 169)
 				]
 			]));
 		}
