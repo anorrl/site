@@ -1138,7 +1138,7 @@
 					else {
 						list($width, $height, $type, $attr) = getimagesize($file['tmp_name']);
 
-						if($width > 16 && $height > 16 && $width < 420 && $height < 420) {
+						if($width > 16 && $height > 16 && $width < 420 && $height < 420 && $width == $height) {
 							move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT']."/../users/profile_".$this->id.".png");
 
 							if(!$this->setprofilepicture) {
@@ -1151,10 +1151,12 @@
 
 							return ["error" => false];
 						} else {
-							if($width < 16 && $height < 16) {
+							if($width < 16 || $height < 16) {
 								return ["error" => true, "reason" => "GIF was wayyy too small! (16x16 minimum)"];
-							} else if($width > 256 && $height > 256) {
+							} else if($width > 256 || $height > 256) {
 								return ["error" => true, "reason" => "GIF was wayyy too big! (256x256 maximum)"];
+							} else if($width != $height) {
+								return ["error" => true, "reason" => "Must be a damn square! SQUARE!!!"];
 							} else {
 								return ["error" => true, "reason" => "I hate your image. (what the fuck is this resolution)"];
 							}

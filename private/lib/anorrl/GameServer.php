@@ -17,6 +17,17 @@
 		public bool $teamcreate;
 
 		public static function Get(string $id, bool $teamcreate = false): self|null {
+			$row = Database::singleton()->run(
+				"SELECT * FROM `active_players` WHERE `id` = :id AND `teamcreate` = :teamcreate",
+				[
+					":id" => $id,
+					":teamcreate" => $teamcreate
+				]
+			)->fetch(\PDO::FETCH_OBJ);
+
+			if($row)
+				return new self($row);
+
 			return null;
 		}
 

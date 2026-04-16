@@ -30,6 +30,19 @@
 			$this->pdo->setAttribute(\PDO::ATTR_PERSISTENT, true);
 		}
 
+		private function getPDOType(mixed $data): int {
+			if(is_int($data) || is_bool($data))
+				return \PDO::PARAM_INT;
+
+			return \PDO::PARAM_STR;
+		}
+
+		private function evaluateValue(mixed $data): mixed {
+			if(is_bool($data))
+				return $data ? 1 : 0;
+
+			return $data;
+		}
 
 		function run($sql, $args = null): \PDOStatement {
 			if (!$args) return $this->pdo->query($sql);
@@ -37,12 +50,11 @@
 			$stmt = $this->pdo->prepare($sql);
 
 			foreach ($args as $param => $value) {
-				if (is_int($param)) {
-					$stmt->bindValue($param + 1, $value, is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
-				}
-				else {
-					$stmt->bindValue($param, $value, is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
-				}
+				$stmt->bindValue(
+					is_int($param) ? $param + 1 : $param,
+					$this->evaluateValue($value), 
+					$this->getPDOType($value)
+				);
 			}
 
 			$stmt->execute();

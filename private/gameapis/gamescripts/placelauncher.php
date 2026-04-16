@@ -1,8 +1,10 @@
 <?php
 
+	use anorrl\Database;
 	use anorrl\Place;
 	use anorrl\User;
 	use anorrl\utilities\UserUtils;
+	use anorrl\utilities\Arbiter;
 	
 	header("Content-Type: application/json");
 
@@ -124,6 +126,49 @@
 	$arbiter_token = CONFIG->arbiter->token;
 	$domain = CONFIG->domain;
 
+	$arbiter = Arbiter::singleton();
+	$db = Database::singleton();
+
+	function errorOut(int $status = 0, string|null $sessionID = null, bool $teamcreate = false) {
+		http_response_code(503);
+		if($sessionID) {
+			Database::singleton()->run(
+				"DELETE FROM `active_players` WHERE `id` = :id AND `teamcreate` = :teamcreate",
+				[
+					":id" => $sessionID,
+					":teamcreate" => $teamcreate
+				]
+			);
+		}
+		
+		die(json_encode([
+			"status" => $status,
+			"message" => "Wow so much errors!"
+		]));
+	}
+
+	function createResponse(string $jobID, string $serverID, string $sessionID) {
+		$domain = CONFIG->domain;
+		$arbiter_pub_ip = CONFIG->arbiter->location->public;
+
+		$json = json_encode(
+			[
+				"jobId" => "$jobID",
+				"status" => 2,
+				"joinScriptUrl" => "http://$domain/game/join.ashx?serverToken=$serverID&sessionToken=$sessionID&server=$arbiter_pub_ip",
+				"authenticationUrl" => "https://$domain/Login/Negotiate.ashx",
+				"authenticationTicket" => "$sessionID",
+				"message" => "HELLOOOOOOOO!!!!!"
+			]
+		);
+
+		// i forgot why i did this but it works i guess.
+		$json = str_replace("\\\\", "", $json);
+		$json = str_replace("\\", "", $json); 
+
+		return $json;
+	}
+
 	//
 	// request=RequestGame
 	// placeId=1818
@@ -136,10 +181,8 @@
 	) {
 		if(isset($_GET['placeId']) &&
 		isset($_GET['isPartyLeader']) &&
-		isset($_GET['gender']) &&
 		isset($_GET['isTeleport']) &&
-		$_GET['request'] == "RequestGame" &&
-		$_GET['gender'] == "") {
+		$_GET['request'] == "RequestGame") {
 			$place = Place::FromID(intval($_GET['placeId']));
 			$user = UserUtils::RetrieveUser();
 
@@ -171,91 +214,48 @@
 					try {
 						$placeId = $place->id;
 
-						$data = json_encode([
-							"PlaceId" => $placeId,
-							"MaxPlayers" => $place->server_size,
-							"TeamCreate" => false
-						]);
+						$gsr = $arbiter->request(
+							"gameserver", 
+							[
+								"PlaceId" => $placeId,
+								"MaxPlayers" => $place->server_size,
+								"TeamCreate" => false
+							]
+						);
 
-						$ch = curl_init("http://$arbiter_ip/api/v1/gameserver");
-
-						curl_setopt($ch, CURLOPT_HTTPHEADER, [
-							"Authorization: Bearer $arbiter_token",
-							"Content-Type: application/json",
-							"User-Agent: ANORRL/1.0"
-						]);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_POST, true);
-						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-
-						$response = curl_exec($ch);
-						$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-						curl_close($ch);
-
-						if ($code != 200) {
-							include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-							$stmt = $con->prepare("DELETE FROM `active_players` WHERE `id` = ?");
-							$stmt->bind_param("s", $sessionID);
-							$stmt->execute();
-
-							die(json_encode([
-								"status" => 0,
-								"error" => "Wow so much errors!"
-							]));
-						}
-
-						$json = json_decode($response, true);
+						if(!$gsr)
+							throw new Exception("Failed to create gameserver.");
 
 						$serverid = getRandomString();
-						$jobid = $json['jobId'];
-						$port = $json['fakeahport'];
-						$pid = $json['pid'];
+						$jobID = $gsr->jobId;
+						$port = $gsr->fakeahport;
+						$pid = $gsr->pid;
 
 						$strPort = strval($port);
 
 						include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
 
 						$stmt_createnewserver = $con->prepare("INSERT INTO `active_servers` (`id`, `jobid`, `placeid`, `maxcount`, `port`, `pid`) VALUES (?,?,?,?,?,?)");
-						$stmt_createnewserver->bind_param("ssiiss", $serverid, $jobid, $placeId, $place->server_size, $strPort, $pid);
+						$stmt_createnewserver->bind_param("ssiiss", $serverid, $jobID, $placeId, $place->server_size, $strPort, $pid);
 						$stmt_createnewserver->execute();
 
 						updatePlaceOfSession($sessionID, $serverid);
-
-					} catch(SoapFault $e) {
-						include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-						$stmt_createnewserver = $con->prepare("DELETE FROM `active_players` WHERE `id` = ?;");
-						$stmt_createnewserver->bind_param("s", $sessionID);
-						$stmt_createnewserver->execute();
-						die(json_encode([
-							"status" => 1,
-							"message" => "Wow so much errors!"
-						]));
+					} catch(Exception $e) {
+						errorOut(1, $sessionID);
 					}
 				} else {
 					$server_data = getAnActiveServer($place->id);
 
 					if($server_data != null) {
 						$serverid = $server_data['id'];
+						$jobID = $server_data['jobid'];
 					} else {
 						$dont_load = true;
 					}
 				}
 
 				if(!$dont_load) {
-					$jobIDThingy = md5(rand());
-					$json = json_encode(
-						[
-							"jobId" => "$jobIDThingy",
-							"status" => 2,
-							"joinScriptUrl" => "http://$domain/game/join.ashx?serverToken=$serverid&sessionToken=$sessionID&server=$arbiter_pub_ip",
-							"authenticationUrl" => "https://$domain/Login/Negotiate.ashx",
-							"authenticationTicket" => "$sessionID",
-							"message" => "HELLOOOOOOOO!!!!!"
-						]
-					);
-					$json = str_replace("\\\\", "", $json);
-					$json = str_replace("\\", "", $json); 
-					die($json);
+					die(createResponse($jobID, $serverid, $sessionID));
 				}
 
 			}
@@ -291,40 +291,23 @@
 				if(getActiveServersCount($place->id, true) == 0) {
 					try {
 						$placeId = $place->id;
-						
-						$data = json_encode([
-							"PlaceId" => $placeId,
-							"MaxPlayers" => 100,
-							"TeamCreate" => true
-						]);
 
-						$ch = curl_init("http://$arbiter_ip/api/v1/gameserver");
+						$gsr = $arbiter->request(
+							"gameserver", 
+							[
+								"PlaceId" => $placeId,
+								"MaxPlayers" => 100,
+								"TeamCreate" => true
+							]
+						);
 
-						curl_setopt($ch, CURLOPT_HTTPHEADER, [
-							"Authorization: Bearer $arbiter_token",
-							"Content-Type: application/json",
-							"User-Agent: ANORRL/1.0"
-						]);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_POST, true);
-						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-						$response = curl_exec($ch);
-						$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-						curl_close($ch);
+						if(!$gsr)
+							throw new Exception("Failed to create gameserver.");
 
-						if($code != 200) {
-							http_response_code(503);
-							die(json_encode([
-								"status" => 0,
-								"error" => "Wow so much errors!"
-							]));
-						}
-
-						$json = json_decode($response, true);
 						$serverid = getRandomString();
-						$jobid = $json['jobId'];
-						$port = $json['fakeahport'];
-						$pid = $json['pid'];
+						$jobid = $gsr->jobId;
+						$port = $gsr->fakeahport;
+						$pid = $gsr->pid;
 						$strPort = strval($port);
 						
 						include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
@@ -334,17 +317,8 @@
 
 						updatePlaceOfSession($sessionToken, $serverid, true);
 
-					} catch(SoapFault $e) {
-						
-						include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-						$stmt_createnewserver = $con->prepare("DELETE FROM `active_players` WHERE `id` = ? AND `teamcreate` = 1;");
-						$stmt_createnewserver->bind_param("s", $sessionID);
-						$stmt_createnewserver->execute();
-						
-						die(json_encode([
-							"status" => 0,
-							"error" => "Wow so much errors!"
-						]));
+					} catch(Exception $e) {
+						errorOut(1, $sessionID, true);
 					}
 				} else {
 					$server_data = getAnActiveServer($place->id, true);
@@ -363,32 +337,28 @@
 						[
 							"status" => 2,
 							"settings" => [
-									"ClientPort" => 0,
-									"MachineAddress" => $arbiter_pub_ip,
-									"ServerPort" => intval($port),
-									"PingUrl" => "",
-									"PingInterval" => 120,
-									"UserName" => $user->name,
-									"SeleniumTestMode" => false,
-									"UserId" => $user->id,
-									"SuperSafeChat" => false,
-									"CharacterAppearance" => "http://$domain/Asset/CharacterFetch.ashx?userId=".$user->id,
-									"ClientTicket" => $sessionID,
-									"GameId" =>"00000000-0000-0000-0000-000000000000",
-									"PlaceId" => $place->id,
-									"MeasurementUrl" => "",
-									"WaitingForCharacterGuid" => "16be1dd8-5462-4ca5-a997-0725d997708b",
-									"BaseUrl" => "http://$domain/",
-									"ChatStyle" => "ClassicAndBubble",
-									"VendorId" => 0,
-									"ScreenShotInfo" => "",
-									"VideoInfo" => "",
-									"CreatorId" => $place->creator->id,
-									"CreatorTypeEnum" => "User",
-									"MembershipType" => "None",
-									"AccountAge" => 256,
-									"SessionId" => "blehhh".rand(),
-									"UniverseId" => $place->id,
+								"ClientPort" => 0,
+								"MachineAddress" => $arbiter_pub_ip,
+								"ServerPort" => intval($port),
+								"PingUrl" => "",
+								"PingInterval" => 120,
+								"UserName" => $user->name,
+								"SeleniumTestMode" => false,
+								"UserId" => $user->id,
+								"SuperSafeChat" => false,
+								"CharacterAppearance" => "http://$domain/Asset/CharacterFetch.ashx?userId=".$user->id,
+								"ClientTicket" => $sessionID,
+								"GameId" =>"00000000-0000-0000-0000-000000000000",
+								"PlaceId" => $place->id,
+								"MeasurementUrl" => "",
+								"WaitingForCharacterGuid" => "16be1dd8-5462-4ca5-a997-0725d997708b",
+								"BaseUrl" => "http://$domain/",
+								"ChatStyle" => "ClassicAndBubble",
+								"VendorId" => 0,
+								"CreatorId" => $place->creator->id,
+								"AccountAge" => $user->getAccountAge(),
+								"SessionId" => "blehhh".rand(),
+								"UniverseId" => $place->id,
 							]
 						]
 					);
@@ -415,7 +385,6 @@
 				} else {
 					$place = null;
 				}
-				
 			}
 			
 			$user = User::FromID(intval($session_data['playerid']));
@@ -428,91 +397,53 @@
                 if(getActiveServersCount($place->id) == 0) {
 					try {
 						$placeId = $place->id;
-						
-						$data = json_encode([
-							"PlaceId" => $placeId,
-							"MaxPlayers" => $place->server_size,
-							"TeamCreate" => false
-						]);
 
-						$ch = curl_init("http://$arbiter_ip/api/v1/gameserver");
+						$gsr = $arbiter->request(
+							"gameserver", 
+							[
+								"PlaceId" => $placeId,
+								"MaxPlayers" => $place->server_size,
+								"TeamCreate" => false
+							]
+						);
 
-						curl_setopt($ch, CURLOPT_HTTPHEADER, [
-							"Authorization: Bearer $arbiter_token",
-							"Content-Type: application/json",
-							"User-Agent: ANORRL/1.0"
-						]);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						curl_setopt($ch, CURLOPT_POST, true);
-						curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-						$response = curl_exec($ch);
-						$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-						curl_close($ch);
+						if(!$gsr)
+							throw new Exception("Failed to create gameserver.");
 
-						if($code != 200) {
-							http_response_code(503);
-                            die(json_encode([
-                                "status" => 0,
-                                "error" => "Wow so much errors!"
-                            ]));
-						}
-
-						$json = json_decode($response, true);
 						$serverid = getRandomString();
-                        $jobid = $json['jobId'];
-						$port = $json['fakeahport'];
-						$pid = $json['pid'];
+						$jobID = $gsr->jobId;
+						$port = $gsr->fakeahport;
+						$pid = $gsr->pid;
 						$strPort = strval($port);
 
 						include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
 						$stmt_createnewserver = $con->prepare("INSERT INTO `active_servers`(`id`, `jobid`, `placeid`, `maxcount`, `port`, `pid`) VALUES (?,?,?,?,?,?)");
-						$stmt_createnewserver->bind_param("ssiiss", $serverid, $jobid, $placeId, $place->server_size, $strPort, $pid);
+						$stmt_createnewserver->bind_param("ssiiss", $serverid, $jobID, $placeId, $place->server_size, $strPort, $pid);
 						$stmt_createnewserver->execute();
 
 						updatePlaceOfSession($sessionToken, $serverid);
 
 					} catch(Exception $e) {
-						include $_SERVER['DOCUMENT_ROOT']."/private/connection.php";
-						$stmt_createnewserver = $con->prepare("DELETE FROM `active_players` WHERE `id` = ?;");
-						$stmt_createnewserver->bind_param("s", $sessionToken);
-						$stmt_createnewserver->execute();
-						die(json_encode([
-							"status" => 0,
-							"error" => "Wow so much errors!"
-						]));
+						errorOut(1, $sessionToken, true);
 					}
 				} else {
 					$server_data = getAnActiveServer($place->id);
 
-					if($server_data != null) {
+					if($server_data) {
 						$serverid = $server_data['id'];
+						$jobID = $server_data['jobid'];
 					} else {
 						$dont_load = true;
 					}
 				}
 
 				if(!$dont_load) {
-					$jobIDThingy = md5(rand());
-					die(json_encode(
-						[
-							"jobId" => "$jobIDThingy",
-							"status" => 2,
-							"joinScriptUrl" => "http://$domain/game/join.ashx?serverToken=$serverid&sessionToken=$sessionToken&server=$arbiter_pub_ip",//",
-							"authenticationUrl" => "https://$domain/Login/Negotiate.ashx",
-							"authenticationTicket" => "$sessionToken",
-							"message" => "HELLOOOOOOOO!!!!!"
-						]
-					));
+					die(createResponse($jobID, $serverid, $sessionToken));
 				}
 				
 			}
 		}
 	}
 
-	die(json_encode([
-		"status" => 0,
-		"error" => "Wow so much errors!"
-	]));
-	
-
+	errorOut();
 ?>
