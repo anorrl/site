@@ -2,6 +2,8 @@
 
 	namespace anorrl\enums;
 
+	use anorrl\enums\CharacterMeshType;
+
 	enum AssetType {
 		case IMAGE;
 		case TSHIRT;
@@ -26,6 +28,10 @@
 		case RIGHTLEG;
 		case PACKAGE;
 		case GAMEPASS;
+		/**
+		 * This is only for stuff api lol
+		 */
+		case BODYPARTS;
 
 		public static function index(int $ordinal): AssetType {
 			return match($ordinal) {
@@ -52,6 +58,7 @@
 				31 => AssetType::RIGHTLEG,
 				32 => AssetType::PACKAGE,
 				34 => AssetType::GAMEPASS,
+				99 => AssetType::BODYPARTS
 			};
 		}
 
@@ -80,6 +87,7 @@
 				AssetType::RIGHTLEG 	=> 31,
 				AssetType::PACKAGE      => 32,
 				AssetType::GAMEPASS     => 34,
+				AssetType::BODYPARTS    => 99
 			};
 		}
 
@@ -142,6 +150,19 @@
 				AssetType::RIGHTLEG 	=> "Right Leg",
 				AssetType::PACKAGE      => "Package",
 				AssetType::GAMEPASS     => "Gamepass",
+			};
+		}
+
+
+		public function tocharactermesh(): CharacterMeshType {
+			return match($this) {
+				AssetType::HEAD 	    => CharacterMeshType::HEAD,
+				AssetType::TORSO 		=> CharacterMeshType::TORSO,
+				AssetType::RIGHTARM 	=> CharacterMeshType::RIGHTARM,
+				AssetType::LEFTARM 		=> CharacterMeshType::LEFTARM,
+				AssetType::LEFTLEG 		=> CharacterMeshType::LEFTLEG,
+				AssetType::RIGHTLEG 	=> CharacterMeshType::RIGHTLEG,
+				default => false
 			};
 		}
 	}

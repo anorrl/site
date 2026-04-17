@@ -114,5 +114,10 @@
 		public static function GeneratePantsRBXM(int $id): string {
 			return self::Replace("assetid", $id, self::GetTemplate("pants"));
 		}
+
+		public static function GenerateCharacterMeshRBXM(int $id, AssetType $type): string {
+			$meshrbxm = self::Replace("assetid", $id, self::GetTemplate("charactermesh"));
+			return self::Replace("bodypart", $type->tocharactermesh()->ordinal(), $meshrbxm);
+		}
 	}
 ?>

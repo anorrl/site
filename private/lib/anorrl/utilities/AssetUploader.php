@@ -83,6 +83,14 @@
 			return match($type) {
 				AssetType::SHIRT => Renderer::RenderClothing($id),
 				AssetType::PANTS => Renderer::RenderClothing($id),
+
+				AssetType::HEAD => Renderer::RenderClothing($id),
+				AssetType::TORSO => Renderer::RenderClothing($id),
+				AssetType::LEFTARM => Renderer::RenderClothing($id),
+				AssetType::RIGHTARM => Renderer::RenderClothing($id),
+				AssetType::LEFTLEG => Renderer::RenderClothing($id),
+				AssetType::RIGHTLEG => Renderer::RenderClothing($id),
+
 				AssetType::PLACE => Renderer::RenderPlace($id),
 				AssetType::MESH => Renderer::RenderMesh($id),
 				AssetType::MODEL => Renderer::RenderModel($id),
@@ -736,6 +744,42 @@
 
 								return self::CommitAsset($data, $type, $name, $description, $public, $on_sale, $comments_enabled, $user);
 
+							} else if(
+								$type == AssetType::HEAD	 ||
+								$type == AssetType::TORSO	 ||
+								$type == AssetType::LEFTARM	 ||
+								$type == AssetType::RIGHTARM ||
+								$type == AssetType::LEFTLEG	 ||
+								$type == AssetType::RIGHTLEG
+							) {
+								if(!self::IsValidMesh($data)) {
+									return INVALIDFILE;
+								}
+
+								if(!self::IsSupportedMesh($data)) {
+									$mesh_result = MeshConverter::Convert($data);
+
+									if(!$mesh_result['error'])
+										$data = $mesh_result['mesh'];
+									else
+										return $mesh_result;
+								}
+
+								$mesh_asset_result = self::CommitAsset($data, AssetType::MESH, $name, $description, false, false, false, $user);
+
+								if(!$mesh_asset_result['error']) {
+									self::ExecuteRender($mesh_asset_result['id'], AssetType::MESH, $data);
+
+									$result = self::CommitAsset(AssetTypeUtils::GenerateCharacterMeshRBXM($mesh_asset_result['id'], $type), $type, $name, $description, $public, $on_sale, $comments_enabled, $user);
+
+									if(!$result['error']) {
+										self::ExecuteRender($result['id'], $type, $data);
+									}
+
+									return $result;
+								} else {
+									return $mesh_asset_result;
+								}
 							} else {
 								return ["error" => true, "reason" => "Invalid asset type found!"];
 							}

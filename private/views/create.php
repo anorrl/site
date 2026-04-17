@@ -1,5 +1,6 @@
 <?php
 	use anorrl\Asset;
+	use anorrl\enums\CharacterMeshType;
 	use anorrl\Page;
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\AssetUploader;
@@ -24,6 +25,7 @@
 		"animations",
 		"images",
 		"lua",
+		"body"
 	];
 
 	$types = [
@@ -40,6 +42,7 @@
 		"lua" => AssetType::LUA,
 		"hats" => AssetType::HAT,
 		"animations" => AssetType::ANIMATION,
+
 	];
 
 	if(!in_array($type, $validtypes))
@@ -49,7 +52,8 @@
 		if(in_array($type, $validtypes)) {
 			if(isset($_POST['ANORRL$CreateAsset$Name']) &&
 				isset($_POST ['ANORRL$CreateAsset$Description']) &&
-				isset($_FILES['ANORRL$CreateAsset$File'])
+				isset($_FILES['ANORRL$CreateAsset$File']) &&
+				isset($_FILES['ANORRL$CreateAsset$BodyType'])
 			) {
 				
 				$result = null;
@@ -60,7 +64,18 @@
 				$comments_enabled = isset($_POST['ANORRL$CreateAsset$CommentsEnabled']);
 				$on_sale = isset($_POST['ANORRL$CreateAsset$Purchasable']);
 
-				$result = AssetUploader::UploadAsset($_FILES['ANORRL$CreateAsset$File'], $types[$type], $name, $description, $public, $on_sale, $comments_enabled);
+				$body_type = CharacterMeshType::index(intval($_FILES['ANORRL$CreateAsset$BodyType']));
+
+				if($body_type == null) {
+					$_SESSION['ANORRL$CreateAsset$Error'] = true;
+					$_SESSION['ANORRL$CreateAsset$Result'] = "Invalid body type!";
+					
+					die(header("Location: /create/".$type));
+				}
+
+				$asset_type = $type == "body" ? $body_type->assettype() : $types[$type];
+
+				$result = AssetUploader::UploadAsset($_FILES['ANORRL$CreateAsset$File'], $asset_type, $name, $description, $public, $on_sale, $comments_enabled);
 				
 				if(isset($result)) {
 					if($result['error']) {
@@ -85,7 +100,7 @@
 	$page->addStylesheet("/css/new/stuff.css?v=2");
 	$page->addStylesheet("/css/new/forms.css?v=1");
 
-	$page->addScript("/js/create.js?t=1776253537");
+	$page->addScript("/js/create.js?t=1776449023");
 	$page->loadHeader();
 ?>
 <div class="Asset" template>
@@ -235,6 +250,7 @@
 			<li data_category="2" ><a>T-Shirts</a></li>
 			<li data_category="12"><a>Pants</a></li>
 			<li data_category="19"><a>Gears</a></li>
+			<li data_category="body"><a>Body Type</a></li>
 			<hr>
 			<h4>Development</h4>
 			<li data_category="13"><a>Decals</a></li>
@@ -315,6 +331,16 @@
 									<label for="files" style="margin-top: 5px;display: inline-block;">Choose file</label>
 									<input id="files" style="display:none;" type="file"  name="ANORRL$CreateAsset$File" required>
 									<label id="filename">No file chosen</label>
+								</td>
+							</tr>
+							<tr style="display: none" id="bodytyperow">
+								<td>Body Type <span class="RequiredThing">*</span></td>
+								<td>
+									<select name="ANORRL$CreateAsset$BodyType" style="margin-top: 5px;">
+										<?php foreach(CharacterMeshType::all() as $type): ?>
+											<option value="<?= $type->ordinal() ?>"><?= $type->label() ?></option>
+										<?php endforeach ?>
+									</select>
 								</td>
 							</tr>
 							<tr>

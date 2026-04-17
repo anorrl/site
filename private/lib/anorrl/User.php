@@ -356,27 +356,61 @@
 			if(!$show_all) {
 				$sql_extra .= " AND `public` = 1";
 			}
-			
-			$sql = "SELECT assets.* FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = ? AND `type` = ? AND `name` LIKE ? $sql_extra ORDER BY `lastedited` DESC";
 
-			if($page <= -1 || $count <= 0) {
-				$stmt_getassets = $con->prepare("$sql");
-				
-				if($creator_only) {
-					$stmt_getassets->bind_param('iisi', $this->id, $sql_assettype, $sql_query, $this->id);
+			$sql_types = "`type` = ?";
+			if($type == AssetType::BODYPARTS) {
+				$type_head = AssetType::HEAD->ordinal();
+				$type_torso = AssetType::TORSO->ordinal();
+				$type_leftarm = AssetType::LEFTARM->ordinal();
+				$type_rightarm = AssetType::RIGHTARM->ordinal();
+				$type_leftleg = AssetType::LEFTLEG->ordinal();
+				$type_rightleg = AssetType::RIGHTLEG->ordinal();
+
+				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg)";
+			}
+			
+			$sql = "SELECT assets.* FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = ? AND $sql_types AND `name` LIKE ? $sql_extra ORDER BY `lastedited` DESC";
+
+			if($type == AssetType::BODYPARTS) {
+				if($page <= -1 || $count <= 0) {
+					$stmt_getassets = $con->prepare("$sql");
+					
+					if($creator_only) {
+						$stmt_getassets->bind_param('isi', $this->id, $sql_query, $this->id);
+					} else {
+						$stmt_getassets->bind_param('is', $this->id, $sql_query);
+					}
 				} else {
-					$stmt_getassets->bind_param('iis', $this->id, $sql_assettype, $sql_query);
+					$sql_page = (($page-1)*$count);
+					$stmt_getassets = $con->prepare("$sql LIMIT ?, ?");
+					
+					if($creator_only) {
+						$stmt_getassets->bind_param('isiii', $this->id, $sql_query, $this->id, $sql_page, $count);
+					} else {
+						$stmt_getassets->bind_param('isii', $this->id, $sql_query, $sql_page, $count);
+					}
 				}
 			} else {
-				$sql_page = (($page-1)*$count);
-				$stmt_getassets = $con->prepare("$sql LIMIT ?, ?");
-				
-				if($creator_only) {
-					$stmt_getassets->bind_param('iisiii', $this->id, $sql_assettype, $sql_query, $this->id, $sql_page, $count);
+				if($page <= -1 || $count <= 0) {
+					$stmt_getassets = $con->prepare("$sql");
+					
+					if($creator_only) {
+						$stmt_getassets->bind_param('iisi', $this->id, $sql_assettype, $sql_query, $this->id);
+					} else {
+						$stmt_getassets->bind_param('iis', $this->id, $sql_assettype, $sql_query);
+					}
 				} else {
-					$stmt_getassets->bind_param('iisii', $this->id, $sql_assettype, $sql_query, $sql_page, $count);
+					$sql_page = (($page-1)*$count);
+					$stmt_getassets = $con->prepare("$sql LIMIT ?, ?");
+					
+					if($creator_only) {
+						$stmt_getassets->bind_param('iisiii', $this->id, $sql_assettype, $sql_query, $this->id, $sql_page, $count);
+					} else {
+						$stmt_getassets->bind_param('iisii', $this->id, $sql_assettype, $sql_query, $sql_page, $count);
+					}
 				}
 			}
+			
 
 			$stmt_getassets->execute();
 
@@ -437,16 +471,38 @@
 			if(!$show_all) {
 				$sql_extra .= " AND `public` = 1";
 			}
+
+			$sql_types = "`type` = ?";
+			if($type == AssetType::BODYPARTS) {
+				$type_head = AssetType::HEAD->ordinal();
+				$type_torso = AssetType::TORSO->ordinal();
+				$type_leftarm = AssetType::LEFTARM->ordinal();
+				$type_rightarm = AssetType::RIGHTARM->ordinal();
+				$type_leftleg = AssetType::LEFTLEG->ordinal();
+				$type_rightleg = AssetType::RIGHTLEG->ordinal();
+
+				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg)";
+			}
 			
-			$sql = "SELECT COUNT(`transactions`.`id`) FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = ? AND `type` = ? AND `name` LIKE ? $sql_extra ORDER BY `date` DESC";
+			
+			$sql = "SELECT COUNT(`transactions`.`id`) FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = ? AND $sql_types AND `name` LIKE ? $sql_extra ORDER BY `date` DESC";
 
 			$stmt_getassets = $con->prepare("$sql");
-				
-			if($creator_only) {
-				$stmt_getassets->bind_param('iisi', $this->id, $sql_assettype, $sql_query, $this->id);
+			
+			if($type == AssetType::BODYPARTS) {
+				if($creator_only) {
+					$stmt_getassets->bind_param('isi', $this->id, $sql_query, $this->id);
+				} else {
+					$stmt_getassets->bind_param('is', $this->id, $sql_query);
+				}
 			} else {
-				$stmt_getassets->bind_param('iis', $this->id, $sql_assettype, $sql_query);
+				if($creator_only) {
+					$stmt_getassets->bind_param('iisi', $this->id, $sql_assettype, $sql_query, $this->id);
+				} else {
+					$stmt_getassets->bind_param('iis', $this->id, $sql_assettype, $sql_query);
+				}
 			}
+			
 
 			$stmt_getassets->execute();
 

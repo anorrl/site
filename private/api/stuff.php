@@ -10,7 +10,11 @@
 		
 		$type = AssetType::HAT->ordinal();
 		if(isset($_GET['c'])) {
-			$type = intval($_GET['c']);
+			if($_GET['c'] != "body") {
+				$type = intval($_GET['c']);
+			} else {
+				$type = AssetType::BODYPARTS->ordinal();
+			}
 		}
 		$page = 1;
 		if(isset($_GET['p'])) {

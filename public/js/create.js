@@ -97,7 +97,12 @@ ANORRL.Create = {
 		});
 
 		$("li[data_category="+category+"]").attr("selected", "");
-		ChangeUrl("", "/create/"+$("li[data_category="+category+"]").find("a").html().toLowerCase().replaceAll("-", ""));
+		if(!Number(category)) {
+			ChangeUrl("", "/create/"+category);
+		} else {
+			ChangeUrl("", "/create/"+$("li[data_category="+category+"]").find("a").html().toLowerCase().replaceAll("-", "").replaceAll(" ", ""));
+		}
+		
 
 		var categorylabel = $("li[data_category="+category+"]").find("a").html();
 		if(categorylabel.endsWith("s") && categorylabel != "Pants" && categorylabel != "Meshes") {
@@ -125,6 +130,12 @@ ANORRL.Create = {
 			template_window.css("display", "block");
 		} else {
 			$(".Window#ShirtPantsTemplate").css("display", "none");
+		}
+
+		if(categorylabel == "Body Type") {
+			$("#bodytyperow").removeAttr("style");
+		} else {
+			$("#bodytyperow").css("display", "none");
 		}
 		
 		$("#files").attr("accept", categoryFileTypes[category]);
@@ -254,6 +265,7 @@ $(function(){
 		"meshes": 4,
 		"lua": 5,
 		"animations": 24,
+		"body": "body"
 	}
 
 	ANORRL.Create.GrabAssets(categories[url]);
