@@ -126,7 +126,7 @@
 									<span id="Name"><?= $recentlyplayedplace->name ?></span>
 								</a>
 								<div id="Stats">
-									<div id="OnlinePlayers"><?= $recentlyplayedplace->current_playing_count ?></div>
+									<div id="OnlinePlayers">Players online: <?= $recentlyplayedplace->current_playing_count ?></div>
 									<div id="Created">Creator: <a href="/users/<?= $recentlyplayedplace->creator->id ?>/profile"><?= $recentlyplayedplace->creator->name ?></a></div>
 								</div>
 							</div>
