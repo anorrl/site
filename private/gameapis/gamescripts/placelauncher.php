@@ -100,9 +100,10 @@
 						
 			$user = SESSION ? SESSION->user : null;
 
-			if(!$user)
+			if(!$user) {
+				error_log("User is not existing ahh");
 				errorOut(1);
-
+			}
 				
 			if(isset($_GET['placeId'])) {
 				$place = Place::FromID(intval($_GET['placeId']));
