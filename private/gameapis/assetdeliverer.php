@@ -174,8 +174,25 @@
 			echo $contents;	
 		
 		} else {
-			http_response_code(404);
-			die("Asset not found!");
+			if(!file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""))) {
+				http_response_code(404);
+				die("Asset not found!");
+			} else {
+				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""));
+				$mimetype = checkMimeType($contents);
+				
+				if($mimetype == "application/gzip") {
+					$contents = gzdecode($contents);
+					$mimetype = checkMimeType($contents);
+				}
+				header("Content-Type: $mimetype");
+				if(str_contains(checkMimeType($contents), "json")) {
+					echo "Unauthorised access to this roblox asset!";
+					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""), "");
+					die(http_response_code(500));
+				}
+			}
+			
 		}
 
 		
