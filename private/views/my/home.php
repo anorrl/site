@@ -19,6 +19,8 @@
 		die(header("Location: /my/home"));
 	}
 
+	$recentlyplayed = $user->getRecentlyPlayedGames(2);
+
 	$page = new Page("Home", "my/home");
 
 	$page->addStylesheet("/css/new/my/home.css?v=2");
@@ -114,8 +116,24 @@
 								<div id="Created">Creator: <a href="/profile/1">Creator</a></div>
 							</div>
 						</div>-->
+						<?php if(count($recentlyplayed) == 0):?>
+							<span id="NoTagline">No recently played games yet!</span>
+						<?php else: ?>
+							<?php foreach($recentlyplayed as $recentlyplayedplace): ?>
+							<div class="Game">
+								<a href="/game/<?= $recentlyplayedplace->id ?>" title="<?= $recentlyplayedplace->name ?>">
+									<img src="/public/images/review-pending.png">
+									<span id="Name"><?= $recentlyplayedplace->name ?></span>
+								</a>
+								<div id="Stats">
+									<div id="OnlinePlayers">Couple ppl online</div>
+									<div id="Created">Creator: <a href="/users/<?= $recentlyplayedplace->creator->id ?>/profile"><?= $recentlyplayedplace->creator->name ?></a></div>
+								</div>
+							</div>
+							<?php endforeach ?>
+						<?php endif ?>
 
-						<span id="NoTagline">No recently played games yet!</span>
+						
 					</div>
 				</div>
 				<div id="Favourites">

@@ -1315,5 +1315,23 @@
 		function getSettings(): UserSettings {
 			return UserSettings::Get($this);
 		}
+
+		function getRecentlyPlayedGames(int $limit = 2): array {
+			$rows = Database::singleton()->run(
+				"SELECT DISTINCT `place` FROM `visits` WHERE `player` = :id ORDER BY `time` DESC LIMIT :limit", 
+				[
+					":id" => $this->id,
+					":limit" => $limit
+				]
+			)->fetchAll(\PDO::FETCH_OBJ);
+			
+			$places = [];
+
+			foreach($rows as $row) {
+				$places[] = Place::FromID($row->place);
+			}
+
+			return $places;
+		}
 	}
 ?>
