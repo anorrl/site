@@ -57,6 +57,9 @@
 			if (!$json)
 				return null;
 
+			if(isset($json->message) && $json->message == "Service Unavailable")
+				return null;
+
 			return $json;
 		}
 
