@@ -63,7 +63,7 @@
 		$file = "/private/api/$path.php";
 
 		$router->map($method, "/api/$path", function(...$params) use ($path, $file) {
-			if(SESSION || (str_starts_with($path, "gameserver") && str_ends_with($path,"/get"))) {
+			if(SESSION || (str_starts_with($path, "gameserver") && !str_ends_with($path,"/get"))) {
 				foreach ($params as $key => $value) {
 					$$key = $value;
 				}
