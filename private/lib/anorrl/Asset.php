@@ -402,7 +402,14 @@
 				$render = Renderer::RenderMesh($id);
 			} else if($type == AssetType::MODEL || $type == AssetType::HAT || $type == AssetType::GEAR) {
 				$render = Renderer::RenderModel($id);
-			} else if($type == AssetType::TORSO) {
+			} else if(
+				$type == AssetType::HEAD	 ||
+				$type == AssetType::TORSO	 ||
+				$type == AssetType::LEFTARM	 ||
+				$type == AssetType::RIGHTARM ||
+				$type == AssetType::LEFTLEG	 ||
+				$type == AssetType::RIGHTLEG
+			) {
 				$render = Renderer::RenderClothing($id);
 			}
 
