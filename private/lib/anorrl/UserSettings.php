@@ -19,6 +19,7 @@
 		public Asset|null $background_music = null;
 		public string $css = "";
 		public bool $loadingscreens_enabled;
+		public bool $profile_music_enabled;
 
 		public static function Get(User|null $user = null) {
 			if($user == null) {
@@ -31,7 +32,8 @@
 					"nightbg" => 0,
 					"bgm" => -1,
 					"css" => "",
-					"loadingscreens" => true
+					"loadingscreens" => true,
+					"profilemusic" => true
 				]);
 			}
 
@@ -65,6 +67,7 @@
 				$this->background_music = $rowdata['bgm'] <= 0 ? null : Asset::FromID($rowdata['bgm']);
 				$this->css = $rowdata['css'];
 				$this->loadingscreens_enabled = boolval($rowdata['loadingscreens']);
+				$this->profile_music_enabled = boolval($rowdata['profilemusic']);
 			} else {
 				$this->user = User::FromID(intval($rowdata->userid));
 				$this->randoms_enabled = boolval($rowdata->randoms);
@@ -75,6 +78,7 @@
 				$this->background_music = $rowdata->bgm <= 0 ? null : Asset::FromID($rowdata->bgm);
 				$this->css = $rowdata->css;
 				$this->loadingscreens_enabled = boolval($rowdata->loadingscreens);
+				$this->profile_music_enabled = boolval($rowdata->profilemusic);
 			}
 			
 			if($this->background_music && $this->background_music->type != AssetType::AUDIO)
@@ -165,6 +169,11 @@
 			}
 
 			return false;
+		}
+
+		function setProfileMusicEnabled(bool $value) {
+			$this->setValue("profilemusic", $value);
+			$this->profile_music_enabled = $value;
 		}
 	}
 ?>

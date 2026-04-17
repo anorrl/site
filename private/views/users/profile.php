@@ -46,6 +46,9 @@
 
 	$comments = Comment::GetCommentsOn($get_user);
 	$comments_count = count($comments);
+
+	$settings = SESSION->settings;
+
     $bgm = $get_user->getSettings()->background_music;
 	if($bgm && !$bgm->isUsable()) {
 		$bgm = null;
@@ -78,7 +81,7 @@
 		}
 	}
 </script>
-<?php if($bgm != null): ?>
+<?php if($bgm != null && $settings->profile_music_enabled): ?>
 <audio id="bgm" loop muted volume="0.25"> <!-- autoplay m.i.a -->
 	<source src="/asset/?id=<?= $bgm->getAssetIDSafe() ?>">
 </audio>
