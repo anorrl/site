@@ -1318,7 +1318,7 @@
 
 		function getRecentlyPlayedGames(int $limit = 2): array {
 			$rows = Database::singleton()->run(
-				"SELECT DISTINCT `place` FROM `visits` WHERE `player` = :id ORDER BY `time` DESC LIMIT :limit", 
+				"SELECT DISTINCT `place` FROM `visits` WHERE `player` = :id ORDER BY `time` ASC LIMIT :limit", 
 				[
 					":id" => $this->id,
 					":limit" => $limit

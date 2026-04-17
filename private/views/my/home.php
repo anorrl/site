@@ -106,16 +106,6 @@
 				<div id="RecentlyPlayed">
 					<h3>Recently Played</h3>
 					<div id="Games">
-						<!--<div class="Game">
-							<a href="/game/1000" title="Whats up guys im gonna rob a store">
-								<img src="/public/images/review-pending.png">
-								<span id="Name">aaaaaaaaaaaaaaaaaaaaa...</span>
-							</a>
-							<div id="Stats">
-								<div id="OnlinePlayers">Couple ppl online</div>
-								<div id="Created">Creator: <a href="/profile/1">Creator</a></div>
-							</div>
-						</div>-->
 						<?php if(count($recentlyplayed) == 0):?>
 							<span id="NoTagline">No recently played games yet!</span>
 						<?php else: ?>
