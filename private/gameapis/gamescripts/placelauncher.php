@@ -5,6 +5,7 @@
 	use anorrl\GameServer;
 	use anorrl\GameSession;
 	use anorrl\utilities\Arbiter;
+	use anorrl\utilities\UserUtils;
 	
 	header("Content-Type: application/json");
 
@@ -98,7 +99,7 @@
 			$session = null;
 			$server = null;
 						
-			$user = SESSION ? SESSION->user : null;
+			$user = UserUtils::RetrieveUser();
 
 			if(!$user) {
 				error_log("User is not existing ahh");
