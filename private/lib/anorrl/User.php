@@ -1269,7 +1269,7 @@
 				return null;
 
 			$rows = Database::singleton()->run(
-				"SELECT `serverid` FROM `active_players` WHERE `playerid` = :playerid AND `status` = 1 AND `teamcreate` = :teamcreate", 
+				"SELECT `serverid` FROM `active_players` WHERE `playerid` = :playerid AND `teamcreate` = :teamcreate", 
 				[
 					":playerid" => $this->id,
 					":teamcreate" => $teamcreate
@@ -1283,7 +1283,10 @@
 
 				if($grab_server->active()) {
 					if(!$server) {
-						$server = $grab_server;
+						if($row->status == 1)
+							$server = $grab_server;
+						else
+							$grab_server->removePlayer($this);
 					} else {
 						$server->removePlayer($this);
 						$server = null;
