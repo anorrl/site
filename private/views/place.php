@@ -279,7 +279,7 @@
 			<div class="Window" style="margin: 0 auto; width: 100%">
 				<div id="Name">Servers<?php if($user): ?> <button onclick="ANORRL.PlaceLauncher.GrabGameservers(<?= $id ?>);">Refresh</button><?php endif ?></div>
 				<div id="Contents">
-					<div id="ServersBox">
+					<div id="ServersBox" style="border: none; background: none;">
 						<?php if($user == null): ?>
 						<p id="NoGamesWarning">You need to be logged in to see the servers for this game!</p>
 						<?php else: ?>
