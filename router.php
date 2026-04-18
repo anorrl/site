@@ -151,7 +151,7 @@
 	route_api('GET|POST', 'asset/render');
 	route_api('GET|POST', 'asset/delete');
 
-	route_api('GET', 'user/emotes');
+	route_api('GET', 'users/emotes');
 
 	// game apis
 	route('GET',      '/asset/', '/private/gameapis/assetdeliverer.php');
