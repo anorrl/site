@@ -4,17 +4,25 @@
 
 	header("Content-Type: application/json");
 
-	if(SESSION) {
-		$userid = SESSION->user->id;
-	} else {
-		$userid = 1;
+	if(isset($_GET['userId'])) {
+		$userid = intval($_GET['userId']);
 	}
 
 	$user = User::FromID($userid);
 
+	if(!$user && SESSION) {
+		$user = SESSION->user;
+	}
+
+	if(!$user)
+		die(json_encode([
+			"success" => false,
+			"reason" => "User not found!"
+		]));
+
 	$emotes = [];
 
-	foreach($user->getOwnedAssets(AssetType::ANIMATION) as $emote) {
+	foreach($user->getOwnedAssets(AssetType::EMOTE) as $emote) {
 		$emotes[] = [
 			"id" => $emote->id,
 			"name" => $emote->name,
