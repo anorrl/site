@@ -260,36 +260,37 @@
 			return $users;
 		}
 
-		public static function GetAllUsersPaged(int $pagenum, int $count, string $query = ""): array|null {
+		public static function GetAllUsersPaged(int $page, int $count, string $query = ""): array|null {
 			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
 			$queryfiltered = "%$query%";
 			if($queryfiltered == "%%") {
 				$queryfiltered = "%";
 			}
 
-			$fetch_users = Database::singleton()->run("SELECT `id` FROM `users`")->fetchAll(\PDO::FETCH_OBJ);
+			$db = Database::singleton();
+
+			$fetch_users = $db->run("SELECT `id` FROM `users`")->fetchAll(\PDO::FETCH_OBJ);
 			
 			foreach($fetch_users as $obj_user) {
 				User::FromID($obj_user->id)->isOnline();
 			}
-
-			$stmt_getallusers = $con->prepare("SELECT * FROM `users` WHERE `name` LIKE ? ORDER BY `online` DESC, `joindate` DESC LIMIT ?, ?");
-			$page = (($pagenum-1)*$count);
 			
-			$stmt_getallusers->bind_param('sii', $queryfiltered, $page, $count);
-			$stmt_getallusers->execute();
-			$result = $stmt_getallusers->get_result();
-			$result_array = [];
+			$userids = $db->run(
+				"SELECT `users`.`id` FROM `users`, `activity` WHERE `activity`.`userid` = `users`.`id` WHERE `name` LIKE :query ORDER BY `users`.`online` DESC, `activity`.`action_time` DESC LIMIT :page, :rows",
+				[
+					":query" => $queryfiltered,
+					":page" => (($page-1)*$count),
+					":rows" => $count
+				]
+			)->fetchAll(\PDO::FETCH_OBJ);
 
-			if($result->num_rows != 0) {
-				while($row = $result->fetch_assoc()) {
-					$result_array[] = new User($row);
-				}
-				
+			$users = [];
+
+			foreach($userids as $row) {
+				$users[] = User::FromID($row->id);
 			}
 
-			//return $users;
-			return $result_array;
+			return $users;
 		}
 
 		public static function GetAllUsers(string $query = ""): array|null {
