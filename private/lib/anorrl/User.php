@@ -743,13 +743,14 @@
 
 		function getCharacterAppearance(): string {
 			$domain = \CONFIG->domain;
-			$getwearing = $this->getWearingArray();
+			$getwearing = $this->getWearing();
 
 			$userId = $this->id;
 			$parsedshit= "";
 
-			foreach($getwearing as $id) {
-				$parsedshit .= ";http://$domain/asset/?id=$id";
+			foreach($getwearing as $asset) {
+				if($asset->type != AssetType::EMOTE)
+					$parsedshit .= ";http://$domain/asset/?id={$asset->id}";
 			}
 
 			if(str_ends_with($parsedshit, ";")) {
@@ -772,6 +773,9 @@
 			foreach($getwearing as $id) {
 				$asset = Asset::FromID($id);
 				if($asset != null) {
+					if($asset->type == AssetType::EMOTE)
+						continue;
+					
 					$version = $asset->current_version;
 					$parsedshit .= "http://$domain/asset/?id=$id&version=$version;";
 
