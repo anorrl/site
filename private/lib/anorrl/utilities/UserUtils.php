@@ -261,7 +261,6 @@
 		}
 
 		public static function GetAllUsersPaged(int $page, int $count, string $query = ""): array|null {
-			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
 			$queryfiltered = "%$query%";
 			if($queryfiltered == "%%") {
 				$queryfiltered = "%";
@@ -294,20 +293,21 @@
 		}
 
 		public static function GetAllUsers(string $query = ""): array|null {
-			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
 			$queryfiltered = "%$query%";
-			$stmt_getallusers = $con->prepare("SELECT * FROM `users` WHERE `name` LIKE ?");
-			$stmt_getallusers->bind_param('s', $queryfiltered);
-			$stmt_getallusers->execute();
-			$result = $stmt_getallusers->get_result();
+
 			$result_array = [];
 
-			if($result->num_rows != 0) {
-				while($row = $result->fetch_assoc()) {
-					$result_array[] = new User($row);
-				}
-				
+			$getallusers = Database::singleton()->run(
+				"SELECT * FROM `users` WHERE `name` LIKE ?",
+				[
+					":query" => $queryfiltered
+				]
+			)->fetchAll(\PDO::FETCH_ASSOC);
+
+			foreach($getallusers as $user) {
+				$result_array[] = new User($user);
 			}
+			
 			return $result_array;
 		}
 	}
