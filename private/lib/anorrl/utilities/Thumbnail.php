@@ -58,8 +58,8 @@
 			if(!self::Exists($hash))
 				return null;
 
-			$json = json_decode((file_get_contents(self::GetPath($hash))), true);
-
+			$json = json_decode((file_get_contents(self::GetPath($hash))), true, 1024, JSON_THROW_ON_ERROR);
+			
 			if(!$json)
 				unlink(self::GetPath($hash)); // scary
 
