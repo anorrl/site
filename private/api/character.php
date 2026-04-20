@@ -24,7 +24,7 @@ use anorrl\User;
 				$data = str_replace("\"y\":+", "\"y\":", $render);
 				$data = str_replace("\"z\":+", "\"z\":", $render);
 
-				file_put_contents("$mediadir/$charactermd5.json", gzcompress($data));
+				file_put_contents("$mediadir/$charactermd5.json", $data);
 			}
 
 			$user->updateOutfitHash();
