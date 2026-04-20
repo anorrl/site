@@ -677,4 +677,12 @@ $(function(){
 	$("#Paginator").find("input").on("change", function() {
 		ANORRL.Character.LoadWardrobe(ANORRL.Character.CurrentCategory, Number($(this).val()));
 	});
+
+	if($(".thumbnail-span").length != 0) {
+		$(".thumbnail-span").load3DThumbnail(function(canvas) {
+			console.log("3D: complete!");
+		}, function() {
+			console.log("3D: I dont like you");
+		});
+	}
 });
