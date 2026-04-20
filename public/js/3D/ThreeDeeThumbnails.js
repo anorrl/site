@@ -121,7 +121,7 @@
 
         function loadObjAndMtl(hash, container, json, callbackAfterLoaderIsDone) {
 
-            var baseUri = "/thumbnail/"; //server should provide
+            var baseUri = "/thumbnail/avatar/"; //server should provide
             var containerHeight = container.width(); //container.height();
             var containerWidth = container.width();
             var camera = new THREE.PerspectiveCamera(fieldOfView, containerWidth / containerHeight, minRenderDistance, maxRenderDistance);
