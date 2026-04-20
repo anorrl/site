@@ -63,7 +63,7 @@
 			if(!self::Exists($hash, $user))
 				return null;
 
-			$json = json_decode((file_get_contents(self::GetPath($hash, $user ? "renders" : "assets"))), true, 1024, JSON_THROW_ON_ERROR);
+			$json = json_decode((file_get_contents(self::GetPath($hash, $user ? "renders" : "assets"))), true, 1024);
 
 			//if(!$json)
 				//unlink(self::GetPath($hash, $user ? "renders" : "assets")); // scary
