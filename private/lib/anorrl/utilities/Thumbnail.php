@@ -45,7 +45,7 @@
 			$mtl = self::GetFileInRender($hash, "scene.mtl");
 
 			if($mtl)
-				return str_replace("Player1Tex.png", $hash, $mtl);
+				return preg_replace("/Player([0-9]+)Tex\.png/i", $hash, $mtl);
 			else
 				return null;
 		}
@@ -60,8 +60,8 @@
 
 			$json = json_decode((file_get_contents(self::GetPath($hash))), true);
 
-			/*if(!$json)
-				unlink(self::GetPath($hash)); // scary*/
+			if(!$json)
+				unlink(self::GetPath($hash)); // scary
 
 			return $json;
 		}
