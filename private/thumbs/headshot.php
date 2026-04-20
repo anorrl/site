@@ -21,7 +21,7 @@
 
 			$md5hash = $user->currentoutfitmd5;
 
-			$path = $_SERVER['DOCUMENT_ROOT']."/../renders/headshot/$md5hash.png";
+			$path = $_SERVER['DOCUMENT_ROOT']."/../renders/headshots/$md5hash.png";
 
 			if(!file_exists($path)) {
 				$user->render(true);
