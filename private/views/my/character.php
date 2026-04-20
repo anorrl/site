@@ -3,21 +3,22 @@
 
 	$page = new Page("Your Character", "my/character");
 	
-	
+	$page->addScript("/js/core/jquery-modal.js");
+	$page->addScript("/js/character.js?t=1776656018");
 
 	$page->addStylesheet("/css/new/stuff.css?v=2");
 	$page->addStylesheet("/css/new/my/character.css");
 	$page->addStylesheet("/css/new/forms.css");
-	
-
-	$page->load3DScripts();
-
-	$page->addScript("/js/character.js?t=1776656018");
-
-	$page->addScript("/js/core/jquery-modal.js");
 
 	$page->loadHeader();
 ?>
+<script src="/public/js/3D/ThumbnailView.js"></script>
+<script src="/public/js/3D/ThreeDeeThumbnails.js"></script>
+<script src="/public/js/3D/three.min.js"></script>
+<script src="/public/js/3D/MTLLoader.js"></script>
+<script src="/public/js/3D/OBJMTLLoader.js"></script>
+<script src="/public/js/3D/tween.js"></script>
+<script src="/public/js/3D/PolygonOrbitControls.js"></script>
 <div id="Colours">
 
 </div>
