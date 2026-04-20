@@ -120,8 +120,10 @@
 						$data = str_replace("\"y\":+", "\"y\":-", $data);
 						$data = str_replace("\"z\":+", "\"z\":-", $data);
 
-						if(str_ends_with($data, "==")) {
-							$data = substr($data, 0, strlen($data)-2);
+						if(!str_ends_with($data, "}")) {
+							while(!str_ends_with($data, "}")) {
+								$data = substr($data, 0, strlen($data)-1);
+							}
 						}
 
 						file_put_contents($assetsdir, $data);
