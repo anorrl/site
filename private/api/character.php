@@ -20,11 +20,12 @@ use anorrl\User;
 				imagesavealpha($render_image, true);
 				imagepng($render_image, "$mediadir/$charactermd5.png");
 			} else {
-				$data = str_replace("\"x\":+", "\"x\":", $render);
-				$data = str_replace("\"y\":+", "\"y\":", $render);
-				$data = str_replace("\"z\":+", "\"z\":", $render);
+				$data = trim($render);
+				$data = str_replace("\"x\":\+", "\"x\":", $render);
+				$data = str_replace("\"y\":\+", "\"y\":", $render);
+				$data = str_replace("\"z\":\+", "\"z\":", $render);
 
-				if(str_ends_with($data, "==\n")) {
+				if(str_ends_with($data, "==")) {
 					$data = substr($data, 0, strlen($data)-2);
 				}
 
