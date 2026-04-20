@@ -24,6 +24,10 @@ use anorrl\User;
 				$data = str_replace("\"y\":+", "\"y\":", $render);
 				$data = str_replace("\"z\":+", "\"z\":", $render);
 
+				if(str_ends_with($data, "==")) {
+					$data = substr($data, 0, strlen($data)-2);
+				}
+
 				file_put_contents("$mediadir/$charactermd5.json", $data);
 			}
 
