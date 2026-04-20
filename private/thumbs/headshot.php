@@ -21,11 +21,16 @@
 
 			$md5hash = $user->currentoutfitmd5;
 
-			if(file_exists($_SERVER['DOCUMENT_ROOT']."/../renders/headshot_$md5hash.png")) {
-				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../renders/headshot_$md5hash.png");
-			} else {
-				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.jpg");
+			$path = $_SERVER['DOCUMENT_ROOT']."/../renders/headshot/$md5hash.png";
+
+			if(!file_exists($path)) {
+				$user->render(true);
+
+				if(!file_exists($path))
+					$path = $_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.jpg";
 			}
+
+			$contents = file_get_contents($path);
 
 			ob_clean();
 
