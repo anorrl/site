@@ -21,7 +21,7 @@ use anorrl\User;
 			} else {
 				file_put_contents("$mediadir/$charactermd5.json", gzcompress($data));
 			}
-			
+
 			$user->updateOutfitHash();
 
 			if($headshot && !$is3D) {
@@ -349,7 +349,7 @@ use anorrl\User;
 				}
 
 				performRender($user, $mediadir, $charactermd5, true);
-				performRender($user, $mediadir."3d/", $charactermd5, false, false);
+				performRender($user, $mediadir."3d/", $charactermd5, false, true);
 				
 				die(json_encode(["error" => false, "reason" => "Wow we rendered!"]));
 			} else if($request == "rerendercharacter") {
@@ -358,7 +358,7 @@ use anorrl\User;
 				$charactermd5 = $user->getCharacterAppearanceHash();
 				
 				performRender($user, $mediadir, $charactermd5, true);
-				performRender($user, $mediadir."3d/", $charactermd5, false, false);
+				performRender($user, $mediadir."3d/", $charactermd5, false, true);
 
 				
 				die(json_encode(["error" => false, "reason" => "Wow we rendered!"]));
