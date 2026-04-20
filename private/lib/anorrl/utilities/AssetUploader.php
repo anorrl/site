@@ -79,21 +79,23 @@
 			return md5($data);
 		}
 
-		private static function GetRender(int $id, AssetType $type): string|null {
+		private static function GetRender(int $id, AssetType $type, bool $is3D): string|null {
 			return match($type) {
-				AssetType::SHIRT => Renderer::RenderClothing($id),
-				AssetType::PANTS => Renderer::RenderClothing($id),
+				AssetType::SHIRT => Renderer::RenderClothing($id, $is3D),
+				AssetType::PANTS => Renderer::RenderClothing($id, $is3D),
 
-				AssetType::HEAD => Renderer::RenderClothing($id),
-				AssetType::TORSO => Renderer::RenderClothing($id),
-				AssetType::LEFTARM => Renderer::RenderClothing($id),
-				AssetType::RIGHTARM => Renderer::RenderClothing($id),
-				AssetType::LEFTLEG => Renderer::RenderClothing($id),
-				AssetType::RIGHTLEG => Renderer::RenderClothing($id),
+				AssetType::HEAD => Renderer::RenderClothing($id, $is3D),
+				AssetType::TORSO => Renderer::RenderClothing($id, $is3D),
+				AssetType::LEFTARM => Renderer::RenderClothing($id, $is3D),
+				AssetType::RIGHTARM => Renderer::RenderClothing($id, $is3D),
+				AssetType::LEFTLEG => Renderer::RenderClothing($id, $is3D),
+				AssetType::RIGHTLEG => Renderer::RenderClothing($id, $is3D),
 
 				AssetType::PLACE => Renderer::RenderPlace($id),
-				AssetType::MESH => Renderer::RenderMesh($id),
-				AssetType::MODEL => Renderer::RenderModel($id),
+				AssetType::MESH => Renderer::RenderMesh($id, $is3D),
+				AssetType::MODEL => Renderer::RenderModel($id, $is3D),
+				AssetType::GEAR => Renderer::RenderModel($id, $is3D),
+				AssetType::HAT => Renderer::RenderModel($id, $is3D),
 				default => null
 			};
 			 
@@ -110,14 +112,14 @@
 			$assetsdir = "$directory/../assets/{$loc}/$md5hashfile$ext";
 
 			if(!file_exists($assetsdir)) {
-				$render = self::GetRender($id, $type);
+				$render = self::GetRender($id, $type, $is3D);
 				if($render != null) {
 					if($is3D) {
 						$data = trim($render);
 						$data = str_replace("\"x\":+", "\"x\":-", $data);
 						$data = str_replace("\"y\":+", "\"y\":-", $data);
 						$data = str_replace("\"z\":+", "\"z\":-", $data);
-						
+
 						if(str_ends_with($data, "==")) {
 							$data = substr($data, 0, strlen($data)-2);
 						}
