@@ -1319,7 +1319,7 @@
 
 			return $this->getThumbsUrlService(
 				($this->setprofilepicture ? 
-					($settings->headshots_enabled ? "headshot" : "profile")
+					($settings->headshots ? "headshot" : "profile")
 					: "headshot"),
 				
 				$size_x,
