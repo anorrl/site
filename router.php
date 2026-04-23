@@ -213,6 +213,11 @@
 	route('GET',      '/Setting/QuietGet/AndroidAppSettings/', '/private/gameapis/settings/ClientAppSettings.json');
 	route('GET',      '/Setting/QuietGet/ClientAppSettings/', '/private/gameapis/settings/ClientAppSettings.json');
 	route('GET',      '/Setting/QuietGet/ClientSharedSettings/', '/private/gameapis/settings/ClientSharedSettings.json');
+	
+	// oh hello 2014 and what are you even doing here?
+	route('GET',      '/Setting/QuietGet/2014AppSettings/', '/private/gameapis/settings/2014ClientAppSettings.json');
+	route('GET',      '/Setting/QuietGet/2014SharedSettings/', '/private/gameapis/settings/2014ClientSharedSettings.json');
+	
 	route('GET',      '/Setting/QuietGet/WindowsBootstrapperSettings/', '/private/gameapis/settings/Bootstrapper.json');
 	route('GET',      '/Setting/QuietGet/WindowsStudioBootstrapperSettings/', '/private/gameapis/settings/Bootstrapper.json');
 

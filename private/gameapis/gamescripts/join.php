@@ -29,6 +29,7 @@
 	$place_chat_type = "ClassicAndBubble"; // $place->getChatType()->name();
 	$unknown = true;
 	$game_id = "00000000-0000-0000-0000-000000000000";
+	$ping_url = "";
 	
 	$serverDetails = GameServer::Get($serverToken);
 	$sessionDetails = GameSession::Get($sessionToken);
@@ -55,6 +56,7 @@
 			$place_creator_id = $place->creator->id;
 			$unknown = false;
 			$game_id = $server->jobid;
+			$ping_url = "http://$domain/Game/GamerPinger.ashx?serverID={$serverDetails->id}&jobID={$game_id}";
 		}
 	}
 	
@@ -62,7 +64,7 @@
 		"ClientPort" => 0,
 		"MachineAddress" => $server,
 		"ServerPort" => $port,
-		"PingUrl" => "http://$domain/Game/GamerPinger.ashx?serverID={$serverDetails->id}&jobID={$game_id}",
+		"PingUrl" => $ping_url,
 		"PingInterval" => 120,
 		"UserName" => $user_name,
 		"SeleniumTestMode" => false,
