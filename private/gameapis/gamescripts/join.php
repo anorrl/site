@@ -55,7 +55,7 @@
 			$place_id = $place->id;
 			$place_creator_id = $place->creator->id;
 			$unknown = false;
-			$game_id = $server->jobid;
+			$game_id = $serverDetails->jobid;
 			$ping_url = "http://$domain/Game/GamerPinger.ashx?serverID={$serverDetails->id}&jobID={$game_id}";
 		}
 	}
