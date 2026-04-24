@@ -97,11 +97,6 @@ ANORRL.Games = {
 					var asset = games[key];
 					var template = $($(".Game[template]").clone().prop('outerHTML'));
 					template.removeAttr("template");
-					
-					var urlname = asset['name'].replaceAll(regex, "").trim().toLowerCase().replaceAll(" ", "-");
-					if(urlname == "") {
-						urlname = "unnamed";
-					}
 
 					template.find("a").on("click", function(ev) {
 						ev.stopPropagation(); // overrides container click so only this action is performed
@@ -121,7 +116,7 @@ ANORRL.Games = {
 					if(ANORRL.Games.MobileEnabled) {
 						template.find("#GameName").attr("href", "/games/start?placeid="+asset['id']);
 					} else {
-						template.find("#GameName").attr("href", urlname+"-place?id="+asset['id']);
+						template.find("#GameName").attr("href", "/game/"+asset['id']);
 					}
 					
 					template.find("#GameName").html(asset['name']);

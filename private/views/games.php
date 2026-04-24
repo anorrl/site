@@ -7,7 +7,7 @@
 
 	$page = new Page("Games");
 
-	$page->addScript("/js/games.js?t=1776011774");
+	$page->addScript("/js/games.js?t=1777052041");
 
 	$page->addStylesheet("/css/new/forms.css");
 	$page->addStylesheet("/css/new/games.css?v=6");
