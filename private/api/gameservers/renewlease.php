@@ -13,7 +13,7 @@
 				$job = Arbiter::singleton()->getGSMJob($_GET['jobID']);
 
 				if($job) 
-					Arbiter::singleton()->request("gameserver/kill", ["pid" => $job->pid]);
+					Arbiter::singleton()->requestGS("kill", ["pid" => $job->pid]);
 			}
 		}
 	}

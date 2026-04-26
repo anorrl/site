@@ -135,7 +135,7 @@
 				if($result_getactiveservers->num_rows != 0) {
 					$row = $result_getactiveservers->fetch_assoc();
 
-					Arbiter::singleton()->request("gameserver/kill", ["pid" => $row['pid']]);
+					Arbiter::singleton()->requestGS("kill", ["pid" => $row['pid']]);
 
 					$db->run("DELETE FROM `active_servers` WHERE `jobid` = :jobid;", [ ":jobid" => $row['jobid'] ]);
 				}

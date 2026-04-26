@@ -96,8 +96,8 @@
 
 		function kick(string $reason = "You have been kicked from the session because the owner hates you") {
 			if($this->server && $this->player) {
-				Arbiter::singleton()->request(
-					"gameserver/kick", 
+				Arbiter::singleton()->requestGS(
+					"kick", 
 					[
 						"PlayerId" => $this->player->id, 
 						"JobId" => $this->server->jobid,

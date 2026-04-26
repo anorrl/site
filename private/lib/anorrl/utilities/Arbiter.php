@@ -63,6 +63,10 @@
 			return $json;
 		}
 
+		function requestGS(string $endpoint, array $data = []) {
+			return $this->request("gameserver/{$endpoint}", $data);
+		}
+
 		public function requestGET(string $endpoint): Object|null {
 			if(str_starts_with($endpoint, "/"))
 				$endpoint = substr($endpoint, 1);

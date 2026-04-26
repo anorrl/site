@@ -54,8 +54,8 @@
 
 	function startServer(Place $place, bool $teamcreate = false) {
 		try {
-			$gsr = Arbiter::singleton()->request(
-				"gameserver",
+			$gsr = Arbiter::singleton()->requestGS(
+				"start",
 				[
 					"PlaceId" => $place->id,
 					"MaxPlayers" => $teamcreate ? 100 : $place->server_size,

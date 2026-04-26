@@ -169,7 +169,7 @@
 		}
 
 		function destroy() {
-			Arbiter::singleton()->request("gameserver/kill", ["pid" => $this->pid]);
+			Arbiter::singleton()->requestGS("kill", ["pid" => $this->pid]);
 
 			Database::singleton()->run(
 				"DELETE FROM `active_servers` WHERE `id` = :id",
