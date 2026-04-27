@@ -724,7 +724,7 @@
 			$domain = \CONFIG->domain;
 
 			return <<<EOT
-			<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://$domain/roblox.xsd" version="4">
+			<anorrl xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://$domain/roblox.xsd" version="4">
 				<External>null</External>
 				<External>nil</External>
 				<Item class="BodyColors" referent="RBX0">
@@ -738,7 +738,7 @@
 						<int name="TorsoColor">$torsocolour</int>
 					</Properties>
 				</Item>
-			</roblox>
+			</anorrl>
 			EOT;
 		}
 

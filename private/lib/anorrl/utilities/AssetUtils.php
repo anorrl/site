@@ -128,7 +128,7 @@
 				return $result_array;
 			}
 
-			return [];
+			return $result_array;
 		}
 
 		public static function GetFilteredCount(CatalogFilter $filter, AssetType $type, string $query, int $page = -1, int $count = -1) {

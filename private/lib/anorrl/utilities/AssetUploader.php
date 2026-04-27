@@ -45,7 +45,7 @@
 		private static function IsValidXML(string $data, bool $legacy = false): bool {
 			$trimmed_data = trim($data);
 
-			if(!str_starts_with($trimmed_data, "<roblox") && !str_ends_with($trimmed_data, "</roblox>")) {
+			if(!str_starts_with($trimmed_data, "<anorrl") && !str_ends_with($trimmed_data, "</anorrl>")) {
 				return false;
 			}
 

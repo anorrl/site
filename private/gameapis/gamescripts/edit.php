@@ -89,7 +89,7 @@ game:GetService("ChangeHistoryService"):SetEnabled(true)
 					$script = str_replace("{uploadurl}", $uploadurl, $script);
 					$script = str_replace("{creatorid}", "".$place->creator->id, $script);
 					$signature = get_signature($script);
-					die("--rbxsig%". $signature . "%" . $script);
+					die("--arlsig%". $signature . "%" . $script);
 					
 				}
 			}

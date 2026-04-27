@@ -83,6 +83,12 @@
 					}*/
 				}
 			}
+			// quick hack workaround, not gonna be in prod.
+			if(str_contains($contents, "<roblox")) {
+				$contents = str_replace("<roblox", "<anorrl", $contents);
+				$contents = str_replace("roblox>", "anorrl>", $contents);
+				$contents = str_replace("rbxasset", "arlasset", $contents);
+			}
 
 			header("Content-Type: application/octet-stream");
 			Header("Content-Disposition: attachment; filename=\"$md5hash\"");
@@ -135,12 +141,13 @@
 
 					$contents = str_replace("www.roblox.com", $domain, $output);
 
-					if(str_starts_with($contents, "version "))
+					if(str_starts_with($contents, "version ")) {
 						$mesh_result = MeshConverter::Convert($contents);
-						if(!$mesh_result['error'])
+						if($mesh_result && !$mesh_result['error'])
 							$contents = $mesh_result['mesh'];
 						// todo: do something with $mesh_result['reason']
-
+					}
+					
 					if(!isset($_GET['version'])) {
 						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id, $contents);
 					} else {

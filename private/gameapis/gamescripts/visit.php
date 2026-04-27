@@ -150,5 +150,5 @@ end
 	$script = str_replace("{domain}",$_SERVER['SERVER_NAME'], $script);
 	$signature = get_signature($script);
 
-	echo "--rbxsig%". $signature . "%" . $script;
+	echo "--arlsig%". $signature . "%" . $script;
 ?>

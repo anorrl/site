@@ -94,5 +94,5 @@
 	$script = "\r\n" . json_encode($joinscript);
 	$signature = get_signature($script);
 
-	exit("--rbxsig%". $signature . "%" . $script);
+	exit("--arlsig%". $signature . "%" . $script);
 ?>

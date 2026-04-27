@@ -29,18 +29,18 @@ pcall(function() game:GetService("GamePassService"):SetPlayerHasPassUrl("http://
 			$script = str_replace("{domain}", $domain, $script);
 			$signature = get_signature($script);
 	
-			echo "--rbxsig%". $signature . "%" . $script;
+			echo "--arlsig%". $signature . "%" . $script;
 		} else {
 			$script = "\r\nprint(\"Not a place hellooooo - Grace\")";
 			$signature = get_signature($script);
 	
-			echo "--rbxsig%". $signature . "%" . $script;
+			echo "--arlsig%". $signature . "%" . $script;
 		}
 	} else {
 		$script = "\r\nprint(\"What were you even trying to do?? - Grace\")";
 		$signature = get_signature($script);
 
-		echo "--rbxsig%". $signature . "%" . $script;
+		echo "--arlsig%". $signature . "%" . $script;
 	}
 	
 

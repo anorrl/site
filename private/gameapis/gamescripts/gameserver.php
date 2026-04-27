@@ -182,5 +182,5 @@ end
     $script = "\r\n" . ob_get_clean();
     $signature = get_signature($script);
 
-    echo "--rbxsig%". $signature . "%" . $script;
+    echo "--arlsig%". $signature . "%" . $script;
 ?>
