@@ -1,7 +1,7 @@
 <?php
 	use anorrl\GameServer;
 	use anorrl\User;
-	use anorrl\utilties\ClientDetector;
+	use anorrl\utilities\ClientDetector;
 
 	if(!ClientDetector::HasAccess()) {
 		echo "NOT OK";
