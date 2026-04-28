@@ -1114,7 +1114,7 @@
 	"DFFlagUrlReconstructToAssetGameSecure": "False",
 	"DFFlagUseModerationFilterTextV2": "True",
 	"FFlagGraphicsD3D10": "True",
-	"FFlagRenderFixFog": "True",
+	"FFlagRenderFixFog": "False",
 	"FFlagUseNewAppBridgeWindows": "True",
 	"DFFlagNullCheckJointStepWithNullPrim": "True",
 	"FFlagJNIEnvScopeOptimization": "True",
