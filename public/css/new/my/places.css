@@ -92,6 +92,7 @@ a:hover, a[selected] {
 	text-align: center;
 	font-weight: bold;
 	border-radius: 4px;
+	width: 230px;
 
 	float: left;
 }
@@ -119,6 +120,10 @@ a:hover, a[selected] {
 
 .Place #Name {
 	margin-top: 5px;
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .Place #LastEdited {

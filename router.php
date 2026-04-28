@@ -2,6 +2,19 @@
 
 	// base code lifted from pixie by parakeet
 
+	// dont really care just like move from arl.lambda.cam to anorrl.lambda.cam
+	// deprecate arl.lambda.cam when the time comes
+	if(isset(CONFIG->secret)) {
+		if($_SERVER['SERVER_NAME'] != "anorrl.lambda.cam" && 
+		   !str_contains($_SERVER['SERVER_NAME'], "localhost") && 
+		   isset($_COOKIE['ANORRL$Hidden$Cookie$yaya']) &&
+		   $_COOKIE['ANORRL$Hidden$Cookie$yaya'] == CONFIG->secret->token &&
+		   $_SERVER['HTTP_X_FORWARDED_PROTO'] == "https"
+		) {
+			die(header("Location: https://anorrl.lambda.cam".$_SERVER['REQUEST_URI']));
+		}
+	}
+
 	$dir = __DIR__."/private";
 	$router = new AltoRouter();
 
@@ -89,8 +102,10 @@
 	route('GET|POST', '/vandals', '/private/views/vandals.php');
 	route('GET|POST', '/edit', '/private/views/edit.php');
 
+	route('GET|POST', '/create/[i:placeId]/badge', '/private/views/create_badge.php');
 	route('GET|POST', '/create/[*:type]', '/private/views/create.php');
 	route('GET|POST', '/create/', '/private/views/create.php');
+	route('GET|POST', '/create', '/private/views/create.php');
 
 	route('GET|POST', '/[*:name]-item', '/private/views/item.php');
 
@@ -214,11 +229,6 @@
 	route('GET',      '/Setting/QuietGet/ClientAppSettings/', '/private/gameapis/settings/ClientAppSettings.json');
 	route('GET',      '/Setting/QuietGet/ClientSharedSettings/', '/private/gameapis/settings/ClientSharedSettings.json');
 	route('GET',      '/Setting/QuietGet/ACCService'.CONFIG->asset->key.'/', '/private/gameapis/settings/ClientSharedSettings.json');
-	
-	// oh hello 2014 and what are you even doing here?
-	route('GET',      '/Setting/QuietGet/2014AppSettings/', '/private/gameapis/settings/2014ClientAppSettings.json');
-	route('GET',      '/Setting/QuietGet/2014SharedSettings/', '/private/gameapis/settings/2014ClientSharedSettings.json');
-	
 	route('GET',      '/Setting/QuietGet/WindowsBootstrapperSettings/', '/private/gameapis/settings/Bootstrapper.json');
 	route('GET',      '/Setting/QuietGet/WindowsStudioBootstrapperSettings/', '/private/gameapis/settings/Bootstrapper.json');
 

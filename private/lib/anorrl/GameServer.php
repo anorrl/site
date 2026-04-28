@@ -166,7 +166,7 @@
 				$session->kick($reason ?? '');
 		}
 
-		function renewLease(int $time = 35) {
+		function renewLease(int $time = 60) {
 			if(!$this->active()) { $this->destroy(); return; }
 
 			Arbiter::singleton()->requestGS("renewlease", [
