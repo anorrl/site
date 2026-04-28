@@ -11,6 +11,7 @@ game:GetService("Players").PlayerRemoving:connectLast(function(player)
 end)
 <?php
 	use anorrl\Place;
+	use anorrl\utilities\ClientDetector;
 
 	$domain = CONFIG->domain;
 	
@@ -20,7 +21,7 @@ end)
 		return base64_encode($signature);
 	}
 
-	if(isset($_GET['PlaceId']) && isset($_GET['access'])) {
+	if(isset($_GET['PlaceId']) && ClientDetector::HasAccess()) {
 		header("Content-Type: text/plain");
 
 		$place = Place::FromID(intval($_GET['PlaceId']));
@@ -29,7 +30,7 @@ end)
 			$script = "\r\n" . ob_get_clean();
 			$script = str_replace("{domain}", $domain, $script);
 			$script = str_replace("{id}", $_GET['PlaceId'], $script);
-			$script = str_replace("{access}", $_GET['access'], $script);
+			$script = str_replace("{access}", CONFIG->asset->key, $script);
 			$signature = get_signature($script);
 
 			echo "--arlsig%". $signature . "%" . $script;
