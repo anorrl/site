@@ -1036,7 +1036,7 @@
 	"DFFlagFixYieldThrottling": "True",
 	"FFlagCheckSleepOptimization": "True",
 	"DFFlagContactManagerOptimizedQueryExtents": "True",
-	"FFlagEnableSetCoreTopbarEnabled": "False",
+	"FFlagEnableSetCoreTopbarEnabled": "True",
 	"FFlagUseBuildGenericGameUrl": "True",
 	"DFFlagFixFallenPartsNotDeleted": "True",
 	"DFFlagTrackPhysicalPropertiesGA": "True",

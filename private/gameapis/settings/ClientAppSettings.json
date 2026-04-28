@@ -725,7 +725,7 @@
 	"FFlagEnableNonleathalExplosions": "True",
 	"FFlagEnableRenderCSGTrianglesDebug": "False",
 	"FFlagEnableRubberBandSelection": "True",
-	"FFlagEnableSetCoreTopbarEnabled": "False",
+	"FFlagEnableSetCoreTopbarEnabled": "True",
 	"FFlagEnableViewportScaling": "True",
 	"FFlagEnableVoiceASR": "False",
 	"FFlagEnableVoiceRecording": "False",
