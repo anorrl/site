@@ -5,9 +5,8 @@
 	use anorrl\Place;
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\AssetUploader;
-	
-	$access = CONFIG->asset->key;
-	
+	use anorrl\utilities\ClientDetector;
+
 	$user = SESSION->user;
 
 	function FunnyStrToBool(string $value): bool {
@@ -35,7 +34,7 @@
 		}
 	}
 
-	if($user != null || (isset($_GET['access']) && $_GET['access'] == $access)) {
+	if($user != null || ClientDetector::HasAccess()) {
 		if(isset($_GET['assetid'])) {
 			$assetid = intval($_GET['assetid']);
 
@@ -111,7 +110,7 @@
 					if($asset->type == AssetType::PLACE) {
 						$place = Place::FromID(intval($assetid));
 
-						if(($user != null && $asset->creator->id == $user->id) || ($place->teamcreate_enabled && (($user != null && $place->isCloudEditor($user))  || (isset($_GET['access']) && $_GET['access'] == $access)))) {
+						if(($user != null && $asset->creator->id == $user->id) || ($place->teamcreate_enabled && (($user != null && $place->isCloudEditor($user))  || ClientDetector::HasAccess()))) {
 							// If the user owns this asset, then allow publishing.
 							$result = AssetUploader::UpdateAsset($asset, $recieveddata, $asset->creator);
 
