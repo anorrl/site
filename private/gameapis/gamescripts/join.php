@@ -2,16 +2,9 @@
 	use anorrl\GameServer;
 	use anorrl\GameSession;
 	use anorrl\utilities\UserUtils;
+	use anorrl\Script;
 
-	$domain = CONFIG->domain;
-
-	function get_signature($script) // one day someday... move this to a crypt class...
-	{
-		$signature = "";
-		openssl_sign($script, $signature, file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/../PrivateKey.pem"), OPENSSL_ALGO_SHA1);
-		return base64_encode($signature);
-	}    
-	header("Content-Type: application/json");
+	header("Content-Type: text/plain");
 
 	$serverToken = $_GET['serverToken'] ?? '';
 	$sessionToken = $_GET['sessionToken'] ?? '';
@@ -56,7 +49,7 @@
 			$place_creator_id = $place->creator->id;
 			$unknown = false;
 			$game_id = $serverDetails->jobid;
-			$ping_url = "http://$domain/Game/GamerPinger.ashx?serverID={$serverDetails->id}&jobID={$game_id}";
+			$ping_url = "http://{domain}/Game/GamerPinger.ashx?serverID={$serverDetails->id}&jobID={$game_id}";
 		}
 	}
 	
@@ -70,13 +63,13 @@
 		"SeleniumTestMode" => false,
 		"UserId" => (int)$user_id,
 		"SuperSafeChat" => $unknown,
-		"CharacterAppearance" => "http://$domain/Asset/CharacterFetch.ashx?userId={$user_id}",
+		"CharacterAppearance" => "http://{domain}/Asset/CharacterFetch.ashx?userId={$user_id}",
 		"ClientTicket" => $user_ticket,
 		"GameId" => $game_id,
 		"PlaceId" => $place_id,
 		"MeasurementUrl" => "",
 		"WaitingForCharacterGuid" => "16be1dd8-5462-4ca5-a997-0725d997708b",
-		"BaseUrl" => "http://$domain/",
+		"BaseUrl" => "http://{domain}/",
 		"ChatStyle" => $place_chat_type, // move this to place soon
 		"CreatorId" => $place_creator_id,
 		"CreatorTypeEnum" => "User",
@@ -91,8 +84,5 @@
 		"characterAppearanceId" => $user_id
 	];
 
-	$script = "\r\n" . json_encode($joinscript);
-	$signature = get_signature($script);
-
-	exit("--arlsig%". $signature . "%" . $script);
+	die(Script::SignNonScript(json_encode($joinscript)));
 ?>
