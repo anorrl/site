@@ -1384,7 +1384,7 @@
 				return null;
 
 			$rows = Database::singleton()->run(
-				"SELECT `serverid` FROM `active_players` WHERE `playerid` = :playerid AND `teamcreate` = :teamcreate", 
+				"SELECT `id`,`serverid` FROM `active_players` WHERE `playerid` = :playerid AND `teamcreate` = :teamcreate", 
 				[
 					":playerid" => $this->id,
 					":teamcreate" => $teamcreate
@@ -1395,6 +1395,15 @@
 
 			foreach($rows as $row) {
 				$grab_server = GameServer::Get($row->serverid);
+
+				if(!$grab_server) {
+					$session = GameSession::Get($row->id);
+
+					if($session)
+						$session->kick("");
+
+					continue;
+				}
 
 				if($grab_server->active()) {
 					if(!$server) {

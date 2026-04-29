@@ -157,7 +157,8 @@
 			}
 				
 
-		} else if($_GET['request'] == "CloudEdit" && isset($_GET['placeId'])) {
+		}
+		if($_GET['request'] == "CloudEdit" && isset($_GET['placeId'])) {
 
 			$domain = CONFIG->domain;
 			

@@ -313,6 +313,7 @@
 
 	route('GET|POST', '/moderation/v2/filtertext', '/private/gameapis/moderation/filtertext.php');
 	route('GET|POST', '//moderation/filtertext/', '/private/gameapis/moderation/filtertext.php');
+	route('GET|POST', '/moderation/filtertext/', '/private/gameapis/moderation/filtertext.php');
 
 	route('GET',      '/marketplace/productinfo', '/private/gameapis/marketplace/productinfo.php');
 	route('GET',      '/marketplace/productDetails', '/private/gameapis/marketplace/productinfo.php');
