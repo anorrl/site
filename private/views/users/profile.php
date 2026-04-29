@@ -68,6 +68,9 @@
 	$page->addScript("/js/user.js?t=1776712536");
 
 	$page->loadHeader();
+
+	if(!$settings->profile_music)
+		$bgm = null;
 ?>
 <script src="/public/js/3D/ThumbnailView.js"></script>
 <script src="/public/js/3D/ThreeDeeThumbnails.js?v=3"></script>
@@ -116,7 +119,7 @@
 		</div>
 	</div>
 </div>
-<?php if($bgm != null && $settings->profile_music): ?>
+<?php if($bgm != null): ?>
 <audio id="bgm" loop muted volume="0.25"> <!-- autoplay m.i.a -->
 	<source src="/asset/?id=<?= $bgm->getAssetIDSafe() ?>">
 </audio>
@@ -132,21 +135,13 @@ document.body.addEventListener("click", () => {
 */
 
 // rewrite of skylers autoplay thing
-var shouldplay = false;
-if (confirm("This profile uses music... Play it?")) {
-	$("#bgm")[0].muted = false;
-	shouldplay = true;
-} else {
-	$(function() {
-		$("#MusicPlayer").remove();
-		$("#bgm").remove();
-	})
-	
-}
 
+var shouldplay = <?= $settings->profile_music ? "true" : "false" ?>;
 var once = false;
 
 $(function() {
+	$("#bgm")[0].muted = false;
+	$("#bgm")[0].play();
 	$("body").on("click", function() {
 		if(once || !shouldplay) {
 			return;
@@ -261,32 +256,32 @@ $(function() {
 	</div>
 	<div id="ProfileInfo">
 		<div id="Stats">
+			<?php if ($bgm): ?>
+                        <div id="OnlineStatusArea" style="text-align: center; font-size: 11px; padding-top: 10px; margin-bottom: 5px; color: #bbb; font-style: italic;">
+                                <span><b>This user has profile music set. Don't hear it? Turn on autoplay! (or click anywhere on this page)</b></span>
+                        </div>
+                        <?php endif; ?>
 			<div id="FollowFriendsWhatever">
 				<a href="/users/<?= $get_user->id ?>/friends">
 					<b id="Numbers"><?= $get_user->getFriendsCount() ?></b> <span>Friends</span>
-				</a> | 
+				</a> |
 				<a href="/users/<?= $get_user->id ?>/followers">
 					<b id="Numbers"><?= $get_user->getFollowersCount() ?></b> <span>Followers</span>
-				</a> | 
+				</a> |
 				<a href="/users/<?= $get_user->id ?>/following">
 					<b id="Numbers"><?= $get_user->getFollowingCount() ?></b> <span>Following</span>
 				</a>
 			</div>
 			<div id="OnlineStatusArea">
-				<?php $profile_status = $get_user->isOnline() ? "Online" : "Offline"; ?>										
+				<?php $profile_status = $get_user->isOnline() ? "Online" : "Offline"; ?>
 				<span class="<?= $profile_status ?>"><b><?= $profile_status ?></b> - <?= $get_user->getOnlineActivity() ?></span>
 
 			</div>
 			<div id="OnlineStatusArea" style="padding-top:0px; margin-top:-5px;">
 				<span><b>Joined</b>: <?= $get_user->join_date->format('F dS, Y') ?></span>
 			</div>
-			<?php if ($bgm): ?>
-			<div id="OnlineStatusArea" style="padding-top:0px; margin-top:-5px;">
-				<span><b>This user has a custom profile music, If it doesn't play then click anywhere to play it!</b></span>
-			</div>
-			<?php endif; ?>
 			<div id="Blurb">
-				<?php 
+				<?php
 					if(strlen($get_user->blurb) == 0) {
 						echo "<b>This user has no blurb!</b>";
 					} else {
