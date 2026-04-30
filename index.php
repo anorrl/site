@@ -8,7 +8,12 @@
 	use anorrl\utilities\UserUtils;
 	use anorrl\Session;
 	
-	
+	if(isset(CONFIG->secret)) {
+		if(isset($_GET[CONFIG->secret->partone]) && $_GET[CONFIG->secret->partone] == CONFIG->secret->parttwo) {
+			setcookie('ANORRL$Hidden$Cookie$yaya', CONFIG->secret->token, time() + (460800* 30), "/", CONFIG->domain);
+			die(header("Location: /register"));
+		}
+	}
 	
 	$session_user = UserUtils::RetrieveUser();
 

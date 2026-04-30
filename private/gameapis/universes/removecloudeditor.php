@@ -4,17 +4,23 @@
 	
 	header("Content-Type: application/json");
 
-	$place_id = intval($universeId);
-	$usertoadd_id = intval($_GET['userId']);
+	if(!SESSION || !isset($universeId))
+		die(http_response_code(503));
 
-	$place = Place::FromID($place_id);
+
+	$place = Place::FromID(intval($universeId));
+	
+	if(!$place)
+		die(http_response_code(503));
+	
 	$user = SESSION->user;
 
-	if($place != null && $user != null && ($user->id == $place->creator->id || $user->isAdmin())) {
-		$userToAdd = User::FromID($usertoadd_id);
-		if($userToAdd != null) {
-			$place->removeCloudEditor($userToAdd);
-			echo "{}";
-		}
+	if($user->id != $place->creator->id && !$user->isAdmin())
+		die(http_response_code(503));
+
+	$userToAdd = User::FromID(intval($_GET['userId']));
+	if($userToAdd) {
+		$place->removeCloudEditor($userToAdd);
+		echo "{}";
 	}
 ?>

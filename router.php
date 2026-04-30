@@ -2,20 +2,6 @@
 
 	// base code lifted from pixie by parakeet
 
-	// dont really care just like move from arl.lambda.cam to anorrl.lambda.cam
-	// deprecate arl.lambda.cam when the time comes
-	if(isset(CONFIG->secret)) {
-		if($_SERVER['SERVER_NAME'] != "anorrl.lambda.cam" && 
-		   !str_contains($_SERVER['SERVER_NAME'], "localhost") && 
-		   isset($_COOKIE['ANORRL$Hidden$Cookie$yaya']) &&
-		   $_COOKIE['ANORRL$Hidden$Cookie$yaya'] == CONFIG->secret->token &&
-		   $_SERVER['HTTP_X_FORWARDED_PROTO'] == "https" &&
-		   !str_contains($_SERVER['REQUEST_URI'], "PlaceLauncher.ashx")
-		) {
-			die(header("Location: https://anorrl.lambda.cam".$_SERVER['REQUEST_URI']));
-		}
-	}
-
 	$dir = __DIR__."/private";
 	$router = new AltoRouter();
 
@@ -29,8 +15,8 @@
 				(!isset($_COOKIE['ANORRL$Hidden$Cookie$yaya']) || 
 				(isset($_COOKIE['ANORRL$Hidden$Cookie$yaya']) && $_COOKIE['ANORRL$Hidden$Cookie$yaya'] != CONFIG->secret->token))) {
 						
-					if($path != "/goodbye" && $path != "/users/[i:id]/friends")
-						die(header("Location: /goodbye"));
+					if($path != "/")
+						die(header("Location: https://arl.lambda.cam/goodbye"));
 			} else {
 				$secret_enabled = false;
 			}
@@ -91,8 +77,6 @@
 	//route('GET',      '/test', '/private/views/test.php');
  
 	route('GET',      '/', '/private/views/index.php');
-	if(isset(CONFIG->secret))
-		route('GET',      '/goodbye', '/private/views/goodbye.php');
 
 	route('GET',      '/index', '/private/views/index.php');
 	route('GET|POST', '/login', '/private/views/login.php');
@@ -351,7 +335,7 @@
 	} else {
 		header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
 		if(!SESSION && isset(CONFIG->secret)) {
-			die(header("Location: /goodbye"));
+			die(header("Location: /"));
 		}
 		require __DIR__.'/private/views/errors/404.php';
 		exit();
