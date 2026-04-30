@@ -185,7 +185,7 @@
 
 		function getAllVersions(): array {
 			$rows = Database::singleton()->run(
-				"SELECT `id` FROM `asset_versions` WHERE `assetid` = ? ORDER BY `id` DESC",
+				"SELECT `id` FROM `asset_versions` WHERE `assetid` = :aid ORDER BY `id` DESC",
 				[ ":aid" => $this->id ]
 			)->fetchAll(\PDO::FETCH_OBJ);
 
