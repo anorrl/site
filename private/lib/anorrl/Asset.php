@@ -184,10 +184,6 @@
 		}
 
 		function getAllVersions(): array {
-			include $_SERVER["DOCUMENT_ROOT"]."/private/connection.php";
-			$stmt_getuser = $con->prepare();
-			$stmt_getuser->bind_param('i', $this->id);
-
 			$rows = Database::singleton()->run(
 				"SELECT `id` FROM `asset_versions` WHERE `assetid` = ? ORDER BY `id` DESC",
 				[ ":aid" => $this->id ]
