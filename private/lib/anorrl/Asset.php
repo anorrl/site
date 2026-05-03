@@ -447,7 +447,7 @@
 
 		function delete() {
 			if(\SESSION) {
-				if(\SESSION->user->isAdmin() || \SESSION->user->id == $this->creator->id) {
+				if($this->isOwner(\SESSION->user)) {
 					// update name to [Content Deleted]
 					// update description to [Content Deleted]
 					// update noncatalogable to true
@@ -603,6 +603,10 @@
 				$size_params = "&sx=$size_x&sy=$size_y";
 
 			return "/thumbs/?id=" . $this->id . $size_params;
+		}
+
+		function isOwner(User|null $user) {
+			return $user && ($user->id == $this->creator->id || $user->isAdmin());
 		}
 
 	}

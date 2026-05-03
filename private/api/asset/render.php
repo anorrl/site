@@ -18,7 +18,7 @@
 		die(json_encode($result));
 	}
 
-	if(!($asset->creator->id == $user->id || $user->isAdmin())) {
+	if(!$asset->isOwner($user)) {
 		$result['reason'] = "You are not authorised to perform this action.";
 		die(json_encode($result));
 	}

@@ -26,7 +26,7 @@
 		if($asset->type == AssetType::PLACE) {
 			$asset = Place::FromID($id);
 		}
-		$is_creator = $user->id == $asset->creator->id || $user->isAdmin();
+		$is_creator = $asset->isOwner($user);
 
 		if(!$is_creator) {
 			die(header("Location: /catalog"));

@@ -15,7 +15,7 @@
 	
 	$user = SESSION->user;
 
-	if($user->id != $place->creator->id && !$user->isAdmin())
+	if(!$place->isOwner($user))
 		die(http_response_code(503));
 
 	$userToAdd = User::FromID(intval($_GET['userId']));

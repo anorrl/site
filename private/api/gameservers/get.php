@@ -47,7 +47,10 @@
 					]
 				);
 
-				die(json_encode($data));
+				die(json_encode([
+					"is_owner" => $place->isOwner(SESSION->user),
+					"servers" => $data
+				]));
 			}
 		}
 	}

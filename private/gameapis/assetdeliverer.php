@@ -38,11 +38,11 @@
 				
 				if($place->copylocked) {
 					$error = false;
-					if($user == null && !ClientDetector::HasAccess()) {
+					if($user == null || !ClientDetector::HasAccess()) {
 						$error = true;
 					} 
 
-					if(!$error && $user != null && $place->creator->id != $user->id && !$user->isAdmin()) {
+					if(!$error && $user != null && !$place->isOwner($user)) {
 						$error = true;
 					}
 

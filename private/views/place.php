@@ -76,7 +76,7 @@
 	
 
 	$page->addScript("/js/item.js?t=1776186351");
-	$page->addScript("/js/placelauncher.js?t=1776506477");
+	$page->addScript("/js/placelauncher.js?t=1777822582");
 
 	$page->addMeta("title", htmlspecialchars($asset->name, ENT_QUOTES));
 	$page->addMeta("description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));

@@ -8,7 +8,7 @@
 	$place = Place::FromID($place_id);
 	$user = SESSION->user;
 
-	if($place != null && $user != null && ($user->id == $place->creator->id || $user->isAdmin())) {
+	if($place != null && $user != null && $place->isOwner($user)) {
 		$place->enableTeamCreate();
 		echo "{}";
 	}

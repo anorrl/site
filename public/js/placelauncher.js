@@ -101,7 +101,7 @@ ANORRL.PlaceLauncher  = {
 		});
 	},
 	
-	CreateServerElement: function(placeID, serverId, currentPlayersCount, maxPlayersCount) {
+	CreateServerElement: function(placeID, serverId, currentPlayersCount, maxPlayersCount, isOwner) {
 		var table = $("<table><tr></tr></table>");
 		table.addClass("Server");
 
@@ -155,7 +155,27 @@ ANORRL.PlaceLauncher  = {
 
 		joinArea.append(joinButton);
 		joinBox.append(joinArea);
-		
+
+		if(isOwner) {
+			var shutdownArea = $("<div id=\"ShutdownArea\"></div>");
+			shutdownArea.css("margin-top", "5px");
+
+			var shutdownButton = $("<button>Shutdown</button>");
+
+			shutdownButton.on("click", function() {
+				if(window.confirm("Are you sure you want to shutdown this server?")) {
+					$.post("/api/gameservers/shutdown", {serverID: serverId}, function(data) {
+						ANORRL.PlaceLauncher.GrabGameservers(placeID);
+						if(data['error'])
+							window.alert("Error: " + data['reason']);
+					});
+				}
+			})
+
+			shutdownArea.append(shutdownButton);
+			joinBox.append(shutdownArea);
+		}
+
 		joinBox.appendTo(trRow);
 
 		return table;
@@ -182,7 +202,8 @@ ANORRL.PlaceLauncher  = {
 
 		$.get("/api/gameservers/get", {placeId: placeid}, function(data) {
 			
-			var servers = data;
+			var servers = data["servers"];
+			var isOwner = data["is_owner"];
 
 			if(servers.length == 0) {
 				$("#NoGamesWarning").css("display", "block");
@@ -197,7 +218,7 @@ ANORRL.PlaceLauncher  = {
 					var playerCount = players.length;
 					var maxPlayerCount = server['maxplayercount'];
 
-					var template = ANORRL.PlaceLauncher.CreateServerElement(placeid, server['id'], playerCount, maxPlayerCount);
+					var template = ANORRL.PlaceLauncher.CreateServerElement(placeid, server['id'], playerCount, maxPlayerCount, isOwner);
 					for (var pkey in players) {
 						var player = players[pkey];
 						// what the fuck is wrong with me

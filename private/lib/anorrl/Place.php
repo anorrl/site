@@ -251,10 +251,9 @@
 
 		function isEditable(User $user): bool {
 			return 
-				$user->id == $this->creator->id ||
+				$this->isOwner($user) ||
 				!$this->copylocked ||
-				($this->teamcreate_enabled && $this->isCloudEditor($user)) ||
-				$user->isAdmin();
+				($this->teamcreate_enabled && $this->isCloudEditor($user));
 		}
 
 		function anyActiveServers(bool $teamcreate = false): bool {
