@@ -98,7 +98,13 @@
 		}
 
 		function shutdown(string $reason = "This game has been shutdown by the creator") {
-			// make new api endpoint on anrsal or something
+			if(!$this->active()) { $this->destroy(); return; }
+
+			foreach($this->getSessions() as $session) {
+				$session->kick($reason);
+			}
+
+			$this->destroy();
 		}
 
 		function getSessions(): array {

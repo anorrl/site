@@ -12,7 +12,7 @@
 		die(json_encode([ "error" => true, "reason" => "Gameserver not found."]));
 
 	if($gameserver->place->isOwner(SESSION->user)) {
-		$gameserver->destroy();
+		$gameserver->shutdown();
 		die(json_encode([ "error" => false ]));
 	}
 	else 
