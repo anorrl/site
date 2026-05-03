@@ -9,9 +9,11 @@
 	use anorrl\utilities\AssetUtils;
 	use anorrl\utilities\Arbiter;
 	use anorrl\GameServer;
+	use anorrl\Universe;
 
 	class Place extends Asset {
 		/** is the same as Asset::public */
+		// public Universe $universe;
 		public bool $friends_only;
 		public bool $copylocked;
 		public int  $server_size;
@@ -93,6 +95,14 @@
 
 			$this->is_original = $rowdata->original;
 			$this->gears_enabled = $rowdata->gears_enabled;
+
+			/* yes high as hell code
+			if(!Universe::GetFromPlace($this))
+				$this->universe = Universe::Create($this);
+			} else {
+				$this->universe = Universe::FromID($rowdata->universe)
+			}
+			*/
 		}
 
 		function enableTeamCreate() {
