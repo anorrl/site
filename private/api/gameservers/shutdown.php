@@ -3,10 +3,10 @@
 
 	header("Content-Type: application/json");
 
-	if(!SESSION || !isset($_GET['serverID']))
+	if(!SESSION || !isset($_POST['serverID']))
 		die(json_encode([ "error" => true, "reason" => "You are not authorised to perform this action." ]));
 
-	$gameserver = GameServer::Get($_GET['serverID']);
+	$gameserver = GameServer::Get($_POST['serverID']);
 
 	if(!$gameserver)
 		die(json_encode([ "error" => true, "reason" => "Gameserver not found."]));
