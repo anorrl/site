@@ -104,7 +104,8 @@
 				$session->kick($reason);
 			}
 
-			$this->destroy();
+			// maybe not?
+			//$this->destroy();
 		}
 
 		function getSessions(): array {
