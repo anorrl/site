@@ -448,7 +448,7 @@
 					$db->run(
 						"INSERT INTO `places`(`id`, `copylocked`, `serversize`, `gears_enabled`, `original`) VALUES (:id, :copylocked, :serversize, :gears, :original);",
 						[
-							":id" => 0,
+							":id" => $result['id'],
 							":copylocked" => $copylocked,
 							":serversize" => $server_size,
 							":gears" => $gears_enabled,
