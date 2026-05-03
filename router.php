@@ -160,6 +160,7 @@
 	route_api('GET|POST', 'gameservers/validateplayer');
 	route_api('GET|POST', 'gameservers/renewlease');
 	route_api('GET',      'gameservers/get');
+	route_api('GET',      'gameservers/shutdown');
 
 	route_api('GET|POST', 'asset/render');
 	route_api('GET|POST', 'asset/delete');
