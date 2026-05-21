@@ -61,7 +61,12 @@
 	function set_attachment(string $filename) {
 		set_header("Content-Disposition", "attachment; filename=\"$filename\"");
 	}
-	
+
+	function get_header(string $name) {
+		$headers = getallheaders();
+		return $headers[$name] ?? null;
+	}
+
 	require_once __DIR__ . "/router.php";
 
 	exit();

@@ -2,7 +2,7 @@
 
 -- maybe try find the placeid and creatorid?
 
-local placeID = 0
+local placeID = {placeid}
 local creatorID = 0
 
 pcall(function() game:SetPlaceID(placeID) end)

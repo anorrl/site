@@ -7,7 +7,7 @@
 		redirect("/my/home");
 	}
 	
-	$istoomany = count(UserUtils::GetAllUsers()) > 15;
+	$istoomany = count(UserUtils::GetAllUsers()) > 18;
 
 	if(isset($_POST['ANORRL$Signup$Username']) &&
 	   isset($_POST['ANORRL$Signup$Password']) &&

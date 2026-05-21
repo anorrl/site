@@ -37,10 +37,14 @@
 	if(count($users) != 0) {
 		foreach($users as $user) {
 			if($user instanceof User) {
+				$status = $user->getLatestStatus();
+				$blurb = "";
+				if($status)
+					$blurb = $status->content;
 				$users_raw[] = [
 					"id" => $user->id,
 					"name" => $user->name,
-					"blurb" => htmlspecialchars($user->blurb, ENT_QUOTES),
+					"blurb" => htmlspecialchars($blurb, ENT_QUOTES),
 					"online" => $user->isOnline(),
 					"status" => $user->getOnlineActivity(),
 					"thumbnail" => $user->getThumbsUrl(64)
