@@ -35,7 +35,7 @@
 		isset($_GET['type']) &&
 		isset($_GET['scope']) &&
 		isset($_GET['target']) &&
-		isset($_POST['value'])
+		isset($_GET['value'])
 	))
 		dieOff(); // Method Not Allowed
 
@@ -44,7 +44,7 @@
 	$scope  = $_GET["scope"];
 	$type   = $_GET["type"];
 	$target = $_GET["target"];
-	$value  = $_POST["value"];
+	$value  = $_GET["value"];
 
 	if($type != "standard")
 		dieOff();
