@@ -39,7 +39,7 @@
 			)->fetchAll(\PDO::FETCH_ASSOC);
 
 			$values = [];
-			foreach($result as &$data){
+			foreach($result as $data){
 				array_push($values,array("Value"=>$data["value"],"Scope"=>$data["scope"],"Key"=>$data["key"],"Target"=>$data["target"]));
 			}
 
