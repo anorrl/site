@@ -7,7 +7,7 @@ use anorrl\User;
 set_content_type(ARLTYPEPLAIN); 
 
 // dont cache this shit!
-enable_cache();
+disable_cache();
 
 $domain = CONFIG->domain;
 

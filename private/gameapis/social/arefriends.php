@@ -2,7 +2,7 @@
 	use anorrl\User;
 
 	// dont cache this shit!
-	enable_cache();
+	disable_cache();
 	set_content_type(ARLTYPEPLAIN);
 
 	$userId = (int)$_GET['userId'];

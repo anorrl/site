@@ -1,17 +1,50 @@
 <?php
-    namespace anorrl;
-    use anorrl\Universe;
+	namespace anorrl;
 
-    class Datastore {
+	use anorrl\Database;
+	use anorrl\Universe;
 
-        private Universe $universe;
+	class Datastore {
 
-        function __construct(Universe $universe) {
-            $this->universe = $universe;
-        }
+		private Universe $universe;
 
-        function get(bool $sorted = false) {}
-        function set() {}
-        function increment() {}
+		function __construct(Universe $universe) {
+			$this->universe = $universe;
+		}
 
-    }
+		//
+		function keyExists(string $key, string $target, string $scope = "global") {
+			$row = Database::singleton()->run(
+				"SELECT `id` FROM `datastores` WHERE `universe`= :universe AND `scope` = :scope AND `key` = :key AND `target` = :target",
+				[
+					"universe" => $this->universe->id,
+					"scope" => $scope,
+					"key" => $key,
+					"target" => $target
+				]
+			)->rowCount();
+
+			return $row != null;
+		}
+
+		function get() {}
+		function set(string $key, string $value, string $target = "", string $scope = "global"): bool {
+			$result = Database::singleton()->run(
+				$this->keyExists($key, $target, $scope) ? 
+					"UPDATE `datastores` SET `value` = :value WHERE `universe` = :universe AND `scope` = :scope AND `key` = :key AND `target` = :target" : 
+					"INSERT INTO `datastores`(`key`, `universe`, `scope`, `target`, `value`) VALUES (:key, :universe, :scope, :target, :value)",
+				[
+					"key" => $key,
+					"universe" => $this->universe->id,
+					"scope" => $scope,
+					"target" => $target,
+					"value" => $value,
+				]
+			);
+			
+			return $result->errorCode() == SQL_ALLOK;
+		}
+		function increment() {}
+
+	}
+?>

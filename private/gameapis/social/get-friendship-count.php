@@ -1,7 +1,7 @@
 <?php
 	use anorrl\User;
 	
-	enable_cache();
+	disable_cache();
 	set_content_type(ARLTYPEJSON);
 	
 	if(isset($_GET['userId'])) {

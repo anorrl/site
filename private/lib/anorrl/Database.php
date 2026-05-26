@@ -53,7 +53,7 @@
 
 			foreach ($args as $param => $value) {
 				$stmt->bindValue(
-					is_int($param) ? $param + 1 : $param,
+					is_int($param) ? $param + 1 : (!str_ends_with($param, ":") ? ":$param" : $param),
 					$this->evaluateValue($value), 
 					$this->getPDOType($value)
 				);

@@ -4,7 +4,7 @@
 	
 	set_content_type(ARLTYPEJSON);
 	// dont cache this shit!
-	enable_cache();
+	disable_cache();
 
 	if(isset($universeId)) {
 		$universe = Universe::FromID(intval($universeId));

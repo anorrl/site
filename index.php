@@ -36,20 +36,41 @@
 		define('SESSION', false);
 	}
 
+	/**
+	 * Macro for header()
+	 * @param string $name
+	 * @param string $value
+	 * @param bool $replace
+	 * @return void
+	 */
 	function set_header(string $name, string $value, bool $replace = true) {
 		header("$name: $value", $replace);
 	}
 
+	/**
+	 * Macro for header("Content-Type: {$type}")
+	 * @param string $type
+	 * @return void
+	 */
 	function set_content_type(string $type) {
 		set_header("Content-Type", $type);
 	}
 
-	function enable_cache() {
+	/**
+	 * Macro for setting no caching via headers.
+	 * @return void
+	 */
+	function disable_cache() {
 		set_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
 		set_header("Cache-Control", "post-check=0, pre-check=0", false);
 		set_header("Pragma", "no-cache");
 	}
 
+	/**
+	 * Macro for exiting with a Location header
+	 * @param string $path
+	 * @return never
+	 */
 	function redirect(string $path) {
 		die(set_header("Location", $path));
 	}
