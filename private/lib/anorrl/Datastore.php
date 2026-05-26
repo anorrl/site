@@ -47,6 +47,41 @@
 
 			return $values;
 		}
+
+		function getordered(string $key, string $target = "", string $scope = "global", string $type = "sorted", int $page_size, bool $ascending) {
+			$current_page = 0;
+			$continue = true;
+
+			while($continue) {
+				$result = Database::singleton()->run(
+					"SELECT `target`, `value` FROM `datastores` WHERE `universe` = :universe AND `scope`=:scope AND `key`=:key AND `target`=:target AND `type` = :type LIMIT :page, :pagesize ORDER BY `value`".($ascending ? "ASC" :"DESC"),
+					[
+						"key" => $key,
+						"universe" => $this->universe->id,
+						"scope" => $scope,
+						"target" => $target,
+						"type" => $type,
+						"page" => $current_page * $page_size
+					]
+				);
+
+				if($result->rowCount() < $page_size)
+					break;
+
+				$rows = $result->fetchAll(\PDO::FETCH_ASSOC);
+
+				$current_page += 1;
+			}
+			
+
+			$values = [];
+			foreach($result as $data){
+				array_push($values,array("Value"=>$data["value"],"Scope"=>$data["scope"],"Key"=>$data["key"],"Target"=>$data["target"]));
+			}
+
+			return $values;
+		}
+
 		function set(string $key, string $value, string $target = "", string $scope = "global", string $type): bool {
 			$result = Database::singleton()->run(
 				$this->keyExists($key, $target, $scope, $type) ? 
