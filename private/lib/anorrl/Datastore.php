@@ -13,28 +13,30 @@
 		}
 
 		//
-		function keyExists(string $key, string $target, string $scope = "global") {
+		function keyExists(string $key, string $target, string $scope = "global", string $type = "standard") {
 			$row = Database::singleton()->run(
-				"SELECT `id` FROM `datastores` WHERE `universe`= :universe AND `scope` = :scope AND `key` = :key AND `target` = :target",
+				"SELECT `id` FROM `datastores` WHERE `universe`= :universe AND `scope` = :scope AND `key` = :key AND `target` = :target AND `type` = :type",
 				[
 					"universe" => $this->universe->id,
 					"scope" => $scope,
 					"key" => $key,
-					"target" => $target
+					"target" => $target,
+					"type" => $type,
 				]
 			)->rowCount();
 
 			return $row != null;
 		}
 
-		function get(string $key, string $target = "", string $scope = "global") {
+		function get(string $key, string $target = "", string $scope = "global", string $type = "standard") {
 			$result = Database::singleton()->run(
-				"SELECT * FROM `datastores` WHERE `universe`=:universe AND `scope`=:scope AND `key`=:key AND `target`=:target",
+				"SELECT * FROM `datastores` WHERE `universe`=:universe AND `scope`=:scope AND `key`=:key AND `target`=:target AND `type` = :type",
 				[
 					"key" => $key,
 					"universe" => $this->universe->id,
 					"scope" => $scope,
 					"target" => $target,
+					"type" => $type,
 				]
 			)->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -45,17 +47,18 @@
 
 			return $values;
 		}
-		function set(string $key, string $value, string $target = "", string $scope = "global"): bool {
+		function set(string $key, string $value, string $target = "", string $scope = "global", string $type): bool {
 			$result = Database::singleton()->run(
-				$this->keyExists($key, $target, $scope) ? 
-					"UPDATE `datastores` SET `value` = :value WHERE `universe` = :universe AND `scope` = :scope AND `key` = :key AND `target` = :target" : 
-					"INSERT INTO `datastores`(`key`, `universe`, `scope`, `target`, `value`) VALUES (:key, :universe, :scope, :target, :value)",
+				$this->keyExists($key, $target, $scope, $type) ? 
+					"UPDATE `datastores` SET `value` = :value WHERE `universe` = :universe AND `scope` = :scope AND `key` = :key AND `target` = :target AND `type` = :type" : 
+					"INSERT INTO `datastores`(`key`, `universe`, `scope`, `target`, `value`, `type`) VALUES (:key, :universe, :scope, :target, :value, :type)",
 				[
 					"key" => $key,
 					"universe" => $this->universe->id,
 					"scope" => $scope,
 					"target" => $target,
 					"value" => $value,
+					"type" => $type,
 				]
 			);
 

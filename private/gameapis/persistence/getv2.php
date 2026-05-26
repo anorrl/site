@@ -54,7 +54,7 @@
 	$type   = urldecode($_GET["type"]);
 	$target = urldecode($qkeys['qkeys[0].target']);
 
-	if($type != "standard")
+	if($type != "standard" && $type != "sorted")
 		dieOff();
 	
 	if(!$place)
@@ -67,6 +67,6 @@
 	$ds = new Datastore($universe);
 
 	exit(json_encode([
-		"data" => $ds->get($key, $target, $scope)
+		"data" => $ds->get($key, $target, $scope, $type)
 	]));
 ?>

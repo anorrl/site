@@ -46,7 +46,7 @@
 	$target = $_GET["target"];
 	$value  = $_POST["value"];
 
-	if($type != "standard")
+	if($type != "standard" && $type != "sorted")
 		dieOff();
 
 	if(!$place)
@@ -69,7 +69,7 @@
 		}
 	}
 
-	$result = $ds->set($key, $value, $target, $scope);
+	$result = $ds->set($key, $value, $target, $scope, $type);
 
 	if(!$result)
 		dieOff();
