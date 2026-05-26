@@ -13,7 +13,8 @@
 			if(
 				str_contains("v ", $contents) && 
 				str_contains("vn ", $contents) && 
-				str_contains("vt ", $contents)
+				str_contains("vt ", $contents) &&
+				str_contains("/" , $contents)
 			) {
 				// could be a valid obj
 			}
