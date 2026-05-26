@@ -48,18 +48,19 @@
 			return $values;
 		}
 
-		function getordered(string $key, string $target = "", string $scope = "global", string $type = "sorted", int $page_size, bool $ascending) {
+		function getordered(string $key, string $scope = "global", string $type = "sorted", int $page_size, bool $ascending) {
 			$current_page = 0;
 			$continue = true;
 
+			$values = [];
+
 			while($continue) {
 				$result = Database::singleton()->run(
-					"SELECT `target`, `value` FROM `datastores` WHERE `universe` = :universe AND `scope`=:scope AND `key`=:key AND `target`=:target AND `type` = :type LIMIT :page, :pagesize ORDER BY `value`".($ascending ? "ASC" :"DESC"),
+					"SELECT `target`, `value` FROM `datastores` WHERE `universe` = :universe AND `scope`=:scope AND `key`=:key AND `type` = :type LIMIT :page, :pagesize ORDER BY `value`".($ascending ? "ASC" :"DESC"),
 					[
 						"key" => $key,
 						"universe" => $this->universe->id,
 						"scope" => $scope,
-						"target" => $target,
 						"type" => $type,
 						"page" => $current_page * $page_size
 					]
@@ -70,13 +71,11 @@
 
 				$rows = $result->fetchAll(\PDO::FETCH_ASSOC);
 
-				$current_page += 1;
-			}
-			
+				foreach($rows as $data){
+					array_push($values,array("Value"=>$data["value"],"Target"=>$data["target"]));
+				}
 
-			$values = [];
-			foreach($result as $data){
-				array_push($values,array("Value"=>$data["value"],"Scope"=>$data["scope"],"Key"=>$data["key"],"Target"=>$data["target"]));
+				$current_page += 1;
 			}
 
 			return $values;

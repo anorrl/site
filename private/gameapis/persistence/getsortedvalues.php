@@ -47,7 +47,7 @@
 	$type   = $_GET["type"];
 	$page_size = intval($_GET['pageSize']);
 	$ascending = $_GET['ascending'] == "True";
-	
+
 	if(!$place)
 		dieOff("Not Found", 404);
 
@@ -59,7 +59,7 @@
 
 	//$result = $ds->getordered($key, $target, $scope, $type, $page_size, $ascending);
 
-	$result = $ds->get($key, "", $scope, $type);
+	$result = $ds->getordered($key, $scope, "sorted", $page_size, $ascending);
 
 	if(!$result)
 		dieOff();
