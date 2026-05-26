@@ -61,6 +61,10 @@
 
 	$result = $ds->getordered($key, $scope, "sorted", 1, $page_size, $ascending);
 
+	error_log(json_encode([
+		"data" => $result
+	]));
+
 	exit(json_encode([
 		"data" => $result
 	]));
