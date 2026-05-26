@@ -62,7 +62,8 @@
 						"universe" => $this->universe->id,
 						"scope" => $scope,
 						"type" => $type,
-						"page" => $current_page * $page_size
+						"page" => $current_page * $page_size,
+						"pagesize" => $page_size
 					]
 				);
 
