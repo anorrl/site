@@ -56,7 +56,7 @@
 
 			while($continue) {
 				$result = Database::singleton()->run(
-					"SELECT `target`, `value` FROM `datastores` WHERE `universe` = :universe AND `scope`=:scope AND `key`=:key AND `type` = :type LIMIT :page, :pagesize ORDER BY `value` ".($ascending ? "ASC" :"DESC"),
+					"SELECT `target`, `value` FROM `datastores` WHERE `universe` = :universe AND `scope`=:scope AND `key`=:key AND `type` = :type ORDER BY `value` ".($ascending ? "ASC" :"DESC"). "LIMIT :page, :pagesize",
 					[
 						"key" => $key,
 						"universe" => $this->universe->id,
