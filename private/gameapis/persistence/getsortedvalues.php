@@ -61,12 +61,9 @@
 
 	$result = $ds->getordered($key, $scope, "sorted", $page_size, $ascending);
 
-	if(!$result)
-		dieOff();
-	else
-		exit(json_encode([
-			"data" => [
-				"Entries" => $result
-			]
-		]));
+	exit(json_encode([
+		"data" => [
+			"Entries" => $result
+		]
+	]));
 ?>
