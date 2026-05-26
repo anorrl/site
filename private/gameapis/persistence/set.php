@@ -25,7 +25,17 @@
 	}
 
 	function stripQuotes($text) {
-		return preg_replace('/^(\'[^\']*\'|"[^"]*")$/', '$2$3', $text);
+		$pre_text = $text;
+
+		if(str_starts_with($pre_text, "\"") || str_starts_with($pre_text, "'")) {
+			$pre_text = substr($pre_text, 1);
+		}
+
+		if(str_ends_with($pre_text, "\"") || str_ends_with($pre_text, "'")) {
+			$pre_text = substr($pre_text, 0, strlen($pre_text)-1);
+		}
+		
+		return $pre_text;
 	}
 
 	set_content_type(ARLTYPEJSON);
