@@ -249,7 +249,7 @@
 	route('GET',      '/game/players/[i:id]/', '/private/api/users/players.php');
 	
 	route('GET|POST', '/persistence/getV2', '/private/gameapis/persistence/getv2.php');
-	route('POST', '/persistence/getSortedValues', '/private/gameapis/persistence/getv2.php');
+	route('POST', '/persistence/getSortedValues', '/private/gameapis/persistence/getsortedvalues.php');
 	route('POST', '/persistence/increment', '/private/gameapis/persistence/increment.php');
 	route('POST', '/persistence/set', '/private/gameapis/persistence/set.php');
 	route('GET|POST', '/Persistence/SetBlob.ashx', '/private/gameapis/datastores/setblob.php');
