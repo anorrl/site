@@ -73,7 +73,7 @@
 		}
 	}
 
-	$result = $ds->set($key, $scope, $target, $scope);
+	$result = $ds->set($key, $value, $target, $scope);
 
 	if(!$result)
 		dieOff();
