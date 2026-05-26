@@ -59,7 +59,7 @@
 
 	//$result = $ds->getordered($key, $target, $scope, $type, $page_size, $ascending);
 
-	$result = $ds->getordered($key, $scope, "sorted", $page_size, $ascending);
+	$result = $ds->getordered($key, $scope, "sorted", 1, $page_size, $ascending);
 
 	exit(json_encode([
 		"data" => $result
