@@ -44,10 +44,7 @@
 	$scope  = $_GET["scope"];
 	$type   = $_GET["type"];
 	$target = $_GET["target"];
-	$value  = $_GET["value"];
-
-	if(!is_int($value))
-		dieOff();
+	$value  = intval($_GET["value"]);
 
 	if($type != "standard")
 		dieOff();
