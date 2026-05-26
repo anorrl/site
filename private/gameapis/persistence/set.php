@@ -30,7 +30,7 @@
 
 	set_content_type(ARLTYPEJSON);
 
-	if(!ClientDetector::HasAccess())
+	if(!(ClientDetector::HasAccess()||ClientDetector::IsAClient()))
 		dieOff(); // Method Not Allowed
 
 	if(!(
