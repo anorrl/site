@@ -27,7 +27,24 @@
 			return $row != null;
 		}
 
-		function get() {}
+		function get(string $key, string $target = "", string $scope = "global") {
+			$result = Database::singleton()->run(
+				"SELECT * FROM `datastores` WHERE `universeId`=:pid AND `scope`=:scope AND `type`=:type AND `key`=:key AND `target`=:target",
+				[
+					"key" => $key,
+					"universe" => $this->universe->id,
+					"scope" => $scope,
+					"target" => $target,
+				]
+			)->fetchAll(\PDO::FETCH_ASSOC);
+
+			$values = [];
+			foreach($result as &$data){
+				array_push($values,array("Value"=>$data["value"],"Scope"=>$data["scope"],"Key"=>$data["key"],"Target"=>$data["target"]));
+			}
+
+			return $values;
+		}
 		function set(string $key, string $value, string $target = "", string $scope = "global"): bool {
 			$result = Database::singleton()->run(
 				$this->keyExists($key, $target, $scope) ? 
@@ -41,7 +58,7 @@
 					"value" => $value,
 				]
 			);
-			
+
 			return $result->errorCode() == SQL_ALLOK;
 		}
 		function increment() {}

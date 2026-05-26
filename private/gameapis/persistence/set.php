@@ -64,12 +64,11 @@
 		dieOff();
 
 	if(!$place)
-		dieOff(); // Method Not Allowed
+		dieOff("Not Found", 404);
 
 	$universe = Universe::FromID($place->universe);
-
 	if(!$universe)
-		dieOff(); // Method Not Allowed
+		dieOff("Not Found", 404);
 
 	$ds = new Datastore($universe);
 
