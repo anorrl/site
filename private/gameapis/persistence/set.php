@@ -72,6 +72,8 @@
 				$value = $postData['0']->Value;
 			}
 		}
+	} else {
+		$value = stripQuotes($value);
 	}
 
 	$result = $ds->set($key, $value, $target, $scope);
