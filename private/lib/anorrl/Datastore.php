@@ -29,7 +29,7 @@
 
 		function get(string $key, string $target = "", string $scope = "global") {
 			$result = Database::singleton()->run(
-				"SELECT * FROM `datastores` WHERE `universeId`=:pid AND `scope`=:scope AND `type`=:type AND `key`=:key AND `target`=:target",
+				"SELECT * FROM `datastores` WHERE `universe`=:universe AND `scope`=:scope AND `key`=:key AND `target`=:target",
 				[
 					"key" => $key,
 					"universe" => $this->universe->id,
