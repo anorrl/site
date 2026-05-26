@@ -46,6 +46,9 @@
 	$target = $_GET["target"];
 	$value  = $_GET["value"];
 
+	if(!is_int($value))
+		dieOff();
+
 	if($type != "standard")
 		dieOff();
 
@@ -58,7 +61,7 @@
 
 	$ds = new Datastore($universe);
 
-	$result = $ds->set($key, $value, $target, $scope);
+	$result = $ds->increment($key, $value, $target, $scope);
 
 	if(!$result)
 		dieOff();
