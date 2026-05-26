@@ -1272,6 +1272,9 @@
 			$server = null;
 
 			foreach($rows as $row) {
+				if(!$row)
+					continue;
+
 				$grab_server = GameServer::Get($row->serverid);
 
 				if(!$grab_server) {
@@ -1346,11 +1349,11 @@
 				}
 			}
 
-			return $server->active() ? $server : null;
+			return $server ? ($server->active() ? $server : null) : null;
 		}
 
 		function isInAGame(bool $teamcreate = false) {
-			return 
+			return
 				Database::singleton()->run(
 					"SELECT `id` FROM `active_players` WHERE `playerid` = :playerid AND `status` = 1 AND `teamcreate` = :teamcreate", 
 					[

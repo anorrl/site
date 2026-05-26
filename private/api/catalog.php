@@ -37,13 +37,14 @@
 
 	$pre_total_pages = AssetUtils::GetFilteredCount($catalog_filter, $asset_type, $query)/12;
 
-	if($pre_total_pages < 0.5) {
+	$uhmbullshitcalc = ((float)((int) $pre_total_pages))-$pre_total_pages;
+	if($uhmbullshitcalc < 0.5 && $uhmbullshitcalc != 0) {
 		$pre_total_pages += 0.5;
 	}
 
-	$total_pages = floor($pre_total_pages);
+	$total_pages = round($pre_total_pages);
 
-	if($total_pages == 0) {
+	if($total_pages < 1) {
 		$total_pages++;
 	}
 	

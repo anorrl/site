@@ -200,6 +200,9 @@
 					":id" => $this->id
 				]
 			);
+			// just in case the server crashes, we dont want ghost numbers
+			if($this->place)
+				Place::UpdatePlaceStats($this->place->id);
 		}
 
 	}

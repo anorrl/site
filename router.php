@@ -174,6 +174,7 @@
 	route('GET',      '/users/', '/private/views/users/index.php');
 	route('GET',      '/Users/[i:userId]', '/private/api/users/data.php');
 	route('GET',      '/users/[i:userId]/canmanage/[i:placeId]', '/private/api/users/canmanage.php');
+	route('GET',      '//users/[i:userId]/canmanage/[i:placeId]', '/private/api/users/canmanage.php');
 	route('GET',      '/users/get-by-username', '/private/api/users/get-by-username.php');
 	route('GET',      '/users/emotes', '/private/api/users/emotes.php');
 	route('GET',      '/users/get-icon', '/private/api/users/get-icon.php');
@@ -219,9 +220,10 @@
 	route('GET',      '/GetAllowedSecurityKeys/', '/private/gameapis/authentication/getallowedsecuritykeys.json');
 	route('GET',      '/GetAllowedSecurityVersions/', '/private/gameapis/authentication/getallowedsecurityversions.json');
 
-	route('GET',      '/Setting/QuietGet/AndroidAppSettings/', '/private/gameapis/settings/ClientAppSettings.json');
-	route('GET',      '/Setting/QuietGet/ClientAppSettings/', '/private/gameapis/settings/ClientAppSettings.json');
-	route('GET',      '/Setting/QuietGet/ClientSharedSettings/', '/private/gameapis/settings/ClientSharedSettings.json');
+	route('GET',      '/Setting/QuietGet/AndroidAppSettings/', '/private/gameapis/settings/ClientSettings.json');
+	route('GET',      '/Setting/QuietGet/ClientAppSettings/', '/private/gameapis/settings/ClientSettings.json');
+	route('GET',      '/Setting/QuietGet/ClientSettings/', '/private/gameapis/settings/ClientSettings.json');
+
 	route('GET',      '/Setting/QuietGet/ACCService'.CONFIG->arbiter->key.'/', '/private/gameapis/settings/ACCService.json');
 	route('GET',      '/Setting/QuietGet/WindowsBootstrapperSettings/', '/private/gameapis/settings/Bootstrapper.json');
 	route('GET',      '/Setting/QuietGet/WindowsStudioBootstrapperSettings/', '/private/gameapis/settings/Bootstrapper.json');

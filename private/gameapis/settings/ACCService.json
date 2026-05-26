@@ -1,5 +1,6 @@
 {
 	"DFFlagScriptExecutionContextApi": "True",
 	"DFFlagCleanUpInterpolationTimestamps": "False",
-	"DFFlagMinMaxDistanceEnabled": "True"
+	"DFFlagMinMaxDistanceEnabled": "True",
+	"FFlagFindRightGripAttachment": "False"
 }
