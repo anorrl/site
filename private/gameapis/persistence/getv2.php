@@ -10,7 +10,7 @@
 		http_response_code($response_code);
 		exit(json_encode(["error"=>$message]));
 	}
-	
+
 	function removeEverythingBefore($in, $before) {
 		$pos = strpos($in, $before);
 		return $pos !== FALSE
@@ -68,5 +68,5 @@
 
 	exit(json_encode([
 		"data" => $ds->get($key, $target, $scope)
-	], JSON_NUMERIC_CHECK));
+	]));
 ?>

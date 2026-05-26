@@ -24,20 +24,6 @@
 		return (substr($string, -$len) === $endString);
 	}
 
-	function stripQuotes($text) {
-		$pre_text = $text;
-
-		if(str_starts_with($pre_text, "\"") || str_starts_with($pre_text, "'")) {
-			$pre_text = substr($pre_text, 1);
-		}
-
-		if(str_ends_with($pre_text, "\"") || str_ends_with($pre_text, "'")) {
-			$pre_text = substr($pre_text, 0, strlen($pre_text)-1);
-		}
-		
-		return $pre_text;
-	}
-
 	set_content_type(ARLTYPEJSON);
 
 	if(!(ClientDetector::HasAccess()||ClientDetector::IsAClient()))
@@ -81,8 +67,6 @@
 				$value = $postData['0']->Value;
 			}
 		}
-	} else {
-		$value = stripQuotes($value);
 	}
 
 	$result = $ds->set($key, $value, $target, $scope);
