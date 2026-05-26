@@ -64,6 +64,7 @@
 	$ds = new Datastore($universe);
 
 	if (startsWith($_POST["value"], "[{") && endsWith($_POST["value"], "}]")){
+		error_log($_POST['value']);
 		$postData = json_decode($_POST["value"]);
 
 		if (count($postData) == 1){
