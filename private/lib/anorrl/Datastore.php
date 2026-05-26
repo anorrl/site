@@ -35,7 +35,7 @@
 					"key" => $key,
 					"universe" => $this->universe->id,
 					"scope" => $scope,
-					"target" => $target,
+					"target" => strlen($target) == 0 ? "%" : $target,
 					"type" => $type,
 				]
 			)->fetchAll(\PDO::FETCH_ASSOC);

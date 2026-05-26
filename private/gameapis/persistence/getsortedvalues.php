@@ -43,7 +43,6 @@
 	$place  = Place::FromID(intval($_GET["placeId"]));
 	$scope  = $_GET["scope"];
 	$type   = $_GET["type"];
-	$target = $_GET["target"];
 	$page_size = intval($_GET['pageSize']);
 	$ascending = $_GET['ascending'] == "True";
 
@@ -61,7 +60,7 @@
 
 	//$result = $ds->getordered($key, $target, $scope, $type, $page_size, $ascending);
 
-	$result = $ds->get($key, $target, $scope, $type);
+	$result = $ds->get($key, "", $scope, $type);
 
 	if(!$result)
 		dieOff();
