@@ -58,17 +58,6 @@
 
 	$ds = new Datastore($universe);
 
-	if (startsWith($_POST["value"], "[{") && endsWith($_POST["value"], "}]")){
-		error_log($_POST['value']);
-		$postData = json_decode($_POST["value"]);
-
-		if (count($postData) == 1){
-			if (isset($postData['0']->Scope) && isset($postData['0']->Key) && isset($postData['0']->Value)){
-				$value = $postData['0']->Value;
-			}
-		}
-	}
-
 	$result = $ds->set($key, $value, $target, $scope);
 
 	if(!$result)
