@@ -48,38 +48,41 @@
 			return $values;
 		}
 
-		function getordered(string $key, string $scope = "global", string $type = "sorted", int $page_size, bool $ascending) {
+		function getordered(string $key, string $scope = "global", string $type = "sorted", int $page_num, int $page_size, bool $ascending) {
 			$current_page = 0;
 			$continue = true;
 
 			$values = [];
 
-			while($continue) {
-				$result = Database::singleton()->run(
-					"SELECT `target`, `value` FROM `datastores` WHERE `universe` = :universe AND `scope`=:scope AND `key`=:key AND `type` = :type ORDER BY `value` ".($ascending ? "ASC" :"DESC"). " LIMIT :page, :pagesize",
-					[
-						"key" => $key,
-						"universe" => $this->universe->id,
-						"scope" => $scope,
-						"type" => $type,
-						"page" => $current_page * $page_size,
-						"pagesize" => $page_size
-					]
-				);
+			$result = Database::singleton()->run(
+				"SELECT `target`, `value` FROM `datastores` WHERE `universe` = :universe AND `scope`=:scope AND `key`=:key AND `type` = :type ORDER BY `value` ".($ascending ? "ASC" :"DESC"). " LIMIT :page, :pagesize",
+				[
+					"key" => $key,
+					"universe" => $this->universe->id,
+					"scope" => $scope,
+					"type" => $type,
+					"page" => $current_page * $page_size,
+					"pagesize" => $page_size
+				]
+			);
 
-				if($result->rowCount() < $page_size)
-					break;
+			$rows = $result->fetchAll(\PDO::FETCH_ASSOC);
 
-				$rows = $result->fetchAll(\PDO::FETCH_ASSOC);
-
-				foreach($rows as $data){
-					array_push($values,array("Value"=>$data["value"],"Target"=>$data["target"]));
-				}
-
-				$current_page += 1;
+			foreach($rows as $data){
+				array_push($values,array("Value"=>$data["value"],"Target"=>$data["target"]));
 			}
 
-			return $values;
+			if($result->rowCount() < $page_size) {
+				return [
+					"Entries" => $values
+				];
+			} else {
+				return [
+					"Entries" => $values,
+					"ExclusiveStartKey" => "page".($page_num+1)
+				];
+			}
+			
 		}
 
 		function set(string $key, string $value, string $target = "", string $scope = "global", string $type): bool {
