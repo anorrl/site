@@ -26,6 +26,8 @@
 
 	set_content_type(ARLTYPEJSON);
 
+	dieOff("Unimplemented", 503);
+
 	if(!(ClientDetector::HasAccess()||ClientDetector::IsAClient()))
 		dieOff(); // Method Not Allowed
 
