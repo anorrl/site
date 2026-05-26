@@ -29,6 +29,8 @@
 	if(!(ClientDetector::HasAccess()||ClientDetector::IsAClient()))
 		dieOff(); // Method Not Allowed
 
+
+	/// getSortedValues?placeId=768&type=sorted&scope=global&key=Test&pageSize=10&ascending=True
 	if(!(
 		isset($_GET['placeId']) &&
 		isset($_GET['key']) &&
@@ -45,10 +47,7 @@
 	$type   = $_GET["type"];
 	$page_size = intval($_GET['pageSize']);
 	$ascending = $_GET['ascending'] == "True";
-
-	if($type != "sorted")
-		dieOff();
-
+	
 	if(!$place)
 		dieOff("Not Found", 404);
 
