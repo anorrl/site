@@ -1,14 +1,20 @@
 <?php
 	use anorrl\Universe;
+	use anorrl\Place;
 
 	set_content_type(ARLTYPEJSON);
 
-	$assetid = intval($_GET['universeId']);
-	$universe = Universe::FromID($assetid);
-	$place = $universe->starting_place;
+	if(isset($_GET['universeId'])) {
+		$assetid = intval($_GET['universeId']);
+		$universe = Universe::FromID($assetid);
+		$place = $universe->starting_place;
+	} else if(isset($_GET['placeId'])) {
+		$assetid = intval($_GET['placeId']);
+		$place = Place::FromID($assetid);
+		$universe = Universe::FromID($place->universe);
+	}
 
-
-	if($place != null) {
+	if($place) {
 
 		echo json_encode([
 			"CurrentUserHasEditPermissions" => true,
