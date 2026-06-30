@@ -17,13 +17,6 @@
 	use anorrl\utilities\UserUtils;
 	use anorrl\Session;
 	
-	if(isset(CONFIG->secret)) {
-		if(isset($_GET[CONFIG->secret->partone]) && $_GET[CONFIG->secret->partone] == CONFIG->secret->parttwo) {
-			setcookie('ANORRL$Hidden$Cookie$yaya', CONFIG->secret->token, time() + (460800* 30), "/", CONFIG->domain);
-			redirect("/register");
-		}
-	}
-	
 	$session_user = UserUtils::RetrieveUser();
 
 	if(session_status() != PHP_SESSION_ACTIVE) {
