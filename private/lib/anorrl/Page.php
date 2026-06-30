@@ -132,6 +132,16 @@
 			$this->loadTemplate("footer");
 		}
 
+		function loadHeader2() {
+			$this->clearAll();
+			$this->addStylesheet("/css/base.css");
+			$this->addScript("/js/core/jquery.js");
+			$this->loadTemplate("layouts/header");
+		}
+
+		function loadFooter2() {
+			$this->loadTemplate("layouts/footer");
+		}
 
 		function loadWimpy(string $url, string $name, string $cover_art, string $link = "") {
 			$this->url = $url;

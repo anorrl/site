@@ -1,0 +1,146 @@
+@font-face {
+	font-family: 'punk';
+	src: url('/public/css/Punktype.ttf');
+}
+
+@font-face {
+	font-family: 'road';
+	src: url('/public/css/TransportMedium.ttf');
+}
+
+html {
+	background: rgb(82, 19, 123);
+	font-family: Arial,Helvetica,sans-serif;
+	color: #eee;
+	font-size: 12px;
+}
+
+body {
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	color: #ffa634;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: #ffc63f;
+}
+
+@keyframes bgScroll {
+	0% {
+		background-position : 0px 0px;
+	}
+	100% {
+		background-position : -100% 0px;
+	}
+}
+
+@keyframes bgScroll2 {
+	0% {
+		background-position : 0px 0px;
+	}
+	100% {
+		background-position : 100% 0px;
+	}
+}
+
+#header {
+	display:block;
+	width:100%;
+	height: 30px;
+	background-image:url("/public/images/header/navbar3.jpg");
+	animation: bgScroll2 50s linear infinite;
+	background-size: contain;
+	border-bottom: 5px solid black;
+	text-align: center;
+}
+
+#header #links {
+	position:relative;
+	font-size: 16px;
+	padding-top: 5px;
+}
+
+#header #links a {
+	color: white;
+	padding: 1px 1.5em;
+	background: rgb(0,0,0);
+	border: 2px solid black;
+	font-family: punk;
+}
+
+#header #links a:hover {
+	text-decoration: underline;
+	background: #222;
+	background: linear-gradient(0deg,#222 0%, #444 100%);
+}
+
+#header #logo a {
+	padding-left: 5px;
+	width: 120px;
+	height: 30px;
+	display: inline-block;
+	background: linear-gradient(90deg,rgb(191, 181, 0) 0%, rgba(173, 139, 15, 0.76) 50%, rgba(0, 0, 0, 0) 100%);
+	
+}
+
+#header #logo a img {
+	height: 30px;
+}
+
+#header #logo a:hover img, #header #logo a img:hover {
+	background: #fff4;
+}
+
+#header #container {
+	width: 970px;
+	margin: 0 auto;
+}
+
+#footer {
+	line-height: 1.428;
+	width: 100%;
+	margin: 0 auto;
+	padding: 10px 0;
+	text-align: center;
+	background: linear-gradient(to bottom,#230337 0%,rgb(82, 19, 123) 70%);
+}
+
+#footer #container {
+	width: 510px;
+	margin: 0 auto;
+}
+
+#footer #container .legalese {
+	float:right;
+	display: block;
+	border-left: 1px solid white;
+	padding: 10px;
+	margin-top: -10px;
+}
+
+#footer #container p {
+	margin: 0px;
+}
+
+#body {
+	background: url("/public/images/bkg.png?v=1") top center repeat-x #32043f;
+	min-height: calc(100vh - 200px); /* testing */
+	animation: bgScroll 50s linear infinite;
+}
+
+#body #container {
+	width: 970px;
+	margin: 0px auto;
+	padding: 15px 0px;
+}
+
+.box {
+	border: 2px solid rgb(141, 29, 216);
+	padding: 5px;
+	color: white;
+	background: linear-gradient(0deg,rgb(39, 18, 53) 0%, rgb(55, 26, 75) 100%);
+}
