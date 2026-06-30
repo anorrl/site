@@ -23,9 +23,6 @@ It reduces the chance of errors occuring when creating a pull request.
 
 Also in your pull requests, mention WHAT you have done and provide screenshots of what you CHANGED.
 
-### .arch/cachyos tutorial
-[https://www.youtube.com/watch?v=Mb_xV2qz_J8](https://www.youtube.com/watch?v=Mb_xV2qz_J8)
-
 # I HEAVY ADVISE AGAINST USING GITHUB'S ON SITE EDITOR.
 
 thank you :]
