@@ -1,5 +1,5 @@
 # .anorrl
-also known as ANotherOldRobloxRevivalLol
+also known as ANotherOldRobloxRetakeLol
 
 This uses the [ANRSAL](https://github.com/unc-nnected/ANotherRccServiceArbiterLol/) project (created by [Aria](https://github.com/unc-nnected)) as to render and start gameservers so please use that when hosting this source!
 
