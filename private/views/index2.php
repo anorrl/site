@@ -1,7 +1,7 @@
 <?php
 	use anorrl\Page;
 
-	$page = new Page("Welcome to ANORRL");
+	$page = new Page("Welcome to ANORRL!");
 
 	$page->loadHeader2();
 ?>
@@ -93,17 +93,28 @@
 
 	$(function() {
 		$("#login").show();
-			$("#register").hide();
-			$("#auth").attr("data-selected", "login")
+		$("#register").hide();
+		$("#auth").attr("data-selected", "login")
+	})
+2
+	$(function() {
+		$("audio").each(function() {
+			if($(this).attr("volume")) {
+				$(this)[0].volume = Number($(this).attr("volume"));
+			}
+		})
 	})
 </script>
+<audio src="/public/sonic2013menu.mp3" autoplay volume="0.2" loop></audio>
 <div id="newfrontpage">
-	<img src="/public/images/header/logo.png" height="225">
+	<img src="/public/images/header/logo.png" height="200">
+	<br>
+	<img src="/public/images/slogan.gif" width="440">
 	<table>
 		<tr>
 			<td>
 				<div class="box" style="position: relative">
-					<img src="/public/images/test.jpg" height="300">
+					<img src="/public/images/splash_16.png" height="300">
 					<img src="/public/images/anorrl-fellas1.png" style="width: 245px; position: absolute;left: -56px;bottom: -62px;">
 				</div>
 			</td>
@@ -122,7 +133,7 @@
 							<input type="submit" value="Login">
 						</form>
 					</div>
-					<div id="register" class="panel" style="display: none">
+					<div id="register" class="panel">
 						<form method="POST">
 							<h3 style="margin-top: 0px;">are you new around here?</h3>
 							<div class="fieldset">
