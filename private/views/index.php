@@ -166,7 +166,7 @@
 		setTimeout(function () {
 			titleScroller(text.substr(1) + text.substr(0, 1));
 		}, 500);
-	}(" Welcome to ANORRL! "));
+	}("Welcome to ANORRL! "));
 </script>
 <audio src="/public/sonic2013menu.mp3" autoplay volume="0.2" loop></audio>
 <div id="newfrontpage">

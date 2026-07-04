@@ -113,10 +113,10 @@ a:hover {
 #footer {
 	line-height: 1.428;
 	width: 100%;
-	margin: 0 auto;
-	padding: 10px 0;
+	padding: 20px 0;
 	text-align: center;
-	background: linear-gradient(to bottom,#230337 0%,rgb(82, 19, 123) 70%);
+	background: rgb(82, 19, 123);
+	border-top: 1px solid rgb(171, 70, 238);
 }
 
 #footer #container {
