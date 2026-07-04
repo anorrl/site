@@ -1,7 +1,7 @@
 <?php
 	use anorrl\GameServer;
 	use anorrl\GameSession;
-	use anorrl\utilities\UserUtils;
+	use anorrl\Session;
 	use anorrl\Script;
 
 	set_content_type(ARLTYPEPLAIN);
@@ -35,8 +35,8 @@
 		
 		if($player && !$player->isBanned() && $place) {
 
-			if(UserUtils::RetrieveUser() == null) {
-				UserUtils::SetCookies($player->security_key);
+			if(Session::retrieveUser() == null) {
+				Session::setCookies($player->security_key);
 			}
 
 			$port = $serverDetails->port;

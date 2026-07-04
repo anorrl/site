@@ -1,14 +1,14 @@
 <?php
 
-/*
-	[userName] => grace2
-	[password] => BALLS123
-	[gender] => Female
-	[dateOfBirth] => 12/31/2008
-	[email] => penis@lambda.cam
-*/
+	/*
+		[userName] => grace2
+		[password] => BALLS123
+		[gender] => Female
+		[dateOfBirth] => 12/31/2008
+		[email] => penis@lambda.cam
+	*/
 
-	use anorrl\utilities\UserUtils;
+	use anorrl\Session;
 	use anorrl\utilities\SlurUtils;
 
 	if(
@@ -27,15 +27,15 @@
 				"Status" => "Invalid Characters Used"
 			]));
 		} else {
-			if(UserUtils::IsUsernameValid($username)) {
-				$result = UserUtils::RegisterUser($username, $password, $password, str_replace("@lambda.cam", "", $email));
+			if(Session::isUsernameValid($username)) {
+				$result = Session::register($username, $password, $password, str_replace("@lambda.cam", "", $email));
 
-				if($result == "success") {
+				if($result["success"]) {
 					die(json_encode([
 						"Status" => "OK"
 					]));
 				} else {
-					if(!UserUtils::IsUsernameAvailable($username)) {
+					if(!Session::isUsernameAvailable($username)) {
 						die(json_encode([
 							"Status" => "Already Taken"
 						]));

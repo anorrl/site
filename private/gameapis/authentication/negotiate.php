@@ -1,8 +1,8 @@
 <?php
-	use anorrl\utilities\UserUtils;
+	use anorrl\Session;
 
     if(isset($_GET['suggest'])) {
 		$key = base64_decode($_GET['suggest']);
-        UserUtils::SetCookies($key);
+        Session::setCookies($key);
     }
 ?>

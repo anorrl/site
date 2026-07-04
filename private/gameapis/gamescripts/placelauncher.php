@@ -5,7 +5,6 @@
 	use anorrl\GameServer;
 	use anorrl\GameSession;
 	use anorrl\utilities\Arbiter;
-	use anorrl\utilities\UserUtils;
 	
 	set_content_type(ARLTYPEJSON);
 
@@ -110,7 +109,7 @@
 			$session = null;
 			$server = null;
 						
-			$user = UserUtils::RetrieveUser();
+			$user = SESSION ? SESSION->user : null;
 
 			if(!$user) {
 				errorOut(1);

@@ -5,7 +5,7 @@
 	use anorrl\Asset;
 	use anorrl\utilities\SlurUtils;
 	use anorrl\utilities\UtilUtils;
-	use anorrl\utilities\UserUtils;
+	use anorrl\Session;
 
 	class Comment  {
 		public string $id;
@@ -86,7 +86,7 @@
 		}
 
 		public static function Post(Asset|User|null $parent, string $contents): array {
-			$user = UserUtils::RetrieveUser();
+			$user = Session::retrieveUser();
 
 			if(!$user)
 				return [

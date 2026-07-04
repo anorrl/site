@@ -1,6 +1,7 @@
 <?php
 	
 	use anorrl\utilities\UserUtils;
+	use anorrl\Session;
 	use anorrl\Page;
 
 	if(SESSION) {
@@ -19,7 +20,7 @@
 		$confirm_password = trim($_POST['ANORRL$Signup$ConfirmPassword']);
 		$accesskey = trim($_POST['ANORRL$Signup$AccessKey']);
 
-		$result = UserUtils::RegisterUser($username, $password, $confirm_password, $accesskey);
+		$result = Session::register($username, $password, $confirm_password, $accesskey);
 
 		if($result == "success") {
 			redirect("/my/home");

@@ -14,10 +14,9 @@
 
 	require __DIR__ . "/vendor/autoload.php";
 
-	use anorrl\utilities\UserUtils;
 	use anorrl\Session;
 	
-	$session_user = UserUtils::RetrieveUser();
+	$session_user = Session::retrieveUser();
 
 	if(session_status() != PHP_SESSION_ACTIVE) {
 		session_start();

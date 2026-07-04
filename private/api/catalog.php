@@ -1,12 +1,13 @@
 <?php
 	set_content_type(ARLTYPEJSON);
 
-	use anorrl\utilities\UserUtils;
 	use anorrl\utilities\AssetUtils;
 	use anorrl\enums\AssetType;
 	use anorrl\enums\CatalogFilter;
 
-	$user = UserUtils::RetrieveUser();
+	if(!SESSION)
+		die("{}");
+
 	$type = AssetType::HAT->ordinal();
 	$filter = CatalogFilter::MostSold->ordinal();
 	$query = "";

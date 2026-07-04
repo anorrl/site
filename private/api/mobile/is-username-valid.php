@@ -1,6 +1,6 @@
 <?php
 
-	use anorrl\utilities\UserUtils;
+	use anorrl\Session;
 	use anorrl\utilities\SlurUtils;
 
 	$isValid = false;
@@ -10,13 +10,13 @@
 	if(isset($_GET['username'])) {
 		$username = trim($_GET['username']);
 
-		if(UserUtils::IsUsernameValid($username)) {
+		if(Session::isUsernameValid($username)) {
 			$filtered_username = SlurUtils::ProcessText($username);
 
-			if(str_contains($filtered_username, "#") || !UserUtils::IsUsernameValid($filtered_username)) {
+			if(str_contains($filtered_username, "#") || !Session::isUsernameValid($filtered_username)) {
 				$errorMessage = "Username not appropriate for ANORRL";
 			} else {
-				if(UserUtils::IsUsernameAvailable($filtered_username)) {
+				if(Session::isUsernameAvailable($filtered_username)) {
 					$isValid = true;
 					$errorCode = 0;
 					$errorMessage = "";

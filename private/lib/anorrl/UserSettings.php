@@ -93,7 +93,8 @@
 			$this->loadingscreens = !isset($rowdata->loadingscreens) ? self::CreateColumn("loadingscreens", true) : $rowdata->loadingscreens;
 			$this->profile_music = !isset($rowdata->profilemusic) ? self::CreateColumn("profilemusic", true) : $rowdata->profilemusic;
 			$this->background_music = $rowdata->bgm <= 0 ? null : Asset::FromID($rowdata->bgm);
-			$this->playerlisticon = $rowdata->plicon <= 0 ? null : Asset::FromID($rowdata->plicon);
+			$playericon_id = !isset($rowdata->plicon) ? self::CreateColumn("plicon", true) : $rowdata->plicon;
+			$this->playerlisticon = $playericon_id ? null : Asset::FromID($playericon_id);
 			$this->css = $rowdata->css;
 
 			if(!$rowdata->last_username_change) {

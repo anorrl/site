@@ -12,7 +12,10 @@
 	class AssetUtils {
 		
 		public static function Get(AssetType $type, string $query = "", int $page = -1, int $count = -1): array {
-			$user = UserUtils::RetrieveUser();
+			if(!\SESSION) 
+				return [];
+
+			$user = \SESSION->user;
 			$db = Database::singleton();
 
 			if($user == null) 
@@ -75,8 +78,10 @@
 				($filter == CatalogFilter::MostPopular || $filter == CatalogFilter::MostVisited)) {
 				$filter = CatalogFilter::RecentlyUploaded;
 			}
+			if(!\SESSION) 
+				return [];
 
-			$user = UserUtils::RetrieveUser();
+			$user = \SESSION->user;
 			if($user == null) 
 				return [];
 			
@@ -137,9 +142,10 @@
 				$filter = CatalogFilter::RecentlyUploaded;
 			}
 
-			$user = UserUtils::RetrieveUser();
-			if($user == null) 
+			if(!\SESSION->user)
 				return 0;
+
+			$user = \SESSION->user;
 			
 			$query_filter = "AND `public` = 1 AND `nevershow` = 0";
 			if($user->isAdmin()) {

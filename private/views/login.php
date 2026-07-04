@@ -1,7 +1,7 @@
 <?php
 	use anorrl\Page;
-	use anorrl\utilities\UserUtils;
-
+	use anorrl\Session;
+	
 	if(SESSION) {
 		redirect("/my/home");
 	}
@@ -13,7 +13,7 @@
 		$username = trim($_POST['ANORRL$Login$Username']);
 		$password = trim($_POST['ANORRL$Login$Password']);
 
-		$result = UserUtils::LoginUser($username, $password);
+		$result = Session::login($username, $password);
 
 		if($result["login"] != "Incorrect details provided!") {
 			redirect("/my/home");

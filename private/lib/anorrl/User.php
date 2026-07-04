@@ -1487,10 +1487,10 @@
 				return ["error" => false];
 			}
 
-			if(!UserUtils::IsUsernameValid($processed_new_name))
+			if(!Session::isUsernameValid($processed_new_name))
 				return ["error" => true, "reason" => "Username must be a-z A-Z 0-9 and 3-20 characters only!"];
 
-			if(!UserUtils::IsUsernameAvailable($processed_new_name))
+			if(!Session::isUsernameAvailable($processed_new_name))
 				return ["error" => true, "reason" => "Username has already been taken!"];
 
 			// todo: add uhm sql implementation and time check...

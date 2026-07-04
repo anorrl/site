@@ -244,8 +244,8 @@
 			User|null $user = null
 		): array {
 
-			if($user == null) {
-				$user = UserUtils::RetrieveUser();
+			if($user == null && \SESSION) {
+				$user = \SESSION->user;
 			}
 
 			if($user != null && !$user->isBanned()) {
@@ -326,8 +326,8 @@
 			array|string $file,
 			User|null $user = null
 		): array {
-			if($user == null) {
-				$user = UserUtils::RetrieveUser();
+			if($user == null && \SESSION) {
+				$user = \SESSION->user;
 			}
 
 			if($user != null && !$user->isBanned() && $asset->isOwner($user)) {
@@ -522,8 +522,8 @@
 			bool $comments_enabled = true,
 			User|null $user = null
 		): array {
-			if($user == null) {
-				$user = UserUtils::RetrieveUser();
+			if($user == null && \SESSION) {
+				$user = \SESSION->user;
 			}
 
 			if($file == null && $type != AssetType::PLACE && $type != AssetType::PACKAGE) {

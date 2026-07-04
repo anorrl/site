@@ -1,11 +1,10 @@
 <?php
-	
-	use anorrl\utilities\UserUtils;
+	use anorrl\Session;
 	
 	$user = SESSION ? SESSION->user : null;
 	
 	if($user != null) {
-		UserUtils::RemoveCookies();
+		Session::removeCookies();
 		session_destroy();
 		echo "Logged out yay";
 	} else {

@@ -73,8 +73,7 @@
 
 	//route('GET',      '/test', '/private/views/test.php');
  
-	route('GET',      '/', '/private/views/index.php');
-	route('GET',      '/index2', '/private/views/index2.php');
+	route('GET|POST', '/', '/private/views/index.php');
 
 	route('GET',      '/index', '/private/views/index.php');
 	route('GET|POST', '/login', '/private/views/login.php');
