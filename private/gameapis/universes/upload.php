@@ -6,7 +6,7 @@
 	set_content_type(ARLTYPEJSON);
 
 	if(!SESSION)
-		die(http_response_code(500));
+		exit_http(500);
 
 	$user = SESSION->user;
 

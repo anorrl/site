@@ -4,8 +4,7 @@
 	use anorrl\utilities\ClientDetector;
 
 	if(!ClientDetector::HasAccess()) {
-		echo "NOT OK";
-		exit(http_response_code(403));
+		exit_http(403, "NOT OK");
 	}
 
 	// to-do: use json?
@@ -22,6 +21,5 @@
 		}
 	}
 
-	echo "NOT OK";
-	http_response_code(503);
+	exit_http(503, "NOT OK");
 ?>

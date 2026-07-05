@@ -54,7 +54,7 @@
 				}
 				require __DIR__.$file;
 			} else {
-				die(http_response_code(401));
+				exit_http(401);
 			}
 		});
 	}

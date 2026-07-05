@@ -2,17 +2,17 @@
 	use anorrl\Place;
 
 	if(!isset($_GET['placeId']) || !SESSION)
-		die(http_response_code(503));
+		exit_http(503);
 
 	set_content_type(ARLTYPEJSON);
 
 	$place = Place::FromID(intval($_GET['placeId']));
 	
 	if(!$place)
-		die(http_response_code(503));
+		exit_http(503);
 
 	if(!$place->isEditable(SESSION->user))
-		die(http_response_code(503));
+		exit_http(503);
 
 
 	$badges = [];

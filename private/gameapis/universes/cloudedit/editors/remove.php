@@ -5,17 +5,17 @@
 	set_content_type(ARLTYPEJSON);
 
 	if(!SESSION || !isset($universeId))
-		die(http_response_code(503));
+		exit_http(503);
 
 	$universe = Universe::FromID(intval($universeId));
 	
 	if(!$universe)
-		die(http_response_code(503));
+		exit_http(503);
 	
 	$user = SESSION->user;
 
 	if(!$universe->isOwner($user))
-		die(http_response_code(503));
+		exit_http(503);
 
 	$userToAdd = User::FromID(intval($_GET['userId']));
 	if($userToAdd) {

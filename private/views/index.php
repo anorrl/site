@@ -214,7 +214,7 @@
 						$user = SESSION->user; ?>
 					<h3 style="font-family: 'arial-rounded bold'; margin-bottom: 5px;">your character</h3>
 					<span><?= $user->name ?></span>
-					<img src="/public/images/avatar.png" width="250px">
+					<img src="/thumbs/player?id=<?= $user->id ?>&sxy=250" width="250px">
 					<div style="margin-top:-20px; margin-bottom: 15px; font-weight: bold;">
 						<a href="/users/<?= $user->id ?>/profile">profile</a><span class="spacer">&nbsp;</span>
 						<a href="/my/profile">settings</a><span class="spacer">&nbsp;</span>

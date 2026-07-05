@@ -80,7 +80,7 @@
 				]
 			);
 		} else {
-			die(http_response_code(500));
+			exit_http(500);
 		}
 	}
 	
@@ -110,7 +110,7 @@
 					$recieveddata = gzdecode($recieveddata);
 				}
 			} else {
-				die(http_response_code(500));
+				exit_http(500);
 			}
 
 			SetDataBlob($place, $user, $recieveddata);

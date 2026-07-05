@@ -10,16 +10,16 @@
 	set_content_type(ARLTYPEPLAIN);
 
 	if(!SESSION || !isset($_GET['placeId']) && !isset($_GET['PlaceID']))
-		die(http_response_code(403));
+		exit_http(403);
 
 	$user = SESSION->user;
 	$place = Place::FromID(intval(isset($_GET['placeId']) ? $_GET['placeId'] : $_GET['PlaceID']));
 
 	if(!$place)
-		die(http_response_code(403));
+		exit_http(403);
 
 	if(!$place->isEditable($user))
-		die(http_response_code(403));
+		exit_http(403);
 
 
 	$uploadurl = "http://{domain}/Data/Upload.ashx?assetid=".$place->id;

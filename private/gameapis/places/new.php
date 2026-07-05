@@ -3,15 +3,15 @@
 	use anorrl\utilities\AssetUploader;
 	
 	if(!SESSION || !isset($_GET['universeId']))
-		die(http_response_code(403));
+		exit_http(403);
 
 	$universe = Universe::FromID(intval($_GET['universeId']));
 
 	if(!$universe)
-		die(http_response_code(503));
+		exit_http(503);
 
 	if(!$universe->isOwner(SESSION->user))
-		die(http_response_code(403));
+		exit_http(403);
 
 	$result = AssetUploader::CreateSubPlace($universe);
 

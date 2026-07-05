@@ -3,12 +3,12 @@
 	use anorrl\Asset;
 
 	if(!isset($_GET['userid']) && !isset($_GET['assetid']))
-		die(http_response_code(500));
+		exit_http(500);
 	
 	$data = isset($_GET['userid']) ? User::FromID(intval($_GET['userid'])) : Asset::FromID(intval($_GET['assetid']));
 
 	if(!$data)
-		die(http_response_code(500));
+		exit_http(500);
 
 	set_content_type(ARLTYPEJSON);
 

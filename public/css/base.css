@@ -41,6 +41,10 @@ a:hover {
 	color: #ffc63f;
 }
 
+h1, h2, h3, h4, h5 {
+	font-family: monospace;
+}
+
 @keyframes bgScroll {
 	0% {
 		background-position : 0px 0px;

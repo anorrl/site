@@ -44,7 +44,7 @@
 
 			if($assetid == 0 && $user != null) {
 				// Publish new item
-
+				
 				$timer = 31;
 				if($user->getLatestAssetUploaded() != null) {
 					$difference = UtilUtils::GetSecondsElapsedFrom($user->getLatestAssetUploaded()->created_at);
@@ -52,8 +52,7 @@
 				}
 
 				if($timer < 30) {
-					http_response_code(501);
-					die("You are uploading too many assets! Wait a bit!");
+					exit_http(501, "You are uploading too many assets! Wait a bit!");
 				}
 
 				/*
@@ -85,10 +84,10 @@
 						$recieveddata = gzdecode($recieveddata);
 						echo "decoding using gz\n";
 					}
-					die(http_response_code(502));
+					exit_http(502);
 					
 				} else {
-					die(http_response_code(502));
+					exit_http(502);
 				}
 
 			} else {
@@ -97,16 +96,12 @@
 				if($asset != null) {
 					$recieveddata = file_get_contents("php://input");
 					if(is_bool($recieveddata)) {
-						http_response_code(500);
-						error_log("Something went wrong idfk what complain to grace until she says something");
-						die("Something went wrong idfk what complain to grace until she says something");
+						exit_http(500, "Something went wrong idfk what complain to grace until she says something");
 					}
 					if(strlen(gzdecode($recieveddata)) != 0) {
 						$recieveddata = gzdecode($recieveddata);
 						if(is_bool($recieveddata)) {
-							http_response_code(500);
-							error_log("You can't just publish an empty place you dumb eejit!");
-							die("You can't just publish an empty place you dumb eejit!");
+							exit_http(500, "You can't just publish an empty place you dumb eejit!");
 						}
 						error_log("decoding using gz for ".$asset->id);
 					}
@@ -119,16 +114,11 @@
 							$result = AssetUploader::UpdateAsset($asset, $recieveddata, $asset->creator);
 
 							if($result['error']) {
-								http_response_code(500);
-								error_log($result['reason']);
-								die($result['reason']);
+								exit_http(500, $result['reason']);
 							}
-							http_response_code(200);
 							die("Uploaded successfully!");
 						} else {
-							http_response_code(500);
-							error_log("So like you don't own this asset so can you not");
-							die("So like you don't own this asset so can you not");
+							exit_http(500, "So like you don't own this asset so can you not");
 						}
 						
 					}
@@ -137,12 +127,8 @@
 			}
 		}
 	} else {
-		http_response_code(503);
-		die("Action failed.");
+		exit_http(503, "Action failed.");
 	}
 
-	http_response_code(500);
-	error_log("Action failed.");
-	die("Action failed.");
-
+	exit_http(500, "Action failed.");
 ?>
