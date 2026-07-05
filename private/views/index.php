@@ -14,11 +14,10 @@
 		$result = Session::login($username, $password);
 
 		if($result["success"]) {
-			//redirect("/my/home");
+			redirect("/my/home");
 		} else {
 			$_SESSION['login_errors'] = $result["errors"];
-			die(print_r($result["errors"]));
-			//redirect("/");
+			redirect("/");
 		}
 	} else if(isset($_POST['ANORRL$Signup$Username']) &&
 	   isset($_POST['ANORRL$Signup$Password']) &&
@@ -85,20 +84,6 @@
 	.panel {
 		padding: 5px;
 		
-	}
-
-	.panel input[type="submit"] {
-		border: 2px solid rgb(141, 29, 216);
-		font-size: 14px;
-		padding: 5px 15px;
-		font-weight: bold;
-		background: linear-gradient(180deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
-		color: white;
-		cursor: pointer;
-	}
-
-	.panel input[type="submit"]:hover {
-		filter: brightness(1.15);
 	}
 
 	#auth[data-selected="register"] a[href="javascript:openRegisterPanel()"],
@@ -198,7 +183,7 @@
 								<label>.password <span class="form-asterisk">*</span></label>
 								<input type="password" placeholder="don't tell me you forgot it..." name="ANORRL$Login$Password">
 							</div>
-							<input type="submit" value="login" name="ANORRL$Login$Submit">
+							<input class="button" type="submit" value="login" name="ANORRL$Login$Submit">
 						</form>
 					</div>
 					<div id="register" class="panel">
@@ -222,20 +207,25 @@
 								<label>.invite_key <span class="form-asterisk">*</span></label>
 								<input type="password" placeholder="sigh... you know the deal..." required>
 							</div>
-							<input type="submit" value="register">
+							<input class="button" type="submit" value="register">
 						</form>
 					</div>
-					<?php else: ?>
+					<?php else: 
+						$user = SESSION->user; ?>
 					<h3 style="font-family: 'arial-rounded bold'; margin-bottom: 5px;">your character</h3>
-					<span>[username]</span>
+					<span><?= $user->name ?></span>
 					<img src="/public/images/avatar.png" width="250px">
-					<div style="margin-top:-10px; margin-bottom: 15px; font-weight: bold;">
-						<a href="">profile</a><span class="spacer">&nbsp;</span>
-						<a href="">settings</a><span class="spacer">&nbsp;</span>
-						<a href="">stuff</a>
+					<div style="margin-top:-20px; margin-bottom: 15px; font-weight: bold;">
+						<a href="/users/<?= $user->id ?>/profile">profile</a><span class="spacer">&nbsp;</span>
+						<a href="/my/profile">settings</a><span class="spacer">&nbsp;</span>
+						<a href="/my/stuff">stuff</a>
+						<br>
+						<a href="/my/friends">friends</a><span class="spacer">&nbsp;</span>
+						<a href="/users/<?= $user->id ?>/following">following</a><span class="spacer">&nbsp;</span>
+						<a href="/users/<?= $user->id ?>/followers">followers</a>
 						<br style="margin: 10px 0px;">
-						<a href="">friends</a><span class="spacer">&nbsp;</span>
-						<a href="">followers</a>
+						<a href="/api/logout?redirect=/" class="button">logout</a>
+						<br style="margin: 10px 0px;">
 					</div>
 					<?php endif ?>
 				</div>

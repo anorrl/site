@@ -349,7 +349,7 @@
 						<td>
 							<div class="Badge">
 								<a href="/badges#Badge$badgeid" title="$badgedesc">
-									<img src="/public/images/Badges/$badgenamefile.png?v=2" title="$badgename">
+									<img src="/public/images/badges/$badgenamefile.png?v=2" title="$badgename">
 									<span>$badgename</span>
 								</a>
 							</div>

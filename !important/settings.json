@@ -7,9 +7,7 @@
 	},
 	"asset": {
 		"key": "uuid or something",
-		"webhook": "discord webhook for catalog drops",
-		"canforward": false,
-		"roblosec": "this should be filled in if using forwarding system."
+		"webhook": "discord webhook for catalog drops"
 	},
 	"arbiter": {
 		"location": {

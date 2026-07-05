@@ -24,7 +24,7 @@
 
 	route('GET|POST', '/Sets/SetHandler.ashx', '/private/gameapis/sets/setshandler.php');
 
-	route('GET',      '/Game/Tools/ThumbnailAsset.ashx', '/public/images/unavailable-75.png');
+	route('GET',      '/Game/Tools/ThumbnailAsset.ashx', '/public/images/thumbnails/unavailable-75.png');
 	route('GET',      '/Thumbs/Avatar.ashx', '/private/thumbs/player.php');
 	route('GET',      '/thumbs/avatar.ashx', '/private/thumbs/player.php');
 	route('GET',      '/Thumbs/RawAsset.ashx', '/private/thumbs/rawasset.php');

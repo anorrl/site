@@ -23,7 +23,7 @@
 				$user->render(true);
 
 				if(!file_exists($path))
-					$path = $_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.jpg";
+					$path = $_SERVER['DOCUMENT_ROOT']."/public/images/thumbnails/unavailable.jpg";
 			}
 
 			$contents = file_get_contents($path);

@@ -8,13 +8,9 @@
 	$header_check_user = SESSION ? SESSION->user : null;
 
 	$rand_pic = new Splasher(UtilUtils::GetFilesArray("/public/images/randoms/"), false, "RandomImages")->getRandomSplash();
-	$rand_splash_pic = new Splasher(UtilUtils::GetFilesArray("/public/images/splashes/"), false, "SplashScreen")->getRandomSplash();
 
 	$randomsignsplash = new FileSplasher("sign")->getRandomSplash();
 
-	$splashscreencaptions = file($_SERVER["DOCUMENT_ROOT"]."/private/splashes/screens.txt");
-	$splashscreencaption = $splashscreencaptions[str_replace(["ANORRLStudioSplash-", ".png"], "", $rand_splash_pic)-1];
-	
 	if(session_status() == PHP_SESSION_NONE)
 		session_start();
 
@@ -58,7 +54,7 @@
 		<meta property="<?= $meta['type'] ?>" content="<?= $meta['contents'] ?>">
 		<?php endforeach ?>
 		
-		<?php if($this->settings->loadingscreens && !ClientDetector::IsAClient()): ?>
+		<?php if(false): ?>
 		<style>
 			#LoadingScreen {
 				inset: 0;
@@ -139,7 +135,7 @@
 		<?php endif ?>
 	</head>
 	<body <?= $this->settings->nightbg && !$hasBackground ? "night" : "" ?>>
-		<?php if($this->settings->loadingscreens && !ClientDetector::IsAClient()): ?>
+		<?php if(false): ?>
 		<div id="LoadingScreen">
 			<div>
 				<img src="/public/images/splashes/<?= $rand_splash_pic ?>" splash>

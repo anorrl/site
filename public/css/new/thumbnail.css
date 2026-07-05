@@ -1,6 +1,6 @@
 #ThumbnailSwitcher {
 	background: none;
-	background: url("/public/images/thumbnail/3D.png");
+	background: url("/public/images/thumbnails/viewer/3D.png");
 	background-position: -10px -10px;
 	width: 48px;
 	height: 48px;
@@ -11,15 +11,15 @@
 }
 
 #ThumbnailSwitcher:hover {
-	background-image: url("/public/images/thumbnail/3DHover.png");
+	background-image: url("/public/images/thumbnails/viewer/3DHover.png");
 }
 
 #ThumbnailSwitcher[data-3d="true"] {
-	background-image: url("/public/images/thumbnail/2D.png");
+	background-image: url("/public/images/thumbnails/viewer/2D.png");
 }
 
 #ThumbnailSwitcher[data-3d="true"]:hover {
-	background-image: url("/public/images/thumbnail/2DHover.png");
+	background-image: url("/public/images/thumbnails/viewer/2DHover.png");
 }
 
 .thumbnail-holder {

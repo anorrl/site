@@ -80,6 +80,11 @@
 		return $headers[$name] ?? null;
 	}
 
+	function exit_http(int $http_response_code, string $message = "") {
+		http_response_code($http_response_code);
+		die($message);
+	}
+
 	require_once __DIR__ . "/router.php";
 
 	exit();

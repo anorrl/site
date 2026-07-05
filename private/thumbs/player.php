@@ -3,7 +3,7 @@
 	use anorrl\User;
 
 	if(isset($_GET['headshot'])) {
-		die(include $_SERVER['DOCUMENT_ROOT']."/core/thumbs/headshot.php");
+		die(include $_SERVER['DOCUMENT_ROOT']."/private/thumbs/headshot.php");
 	}
 	if(isset($_GET['id']) || isset($_GET['userId']) || isset($_GET['username'])) {
 		if(!isset($_GET['username'])) {
@@ -31,7 +31,7 @@
 				$user->render();
 
 				if(!file_exists($path))
-					$path = $_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.jpg";
+					$path = $_SERVER['DOCUMENT_ROOT']."/public/images/thumbnails/unavailable.jpg";
 			}
 
 			$contents = file_get_contents($path);

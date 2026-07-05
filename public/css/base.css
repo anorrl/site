@@ -20,6 +20,8 @@
 
 html {
 	background: rgb(82, 19, 123);
+	min-height: 100vh;
+	background: linear-gradient(180deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
 	font-family: Arial,Helvetica,sans-serif;
 	color: #eee;
 	font-size: 12px;
@@ -61,31 +63,60 @@ a:hover {
 	display:block;
 	width:100%;
 	height: 30px;
-	background-image:url("/public/images/header/navbar3.jpg");
+	background-image:url("/public/images/header/navbar_new.jpg");
 	animation: bgScroll2 50s linear infinite;
 	background-size: contain;
 	border-bottom: 5px solid black;
 	text-align: center;
 }
 
-#header #links {
-	position:relative;
-	font-size: 16px;
-	padding-top: 5px;
+
+#submenu {
+	display:block;
+	width:100%;
+	background: #171717;
+	border-bottom: 5px solid black;
+	text-align: center;
+	color: white;
+	font-size: 13px;
 }
 
-#header #links a {
+#submenu > #container {
+	margin: 0 auto; width: fit-content;
+}
+
+#submenu > #container a {
+	color:white;
+	display: inline-block;
+	padding: 3px 10px;
+}
+
+#submenu > #container a:hover {
+	color:white;
+	background: #222;
+	background: linear-gradient(0deg,#222 0%, #444 100%);
+	font-weight: bold;
+}
+
+#header #links {
+	position:relative;
+	padding-top: 6px;
+}
+
+.header-link {
 	color: white;
 	padding: 1px 1.5em;
 	background: rgb(0,0,0);
 	border: 2px solid black;
 	font-family: punk;
+	font-size: 16px;
 }
 
-#header #links a:hover {
+.header-link:hover {
 	text-decoration: underline;
 	background: #222;
 	background: linear-gradient(0deg,#222 0%, #444 100%);
+	color: white;
 }
 
 #header #logo a {
@@ -110,12 +141,67 @@ a:hover {
 	margin: 0 auto;
 }
 
+#billboard {
+	position: absolute;
+	background-image: url('/public/images/header/billboard.png');
+	right: 20px;
+	top: 26px;
+	width:229px;
+	height: 145px;
+}
+
+#billboard #container {
+	position: absolute;
+	text-align: left;
+	margin: 8px;
+	width: 212px;
+	height: 99px;
+	top: 26px;
+}
+
+#billboard hr {
+	margin: 0px;margin-bottom: 5px; color: white;
+}
+
+#billboard table {
+	width: 100%;font-family: road;font-weight: bold;
+}
+
+#billboard table a {
+	color: white;
+	padding: 5px;
+	white-space: nowrap;
+	overflow:auto;
+	text-overflow: ellipsis;
+	display: block;
+	max-width:60px;
+}
+
+#billboard table a:hover {
+	border: 1px solid white;
+	margin: -1px;
+}
+
+#billboard #container #profile td {
+	text-align: center;
+}
+
+#billboard #container #profile a {
+	padding: 0px;
+	max-width: unset;
+}
+
+#billboard #container #profile a:hover {
+	margin: 0px;
+	border: 0px;
+}
+
 #footer {
 	line-height: 1.428;
 	width: 100%;
 	padding: 20px 0;
 	text-align: center;
-	background: rgb(82, 19, 123);
+	/*background: rgb(82, 19, 123);*/
 	border-top: 1px solid rgb(171, 70, 238);
 }
 
@@ -161,4 +247,19 @@ a:hover {
 	color: white;
 	background: linear-gradient(0deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
 	border-radius: 8px;
+}
+
+.button {
+	border: 2px solid rgb(141, 29, 216);
+	font-size: 14px;
+	padding: 5px 15px;
+	font-weight: bold;
+	background: linear-gradient(180deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	color: white;
+	cursor: pointer;
+}
+
+.button:hover {
+	filter: brightness(1.15);
+	color: white;
 }
