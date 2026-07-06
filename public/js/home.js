@@ -27,16 +27,16 @@ ANORRL.Home = {
 			page = 1;
 		}
 
-		var feedscontainer = $("#FeedsContainer #Feeds");
+		var feedscontainer = $("#feeds");
 
 		feedscontainer.children().each(function() {
 			$(this).remove();
 		});
 
-		var pagercontainer = $("#FeedsContainer #Pager");
+		var pagercontainer = $("#pager");
 		
-		var backPager = pagercontainer.find("#BackPager");
-		var nextPager = pagercontainer.find("#NextPager");
+		var backPager = pagercontainer.find("#back-pager");
+		var nextPager = pagercontainer.find("#next-pager");
 
 		$.get("/api/feeds", {p : page}, function(data) {
 			if(pagercontainer.css("display") == "none") {
@@ -52,20 +52,20 @@ ANORRL.Home = {
 			for (var key in statuses) {
 				var status = statuses[key];
 
-				var template = $($("#FeedItem[template]").clone().prop('outerHTML'));
+				var template = $($(".feed-item[template]").clone().prop('outerHTML'));
 				template.removeAttr("template");
-				template.removeAttr("class");
+				template.removeAttr("style");
 
 				if(index % 2 == 0) {
 					template.attr("other", "");
 				}
 
-				template.find("#Content code").html(status['content']);
-				template.find(".User").find("a").attr("href", "/users/"+status['poster']['id']+"/profile");
-				template.find(".User").find("a").find("img").attr("src", status['poster']['thumbnail']);
-				template.find(".User #Name").html(status['poster']['name']);
-				template.find("#Content #DatePosted #Date").html(status['time_posted_label']);
-				template.find("#Content #DatePosted a").attr("href", "/report?statusid="+status['id']);
+				template.find("#content code").html(status['content']);
+				template.find("#user a").attr("href", "/users/"+status['poster']['id']+"/profile");
+				template.find("#user a").find("img").attr("src", status['poster']['thumbnail']);
+				template.find("#content #name").html(status['poster']['name']);
+				template.find("#content #date-posted #date").html(status['time_posted_label']);
+				template.find("#content #date-posted a").attr("href", "/report?statusid="+status['id']);
 				
 				feedscontainer.append($(template));
 
@@ -84,7 +84,7 @@ ANORRL.Home = {
 				nextPager.css("display", "inline");
 			}
 
-			pagercontainer.find("#PageCounter").html("Page " + current_page + " of " + total_pages);
+			pagercontainer.find("#page-counter").html("" + current_page + " of " + total_pages);
 		});
 	}
 }

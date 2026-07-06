@@ -83,6 +83,7 @@ h1, h2, h3, h4, h5 {
 	text-align: center;
 	color: white;
 	font-size: 13px;
+	position: relative
 }
 
 #submenu > #container {
@@ -251,6 +252,13 @@ h1, h2, h3, h4, h5 {
 	color: white;
 	background: linear-gradient(0deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
 	border-radius: 8px;
+}
+
+.box.input {
+	border: 2px solid rgb(141, 29, 216);
+	padding: 5px;
+	color: white;
+	background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
 }
 
 .button {

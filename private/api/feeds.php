@@ -29,7 +29,7 @@
 						"poster" => [
 							"id" => $status->poster->id,
 							"name" => $status->poster->name,
-							"thumbnail" => $status->poster->getThumbsUrl(90)
+							"thumbnail" => $status->poster->getThumbsUrl(75)
 						],
 						"content" => $status->content,
 						"time_posted" => $status->time_posted->getTimestamp(),

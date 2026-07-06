@@ -1,40 +1,10 @@
 <?php
-	use anorrl\UserSettings;
-	use anorrl\utilities\ClientDetector;
-	use anorrl\utilities\Splasher;
-	use anorrl\utilities\FileSplasher;
-	use anorrl\utilities\UtilUtils;
+	$auth_user = SESSION ? SESSION->user : null;
 
-	$header_check_user = SESSION ? SESSION->user : null;
-
-	$rand_pic = new Splasher(UtilUtils::GetFilesArray("/public/images/randoms/"), false, "RandomImages")->getRandomSplash();
-	
-	$randomsignsplash = new FileSplasher("sign")->getRandomSplash();
-	
 	if(session_status() == PHP_SESSION_NONE)
 		session_start();
 
-	if(isset($_SESSION['ANORRL$UserPage$RandomImages']))
-		unset($_SESSION['ANORRL$UserPage$RandomImages']);
-
-	//this is so that if the user ever sets 'background:' on the profile css it'll not apply the night background
-	//because the night background can override the user's background
-	$hasBackground = false;
-
-	$userCSS = isset($get_user) ? UserSettings::Get($get_user)->css : (SESSION ? SESSION->settings->css : "");
-	if (!empty($userCSS) && preg_match('/background\s*:/i', $userCSS)) {
-		$hasBackground = true;
-	}
-
-	/*
-	$hasBackground = false;
-	if (isset($get_user)) {
-   		$userCss = $header_data->GetUserCSS();
-    	if (!empty($userCss) && preg_match('/background\s*:/i', $userCss)) {
-        	$hasBackground = true;
-    	}
-	}
-	*/
+	// todo: something!
 ?>
 <!DOCTYPE html>
 <html>
@@ -76,16 +46,16 @@
 				</div>
 			</div>
 		</div>
-		<?php if(SESSION): ?>
-		<div id="submenu" style="position: relative">
+		<?php if($auth_user): ?>
+		<div id="submenu">
 			<div id="container">
-				<a href="/users/<?= SESSION->user->id ?>/profile"   <?php if($this->internal_name == "user_profile"	 ):?>selected<?php endif ?>>Profile</a>
-				<a href="/my/profile"   <?php if($this->internal_name == "my/profile"	 ):?>selected<?php endif ?>>Account</a>
-				<a href="/my/character" <?php if($this->internal_name == "my/character"	 ):?>selected<?php endif ?>>Character</a>
-				<a href="/my/friends"   <?php if($this->internal_name == "my/friends"	 ):?>selected<?php endif ?>>Friends</a>
-				<a href="/create/"      <?php if($this->internal_name == "my/create"	 ):?>selected<?php endif ?>>Create</a>
-				<a href="/my/stuff"     <?php if($this->internal_name == "my/stuff"		 ):?>selected<?php endif ?>>Stuff</a>
-				<a href="/download"     <?php if($this->internal_name == "download/index"):?>selected<?php endif ?>>Download</a>
+				<a href="/users/<?= $auth_user->id ?>/profile" <?php if($this->internal_name == "user_profile"):  ?>selected<?php endif ?>>Profile</a>
+				<a href="/my/profile" <?php                          if($this->internal_name == "my/profile"):    ?>selected<?php endif ?>>Account</a>
+				<a href="/my/character" <?php                        if($this->internal_name == "my/character"):  ?>selected<?php endif ?>>Character</a>
+				<a href="/my/friends" <?php                          if($this->internal_name == "my/friends"):    ?>selected<?php endif ?>>Friends</a>
+				<a href="/create/" <?php                             if($this->internal_name == "my/create"):     ?>selected<?php endif ?>>Create</a>
+				<a href="/my/stuff" <?php                            if($this->internal_name == "my/stuff"):      ?>selected<?php endif ?>>Stuff</a>
+				<a href="/download" <?php                            if($this->internal_name == "download/index"):?>selected<?php endif ?>>Download</a>
 			</div>
 			<div id="billboard">
 				<div id="container">
@@ -93,8 +63,8 @@
 						<table id="profile">
 							<tbody>
 								<tr>
-									<td width="40" title="Hey! That's you!"><img src="/thumbs/player?id=1&amp;sxy=42"></td>
-									<td title="Hey! That's you!"><a href="/users/1/profile"><?= "OnlyTwentyCharacters" ?></a></td>
+									<td width="40" title="Hey! That's you!"><img src="/thumbs/player?id=<?= $auth_user->id ?>&amp;sxy=42"></td>
+									<td title="Hey! That's you!"><a href="/users/<?= $auth_user->id ?>/profile"><?= $auth_user->name ?></a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -118,8 +88,6 @@
 				</div>
 			</div>
 		</div>
-		
-
 		<?php endif ?>
 		<div id="body">
 			<div id="container">

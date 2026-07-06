@@ -54,7 +54,7 @@
 					$calculated_time = 30 - $difference; 
 
 					if($difference < 30) {
-						return ["error"=> true, "reason" => "You need to wait $calculated_time seconds before posting again."];
+						return ["success"=> false, "reason" => "You need to wait $calculated_time seconds before posting again."];
 					}
 				}
 
@@ -62,10 +62,10 @@
 				$status_content = UtilUtils::StripUnicode($contents);
 
 				if(strlen($status_content) < 4) {
-					return ["error"=> true, "reason" => "Status was too short! (4 characters minimum)"];
+					return ["success"=> false, "reason" => "Status was too short! (4 characters minimum)"];
 				}
-				if(strlen($status_content) > 64) {
-					return ["error"=> true, "reason" => "Status was too long! (64 characters maximum)"];
+				if(strlen($status_content) > 256) {
+					return ["success"=> false, "reason" => "Status was too long! (64 characters maximum)"];
 				}
 
 				Database::singleton()->run(
@@ -77,9 +77,9 @@
 					]
 				);
 				
-				return ["error" => false];
+				return ["success" => true];
 			} else {
-				return ["error"=> true, "reason" => "User is not logged in."];
+				return ["success"=> false, "reason" => "User is not logged in."];
 			}
 		}
 
