@@ -32,7 +32,28 @@
 
 	$recentlyplayed = $user->getRecentlyPlayedGames(2);
 
+	$friends_upper_limit = 4;
+
+	$friends = $user->getFriends();
+	$friends_count = count($friends);
+	$has_friends = $friends_count != 0;
+	$too_many_friends = $friends_count > $friends_upper_limit;
+
+	shuffle($friends);
+	
+	if(count($friends) > $friends_upper_limit) {
+		$new_friends = [];
+		for($i = 1; $i <= $friends_upper_limit; $i++) {
+			$new_friends[] = $friends[count($friends)-$i];
+		}
+
+		$friends = $new_friends;
+	}
+
 	$page = new Page("Home", "my/home");
+	$page->clearAll();
+
+	$page->addStylesheet("/css/home.css");
 
 	$page->loadHeader2();
 ?>
@@ -43,47 +64,21 @@
 		</a>
 	</td>
 	<td id="content">
-		<a href=""><div id="name">Name here</div></a>
-		<code>Content content</code>
-		<div id="date-posted">Posted <span id="date">DD/MM/YYYY</span><!-- <a href="">Report abuse</a>--></div>
+		<a href=""><div id="name"></div></a>
+		<code></code>
+		<img id="scroll-arrow" src="/public/images/icons/feed-dropdown_arrow.png" title="This has more content! Scroll!">
+		<div id="date-posted">posted <span id="date">DD/MM/YYYY</span><a href="" id="report">.report</a></div>
+		
 	</td>
 </table>
 <script src="/public/js/home.js?t=1776011774"></script>
-<style>
-	textarea.box.input {
-		width: 890px; height: 52px; max-width: 890px;min-width: 200px; min-height: 20px; max-height: 52px;
-	}
-
-	h2 {
-		margin-left: 25px;
-	}
-
-	hr {
-		color: rgb(141, 29, 216);
-	}
-
-	.error-text {
-		color: red;
-		font-weight: bold;
-		margin-bottom: 5px;
-		font-style: italic;
-	}
-
-	.success-text {
-		color: rgb(242, 83, 255);
-		font-weight: bold;
-		margin-bottom: 5px;
-		font-style: italic;
-	}
-</style>
 <div class="box" style="margin-bottom: 5px;">
-	<h2 style="margin-bottom: 5px;">.add_status</h2>
+	<h2 style="margin-bottom: 5px; margin-left: 25px;">.add_status</h2>
 	
 	<form method="POST" style="margin: 0px 25px; margin-bottom: 20px;">
 		<?php // this lowk ass but it works so whatever ?>
 		<?php if(isset($_SESSION['ANORRL$Home$StatusResult'])):
-			$result = $_SESSION['ANORRL$Home$StatusResult'];
-		?>
+			$result = $_SESSION['ANORRL$Home$StatusResult']; ?>
 			<?php if(!$result['success']): ?>
 				<div class="error-text"><?= $result['reason'] ?></div>
 			<?php else: ?>
@@ -96,50 +91,68 @@
 </div>
 <div style="display: flex; gap: 5px; align-items: flex-start;">
 	<div class="box" style="flex: 1; padding: 0px 25px">
-		<h2 style="margin-left: -5px;">.feed</h2>
-		<style>
-			.feed-item {
-				*margin-left: 25px;
-			}
-
-			#pager {
-				padding: 15px;
-				text-align: center;
-			}
-
-
-			.feed-item #content #name {
-				font-weight: bold;
-				font-size: 12px;
-				letter-spacing: 2px;
-			}
-
-			.feed-item #content #date-posted {
-				color: rgb(159, 124, 184);
-				font-style: italic;
-			}
-			.feed-item #user img {
-				margin-right: 5px;
-			}
-		</style>
+		<h2 style="margin-left: -8px;margin-bottom: 8px;">.feed</h2>
 		<div id="feeds">
 			
 		</div>
 		<hr style="margin-bottom: 0px;">
 		<div id="pager" style="display:none">
-			<a href="javascript:ANORRL.Home.DeadvanceFeed()" id="back-pager">&lt;&lt; Back</a>
-			<span id="page-counter">Page 1 of 1</span>
-			<a href="javascript:ANORRL.Home.AdvanceFeed()" id="next-pager">Next &gt;&gt;</a>
+			<a href="javascript:ANORRL.Home.DeadvanceFeed()" id="back-pager">&lt;&lt; back</a>
+			<span id="page-counter">1 of 1</span>
+			<a href="javascript:ANORRL.Home.AdvanceFeed()" id="next-pager">next &gt;&gt;</a>
 		</div>
 	</div>
-	<div class="box" style="flex: 0.75;">
+	<div class="box" style="flex: 0.75; padding: 5px 25px; max-width: 345px;">
 		<div>
-			<h2>.friends</h2>
+			<div id="recently-played">
+				<h2>.recently_played</h2>
+				<table style="">
+					<?php foreach($recentlyplayed as $game): ?>
+					<td>
+						<div class="game">
+							<a href="/<?= $game->getUrl() ?>">
+								<img src="<?= $game->getThumbsUrl(160, 90) ?>" width="160" height="90">
+								<div id="name"><?= $game->name ?></div>
+							</a>
+							<div id="creator"><a href="/users/<?= $game->creator->id?>/profile"><?= $game->creator->name?></a></div>
+							<div id="played"><?= UtilUtils::GetTimeAgo($game->getLastVisited($user)) ?></div>
+						</div>
+					</td>
+					<?php endforeach ?>
+				</table>
+			</div>
+			<br style="clear: both;">
+			<hr style="margin: 5px -25px;margin-top: 15px;clear: both;">
+			<div id="friends">
+				<h2>.friends <div><a href="/my/friends">[manage]</a></div></h2>
+				<div style="margin: 0px -5px;">
+					<?php foreach($friends as $friend): 
+						$status = $friend->getOnlineActivity(); ?>
+						<table class="home-friend">
+							<td id="user">
+								<a href="/users/<?= $friend->id ?>/profile">
+									<img src="<?= $friend->getThumbsUrl() ?>&amp;sxy=50">
+								</a>
+							</td>
+							<td id="content" style="vertical-align: top;">
+								<div id="name"><a href="/users/<?= $friend->id ?>/profile"><?= $friend->name ?></a></div>
+								<?php if($friend->isOnline()): ?>
+								<div id="activity" online><?= str_contains($status, "[") ? $status : "[ $status ]" ?></div>
+								<?php else: ?>
+								<div id="activity" offline>[ Offline ]</div>
+								<?php endif ?>
+								<div id="status"><?= $friend->getLatestStatus()->content ?? '' ?></div>
+							</td>
+						</table>
+					<?php endforeach ?>
+				</div>
+				<hr>
+				<?php if($too_many_friends): ?>
+					<div id="view-all"><a href="/my/friends">view all (<?= $friends_count ?>)</a></div>
+				<?php endif ?>
+			</div>
 		</div>
-		<hr style="margin: 5px -5px">
-		<div>
-			<h2>.recently_played</h2>
-		</div>
+		
 	</div>
 </div>
 <?php

@@ -1,3 +1,5 @@
+/** todo: add variables */
+
 @font-face {
 	font-family: 'punk';
 	src: url('/public/css/Punktype.ttf');
@@ -16,6 +18,11 @@
 @font-face {
 	font-family: 'arial-rounded\ bold';
 	src: url('/public/css/Arial\ Rounded\ MT\ Bold.ttf');
+}
+
+@font-face {
+	font-family: 'Fira Mono';
+	src: url('/public/css/FiraMono\ Medium.ttf');
 }
 
 html {
@@ -43,6 +50,10 @@ a:hover {
 
 h1, h2, h3, h4, h5 {
 	font-family: monospace;
+}
+
+hr {
+	color: rgb(141, 29, 216);
 }
 
 @keyframes bgScroll {
@@ -218,7 +229,7 @@ h1, h2, h3, h4, h5 {
 #footer #container .legalese {
 	float:right;
 	display: block;
-	border-left: 1px solid white;
+	border-left: 1px solid rgb(159, 96, 201);
 	padding: 10px;
 	margin-top: -10px;
 }
@@ -239,7 +250,7 @@ h1, h2, h3, h4, h5 {
 	padding: 15px 0px;
 }
 
-.box {
+.box, .box.rounded, .box.input {
 	border: 2px solid rgb(141, 29, 216);
 	padding: 5px;
 	color: white;
@@ -247,17 +258,10 @@ h1, h2, h3, h4, h5 {
 }
 
 .box.rounded {
-	border: 2px solid rgb(141, 29, 216);
-	padding: 5px;
-	color: white;
-	background: linear-gradient(0deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
 	border-radius: 8px;
 }
 
 .box.input {
-	border: 2px solid rgb(141, 29, 216);
-	padding: 5px;
-	color: white;
 	background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
 }
 
@@ -269,9 +273,34 @@ h1, h2, h3, h4, h5 {
 	background: linear-gradient(180deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
 	color: white;
 	cursor: pointer;
+	user-select: none;
 }
 
 .button:hover {
 	filter: brightness(1.15);
 	color: white;
+}
+
+.button:active {
+	background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	filter: brightness(1.15);
+}
+
+.error-text {
+	color: red;
+	font-weight: bold;
+	margin-bottom: 5px;
+	font-style: italic;
+}
+
+.success-text {
+	color: rgb(242, 83, 255);
+	font-weight: bold;
+	margin-bottom: 5px;
+	font-style: italic;
+}
+
+#pager {
+	padding: 15px;
+	text-align: center;
 }

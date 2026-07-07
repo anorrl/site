@@ -1,0 +1,134 @@
+textarea.box.input {
+	width: 890px;
+	height: 52px;
+	max-width: 890px;
+	min-width: 200px;
+	min-height: 20px;
+	max-height: 52px;
+}
+
+.feed-item #content #name {
+	font-weight: bold;
+	font-size: 12px;
+	letter-spacing: 2px;
+}
+
+.feed-item #content #date-posted {
+	color: rgb(159, 124, 184);
+	font-style: italic;
+	margin-top: 2px;
+}
+
+.feed-item #user img {
+	margin-right: 5px;
+}
+
+.feed-item #content code {
+	max-height: 48px;
+	display: block;
+	overflow: auto;
+	width: 422px;
+	overflow-wrap: break-word;
+	font-family: "Fira Mono", monospace;
+	font-weight: 500;
+	font-style: normal;
+}
+
+.feed-item #content #scroll-arrow {
+	float: right;
+	margin-top: 4px;
+}
+
+.feed-item #content #report {
+	float: right;
+	margin-top: 1px;
+	margin-right: 4px;
+}
+
+.feed-item #content #report:hover {
+	font-weight: bold;
+}
+
+#recently-played h2 {
+	margin-left: -5px
+}
+
+#recently-played table {
+	width: 100%;
+	text-align: center;
+	margin-left: -4px;
+}
+
+#recently-played td {
+	vertical-align: top;
+}
+
+#recently-played .game {
+	font-family: "arial-rounded\ bold";
+	padding: 5px;
+}
+
+#recently-played .game:hover {
+	background: #0004;
+	border: 2px solid rgb(141, 29, 216);
+	margin: -2px;
+	background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+}
+
+#recently-played .game #name {
+	font-size: 14px;
+}
+
+#recently-played .game:hover #name {
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+#recently-played .game #creator {
+	font-family: "arial-rounded";
+}
+
+#recently-played .game #played {
+	font-family: "arial-rounded";
+	color: rgb(159, 124, 184);
+	font-style:italic;
+}
+
+#friends h2 {
+	margin-left: -5px;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+#friends h2 div {
+	float: right;font-size: 14px;margin-top: 3px;
+}
+.home-friend #user img {
+	margin-right: 5px;
+}
+
+.home-friend #content #name {
+	font-weight: bold;
+	letter-spacing: 2px;
+}
+
+.home-friend #activity, .home-friend #status {
+	font-family: "Fira Mono",monospace;
+	margin: 2px 0px;
+}
+
+.home-friend #activity[offline] {
+	color: #d18bff;
+	font-style: italic;
+}
+
+.home-friend #activity[online] {
+	color: #36f950;
+}
+
+#view-all {
+	font-family: 'Fira Mono',monospace;
+	font-size: 16px;
+	margin: 10px 0px;
+	margin-bottom: 15px;
+}

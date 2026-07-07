@@ -231,6 +231,18 @@
 
 			return $badges;
 		}
+
+		function getLastVisited(User $user) {
+			$row = Database::singleton()->run(
+				"SELECT `time` FROM `visits` WHERE `player` = :id AND `place` = :place", 
+				[
+					":id" => $user->id,
+					":place" => $this->id
+				]
+			)->fetchObject();
+
+			return $row ? \DateTime::createFromFormat("Y-m-d H:i:s", $row->time) : null;
+		}
 	}
 
 ?>

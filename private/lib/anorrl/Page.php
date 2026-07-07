@@ -16,6 +16,11 @@
 		private int $lucky_number;
 		private bool $bad_apple = false;
 		private UserSettings $settings;
+		/**
+		 * temporary
+		 * @var bool
+		 */
+		private bool $cleared = false;
 
 		/* wimpy stuff */
 		private string $url;
@@ -71,6 +76,7 @@
 		}
 
 		function clearAll() {
+			$this->cleared = true;
 			$this->clearStylesheets();
 			$this->clearScripts();
 			$this->clearMetas();
@@ -133,7 +139,8 @@
 		}
 
 		function loadHeader2() {
-			$this->clearAll();
+			if(!$this->cleared)
+				$this->clearAll();
 			$this->addStylesheet("/css/base.css");
 			$this->addScript("/js/core/jquery.js");
 			$this->loadTemplate("layouts/header");

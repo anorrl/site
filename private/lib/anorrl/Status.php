@@ -65,7 +65,7 @@
 					return ["success"=> false, "reason" => "Status was too short! (4 characters minimum)"];
 				}
 				if(strlen($status_content) > 256) {
-					return ["success"=> false, "reason" => "Status was too long! (64 characters maximum)"];
+					return ["success"=> false, "reason" => "Status was too long! (256 characters maximum)"];
 				}
 
 				Database::singleton()->run(

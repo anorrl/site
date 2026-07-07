@@ -114,7 +114,6 @@
 	route('GET',      '/download/thankyou', '/private/views/download/thankyou.php');
 
 	route('GET|POST', '/my/home', '/private/views/my/home.php');
-	route('GET|POST', '/my/home_old', '/private/views/my/home_old.php');
 	route('GET|POST', '/my/profile', '/private/views/my/profile.php');
 	route('GET|POST', '/my/character', '/private/views/my/character.php');
 
