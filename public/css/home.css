@@ -103,26 +103,26 @@ textarea.box.input {
 #friends h2 div {
 	float: right;font-size: 14px;margin-top: 3px;
 }
-.home-friend #user img {
+.friend #user img {
 	margin-right: 5px;
 }
 
-.home-friend #content #name {
+.friend #content #name {
 	font-weight: bold;
 	letter-spacing: 2px;
 }
 
-.home-friend #activity, .home-friend #status {
+.friend #activity, .friend #status {
 	font-family: "Fira Mono",monospace;
 	margin: 2px 0px;
 }
 
-.home-friend #activity[offline] {
+.friend #activity[offline] {
 	color: #d18bff;
 	font-style: italic;
 }
 
-.home-friend #activity[online] {
+.friend #activity[online] {
 	color: #36f950;
 }
 

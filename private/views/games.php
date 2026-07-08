@@ -6,66 +6,136 @@
 	$randomsplash = new FileSplasher("games")->getRandomSplash();
 
 	$page = new Page("Games");
+	$page->clearAll();
 
-	$page->addScript("/js/games.js?t=1777052041");
+	$page->addScript("/js/old/games.js?t=1777052041");
 
-	$page->addStylesheet("/css/new/forms.css");
-	$page->addStylesheet("/css/new/games.css?v=6");
-
-	$page->loadHeader();
+	$page->loadHeader2();
 ?>
-<div class="Game" template>
-	<div id="ImageContainer">
-		<div id="FavouritesArea"><img src="/public/images/favourite_star.gif"> <span>0</span></div>
-		<div id="OriginalArea"><span>Original</span></div>
-		<img src="">
-	</div>
-	<div id="Info">
-		<a href="" id="GameName">Game Name</a>
-		<hr>
-		<span>By <a href="" id="GameCreator">creator</a></span>
-		<div id="Stats">
-			<span id="ActivePlayerCountLabel" style="color: #a93cac;"><b id="ActivePlayerCount">0</b> Player<span id="Plural">s</span> online...</span><br>
-			<span id="VisitCountLabel" style="color:#8a8a8a;font-style:italic;"><b id="VisitCount">0</b> Visit<span id="Plural">s</span></span>
-		</div>
+<style>
+
+	#games-container {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.game {
+		text-align: center;
+		padding: 10px;
+		user-select: none;
+	}
+	
+	.game #name {
+		font-size: 13px;
+		font-weight: bold;
+		width: 181px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		padding-top: 5px;
+		text-align: center;
+		margin: 0 auto;
+	}
+
+	.game img {
+		width: 180px;
+	}
+
+	.game:hover {
+		border: 2px solid var(--border-color);
+		margin: -2px;
+		background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+		margin-bottom: -31px;
+		z-index: 9999;
+	}
+
+	.game #info {
+		display: none;
+	}
+
+	.game:hover #info {
+		display: block;
+	}
+
+	.game #currently-playing {
+		color: #d269e7;
+		letter-spacing: 1px;
 		
-	</div>
-</div>
-<h2 style="margin: 0px;width: 850px;"><marquee behavior="alternate" scrollamount="10"><?= $randomsplash ?></marquee></h2>
-<div id="GamesContainer">
-	<div id="GamesFilterPanel">
-		<h4>Filters</h4>
-		<div style="text-align: center;margin: 5px;border: 2px solid black;padding: 5px;padding-top: 3px;background: #111;color: #ffc63f;text-decoration: none;color: #ffa634;">
-			<label for="ANORRL_Games_OriginalGamesInput">Original Only</label>
-			<input id="ANORRL_Games_OriginalGamesInput" type="checkbox">
-		</div>
+	}
+
+	.game #currently-playing[active] {
+		font-weight: bold;
+	}
+
+	.game #info #visit-count {
+		font-style: italic;
+		color: #d3a5e7;
+	}
+
+	.game #info #creator {
+		font-weight: bold;
+		font-size: 13px;
+	}
+
+	ul {
+		list-style-type: none;
+		margin: 0px;
+		padding: 5px;
+	}
+
+	li[data-filter] {
+		margin: 5px;
+	}
+</style>
+<h2 class="page-title">.games</h2>
+<div style="display: flex; gap: 10px;  align-items: flex-start;">
+	<div class="box" style="flex: 0.35;">
+		<h3 style="margin-top: 6px; margin-bottom: 4px; letter-spacing: 6px; font-size: 15px; margin-left: 10px;">.filters</h3>
+		<hr>
 		<ul>
-			<li data_filter="7"><a>Most Popular</a></li>
-			<li data_filter="8"><a>Most Visited</a></li>
-			<li data_filter="6"><a>Most Favourited</a></li>
-			<li data_filter="1"><a>Recently Created</a></li>
-			<li data_filter="2"><a>Recently Updated</a></li>
+			<li data-filter="7" selected="selected"><a>Most Popular</a></li>
+			<li data-filter="8"><a>Most Visited</a></li>
+			<li data-filter="6"><a>Most Favourited</a></li>
+			<li data-filter="1"><a>Recently Created</a></li>
+			<li data-filter="2"><a>Recently Updated</a></li>
 		</ul>
 	</div>
-	<div id="Games">
-		<div method="GET" id="FormPanel" style="margin: 5px auto;">
-			<input id="SearchBox" name="query" type="text" placeholder="Look for awesome games!!!" style="width: 460px;">
-			<input id="Submit" type="submit" value="Search" onclick="ANORRL.Games.Submit(); return false;">
+	<div style="flex: 1;">
+		<div class="box" style="margin-bottom: 5px;">
+			<div id="FormPanel" style="margin: 5px auto; text-align: center">
+				<input class="box input" id="SearchBox" name="query" type="text" placeholder="look for awesome games!!!" style="width: 460px;">
+				<input class="button" id="Submit" type="submit" value="search" onclick="ANORRL.Games.Submit(); return false;">
+			</div>
 		</div>
-		<div id="StatusText">
-			<b id="Loading" style="display: none">Loading assets...</b>
-			<b id="NoAssets" style="display: none"><img src="/public/images/noassets.png" style="width: 110px;display: block;margin: 0 auto;margin-bottom: -92px;margin-top: 23px;">No games like that here!</b>
+		<div class="box" style="padding: 10px;">
+			<h3 style="margin-top: 6px; margin-bottom: 4px; letter-spacing: 8px;font-size: 18px;margin-left: 6px;">.random</h3>
+			<hr>
+			<div id="games-container">
+				<?php for($i = 0; $i < 9; $i ++): ?>
+					<?php
+						$name = md5(rand());
+						$name = substr($name, 0, rand(0, strlen($name)));
+					?>
+				<div class="game" title="<?= $name ?> by <?= "creator" ?>">
+					<a href="">
+						<img src="/thumbs/?id=573" width="128">
+						<div id="name"><?= $name ?></div>
+					</a>
+					<div id="currently-playing">0 players online</div>
+					<div id="info">						
+						<div id="creator">by <a href="/user/1/profile">creator</a></div>
+						<div id="visit-count">played 1 billion times</div>
+					</div>
+				</div>
+				<?php endfor ?>
+			</div>
+			<hr>
+			<div id="pager">
+				<a href="javascript:ANORRL.Games.PrevPage()" id="back-pager">&lt;&lt; back</a>
+				<input class="box input" type="text"  maxlength="3" style="padding: 2px;width: 21px;border-width: 2px;text-align: center;" value="1"> of <span id="page-counter">1</span>
+				<a href="javascript:ANORRL.Games.NextPage()" id="next-pager">next &gt;&gt;</a>
+			</div>
 		</div>
-	
-		<div id="ContainerThingy">
-			
-		</div>
-		
-		<div id="Paginator" style="display: block;">
-			<a id="BackPager" href="javascript:ANORRL.Games.PrevPage()" style="display: none;">&lt;&lt; Back</a> <input type="text" id="NumberPutter" maxlength="3"> of <span id="Counter">1</span> <a id="NextPager" href="javascript:ANORRL.Games.NextPage()" style="display: none;">Next &gt;&gt;</a>
-		</div>
-		
 	</div>
-	<br style="display:block; clear: both;">
 </div>
-<?php $page->loadFooter() ?>
+<?php $page->loadFooter2() ?>

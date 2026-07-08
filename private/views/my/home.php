@@ -52,8 +52,9 @@
 
 	$page = new Page("Home", "my/home");
 	$page->clearAll();
-
+	$page->addScript("/js/core/jquery.js"); // remove this after revamping all pages
 	$page->addStylesheet("/css/home.css");
+	$page->addScript("/js/home.js?t=1776011774");
 
 	$page->loadHeader2();
 ?>
@@ -68,10 +69,9 @@
 		<code></code>
 		<img id="scroll-arrow" src="/public/images/icons/feed-dropdown_arrow.png" title="This has more content! Scroll!">
 		<div id="date-posted">posted <span id="date">DD/MM/YYYY</span><a href="" id="report">.report</a></div>
-		
 	</td>
 </table>
-<script src="/public/js/home.js?t=1776011774"></script>
+<h2 class="page-title">.home</h2>
 <div class="box" style="margin-bottom: 5px;">
 	<h2 style="margin-bottom: 5px; margin-left: 25px;">.add_status</h2>
 	
@@ -128,7 +128,7 @@
 				<div style="margin: 0px -5px;">
 					<?php foreach($friends as $friend): 
 						$status = $friend->getOnlineActivity(); ?>
-						<table class="home-friend">
+						<table class="friend">
 							<td id="user">
 								<a href="/users/<?= $friend->id ?>/profile">
 									<img src="<?= $friend->getThumbsUrl() ?>&amp;sxy=50">

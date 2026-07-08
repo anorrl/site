@@ -81,6 +81,7 @@
 	
 	route('GET|POST', '/catalog', '/private/views/catalog.php');
 	route('GET|POST', '/games', '/private/views/games.php');
+	route('GET|POST', '/games-old', '/private/views/games_old.php');
 	route('GET|POST', '/vandals', '/private/views/vandals.php');
 	route('GET|POST', '/edit', '/private/views/edit.php');
 	
