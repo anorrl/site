@@ -53,9 +53,10 @@
 							"name" => $asset->creator->name
 						],
 						"name" => $asset->name,
+						"url" => "/{$asset->getURL()}",
 						"favouritescount" => $asset->favourites_count,
-						"activeplayercount" => $asset->current_playing_count,
-						"visitcount" => $asset->visit_count,
+						"activeplayers" => $asset->current_playing_count,
+						"visits" => $asset->visit_count,
 						"original" => Universe::FromID($asset->universe)->original,
 						"thumbnail" => $asset->getThumbsUrl(189, 106)
 					];

@@ -39,7 +39,24 @@
 			}
 		}
 
-		die(json_encode(["feed" => $statuses_raw, "page" => $page, "total_pages" => floor(Status::GetLatestFeedsCount()/5)+1]));
+		$pre_total_pages = Status::GetLatestFeedsCount()/5;
+
+		if($pre_total_pages < 0.5) {
+			$pre_total_pages += 0.5;
+		}
+
+		$total_pages = floor($pre_total_pages);
+
+		if($total_pages == 0) {
+			$total_pages++;
+		}
+		else {
+			if(Status::GetLatestFeedsPaged($total_pages, 5) == 0) {
+				$total_pages--;
+			}
+		}
+
+		die(json_encode(["feed" => $statuses_raw, "page" => $page, "total_pages" => $total_pages]));
 	} else {
 		die(json_encode(["error" => true, "reason" => "User not logged in."]));
 	}

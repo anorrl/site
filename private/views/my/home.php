@@ -6,7 +6,8 @@
 
 	$user = SESSION->user;
 
-	$rand_status = new FileSplasher("home_statuses", false, "Home\$Random\$Status")->getRandomSplash();
+	$rand_status = new FileSplasher("home/statuses", false, "Home\$Random\$Status")->getRandomSplash();
+	$hello = new FileSplasher("home/hello", false, "Home\$Random\$Hello")->getRandomSplash();
 
 	$rand_status = str_replace("\"", "&quot;", $rand_status);
 
@@ -72,6 +73,9 @@
 	</td>
 </table>
 <h2 class="page-title">.home</h2>
+<div class="box" style="margin-bottom: 5px;padding: 20px;">
+	<h1 style="margin: 0px;"><?= trim($hello) ?>, <?= $user->name ?>...</h1>
+</div>
 <div class="box" style="margin-bottom: 5px;">
 	<h2 style="margin-bottom: 5px; margin-left: 25px;">.add_status</h2>
 	

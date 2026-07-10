@@ -12,6 +12,7 @@
 		/* Games Stuff Only */
 		case MostPopular;
 		case MostVisited;
+		case Random;
 
 		public function ordinal(): int {
 			return match($this) {
@@ -23,6 +24,7 @@
 				CatalogFilter::MostFavourited => 6,
 				CatalogFilter::MostPopular => 7,
 				CatalogFilter::MostVisited => 8,
+				CatalogFilter::Random => 9,
 			};
 		}
 
@@ -36,6 +38,7 @@
 				6 => CatalogFilter::MostFavourited,
 				7 => CatalogFilter::MostPopular,
 				8 => CatalogFilter::MostVisited,
+				9 => CatalogFilter::Random,
 			};
 		}
 
@@ -48,7 +51,8 @@
 				CatalogFilter::MostSold         => "ORDER BY `sales_count` DESC, `lastedited` DESC",
 				CatalogFilter::MostFavourited   => "ORDER BY `favourites_count` DESC, `lastedited` DESC",
 				CatalogFilter::MostPopular      => "ORDER BY `currently_playing_count` DESC, `visit_count` DESC, `lastedited` DESC",
-				CatalogFilter::MostVisited      => "ORDER BY `visit_count` DESC"
+				CatalogFilter::MostVisited      => "ORDER BY `visit_count` DESC",
+				CatalogFilter::Random           => "ORDER BY `currently_playing_count` DESC, rand()",
 			};
 		}
 	}

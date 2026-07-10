@@ -75,7 +75,7 @@
 		public static function GetFiltered(CatalogFilter $filter, AssetType $type, string $query, int $page = -1, int $count = -1) {
 
 			if($type != AssetType::PLACE && 
-				($filter == CatalogFilter::MostPopular || $filter == CatalogFilter::MostVisited)) {
+				($filter == CatalogFilter::MostPopular || $filter == CatalogFilter::MostVisited || $filter == CatalogFilter::Random)) {
 				$filter = CatalogFilter::RecentlyUploaded;
 			}
 			if(!\SESSION) 
@@ -138,7 +138,7 @@
 		public static function GetFilteredCount(CatalogFilter $filter, AssetType $type, string $query, int $page = -1, int $count = -1) {
 
 			if($type != AssetType::PLACE && 
-				($filter == CatalogFilter::MostPopular || $filter == CatalogFilter::MostVisited)) {
+				($filter == CatalogFilter::MostPopular || $filter == CatalogFilter::MostVisited || $filter == CatalogFilter::Random)) {
 				$filter = CatalogFilter::RecentlyUploaded;
 			}
 
