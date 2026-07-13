@@ -115,6 +115,10 @@ textarea.box.input {
 .friend #activity, .friend #status {
 	font-family: "Fira Mono",monospace;
 	margin: 2px 0px;
+	white-space: nowrap;
+	width: 288px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .friend #activity[offline] {

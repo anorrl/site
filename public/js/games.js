@@ -63,9 +63,12 @@ ANORRL.Games = {
 			$(this).find("img").remove();
 		});
 
-		$("li[data-filter="+filter+"]").attr("selected", "");
-		$("#filter-name").html($("li[data-filter="+filter+"] span").html());
-		$("li[data-filter="+filter+"] span").prepend('<img src="/public/images/icons/selection.png">');
+		var currentFilterElement = $("li[data-filter="+filter+"]");
+		var spanFilter = currentFilterElement.find("span");
+
+		currentFilterElement.attr("selected", "");
+		$("#filter-name").html(spanFilter.html());
+		spanFilter.prepend('<img src="/public/images/icons/selection.png">');
 
 		var original = 1; //$("#ANORRL_Games_OriginalGamesInput").is(":checked") ? 1 : 0;
 
@@ -102,17 +105,14 @@ ANORRL.Games = {
 						ev.stopPropagation(); // overrides container click so only this action is performed
 						window.location.href = $(this).attr("href");
 					});*/
-
-					/*template.on("click", function() {
-						if(ANORRL.Games.MobileEnabled) {
+					
+					if(ANORRL.Games.MobileEnabled) {
+						template.on("click", function() {
 							window.location.href = "/games/start?placeid="+$(this).attr("data-placeid"); 
-						} else {
-							window.location.href = "/game/"+$(this).attr("data-placeid"); 
-						}
-						
-					});
+						});
+					}
 
-					if(asset['original'] && !original) {
+					/*if(asset['original'] && !original) {
 						template.find("#OriginalArea").css("display", "block");
 					}
 					

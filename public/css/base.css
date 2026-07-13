@@ -6,27 +6,27 @@
 
 @font-face {
 	font-family: 'punk';
-	src: url('/public/css/Punktype.ttf');
+	src: url('/public/css/fonts/Punktype.ttf');
 }
 
 @font-face {
 	font-family: 'road';
-	src: url('/public/css/TransportMedium.ttf');
+	src: url('/public/css/fonts/TransportMedium.ttf');
 }
 
 @font-face {
 	font-family: 'arial-rounded';
-	src: url('/public/css/Arial\ Rounded\ MT\ Regular.ttf');
+	src: url('/public/css/fonts/Arial\ Rounded\ MT\ Regular.ttf');
 }
 
 @font-face {
 	font-family: 'arial-rounded\ bold';
-	src: url('/public/css/Arial\ Rounded\ MT\ Bold.ttf');
+	src: url('/public/css/fonts/Arial\ Rounded\ MT\ Bold.ttf');
 }
 
 @font-face {
 	font-family: 'Fira Mono';
-	src: url('/public/css/FiraMono\ Medium.ttf');
+	src: url('/public/css/fonts/FiraMono\ Medium.ttf');
 }
 
 html {
@@ -246,6 +246,7 @@ hr {
 	background: url("/public/images/bkg.png?v=1") top center repeat-x #32043f;
 	min-height: calc(100vh - 200px); /* testing */
 	animation: bgScroll 50s linear infinite;
+	margin-top: 56px;
 }
 
 #body #container {

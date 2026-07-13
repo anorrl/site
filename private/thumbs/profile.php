@@ -23,8 +23,8 @@
 		
 		if($asset != null) {
 			
-			if(file_exists($_SERVER['DOCUMENT_ROOT']."/../users/profile_$id.png")) {
-				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../users/profile_$id.png");
+			if(file_exists(get_user_profile_path($id))) {
+				$contents = file_get_contents(get_user_profile_path($id));
 			} else {
 				$pictures = UtilUtils::GetFilesArray("/public/images/profile_pictures/");
 				 

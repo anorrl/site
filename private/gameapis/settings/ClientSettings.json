@@ -1598,6 +1598,6 @@
 	"SFFlagUseLuaChat": "True",
 	"SFFlagUseNewBlockFunction": "True",
 	"SFFlagUseNewSetFMOD3D": "True",
-	"StartPageUrl": "/ide/projects",
+	"StartPageUrl": "/develop/projects",
 	"VideoPreRollWaitTimeSeconds": "45"
 }

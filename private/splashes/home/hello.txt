@@ -16,3 +16,5 @@ hej
 shwmae
 ahoj
 sveiki
+oi
+ola

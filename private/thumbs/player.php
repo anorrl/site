@@ -24,14 +24,13 @@
 
 		if($user != null) {
 			$md5hash = $user->currentoutfitmd5;
-
-			$path = $_SERVER['DOCUMENT_ROOT']."/../renders/$md5hash.png";
+			$path = get_user_render_path($md5hash, ARLRENDER);
 
 			if(!file_exists($path)) {
 				$user->render();
 
 				if(!file_exists($path))
-					$path = $_SERVER['DOCUMENT_ROOT']."/public/images/thumbnails/unavailable.jpg";
+					$path = get_path_sitefile("public/images/thumbnails/unavailable.jpg");
 			}
 
 			$contents = file_get_contents($path);

@@ -156,7 +156,7 @@
 			<h4 style="margin-bottom: 0px;">what will you make?</h4>
 			<img src="/public/images/anorrl-fellas1.png" style="width: 245px; position: absolute;left: -100px;bottom: -62px;">
 		</div>
-		<div class="box" id="auth" style="flex: 0.5;">
+		<div class="box" id="auth" style="flex: 0.5;<?= !SESSION ? "max-width: 207px;" : "" ?>">
 			<?php if(!SESSION): ?>
 			<h3><a href="javascript:openRegisterPanel()">.register</a> | <a href="javascript:openLoginPanel()">.login</a></h3>
 			<div id="login" class="panel">

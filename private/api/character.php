@@ -328,11 +328,7 @@ use anorrl\User;
 				die(json_encode(["error" => false]));
 			} else if($request == "rendercharacter") {
 				
-				$mediadir = $_SERVER['DOCUMENT_ROOT']."/../renders/";
-
-				$charactermd5 = $user->getCharacterAppearanceHash();
-				
-				if(file_exists("$mediadir/$charactermd5.png")) {
+				if(get_user_render_path($user->getCharacterAppearanceHash(), ARLRENDER)) {
 					$user->updateOutfitHash();
 					die(json_encode(["error" => false]));
 				}
@@ -342,14 +338,10 @@ use anorrl\User;
 				
 				die(json_encode(["error" => false, "reason" => "Wow we rendered!"]));
 			} else if($request == "rerendercharacter") {
-				$mediadir = $_SERVER['DOCUMENT_ROOT']."/../renders/";
-
-				$charactermd5 = $user->getCharacterAppearanceHash();
-				
+				// sure
 				$user->render(false);
 				$user->render(true);
 
-				
 				die(json_encode(["error" => false, "reason" => "Wow we rendered!"]));
 			}
 		}

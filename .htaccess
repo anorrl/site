@@ -1,7 +1,5 @@
 RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule . index.php [L]
-RewriteRule $(.*)^ index.php [L,NC,QSA]
+
 
 ErrorDocument 403 /403.php
 ErrorDocument 404 /404.php
@@ -9,8 +7,10 @@ ErrorDocument 500 /500.php
 
 RedirectMatch 404 ^README.md$
 RedirectMatch 404 !important/.*$
+RedirectMatch 404 router(.*).php
 
 RedirectMatch 404 ^_htaccess$
+
 RedirectMatch 404 ^LICENSE$
 RedirectMatch 404 /\\.git
 RedirectMatch 403 (?i)^/private/.*$
@@ -18,5 +18,11 @@ RedirectMatch 403 (?i)^private/.*$
 RedirectMatch 403 (?i)^/vendor/.*$
 RedirectMatch 403 (?i)^vendor/.*$
 RedirectMatch 404 (?i)composer\.(json|lock)$
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . index.php [L]
+RewriteRule $(.*)^ index.php [L,NC,QSA]
+
 
 php_flag display_errors on

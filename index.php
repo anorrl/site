@@ -12,6 +12,13 @@
 	define("ARLTYPEPNG", "image/png");
 	define("ARLTYPEWEBP", "image/webp");
 
+	define("ARLRENDER", 0);
+	define("ARLRENDER3D", 1);
+	define("ARLRENDERHEADSHOT", 2);
+
+	// probably should just put this in php.ini ...
+	date_default_timezone_set('Europe/London');
+
 	require __DIR__ . "/vendor/autoload.php";
 
 	use anorrl\Session;
@@ -84,6 +91,45 @@
 		http_response_code($http_response_code);
 		die($message);
 	}
+
+	function create_folder(string $path) {
+		if(file_exists(__DIR__."/{$path}"))
+			return;
+
+		if(!mkdir(__DIR__."/{$path}", 0777, true))
+			throw new Exception("Can't create folders!");
+	}
+
+	function get_path_sitefile(string $path) {
+		return $_SERVER['DOCUMENT_ROOT']."/{$path}";
+	}
+
+	function get_path_file(string $path) {
+		return get_path_sitefile("../{$path}");
+	}
+
+	function get_user_profile_path(int $id) {
+		return get_path_file("users/profiles/{$id}.png");
+	}
+
+	function get_user_render_path(string $md5, int $type) {
+		$path = get_path_file("users/renders/{$md5}");
+		switch($type) {
+			case ARLRENDER:
+				return "$path/image.png";
+			case ARLRENDER3D:
+				return "$path/scene.json";
+			case ARLRENDERHEADSHOT:
+				return "$path/headshot.png";
+		}
+
+		throw new Exception("Something went wrong.");
+	}
+
+	create_folder("../assets/thumbs");
+	create_folder("../assets/3d");
+	create_folder("../users/profiles");
+	create_folder("../users/renders/");
 
 	require_once __DIR__ . "/router.php";
 

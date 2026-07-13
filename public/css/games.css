@@ -1,0 +1,127 @@
+#games-container {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.game {
+	text-align: center;
+	padding: 10px;
+	user-select: none;
+}
+
+.game #name {
+	font-size: 13px;
+	font-weight: bold;
+	width: 181px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	padding-top: 5px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.game img {
+	width: 180px;
+}
+
+.game:hover {
+	border: 2px solid var(--border-color);
+	margin: -2px;
+	background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+	margin-bottom: -31px;
+	z-index: 9999;
+}
+
+.game #info {
+	display: none;
+}
+
+.game:hover #info {
+	display: block;
+}
+
+.game #currently-playing {
+	color: #d269e7;
+	letter-spacing: 1px;
+	
+}
+
+.game #currently-playing[active] {
+	font-weight: bold;
+}
+
+.game #info #visit-count {
+	font-style: italic;
+	color: #d3a5e7;
+}
+
+.game #info #creator {
+	font-weight: bold;
+	font-size: 13px;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 5px;
+}
+
+li[data-filter] {
+	margin: 5px;
+	text-align: center;
+	font-size: 13px;
+}
+li[data-filter][selected] {
+	font-weight: bold;
+	font-size: 14px;
+	text-decoration: underline;
+	filter:brightness(1.5);
+	background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	letter-spacing: 2px;
+}
+
+li[data-filter]:hover {
+	text-decoration: underline;
+}
+
+li[data-filter] span {
+	width: 160px;
+	text-align: left;
+	display: block;
+	margin: 0 auto;
+}
+
+li[data-filter] span img {
+	position: absolute;
+	left: 7px;
+}
+
+#filters-heading, #filter-name {
+	margin-top: 6px;
+	margin-bottom: 4px;
+	letter-spacing: 6px;
+	font-size: 15px;
+	margin-left: 10px;
+}
+
+#filter-name {
+	letter-spacing: 8px;
+	font-size: 18px;
+	margin-left: 6px;
+}
+
+#pager .box.input {
+	padding: 2px;width: 21px;border-width: 2px;text-align: center;
+}
+
+.status {
+	font-size: 18px;
+	text-align: center;
+	margin: 30px auto;
+	display: none;
+}
+
+#pager hr {
+	margin:-15px; margin-bottom: 15px;margin-top:-10px;
+}

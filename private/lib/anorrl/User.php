@@ -1116,7 +1116,7 @@
 
 							$image = imagescale(ImageUtils::cropAlign($pre_image, $size, $size), 420, 420);
 							
-							imagepng($image, $_SERVER['DOCUMENT_ROOT']."/../users/profile_".$this->id.".png", 9);
+							imagepng($image, get_user_profile_path($this->id), 9);
 
 							if(!$this->setprofilepicture) {
 								Database::singleton()->run(
@@ -1134,7 +1134,7 @@
 						list($width, $height, $type, $attr) = getimagesize($file['tmp_name']);
 
 						if($width > 16 && $height > 16 && $width < 420 && $height < 420 && $width == $height) {
-							move_uploaded_file($file['tmp_name'], $_SERVER['DOCUMENT_ROOT']."/../users/profile_".$this->id.".png");
+							move_uploaded_file($file['tmp_name'], get_user_profile_path($this->id));
 
 							if(!$this->setprofilepicture) {
 								Database::singleton()->run(
@@ -1171,8 +1171,8 @@
 
 		function resetProfilePicture() {
 			if($this->setprofilepicture) {
-				if(file_exists($_SERVER['DOCUMENT_ROOT']."/../users/profile_{$this->id}.png")) {
-					unlink($_SERVER['DOCUMENT_ROOT']."/../users/profile_{$this->id}.png");
+				if(file_exists(get_user_profile_path($this->id))) {
+					unlink(get_user_profile_path($this->id));
 				}
 
 				Database::singleton()->run(
@@ -1401,15 +1401,17 @@
 				return;
 			}
 
-			$path = $_SERVER['DOCUMENT_ROOT']."/../renders/";
+			$type = null;
+			
 			if($is3D) {
-				$path .= "3d/";
+				$type = ARLRENDER3D;
 			} else if($headshot) {
-				$path .= "headshots/";
+				$type = ARLRENDERHEADSHOT;
+			} else {
+				$type = ARLRENDER;
 			}
 
-			$path .= $this->currentoutfitmd5;
-			$path .= $is3D ? ".json" : ".png";
+			$path = get_user_render_path($this->currentoutfitmd5, $type);
 
 			$render = Renderer::RenderUser($this->id, $headshot, $is3D);
 			if($render != null) {
@@ -1443,7 +1445,7 @@
 		}
 
 		private function getJsonRenderPath(): string {
-			return $_SERVER['DOCUMENT_ROOT']."/../renders/3d/{$this->currentoutfitmd5}.json";
+			return get_user_render_path($this->currentoutfitmd5, ARLRENDER3D);
 		}
 
 		/**

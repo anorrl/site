@@ -17,7 +17,7 @@
 		if($user != null) {
 			$md5hash = $user->currentoutfitmd5;
 
-			$path = $_SERVER['DOCUMENT_ROOT']."/../renders/headshots/$md5hash.png";
+			$path = get_user_render_path($md5hash, ARLRENDERHEADSHOT);
 
 			if(!file_exists($path)) {
 				$user->render(true);

@@ -39,11 +39,7 @@
 						":type" => $stmt_type
 					]
 				)->fetchAll(\PDO::FETCH_OBJ);
-
-				// show all
 			} else {
-				// pagify
-
 				$rows = $db->run(
 					"SELECT `id`,`type` FROM `assets` WHERE `name` LIKE :search AND `type` = :type $query_filter LIMIT :page, :size",
 					[
@@ -64,9 +60,8 @@
 					$asset = Asset::FromID($row->id);
 				}
 
-				if($user->isAdmin() || !$asset->notcatalogueable && $asset->public) {
-					$result_array[] = $asset;
-				}
+				//if($user->isAdmin() || !$asset->notcatalogueable && $asset->public) {}
+				$result_array[] = $asset;
 			}
 
 			return $result_array;
@@ -86,9 +81,7 @@
 				return [];
 			
 			$query_filter = "AND `assets`.`public` = 1 AND `nevershow` = 0";
-			if($user->isAdmin()) {
-				$query_filter = "AND `nevershow` = 0";
-			}
+			// if($user->isAdmin()) { $query_filter = "AND `nevershow` = 0"; }
 
 			$base_sql_query = "SELECT `id` FROM `assets` WHERE `name` LIKE :query AND `type` = :type $query_filter";
 			if($type == AssetType::PLACE) {
@@ -127,10 +120,8 @@
 				} else {
 					$asset = Asset::FromID($row->id);
 				}
-
-				if($user->isAdmin() || !$asset->notcatalogueable && $asset->public) {
-					$result_array[] = $asset;
-				}
+				//if($user->isAdmin() || !$asset->notcatalogueable && $asset->public) {}
+				$result_array[] = $asset;
 			}
 			return $result_array;
 		}
@@ -142,15 +133,11 @@
 				$filter = CatalogFilter::RecentlyUploaded;
 			}
 
-			if(!\SESSION->user)
+			if(!\SESSION)
 				return 0;
-
-			$user = \SESSION->user;
 			
 			$query_filter = "AND `public` = 1 AND `nevershow` = 0";
-			if($user->isAdmin()) {
-				$query_filter = "AND `nevershow` = 0";
-			}
+			// if($user->isAdmin()) { $query_filter = "AND `nevershow` = 0"; }
 
 			$base_sql_query = "SELECT COUNT(`id`) FROM `assets` WHERE `name` LIKE :query AND `type` = :type $query_filter";
 			if($type == AssetType::PLACE) {

@@ -16,7 +16,7 @@
 	if(!isset($_GET['universeId'])) {
 		$extra_places = [];
 		if(isset($_GET['filepath'])) {
-			$raw_crap = explode("&", str_replace("/ide/projects?", "", $_SERVER['REQUEST_URI']));
+			$raw_crap = explode("&", str_replace("/develop/projects?", "", $_SERVER['REQUEST_URI']));
 
 			$filenames = [];
 			$filepaths = [];
@@ -47,10 +47,10 @@
 		$universe = Universe::FromID(intval($_GET['universeId']));
 
 		if(!$universe)
-			redirect("/ide/projects");
+			redirect("/develop/projects");
 
 		if(!$universe->hasAccess($user) || count($universe->getAllPlaces()) <= 1)
-			redirect("/ide/projects");
+			redirect("/develop/projects");
 
 		$places = $universe->getAllPlaces();
 	}
@@ -77,7 +77,7 @@
 		$(".Place").on("click", function() {
 			var placeid = $(this).attr("data-place-id");
 			if(!Number(placeid)) {
-				window.location.href = "/ide/projects?universeId="+$(this).attr("data-universe-id");
+				window.location.href = "/develop/projects?universeId="+$(this).attr("data-universe-id");
 			} else {
 				window.external.StartGame("http://<?= $domain ?>/","http://<?= $domain ?>/","http://<?= $domain ?>/game/edit.slua?placeId=" + placeid);
 			}
@@ -153,7 +153,7 @@
 		<div id="DidYouKnow" style="margin: 10px 0px; margin-left: 8px;">
 			<p style="margin-bottom: 0px; font-style: italic; font-size: 12px; color: #DDD;">Viewing:</p>
 			<p style="font-size: 14px; margin-top: 3px"><b><?= $universe->starting_place->name ?></b></p>
-			<p><b><a href="/ide/projects">&gt;&gt;&gt; Go back &lt;&lt;&lt;</a></b></p>
+			<p><b><a href="/develop/projects">&gt;&gt;&gt; Go back &lt;&lt;&lt;</a></b></p>
 		</div>
 		<?php endif ?>
 		<div id="DidYouKnow">

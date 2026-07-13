@@ -30,7 +30,7 @@
 
 		function __construct(string $title, string|null $internal_name = null) {
 			if(ClientDetector::IsAClient() && $title != "Login" && !str_starts_with($internal_name, "ide")) // assume studio
-				redirect("/ide/projects");
+				redirect("/develop/projects");
 
 			$this->title = $title;
 			if(!$internal_name)

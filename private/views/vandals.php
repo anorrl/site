@@ -4,7 +4,7 @@
 	use anorrl\utilities\FileSplasher;
 	
     //took this from games.php but idrc atp -skylerclock
-	$randomsplash = new FileSplasher("people")->getRandomSplash();
+	$randomsplash = new FileSplasher("titles/vandals")->getRandomSplash();
 
 	$page = new Page("Vandals");
 
