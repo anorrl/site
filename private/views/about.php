@@ -26,8 +26,9 @@
 <div class="box">
 	<h1>sooo what is anorrl?</h1>
 	<hr>
+	<img style="float:right; height:300px;margin-bottom:-10px;" title="kuro (hey thats me!)" src="/public/images/characters/kuro.png">
 	<p>
-		<b>AN</b>other <b>O</b>ld <b>R</b>oblox <b>R</b>etake <b>L</b>ol
+		<b>ANO</b>ther <b>R</b>oblox <b>R</b>etake <b>L</b>OL
 		is a project that aims to serve as an alternative to ROBLOX.
 		It bases itself off the March 2016 source code (that was leaked around the same time), we do not want profits!
 		We just want to have fun, we don't want the restrictions held by the platform at this time.
@@ -44,11 +45,13 @@
 		Yes, the features added to the client may not be crazy or cool but it adds what the developers need for transitioning.
 		We will not hold back from transforming the client to be entirely different than what everyone else wants to stick by.
 	</p>
+	<br style="clear:both">
 </div>
 <br>
 <div class="box">
 	<h1>sooo why anorrl over anything else?</h1>
 	<b>(yap incoming)</b>
+	<img style="float:right; height:500px;margin-right:-20px;" title="em" src="/public/images/characters/em_face.png">
 	<p>
 		I'm not sure!
 		It's your decision to consider this project as anything remotely interesting...
