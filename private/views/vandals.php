@@ -7,21 +7,44 @@
 	$randomsplash = new FileSplasher("titles/vandals")->getRandomSplash();
 
 	$page = new Page("Vandals");
+	$page->clearAll();
 
-	$page->addStylesheet("/css/new/forms.css");
-	$page->addStylesheet("/css/new/people.css");
+	$page->addScript("/js/core/jquery.js");
+	$page->addScript("/js/vandals.js?t=1776253888");
 
-	$page->addScript("/js/people.js?t=1776253888");
-
-	$page->loadHeader();
+	$page->loadHeader2();
 ?>
-<h2 style="margin: 0px; margin-top: 10px; width: 850px;"><marquee behavior="alternate" scrollamount="10"><?= $randomsplash ?></marquee></h2>
-<div id="Users">
-	<div method="GET" id="FormPanel">
-		<input id="SearchBox" name="query" type="text" placeholder="Look for users lol">
-		<input id="Submit" type="submit" value="Search" onclick="ANORRL.People.Submit(); return false;">
+<style>
+	#users-container a {
+		font-weight: bold;
+		font-size: 12px;
+		letter-spacing: 2px;
+	}
+
+	#users-container td {
+		text-align: center;
+	}
+
+	.user #status {
+		word-break: break-word; overflow-wrap: anywhere;
+		text-align: left;
+	}
+
+	.user #activity {
+		font-size: 13px;
+		font-weight: bold;
+	}
+</style>
+<h2 class="page-title">.vandals</h2>
+<h3 class="page-slogan"><?= $randomsplash ?></h3>
+<div class="box" style="margin-bottom: 5px;">
+	<div style="margin: 5px auto; text-align: center">
+		<input class="box input" id="search-box" name="query" type="text" placeholder="look for users lol" style="width: 460px;">
+		<input class="button" type="submit" value="search" onclick="ANORRL.People.Submit(); return false;">
 	</div>
-	<table id="UsersDataTable">
+</div>
+<div class="box">
+	<table id="users-container">
 		<tr>
 			<th width="80" style="border:0">Avatar</th>
 			<th width="200" style="border:0">Name</th>
@@ -29,8 +52,11 @@
 			<th width="150" style="border:0">Active</th>
 		</tr>
 	</table>
-	<div id="UsersNavLinks">
-		<a id="BackPager" href="javascript:ANORRL.People.DeadvanceFeed()">&lt;&lt; Back</a> <input maxlength="4" id="NumberPutter"> of <span id="Counter"></span> <a id="NextPager" href="javascript:ANORRL.People.AdvanceFeed()">Next &gt;&gt;</a>
+	<div id="pager">
+		<hr>
+		<a href="javascript:ANORRL.People.PrevPage()" id="back-pager">&lt;&lt; back</a>
+		<input class="box input" type="text" maxlength="3" value="1"> of <span id="page-counter">1</span>
+		<a href="javascript:ANORRL.People.NextPage()" id="next-pager">next &gt;&gt;</a>
 	</div>
 </div>
-<?php $page->loadFooter(); ?>
+<?php $page->loadFooter2(); ?>

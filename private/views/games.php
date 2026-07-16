@@ -27,12 +27,12 @@
 	</div>
 </div>
 <h2 class="page-title">.games</h2>
-<h3 class="page-title" style="margin-left: 1px"><?= $randomsplash ?></h3>
+<h3 class="page-slogan"><?= $randomsplash ?></h3>
 <div style="display: flex; gap: 10px;  align-items: flex-start;">
 	<div class="box" style="flex: 0.35;">
 		<h3 id="filters-heading">.filters</h3>
 		<hr>
-		<ul>
+		<ul class="special">
 			<li data-filter="9" class="button" selected="selected"><span>.random</span></li>
 			<li data-filter="7" class="button"><span>.most_popular</span></li>
 			<li data-filter="8" class="button"><span>.most_visited</span></li>

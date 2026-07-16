@@ -73,9 +73,10 @@
 						"id" => $asset->creator->id,
 						"name" => $asset->creator->name
 					],
+					"url" => "/{$asset->getURL()}",
 					"onsale" => $asset->onsale,
 					"favourites" => $asset->favourites_count,
-					"sales_count" => $asset->sales_count,
+					"sales" => $asset->sales_count,
 					"thumbnail" => $asset->getThumbsUrl(130)					
 				];
 			}

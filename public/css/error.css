@@ -1,0 +1,19 @@
+h1 {
+	margin-top: 0px;
+}
+.buttons {
+	margin-top: 5px;
+}
+
+.buttons * {
+	display: inline-block;
+}
+
+#error-container {
+	text-align: center;
+	padding: 15px;
+}
+
+#error-container #main {
+	margin: 10px;
+}

@@ -73,6 +73,9 @@
 				($filter == CatalogFilter::MostPopular || $filter == CatalogFilter::MostVisited || $filter == CatalogFilter::Random)) {
 				$filter = CatalogFilter::RecentlyUploaded;
 			}
+
+			$is_bodyparts = $type == AssetType::BODYPARTS;
+
 			if(!\SESSION) 
 				return [];
 
@@ -83,7 +86,20 @@
 			$query_filter = "AND `assets`.`public` = 1 AND `nevershow` = 0";
 			// if($user->isAdmin()) { $query_filter = "AND `nevershow` = 0"; }
 
-			$base_sql_query = "SELECT `id` FROM `assets` WHERE `name` LIKE :query AND `type` = :type $query_filter";
+			$sql_types = "`type` = :type";
+
+			if($is_bodyparts) {
+				$type_head = AssetType::HEAD->ordinal();
+				$type_torso = AssetType::TORSO->ordinal();
+				$type_leftarm = AssetType::LEFTARM->ordinal();
+				$type_rightarm = AssetType::RIGHTARM->ordinal();
+				$type_leftleg = AssetType::LEFTLEG->ordinal();
+				$type_rightleg = AssetType::RIGHTLEG->ordinal();
+
+				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg OR `type` = :type)";
+			}
+
+			$base_sql_query = "SELECT `id` FROM `assets` WHERE `name` LIKE :query AND $sql_types $query_filter";
 			if($type == AssetType::PLACE) {
 				$base_sql_query = "SELECT places.id FROM `universes`, `places`, `assets` WHERE assets.id = places.id AND universes.starting_place = assets.id AND `name` LIKE :query AND `type` = :type $query_filter ".($_SESSION['ANORRL$Games$OriginalOnly'] ? " AND `original` = 1 " : "");
 			}
@@ -102,7 +118,7 @@
 				)->fetchAll(\PDO::FETCH_OBJ);
 			} else {
 				$rows = $db->run(
-					"$base_sql_query $sql_filter LIMIT :page, :count",
+					"$base_sql_query $sql_filter LIMIT :page, :count", 
 					[
 						":query" => "%$query%",
 						":type" => $type->ordinal(),
@@ -133,13 +149,28 @@
 				$filter = CatalogFilter::RecentlyUploaded;
 			}
 
+			$is_bodyparts = $type == AssetType::BODYPARTS;
+
 			if(!\SESSION)
 				return 0;
 			
 			$query_filter = "AND `public` = 1 AND `nevershow` = 0";
 			// if($user->isAdmin()) { $query_filter = "AND `nevershow` = 0"; }
 
-			$base_sql_query = "SELECT COUNT(`id`) FROM `assets` WHERE `name` LIKE :query AND `type` = :type $query_filter";
+			$sql_types = "`type` = :type";
+
+			if($is_bodyparts) {
+				$type_head = AssetType::HEAD->ordinal();
+				$type_torso = AssetType::TORSO->ordinal();
+				$type_leftarm = AssetType::LEFTARM->ordinal();
+				$type_rightarm = AssetType::RIGHTARM->ordinal();
+				$type_leftleg = AssetType::LEFTLEG->ordinal();
+				$type_rightleg = AssetType::RIGHTLEG->ordinal();
+
+				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg OR `type` = :type)";
+			}
+
+			$base_sql_query = "SELECT COUNT(`id`) FROM `assets` WHERE `name` LIKE :query AND $sql_types $query_filter";
 			if($type == AssetType::PLACE) {
 				$base_sql_query = "SELECT COUNT(`places`.`id`) FROM `places`, `assets` WHERE assets.id = places.id AND `name` LIKE :query AND `type` = :type $query_filter ";
 			}
@@ -154,7 +185,7 @@
 					[
 						":query" => "%$query%",
 						":type" => $type->ordinal()
-					]
+					] 
 				)->fetch(\PDO::FETCH_ASSOC);
 			} else {
 				$row = $db->run(

@@ -1,8 +1,8 @@
 <?php
 	route('GET|POST', '/', '/private/views/index.php', false);
-	route('GET',      '/index', '/private/views/index.php', false);
 	route('GET|POST', '/login', '/private/views/login.php', false);
 	route('GET|POST', '/register', '/private/views/register.php', false);
+	route('GET',      '/about', '/private/views/about.php', false);
 	
 	route('GET|POST', '/catalog', '/private/views/catalog.php');
 	route('GET|POST', '/games', '/private/views/games.php');
@@ -44,15 +44,22 @@
 	route('GET|POST', '/develop/projects', '/private/views/develop/projects.php');
 	route('GET|POST', '/ide/publish', '/private/views/develop/projects.php');
 
-	route('GET', '/badges', '/private/views/badges.php');
+	route('GET',      '/badges', '/private/views/badges.php');
 
-	route('GET', '/thumbnail/avatar/[*:hash]/mtl', '/private/api/thumbnail/avatar/getters/mtl.php');
-	route('GET', '/thumbnail/avatar/[*:hash]/obj', '/private/api/thumbnail/avatar/getters/obj.php');
-	route('GET', '/thumbnail/avatar/[*:hash]/img/[*:image]', '/private/api/thumbnail/avatar/getters/img.php');
-	route('GET', '/thumbnail/avatar/generate', '/private/api/thumbnail/avatar/generate.php');
-	route('GET', '/thumbnail/asset/[*:hash]/mtl', '/private/api/thumbnail/asset/getters/mtl.php');
-	route('GET', '/thumbnail/asset/[*:hash]/obj', '/private/api/thumbnail/asset/getters/obj.php');
-	route('GET', '/thumbnail/asset/[*:hash]/img/[*:image]', '/private/api/thumbnail/asset/getters/img.php');
-	route('GET', '/thumbnail/asset/generate', '/private/api/thumbnail/asset/generate.php');
-	route('GET', '/thumbnail/get', '/private/api/thumbnail/get.php');
+	route('GET',      '/thumbnail/avatar/[*:hash]/mtl', '/private/api/thumbnail/avatar/getters/mtl.php');
+	route('GET',      '/thumbnail/avatar/[*:hash]/obj', '/private/api/thumbnail/avatar/getters/obj.php');
+	route('GET',      '/thumbnail/avatar/[*:hash]/img/[*:image]', '/private/api/thumbnail/avatar/getters/img.php');
+	route('GET',      '/thumbnail/avatar/generate', '/private/api/thumbnail/avatar/generate.php');
+	route('GET',      '/thumbnail/asset/[*:hash]/mtl', '/private/api/thumbnail/asset/getters/mtl.php');
+	route('GET',      '/thumbnail/asset/[*:hash]/obj', '/private/api/thumbnail/asset/getters/obj.php');
+	route('GET',      '/thumbnail/asset/[*:hash]/img/[*:image]', '/private/api/thumbnail/asset/getters/img.php');
+	route('GET',      '/thumbnail/asset/generate', '/private/api/thumbnail/asset/generate.php');
+	route('GET',      '/thumbnail/get', '/private/api/thumbnail/get.php');
+
+	route('GET',      '/inbox', '/private/views/mobile/inbox.php');
+	route('GET',      '/home', '/private/views/mobile/home.php');
+	route('GET',      '/mobile-app-upgrades/native-ios/bc', '/private/views/mobile/nocurrencylol.php');
+	route('GET',      '/mobile-app-upgrades/native-ios/robux', '/private/views/mobile/nocurrencylol.php');
+	route('GET',      '/mobile/games', '/private/views/mobile/games.php');
+	route('GET',      '/mobile/games/', '/private/views/mobile/games.php');
 ?>

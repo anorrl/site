@@ -81,9 +81,9 @@
 	route('GET',      '/game/players/[i:id]/', '/private/api/users/players.php');
 	
 	route('GET|POST', '/persistence/getV2', '/private/gameapis/persistence/getv2.php');
-	route('POST', '/persistence/getSortedValues', '/private/gameapis/persistence/getsortedvalues.php');
-	route('POST', '/persistence/increment', '/private/gameapis/persistence/increment.php');
-	route('POST', '/persistence/set', '/private/gameapis/persistence/set.php');
+	route('POST',     '/persistence/getSortedValues', '/private/gameapis/persistence/getsortedvalues.php');
+	route('POST',     '/persistence/increment', '/private/gameapis/persistence/increment.php');
+	route('POST',     '/persistence/set', '/private/gameapis/persistence/set.php');
 	route('GET|POST', '/Persistence/SetBlob.ashx', '/private/gameapis/datastores/setblob.php');
 	route('GET|POST', '/Persistence/GetBlob.ashx', '/private/gameapis/datastores/getblob.php');
 
@@ -124,13 +124,13 @@
 	route('POST',     '/universes/delete-alias', '/private/gameapis/universes/alias/remove.php');
 	
 	// cloud editing
-	route('GET',  '/universes/[i:universeId]/cloudeditenabled', '/private/gameapis/universes/cloudedit/isenabled.php');
-	route('POST', '/universes/[i:universeId]/enablecloudedit',  '/private/gameapis/universes/cloudedit/enable.php');
-	route('POST', '/universes/[i:universeId]/disablecloudedit', '/private/gameapis/universes/cloudedit/disable.php');
+	route('GET',      '/universes/[i:universeId]/cloudeditenabled', '/private/gameapis/universes/cloudedit/isenabled.php');
+	route('POST',     '/universes/[i:universeId]/enablecloudedit',  '/private/gameapis/universes/cloudedit/enable.php');
+	route('POST',     '/universes/[i:universeId]/disablecloudedit', '/private/gameapis/universes/cloudedit/disable.php');
 
-	route('GET',  '/universes/[i:universeId]/listcloudeditors', '/private/gameapis/universes/cloudedit/editors/list.php');
-	route('POST', '/universes/[i:universeId]/addcloudeditor',   '/private/gameapis/universes/cloudedit/editors/add.php');
-	route('POST', '/universes/[i:universeId]/removecloudeditor','/private/gameapis/universes/cloudedit/editors/remove.php');
+	route('GET',      '/universes/[i:universeId]/listcloudeditors', '/private/gameapis/universes/cloudedit/editors/list.php');
+	route('POST',     '/universes/[i:universeId]/addcloudeditor',   '/private/gameapis/universes/cloudedit/editors/add.php');
+	route('POST',     '/universes/[i:universeId]/removecloudeditor','/private/gameapis/universes/cloudedit/editors/remove.php');
 	
 	
 	route('POST',     '/data/upload/json', '/private/gameapis/universes/upload.php');
@@ -160,12 +160,6 @@
 	route('GET',      '/gametransactions/getpendingtransactions', '/private/gameapis/marketplace/getpendingtransactions.php');
 	route('GET',      '/currency/balance', '/private/gameapis/marketplace/balance.php');
 
-	route('GET',      '/inbox', '/private/views/mobile/inbox.php');
-	route('GET',      '/home', '/private/views/mobile/home.php');
-	route('GET',      '/mobile-app-upgrades/native-ios/bc', '/private/views/mobile/nocurrencylol.php');
-	route('GET',      '/mobile-app-upgrades/native-ios/robux', '/private/views/mobile/nocurrencylol.php');
-	route('GET',      '/mobile/games', '/private/views/mobile/games.php');
-	route('GET',      '/mobile/games/', '/private/views/mobile/games.php');
 	route('GET',      '/signup/is-username-valid', '/private/api/mobile/is-username-valid.php');
 	route('GET',      '/signup/is-password-valid', '/private/api/mobile/is-password-valid.php');
 	route('GET',      '/UserCheck/getrecommendedusername', '/private/api/mobile/getrecommendedusername.php');

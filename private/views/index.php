@@ -39,6 +39,14 @@
 		}
 	}
 
+
+
+	$random = rand(0, 100000);
+
+	$deceptacon = $random >= 50000 && $random <= 55000;
+
+	$music = $deceptacon ? "deceptacon" : "sonic2013menu";
+
 	$page->loadHeader2();
 ?>
 <style>
@@ -143,8 +151,28 @@
 			titleScroller(text.substr(1) + text.substr(0, 1));
 		}, 500);
 	}("Welcome to ANORRL! "));
+
+	$(function() {
+		if(navigator.getAutoplayPolicy("mediaelement") !== "allowed")
+			$("#autoplay-warning").css("display", "block");
+	})
+
+	console.log("chance: <?= $random ?>, <?= $deceptacon ? "true": "false" ?>");
+
 </script>
-<audio src="/public/sonic2013menu.mp3" autoplay volume="0.2" loop></audio>
+<?php if(isset($_SESSION['signup_errors'])): ?>
+	<div style="color: red; font-weight: bold; font-size: 20px;">there's errors with the registration</div>
+<?php endif ?>
+
+<?php if(isset($_SESSION['login_errors'])): ?>
+	<div style="color: red; font-weight: bold; font-size: 20px;">there's errors with the login</div>
+<?php endif ?>
+<audio src="/public/<?= $music ?>.mp3" autoplay volume="<?= $deceptacon ? "0.1" : "0.2" ?>" loop></audio>
+<div style="position: fixed; background: black; padding: 10px;display:none" id="autoplay-warning">
+	Hey did you know there's music playing right now?
+	<br>
+	No? Well seems like you have AUTOPLAY off!
+</div>
 <div id="newfrontpage">
 	<img src="/public/images/header/logo.png" height="200">
 	<br>
@@ -178,23 +206,23 @@
 					<h3 style="margin-top: 0px;">are you new around here?</h3>
 					<div class="fieldset">
 						<label>.username <span class="form-asterisk">*</span></label>
-						<input style="margin-bottom: 0px;" type="text" placeholder="thats your name right?" minlength="3" maxlength="20" required>
+						<input name="ANORRL$Signup$Username" style="margin-bottom: 0px;" type="text" placeholder="thats your name right?" minlength="3" maxlength="20" required>
 						<label class="helperfield"> 3-20 alphanumeric characters, no spaces </label>
 					</div>
 					<div class="fieldset">
 						<label>.password <span class="form-asterisk">*</span></label>
-						<input style="margin-bottom: 0px;" type="password" placeholder="thats your password right?" minlength="6" maxlength="20" required>
+						<input name="ANORRL$Signup$Password" style="margin-bottom: 0px;" type="password" placeholder="thats your password right?" minlength="6" maxlength="20" required>
 						<label class="helperfield"> 6-20 characters, min 4 letters & 2 numbers </label>
 					</div>
 					<div class="fieldset">
 						<label>.confirm_password <span class="form-asterisk">*</span></label>
-						<input type="password" placeholder="just in case... do it again..."  minlength="6" maxlength="20" required>
+						<input name="ANORRL$Signup$ConfirmPassword" type="password" placeholder="just in case... do it again..."  minlength="6" maxlength="20" required>
 					</div>
 					<div class="fieldset">
 						<label>.invite_key <span class="form-asterisk">*</span></label>
-						<input type="password" placeholder="sigh... you know the deal..." required>
+						<input name="ANORRL$Signup$AccessKey" type="password" placeholder="sigh... you know the deal..." required>
 					</div>
-					<input class="button" type="submit" value="register">
+					<input name="ANORRL$Signup$Submit" class="button" type="submit" value="register">
 				</form>
 			</div>
 			<?php else: 
@@ -220,3 +248,7 @@
 
 </div>
 <?php $page->loadFooter2() ?>
+<?php
+	unset($_SESSION['signup_errors']);
+	unset($_SESSION['login_errors']);
+?>

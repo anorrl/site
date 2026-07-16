@@ -1,0 +1,85 @@
+#category-name {
+	font-size: 18px;
+	letter-spacing: 8px;
+	margin-bottom: 0px;
+	margin-top: 5px;
+	margin-left: 6px;
+	font-weight: bold;
+}
+
+#filter-name {
+	font-style: italic;
+	color: #b684b6;
+}
+
+#catalog-container {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.asset {
+	text-align: center;
+	padding: 10px;
+	user-select: none;
+}
+
+.asset #name {
+	font-size: 13px;
+	font-weight: bold;
+	width: 141px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	padding-top: 5px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.asset #creator a {
+	font-size: 13px;
+	font-weight: bold;
+	width: 141px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	padding-top: 5px;
+	text-align: center;
+	margin: 0 auto;
+	position:relative;
+}
+
+.asset img {
+	width: 130px;
+}
+
+.asset:hover {
+	border: 2px solid var(--border-color);
+	margin: -2px;
+	background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+	margin-bottom: -83px;
+	z-index: 9999;
+}
+
+.asset #info {
+	display: none;
+}
+
+.asset:hover #info {
+	display: block;
+}
+
+.asset #price {
+	color: #00e61b;
+	letter-spacing: 1px;
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.asset #info #creator {
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.asset #info table td {
+	text-align: left;
+}

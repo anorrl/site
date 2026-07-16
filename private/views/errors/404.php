@@ -4,19 +4,25 @@
 	use anorrl\Page;
 
 	$page = new Page("404");
-	$page->addStylesheet("/css/new/error.css");
-	$page->loadHeader();
+	$page->clearAll();
+	$page->addStylesheet("/css/error.css");
+	$page->loadHeader2();
 ?>
-
-<div id="ErrorContainer">
-	<img src="/public/images/noassets.png" alt="Error">
-	<h1>Ahhh Shucks!</h1>
-	<b><?php echo "You tried to access \"" . $_SERVER['REQUEST_URI'] . "\" and that failed."; ?></b>
+<div class="box" id="error-container">
+	<div id="main">
+		<h1>404</h1>
+		<a href="/public/images/would-you-error.jpg"><img src="/public/images/would-you-error.jpg" alt="Error" width="220"></a>
+		<h1>awww shucks!</h1>
+		<h3><?php echo "you tried to access \"" . $_SERVER['REQUEST_URI'] . "\" aaaand that failed..."; ?></h3>
+		<hr>
+		<br>
+		<b>try doing something else next time...</b>
+	</div>
 	<div class="buttons">
-		<button id="BackSubmit" onclick="window.history.back();">Back</button>
+		<button class="button" onclick="window.history.back();">Back</button>
 		<form action="/my/home" method="get">
-			<input id="HomeSubmit" type="submit" value="Home">
+			<input  class="button" id="HomeSubmit" type="submit" value="Home">
 		</form>
 	</div>
 </div>
-<?php $page->loadFooter() ?>
+<?php $page->loadFooter2() ?>

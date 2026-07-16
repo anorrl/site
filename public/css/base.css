@@ -310,7 +310,20 @@ hr {
 	text-align: center;
 }
 
-.page-title {
+#pager hr {
+	margin: -15px;
+	margin-bottom: 15px;
+	margin-top: -10px;
+}
+
+#pager .box.input {
+	padding: 2px;
+	width: 21px;
+	border-width: 2px;
+	text-align: center;
+}
+
+.page-title, .page-slogan {
 	margin: 0px;
 	margin-left: 5px;
 	margin-bottom: -7px;
@@ -321,6 +334,72 @@ hr {
 	padding-right: 15px;
 }
 
+.page-slogan {
+	margin-left: 1px
+}
+
 *[template] {
+	display: none;
+}
+
+ul.special {
+	list-style-type: none;
+	margin: 0px;
+	padding: 5px;
+}
+
+ul.special li[data-filter], 
+ul.special li[data-category] {
+	margin: 5px;
+	text-align: center;
+	font-size: 13px;
+}
+ul.special li[data-filter][selected], 
+ul.special li[data-category][selected] {
+	font-weight: bold;
+	font-size: 14px;
+	text-decoration: underline;
+	filter:brightness(1.5);
+	background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	letter-spacing: 2px;
+}
+
+ul.special li[data-filter]:hover,
+ul.special li[data-category]:hover {
+	text-decoration: underline;
+}
+
+ul.special li[data-filter] span,
+ul.special li[data-category] span {
+	width: 160px;
+	text-align: left;
+	display: block;
+	margin: 0 auto;
+}
+
+ul.special li[data-filter] span img, 
+ul.special li[data-category] span img {
+	position: absolute;
+	left: 7px;
+}
+
+#filters-heading, #filter-name {
+	margin-top: 6px;
+	margin-bottom: 4px;
+	letter-spacing: 6px;
+	font-size: 15px;
+	margin-left: 10px;
+}
+
+#filter-name {
+	letter-spacing: 8px;
+	font-size: 18px;
+	margin-left: 6px;
+}
+
+.status {
+	font-size: 18px;
+	text-align: center;
+	margin: 30px auto;
 	display: none;
 }
