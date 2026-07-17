@@ -1,0 +1,19 @@
+#users-container a {
+	font-weight: bold;
+	font-size: 12px;
+	letter-spacing: 2px;
+}
+
+#users-container td {
+	text-align: center;
+}
+
+.user #status {
+	word-break: break-word; overflow-wrap: anywhere;
+	text-align: left;
+}
+
+.user #activity {
+	font-size: 13px;
+	font-weight: bold;
+}

@@ -5,10 +5,9 @@
 
 	$page->loadHeader2();
 ?>
-<h2 class="page-title">.page</h2>
+<h2 class="page-title">.library</h2>
 <div class="box">
-	<h1>Hi hello world!</h1>
-	<p>hi hi hi hi hi hi</p>
+	<p>W.I.P</p>
 </div>		
 <?php
 	$page->loadFooter2();

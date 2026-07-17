@@ -113,6 +113,11 @@
 		display: inline-block;
 	}
 
+	.fieldset {
+		width: fit-content;
+		margin: 0 auto;
+	}
+
 </style>
 <script>
 	function openLoginPanel() {

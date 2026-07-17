@@ -5,7 +5,7 @@
 
 	$randomsplash = new FileSplasher("titles/catalog")->getRandomSplash();
 
-	$page = new Page("Catalog");
+	$page = new Page("Catalog", "catalog");
 	$page->clearAll();
 
 	$page->addScript("/js/core/jquery.js");

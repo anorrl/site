@@ -47,7 +47,7 @@
 	];
 
 	if(!in_array($type, $validtypes))
-		redirect("/create/hats");
+		redirect("/develop/create/hats");
 
 	if(count($_POST) != 0) {
 		if(in_array($type, $validtypes)) {
@@ -71,7 +71,7 @@
 					$_SESSION['ANORRL$CreateAsset$Error'] = true;
 					$_SESSION['ANORRL$CreateAsset$Result'] = "Invalid body type!";
 					
-					redirect("/create/$type");
+					redirect("/develop/create/$type");
 				}
 
 				$asset_type = $type == "body" ? $body_type->assettype() : $types[$type];
@@ -87,7 +87,7 @@
 						$_SESSION['ANORRL$CreateAsset$Result'] = $result['id'];
 					}
 					
-					redirect("/create/$type");
+					redirect("/develop/create/$type");
 				}
 			}
 		} else {

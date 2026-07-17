@@ -6,35 +6,15 @@
     //took this from games.php but idrc atp -skylerclock
 	$randomsplash = new FileSplasher("titles/vandals")->getRandomSplash();
 
-	$page = new Page("Vandals");
+	$page = new Page("Vandals", "vandals");
 	$page->clearAll();
 
 	$page->addScript("/js/core/jquery.js");
 	$page->addScript("/js/vandals.js?t=1776253888");
+	$page->addStylesheet("/css/vandals.css");
 
 	$page->loadHeader2();
 ?>
-<style>
-	#users-container a {
-		font-weight: bold;
-		font-size: 12px;
-		letter-spacing: 2px;
-	}
-
-	#users-container td {
-		text-align: center;
-	}
-
-	.user #status {
-		word-break: break-word; overflow-wrap: anywhere;
-		text-align: left;
-	}
-
-	.user #activity {
-		font-size: 13px;
-		font-weight: bold;
-	}
-</style>
 <h2 class="page-title">.vandals</h2>
 <h3 class="page-slogan"><?= $randomsplash ?></h3>
 <div class="box" style="margin-bottom: 5px;">

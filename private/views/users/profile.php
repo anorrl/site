@@ -1,11 +1,7 @@
 <?php
 	use anorrl\User;
-	use anorrl\UserSettings;
-	use anorrl\utilities\UserUtils;
 	use anorrl\enums\AssetType;
-	use anorrl\enums\ANORRLBadge;
 	use anorrl\Comment;
-	use anorrl\Asset;
 	use anorrl\Page;
 	use anorrl\utilities\UtilUtils;
 

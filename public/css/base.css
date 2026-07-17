@@ -132,7 +132,7 @@ hr {
 	font-size: 16px;
 }
 
-.header-link:hover {
+.header-link:hover, .header-link[selected] {
 	text-decoration: underline;
 	background: #222;
 	background: linear-gradient(0deg,#222 0%, #444 100%);
@@ -240,6 +240,20 @@ hr {
 
 #footer #container p {
 	margin: 0px;
+}
+
+#footer #links {
+	display: flex;
+	text-align: center;
+	justify-content: center;
+	margin-bottom: 10px;
+}
+
+#footer #links a {
+	font-size: 14px;
+	font-family: 'Fira Mono';
+	padding: 0px 15px;
+	font-weight: bold;
 }
 
 #body {

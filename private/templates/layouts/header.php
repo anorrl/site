@@ -25,7 +25,7 @@
 		<?php endforeach ?>
 	</head>
 	<body>
-		<div style="position: fixed; left: 0px; right: 0px; top: 0px;">
+		<div style="position: fixed; left: 0px; right: 0px; top: 0px; z-index: 999">
 			<div id="header" <?= !SESSION ? "" : 'style="border-width: 2px;"' ?>>
 				<div id="logo" style="float: left;">
 					<a href="/">
@@ -39,11 +39,11 @@
 				<?php endif ?>
 				<div id="container">
 					<div id="links">
-						<a class="header-link" href="/my/home">Home</a>
-						<a class="header-link" href="/games">Games</a>
-						<a class="header-link" href="/catalog">Catalog</a>
-						<a class="header-link" href="/vandals">Vandals</a>
-						<a class="header-link" href="/about">About</a>
+						<a class="header-link" href="/my/home" <?php if($this->internal_name == "my/home"):  ?>selected<?php endif ?>>Home</a>
+						<a class="header-link" href="/games" <?php if($this->internal_name == "games"):  ?>selected<?php endif ?>>Games</a>
+						<a class="header-link" href="/catalog" <?php if($this->internal_name == "catalog"):  ?>selected<?php endif ?>>Catalog</a>
+						<a class="header-link" href="/vandals" <?php if($this->internal_name == "vandals"):  ?>selected<?php endif ?>>Vandals</a>
+						<a class="header-link" href="/develop" <?php if(str_starts_with($this->internal_name, "develop")):  ?>selected<?php endif ?>>Develop</a>
 					</div>
 				</div>
 			</div>
@@ -56,7 +56,6 @@
 					<a href="/my/friends" <?php                          if($this->internal_name == "my/friends"):    ?>selected<?php endif ?>>Friends</a>
 					<a href="/create/" <?php                             if($this->internal_name == "my/create"):     ?>selected<?php endif ?>>Create</a>
 					<a href="/my/stuff" <?php                            if($this->internal_name == "my/stuff"):      ?>selected<?php endif ?>>Stuff</a>
-					<a href="/download" <?php                            if($this->internal_name == "download/index"):?>selected<?php endif ?>>Download</a>
 				</div>
 				<div id="billboard" style="z-index: 10;">
 					<div id="container">

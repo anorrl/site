@@ -31,6 +31,17 @@
 		});
 	}
 
+	function route_redirect($method, $path, $file, $auth_reroute = true) {
+		global $router;
+		$router->map($method, $path, function() use ($file, $auth_reroute) {
+			if($auth_reroute && str_starts_with($file, "/private/views/") && !SESSION) {
+				redirect("/");
+			}
+
+			redirect($file);
+		});
+	}
+
 	function route_api($method, $path) {
 		global $router;
 
@@ -66,6 +77,7 @@
 	load("api");
 	load("gameapi");
 	
+	route('GET|POST', '/[*:name]-item', '/private/views/item.php');
 	route('GET|POST', '/[*:name]-place', '/private/views/place.php');
 	route('GET',      '/asset', '/private/gameapis/assetdeliverer.php');
 

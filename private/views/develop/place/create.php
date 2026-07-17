@@ -4,28 +4,30 @@
 	 *  This is not where you create places, rather this is to create ASSETS (like badges) **FOR** places.
 	 */
 
+	// TODO: make this studio compatible
+
 	use anorrl\Place;
 	use anorrl\utilities\ClientDetector;
 
 	if(!isset($placeId) || !isset($type))
-		redirect("/create/");
+		redirect("/develop/create/");
 
 	if($type != "badge")
-		redirect("/create/");
+		redirect("/develop/create/");
 
 	$place = Place::FromID($placeId);
 
 	if(!$place)
-		redirect("/create/");
+		redirect("/develop/create/");
 
 	if(SESSION->user->id != $place->creator->id)
 		redirect("/{$place->getURL()}");
 
 	if(!ClientDetector::IsAClient()) {
-		require "placecreate_views/normal.php";
+		require "views/normal.php";
 	}
 	else {
-		require "placecreate_views/studio.php";
+		require "views/studio.php";
 	}
 
 ?>

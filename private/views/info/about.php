@@ -5,7 +5,7 @@
 	
     $randomsplash = new FileSplasher("titles/about")->getRandomSplash();
 
-	$page = new Page("About ANORRL");
+	$page = new Page("About ANORRL", "about");
 	$page->loadHeader2();
 ?>
 <style>
@@ -28,7 +28,7 @@
 	<hr>
 	<img style="float:right; height:300px;margin-bottom:-10px;" title="kuro (hey thats me!)" src="/public/images/characters/kuro.png">
 	<p>
-		<b>ANO</b>ther <b>R</b>oblox <b>R</b>etake <b>L</b>OL
+		<b>ANO</b>ther <b>R</b>oblox <b>R</b>etake <b>L</b>ol
 		is a project that aims to serve as an alternative to ROBLOX.
 		It bases itself off the March 2016 source code (that was leaked around the same time), we do not want profits!
 		We just want to have fun, we don't want the restrictions held by the platform at this time.
