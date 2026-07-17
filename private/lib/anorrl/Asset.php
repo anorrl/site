@@ -223,8 +223,7 @@
 		}
 
 		function getURL() {
-			$typa = $this->type == AssetType::PLACE ? "place" : "item";
-			return "{$this->getURLTitle()}-{$typa}?id={$this->id}";
+			return "/catalog/{$this->id}/{$this->getURLTitle()}";
 		}
 
 		function getAllVersions(): array {

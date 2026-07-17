@@ -53,7 +53,7 @@
 							"name" => $asset->creator->name
 						],
 						"name" => $asset->name,
-						"url" => "/{$asset->getURL()}",
+						"url" => "{$asset->getURL()}",
 						"favouritescount" => $asset->favourites_count,
 						"activeplayers" => $asset->current_playing_count,
 						"visits" => $asset->visit_count,

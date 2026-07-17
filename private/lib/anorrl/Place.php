@@ -98,6 +98,10 @@
 			}
 		}
 
+		function getURL() {
+			return "/games/{$this->id}/{$this->getURLTitle()}";
+		}
+
 		function updateVisitCount() {
 			$db = Database::singleton();
 

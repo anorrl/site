@@ -168,4 +168,6 @@
 	route('GET|POST', '/mobileapi/securesignup', '/private/api/mobile/securesignup.php');
 
 	route('GET',      '/UserCheck/getrecommendedusername', '/private/api/mobile/getrecommendedusername.php');
+
+	route('GET',      '/asset', '/private/gameapis/assetdeliverer.php');
 ?>

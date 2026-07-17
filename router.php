@@ -76,10 +76,6 @@
 	load("main");
 	load("api");
 	load("gameapi");
-	
-	route('GET|POST', '/[*:name]-item', '/private/views/item.php');
-	route('GET|POST', '/[*:name]-place', '/private/views/place.php');
-	route('GET',      '/asset', '/private/gameapis/assetdeliverer.php');
 
 	$match = $router->match();
 

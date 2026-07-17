@@ -1,7 +1,5 @@
-<?php 
+<?php
 	if(!isset($id))
-		$id = intval($_GET['id']);
-	if(!isset($_GET['id']) && !isset($id))
 		redirect("/my/stuff");
 
 	use anorrl\Asset;
@@ -18,7 +16,7 @@
 	if($place != null) {
 		
 		if($place->getURLTitle() != $name) {
-			redirect("/{$place->getURL()}");
+			redirect("{$place->getURL()}");
 		}
 
 		$universe = Universe::FromID($place->universe);
@@ -39,7 +37,7 @@
 					$_SESSION['ANORRL$Comment$Post$Error'] = $result['reason'];
 				}
 
-				redirect("/{$place->getURL()}");
+				redirect("{$place->getURL()}");
 			}
 
 			$comments = Comment::GetCommentsOn($place);

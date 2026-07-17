@@ -8,8 +8,8 @@
 	use anorrl\Comment;
 	use anorrl\Page;
 	
-
-	$id = intval($_GET['id']);
+	if(!isset($id))
+		redirect("/my/stuff");
 
 	$asset = Asset::FromID($id);
 	$user = SESSION->user;
@@ -17,7 +17,7 @@
 
 	if($asset != null) {
 		if($asset->getURLTitle() != $name || $asset->type == AssetType::PLACE) {
-			redirect("/{$asset->getURL()}");
+			redirect("{$asset->getURL()}");
 		}
 
 		if($user != null) {
@@ -36,7 +36,7 @@
 					$_SESSION['ANORRL$Comment$Post$Error'] = $result['reason'];
 				}
 
-				redirect("/{$asset->getURL()}");
+				redirect("{$asset->getURL()}");
 			}
 
 			$comments = Comment::GetCommentsOn($asset);
@@ -78,17 +78,16 @@
 	$page->addMeta("description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
 	$page->addMeta("og:type", "website");
 	$page->addMeta("og:site_name", "ANORRL");
-	$page->addMeta("og:url", "https://{$domain}/{$asset->getURL()}");
+	$page->addMeta("og:url", "https://{$domain}{$asset->getURL()}");
 	$page->addMeta("og:title", htmlspecialchars($asset->name, ENT_QUOTES));
 	$page->addMeta("og:description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
-	$page->addMeta("og:image", "https://{$domain}/{$asset->getThumbsUrl()}");
+	$page->addMeta("og:image", "https://{$domain}{$asset->getThumbsUrl()}");
 
 	$page->loadHeader();
 
 	if($user == null) {
 		die();
 	}
-
 
 	$linktype = strtolower($asset->type->label());
 	$plural_linktype = !str_ends_with($linktype, "s") ? $linktype."s" : $linktype;

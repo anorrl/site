@@ -133,14 +133,14 @@
 					[
 						"title" => $asset->name,
 						"description" => "Uploaded by: {$asset->creator->name}",
-						"url" => "https://$domain{$asset->getURL()}",
+						"url" => "https://{$domain}{$asset->getURL()}",
 						"author" => [
 							"name" => "ANORRL",
 							"url" => "https://$domain/",
 							"icon_url" => "https://$domain/public/images/download/client.png"
 						],
 						"thumbnail" => [
-							"url" => "https://$domain{$asset->getThumbsUrl()}"
+							"url" => "https://{$domain}{$asset->getThumbsUrl()}"
 						],
 					]
 				]

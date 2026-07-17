@@ -96,5 +96,5 @@
 			</div>
 		</div>
 		</div>
-		<div id="body" <?php if(!SESSION): ?>style="margin-top:72px;"<?php else: ?>style="margin-top: 95px;"<?php endif ?>>
+		<div id="body" style="<?php if(!SESSION): ?>margin-top:72px;<?php else: ?>margin-top: 95px;<?php endif ?> min-height: calc(100vh - 260px)">
 			<div id="container">

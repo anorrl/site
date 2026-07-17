@@ -21,7 +21,7 @@
 		redirect("/develop/create/");
 
 	if(SESSION->user->id != $place->creator->id)
-		redirect("/{$place->getURL()}");
+		redirect("{$place->getURL()}");
 
 	if(!ClientDetector::IsAClient()) {
 		require "views/normal.php";

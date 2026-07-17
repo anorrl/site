@@ -161,7 +161,7 @@
 			}
 		}
 
-		redirect("/{$asset->getURL()}");
+		redirect("{$asset->getURL()}");
 		
 	} else if(isset($_FILES['ANORRL$PublishAsset$File']) &&
 	   isset($_POST['ANORRL$PublishAsset$Submit'])) {
@@ -175,7 +175,7 @@
 
 				redirect("/edit?id=$id");
 			} else {
-				redirect("/{$asset->getURL()}");
+				redirect("{$asset->getURL()}");
 			}
 		} else {
 			die("Yo, what are you doing??");

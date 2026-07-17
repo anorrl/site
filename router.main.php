@@ -5,6 +5,9 @@
 	route('GET',      '/vandals', '/private/views/vandals.php');
 	route('GET',      '/badges', '/private/views/badges.php');
 
+	route('GET|POST', '/catalog/[i:id]/[*:name]', '/private/views/item.php');
+	route('GET|POST', '/games/[i:id]/[*:name]', '/private/views/place.php');
+
 	route('GET',      '/info/credits', '/private/views/info/credits.php');
 	route('GET',      '/info/about', '/private/views/info/about.php', false);
 	route('GET',      '/info/privacy', '/private/views/info/privacy.php', false);
