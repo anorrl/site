@@ -73,7 +73,7 @@
 						"id" => $asset->creator->id,
 						"name" => $asset->creator->name
 					],
-					"url" => "{$asset->getURL()}",
+					"url" => $asset->getURL(),
 					"onsale" => $asset->onsale,
 					"favourites" => $asset->favourites_count,
 					"sales" => $asset->sales_count,

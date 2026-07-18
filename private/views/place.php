@@ -16,7 +16,7 @@
 	if($place != null) {
 		
 		if($place->getURLTitle() != $name) {
-			redirect("{$place->getURL()}");
+			redirect($place->getURL());
 		}
 
 		$universe = Universe::FromID($place->universe);
@@ -37,7 +37,7 @@
 					$_SESSION['ANORRL$Comment$Post$Error'] = $result['reason'];
 				}
 
-				redirect("{$place->getURL()}");
+				redirect($place->getURL());
 			}
 
 			$comments = Comment::GetCommentsOn($place);
@@ -61,7 +61,7 @@
 		if($new_asset == null) {
 			redirect("/my/stuff");
 		} else {
-			redirect("/{$new_asset->getURL()}");
+			redirect($new_asset->getURL());
 		}
 	}
 	$header_data = $place;

@@ -17,7 +17,7 @@
 
 	if($asset != null) {
 		if($asset->getURLTitle() != $name || $asset->type == AssetType::PLACE) {
-			redirect("{$asset->getURL()}");
+			redirect($asset->getURL());
 		}
 
 		if($user != null) {
@@ -36,7 +36,7 @@
 					$_SESSION['ANORRL$Comment$Post$Error'] = $result['reason'];
 				}
 
-				redirect("{$asset->getURL()}");
+				redirect($asset->getURL());
 			}
 
 			$comments = Comment::GetCommentsOn($asset);

@@ -58,7 +58,7 @@
 							"name" => $asset->creator->name
 						],
 						"thumbnail" => $asset->getThumbsUrl(130),
-						"url" => "{$asset->getURL()}"
+						"url" => $asset->getURL()
 					];
 				}
 			}
