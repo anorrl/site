@@ -98,6 +98,19 @@
 			}
 		}
 
+		function getStuffResponse() {
+			return [
+				"id" => $this->id,
+				"name" => $this->name,
+				"creator" => [
+					"id" => $this->creator->id,
+					"name" => $this->creator->name
+				],
+				"thumbnail" => $this->getThumbsUrl(200, 112),
+				"url" => $this->getURL()
+			];
+		}
+
 		function getURL() {
 			return "/games/{$this->id}/{$this->getURLTitle()}";
 		}

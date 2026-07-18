@@ -40,7 +40,7 @@
 		$total_pages = floor($user->getOwnedAssetsCount(AssetType::index($type), $query, $showcreatoronly)/12)+1;
 
 		if($total_pages < $page) {
-			redirect("/api/stuff?c=$type&p=1&q=$query");
+			redirect("/api/stuff?c=$type&p=1&q=$query".($showcreatoronly ? "&showcreatoronly" : ""));
 		}
 
 		$assets = $user->getOwnedAssets(AssetType::index($type), $query, $showcreatoronly, true, [], $page, 12);
@@ -49,18 +49,7 @@
 
 		if(count($assets) != 0) {
 			foreach($assets as $asset) {
-				if($asset instanceof anorrl\Asset) {
-					$assets_raw[] = [
-						"id" => $asset->id,
-						"name" => $asset->name,
-						"creator" => [
-							"id" => $asset->creator->id,
-							"name" => $asset->creator->name
-						],
-						"thumbnail" => $asset->getThumbsUrl(130),
-						"url" => $asset->getURL()
-					];
-				}
+				$assets_raw[] = $asset->getStuffResponse();
 			}
 		}
 		

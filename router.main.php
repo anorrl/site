@@ -22,6 +22,10 @@
 	route('GET|POST', '/develop/create/[*:type]', '/private/views/develop/create.php');
 	route('GET',      '/develop/create/', '/private/views/develop/create.php');
 	route('GET',      '/develop/create',  '/private/views/develop/create.php');
+	
+	route('GET',      '/develop/library/[*:type]',  '/private/views/develop/library.php');
+	route('GET',      '/develop/library/',  '/private/views/develop/library.php');
+	route('GET',      '/develop/library',  '/private/views/develop/library.php');
 
 	// studio
 	route('GET|POST', '/develop/place/[i:placeId]/[*:type]', '/private/views/develop/place/create.php');

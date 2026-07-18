@@ -348,7 +348,7 @@
 				$sql_extra .= " AND `public` = 1";
 			}
 
-			$sql_types = "`type` = :type";
+			$sql_types = "`assets`.`type` = :type";
 			if($type == AssetType::BODYPARTS) {
 				$type_head = AssetType::HEAD->ordinal();
 				$type_torso = AssetType::TORSO->ordinal();
@@ -357,61 +357,47 @@
 				$type_leftleg = AssetType::LEFTLEG->ordinal();
 				$type_rightleg = AssetType::RIGHTLEG->ordinal();
 
-				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg)";
+				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg OR `type` = :type)";
 			}
 			
-			$sql = "SELECT assets.* FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = :user AND $sql_types AND `name` LIKE :query $sql_extra ORDER BY `lastedited` DESC";
 
+			$sql = "SELECT assets.id FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = :user AND $sql_types AND `name` LIKE :query $sql_extra ORDER BY `lastedited` DESC";
+			if($type == AssetType::PLACE)
+				$sql = "SELECT places.id FROM `transactions`, `assets`, `places` WHERE `transactions`.`asset` = `assets`.`id` AND `places`.`id` = `assets`.`id` AND `userid` = :user AND $sql_types AND `name` LIKE :query $sql_extra ORDER BY `lastedited` DESC";
+			
 			$db = Database::singleton();
 
-			if($type == AssetType::BODYPARTS) {
-				if($page <= -1 || $count <= 0) {
-					$rows = $db->run(
-						$sql,
-						[
-							":user" => $this->id,
-							":query" => $sql_query
-						]
-					)->fetchAll(\PDO::FETCH_OBJ);
-				} else {
-					$rows = $db->run(
-						"$sql LIMIT :page, :count",
-						[
-							":user" => $this->id,
-							":query" => $sql_query,
-							":page" => (($page-1)*$count),
-							":count" => $count
-						]
-					)->fetchAll(\PDO::FETCH_OBJ);
-				}
+			if($page <= -1 || $count <= 0) {
+				$rows = $db->run(
+					$sql,
+					[
+						":user" => $this->id,
+						":type" => $type->ordinal(),
+						":query" => $sql_query
+					]
+				)->fetchAll(\PDO::FETCH_OBJ);
 			} else {
-				if($page <= -1 || $count <= 0) {
-					$rows = $db->run(
-						$sql,
-						[
-							":user" => $this->id,
-							":type" => $type->ordinal(),
-							":query" => $sql_query
-						]
-					)->fetchAll(\PDO::FETCH_OBJ);
-				} else {
-					$rows = $db->run(
-						"$sql LIMIT :page, :count",
-						[
-							":user" => $this->id,
-							":type" => $type->ordinal(),
-							":query" => $sql_query,
-							":page" => (($page-1)*$count),
-							":count" => $count
-						]
-					)->fetchAll(\PDO::FETCH_OBJ);
-				}
+				$rows = $db->run(
+					"$sql LIMIT :page, :count",
+					[
+						":user" => $this->id,
+						":type" => $type->ordinal(),
+						":query" => $sql_query,
+						":page" => (($page-1)*$count),
+						":count" => $count
+					]
+				)->fetchAll(\PDO::FETCH_OBJ);
 			}
 
 			$result_array = [];
 
 			foreach($rows as $row) {
-				$result_array[] = Asset::FromID($row->id);
+				if($type != AssetType::PLACE) {
+					$result_array[] = Asset::FromID($row->id);
+				}
+				else {
+					$result_array[] = Place::FromID($row->id);
+				}
 			}
 			return $result_array;
 		}
@@ -472,7 +458,9 @@
 			
 			
 			$sql = "SELECT COUNT(`transactions`.`id`) FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = :user AND $sql_types AND `name` LIKE :query $sql_extra ORDER BY `date` DESC";
-
+			if($type == AssetType::PLACE)
+				$sql = "SELECT COUNT(`transactions`.`id`) FROM `transactions`, `assets`, `places` WHERE `transactions`.`asset` = `assets`.`id` AND `places`.`id` = `assets`.`id` AND `userid` = :user AND $sql_types AND `name` LIKE :query $sql_extra ORDER BY `lastedited` DESC";
+			
 			$params = [
 				":user" => $this->id,
 				":query" => $sql_query,

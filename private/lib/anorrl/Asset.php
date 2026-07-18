@@ -25,6 +25,7 @@
 		public bool        $comments_enabled;
 
 		public bool        $onsale;
+		public int         $price;
 		public int         $sales_count;
 
 		public Asset|null  $relatedasset;
@@ -63,8 +64,6 @@
 			return $row ? self::FromID($row->id) : null;
 		}
 
-
-		// kill associated arrays
 		protected function __construct(object|int $rowdata) {
 			if(is_object($rowdata)) {
 				$this->id = $rowdata->id;
@@ -78,6 +77,7 @@
 				$this->comments_enabled = boolval($rowdata->comments_enabled);
 	
 				$this->onsale = boolval($rowdata->onsale);
+				$this->price = $rowdata->price;
 				$this->sales_count = $rowdata->sales_count;
 
 				$this->notcatalogueable = boolval($rowdata->nevershow);
@@ -115,6 +115,19 @@
 				$this->last_updatetime = $asset_data->last_updatetime;
 				$this->created_at      = $asset_data->created_at;	
 			}
+		}
+
+		function getStuffResponse() {
+			return [
+				"id" => $this->id,
+				"name" => $this->name,
+				"creator" => [
+					"id" => $this->creator->id,
+					"name" => $this->creator->name
+				],
+				"thumbnail" => $this->getThumbsUrl(130),
+				"url" => $this->getURL()
+			];
 		}
 
 		function purchase(User|null $user = null): array {
