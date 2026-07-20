@@ -9,12 +9,14 @@
 	route_api('GET|POST', 'gameservers');
 	route_api('GET|POST', 'logout');
 	route_api('GET|POST', 'outfits');
-	route_api('GET|POST', 'people');
+	route_api('GET|POST', 'vandals');
 	route_api('GET|POST', 'purchase');
 	route_api('GET|POST', 'stuff');
 	route_api('GET|POST', 'ticketer');
 	route_api('GET|POST', 'user');
 	route_api('GET|POST', 'placestuff');
+	
+	route('POST', "/api/universes/[i:id]/shutdown", "/private/api/universes/shutdown.php");
 
 	route_api('GET|POST', 'gameservers/close');
 	route_api('GET|POST', 'gameservers/removeplayer');

@@ -15,7 +15,7 @@
 	}
 
 	if($page < 1) {
-		redirect("/api/people?q=$query&p=1");
+		redirect("/api/vandals?q=$query&p=1");
 		
 	}
 
@@ -26,7 +26,7 @@
 	}
 
 	if($total_pages < $page) {
-		redirect("/api/people?q=$query&p=1");
+		redirect("/api/vandals?q=$query&p=1");
 	}
 
 	$users = UserUtils::GetAllUsersPaged($page, 10, $query);

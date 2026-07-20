@@ -28,9 +28,7 @@
 		if(!$place->isOwner(SESSION->user))
 			die(json_encode([ "error" => true, "reason" => "You are not authorised to perform this action." ]));
 
-		foreach($place->getServers() as $server) {
-			$server->shutdown();
-		}
+		$place->shutdown();
 
 		die(json_encode([ "error" => false ]));
 	}

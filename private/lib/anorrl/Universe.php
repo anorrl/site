@@ -17,6 +17,7 @@
 		public bool $public;
 		public bool $original;
 		public bool $teamcreate;
+		public bool $active;
 		
 
 		public static function Create(Place $place, bool $public = true, bool $original = true): self|null {
@@ -62,6 +63,7 @@
 			$this->public = $data->public;
 			$this->original = $data->original;
 			$this->teamcreate = $data->teamcreate;
+			$this->active = boolval($data->active);
 		}
 
 		function getAllPlaces() {
@@ -80,6 +82,12 @@
 			}
 
 			return $places;
+		}
+
+		function shutdown(string $reason = "This game has been shutdown by the creator") {
+			foreach($this->getAllPlaces() as $place) {
+				$place->shutdown($reason);
+			}
 		}
 
 		function getDeveloperProducts(AssetType|null $type = null) {

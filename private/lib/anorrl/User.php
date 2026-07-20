@@ -341,15 +341,18 @@
 			}
 
 			if($creator_only) {
-				$sql_extra .= " AND `creator` = :user";
+				$sql_extra .= " AND `assets`.`creator` = :user";
 			}
 
 			if(!$show_all) {
 				$sql_extra .= " AND `public` = 1";
 			}
 
-			$sql_types = "`assets`.`type` = :type";
-			if($type == AssetType::BODYPARTS) {
+			$sql_types = "AND `assets`.`type` = :type";
+			if($type == AssetType::GAME || $type == AssetType::PLACE) {
+				$sql_types = "";
+			}
+			else if($type == AssetType::BODYPARTS) {
 				$type_head = AssetType::HEAD->ordinal();
 				$type_torso = AssetType::TORSO->ordinal();
 				$type_leftarm = AssetType::LEFTARM->ordinal();
@@ -357,42 +360,41 @@
 				$type_leftleg = AssetType::LEFTLEG->ordinal();
 				$type_rightleg = AssetType::RIGHTLEG->ordinal();
 
-				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg OR `type` = :type)";
+				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg)";
 			}
-			
 
-			$sql = "SELECT assets.id FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = :user AND $sql_types AND `name` LIKE :query $sql_extra ORDER BY `lastedited` DESC";
+			$sql_select = "SELECT assets.id FROM `transactions`, `assets`";
+			$sql_where = "WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = :user $sql_types AND `assets`.`name` LIKE :query $sql_extra ORDER BY `lastedited` DESC";
+
 			if($type == AssetType::PLACE)
-				$sql = "SELECT places.id FROM `transactions`, `assets`, `places` WHERE `transactions`.`asset` = `assets`.`id` AND `places`.`id` = `assets`.`id` AND `userid` = :user AND $sql_types AND `name` LIKE :query $sql_extra ORDER BY `lastedited` DESC";
-			
+				$sql_select .= " INNER JOIN `places`    ON `assets`.`id` = `places`.`id`";
+			elseif($type == AssetType::GAME)
+				$sql_select .= " INNER JOIN `universes` ON `assets`.`id` = `universes`.`starting_place`";
+		
+			$sql = "$sql_select $sql_where";
+
 			$db = Database::singleton();
 
-			if($page <= -1 || $count <= 0) {
-				$rows = $db->run(
-					$sql,
-					[
-						":user" => $this->id,
-						":type" => $type->ordinal(),
-						":query" => $sql_query
-					]
-				)->fetchAll(\PDO::FETCH_OBJ);
-			} else {
-				$rows = $db->run(
-					"$sql LIMIT :page, :count",
-					[
-						":user" => $this->id,
-						":type" => $type->ordinal(),
-						":query" => $sql_query,
-						":page" => (($page-1)*$count),
-						":count" => $count
-					]
-				)->fetchAll(\PDO::FETCH_OBJ);
+			$params = [ ":user" => $this->id, ":query" => $sql_query ];
+
+			if($page > 0 && $count > 0) {
+				$sql = "$sql LIMIT :page, :count";
+				$params[":page"] = (($page-1)*$count);
+				$params[":count"] = $count;
 			}
+
+			if($type != AssetType::GAME && $type != AssetType::PLACE && $type != AssetType::BODYPARTS)
+				$params[":type"] = $type->ordinal();			
+
+			$rows = $db->run(
+				$sql,
+				$params
+			)->fetchAll(\PDO::FETCH_OBJ);
 
 			$result_array = [];
 
 			foreach($rows as $row) {
-				if($type != AssetType::PLACE) {
+				if($type != AssetType::PLACE && $type != AssetType::GAME) {
 					$result_array[] = Asset::FromID($row->id);
 				}
 				else {
@@ -437,15 +439,18 @@
 			}
 
 			if($creator_only) {
-				$sql_extra .= " AND `creator` = `userid`";
+				$sql_extra .= " AND `assets`.`creator` = `userid`";
 			}
 
 			if(!$show_all) {
 				$sql_extra .= " AND `public` = 1";
 			}
 
-			$sql_types = "`type` = :type";
-			if($type == AssetType::BODYPARTS) {
+			$sql_types = "AND `assets`.`type` = :type";
+			if($type == AssetType::GAME || $type == AssetType::PLACE) {
+				$sql_types = "";
+			}
+			else if($type == AssetType::BODYPARTS) {
 				$type_head = AssetType::HEAD->ordinal();
 				$type_torso = AssetType::TORSO->ordinal();
 				$type_leftarm = AssetType::LEFTARM->ordinal();
@@ -455,20 +460,20 @@
 
 				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg)";
 			}
-			
-			
-			$sql = "SELECT COUNT(`transactions`.`id`) FROM `transactions`, `assets` WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = :user AND $sql_types AND `name` LIKE :query $sql_extra ORDER BY `date` DESC";
-			if($type == AssetType::PLACE)
-				$sql = "SELECT COUNT(`transactions`.`id`) FROM `transactions`, `assets`, `places` WHERE `transactions`.`asset` = `assets`.`id` AND `places`.`id` = `assets`.`id` AND `userid` = :user AND $sql_types AND `name` LIKE :query $sql_extra ORDER BY `lastedited` DESC";
-			
-			$params = [
-				":user" => $this->id,
-				":query" => $sql_query,
-			];
 
-			if($type != AssetType::BODYPARTS) {
-				$params[":type"] = $type->ordinal();
-			}
+			$sql_select = "SELECT COUNT(`transactions`.`id`) FROM `transactions`, `assets`";
+			$sql_where = "WHERE `transactions`.`asset` = `assets`.`id` AND `userid` = :user $sql_types AND `assets`.`name` LIKE :query $sql_extra ORDER BY `lastedited` DESC";
+
+			if($type == AssetType::PLACE)
+				$sql_select .= " INNER JOIN `places`    ON `assets`.`id` = `places`.`id`";
+			elseif($type == AssetType::GAME)
+				$sql_select .= " INNER JOIN `universes` ON `assets`.`id` = `universes`.`starting_place`";
+		
+			$sql = "$sql_select $sql_where";
+			$params = [ ":user" => $this->id, ":query" => $sql_query ];
+
+			if($type != AssetType::GAME && $type != AssetType::PLACE && $type != AssetType::BODYPARTS)
+				$params[":type"] = $type->ordinal();			
 
 			$row = Database::singleton()->run($sql, $params)->fetch(\PDO::FETCH_ASSOC);
 

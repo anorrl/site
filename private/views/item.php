@@ -292,7 +292,7 @@
 			<?php if($user != null): ?>
 			<div id="ManageOptions">
 				<?php if($is_creator): ?>
-				<a href="/edit?id=<?= $asset->id ?>">Configure</a>
+				<a href="/develop/<?= $asset->id ?>/configure">Configure</a>
 				<?php if($asset->isUsable()): ?>
 				<?php if(AssetTypeUtils::IsRenderable($asset->type)): ?><a href="javascript:Render()" id="RenderButton">Render this asset</a><?php endif?>
 				<?php endif ?>

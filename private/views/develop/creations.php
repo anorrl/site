@@ -2,14 +2,14 @@
 	use anorrl\Page;
 
 	if(!isset($type))
-		redirect("/develop/library/places");
+		redirect("/develop/creations/places");
 
 	if(!file_exists(__DIR__."/library/$type.php"))
-		redirect("/develop/library/places");
+		redirect("/develop/creations/places");
 
 	$user = SESSION->user;
 
-	$page = new Page("Library");
+	$page = new Page("Creations");
 
 	$page->clearAll();
 	$page->addScript("/js/core/jquery.js");
@@ -85,10 +85,80 @@
 	}
 
 	div[data-loadtype] {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
 		padding: 5px;
 	}
+
+	div[data-loadtype][grid] {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.cog img {
+		margin-bottom: -3px;
+		transition: transform 0.4s;
+	}
+
+	.cog[active] img {
+		transform: rotate(90deg)
+	}
+
+	.cog[active] {
+		background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	}
+
+	.cog-dropdown {
+		position: relative;
+	}
+
+	.cog-dropdown ul {
+		display:none;
+		position: absolute;
+		list-style: none;
+		text-align: left;
+		width: 130px;
+		min-width:fit-content;
+		background: magenta;
+		margin: 0px;
+		padding: 0px;
+		z-index: 10;
+		border: 2px solid var(--border-color);
+		left: 49px;
+		top: 0px;
+	}
+
+	.cog-dropdown li {
+		padding: 5px;
+		user-select: none;
+		background: linear-gradient(0deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+		border-top: 1px solid var(--border-color);
+		cursor: pointer;
+	}
+
+	.cog-dropdown li span.title {
+		display: inline;
+	} 
+
+	.cog-dropdown li span {
+		display: none;
+	}
+
+	.cog-dropdown li:hover span {
+		display: inline;
+	}
+
+	.cog-dropdown li:first-child {
+		border-top: none;
+	}
+
+
+	.cog-dropdown li:active {
+		background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+	}
+
+	.cog-dropdown li:hover {
+		filter: brightness(1.5)
+	}
+
 </style>
 <script>
 	$(function() {
@@ -97,7 +167,7 @@
 			if(type == "<?= $type ?>")
 				return;
 
-			window.location.href = "/develop/library/"+type;
+			window.location.href = "/develop/creations/"+type;
 		})
 	})
 </script>

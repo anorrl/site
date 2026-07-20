@@ -6,8 +6,10 @@
 	use anorrl\Database;
 	use anorrl\enums\AssetType;
 	use anorrl\enums\ANORRLBadge;
+	use anorrl\enums\ChatOption;
+	use anorrl\enums\Genre;
+	use anorrl\enums\GearType;
 	use anorrl\utilities\AssetUtils;
-	use anorrl\utilities\Arbiter;
 	use anorrl\GameServer;
 	use anorrl\Universe;
 
@@ -17,6 +19,9 @@
 		public int  $current_playing_count;
 		public bool $copylocked;
 		public bool $gears_enabled;
+		public array|null|GearType $gear_types;
+		public Genre $genre;
+		public ChatOption $chat_option;
 
 		public static function UpdatePlaceStats(int $placeID) {
 			$place = Place::FromID($placeID);
@@ -96,6 +101,14 @@
 				if($universe)
 					$this->universe = $universe->id;
 			}
+
+			$this->genre = Genre::index($rowdata->genre);
+			$this->chat_option = ChatOption::index($rowdata->chat_option);
+			$this->gear_types = !$this->gears_enabled ? null : null;
+		}
+
+		function isStartingPlace() {
+			return Universe::FromID($this->universe)->starting_place->id == $this->id;
 		}
 
 		function getStuffResponse() {
@@ -107,8 +120,17 @@
 					"name" => $this->creator->name
 				],
 				"thumbnail" => $this->getThumbsUrl(200, 112),
-				"url" => $this->getURL()
+				"url" => $this->getURL(),
+				"updated" => $this->last_updatetime->format("d/m/Y"),
+				"slot" => "inactive",
+				"visits" => $this->visit_count,
+				"weekly_visits" => $this->getWeeklyVisitCount(),
+				"universe" => $this->universe
 			];
+		}
+
+		function getWeeklyVisitCount() {
+			return 0;
 		}
 
 		function getURL() {
@@ -161,6 +183,12 @@
 			}
 
 			return $result;
+		}
+
+		function shutdown(string $reason = "This game has been shutdown by the creator") {
+			foreach($this->getServers() as $server) {
+				$server->shutdown($reason);
+			}
 		}
 
 		function isEditable(User $user): bool {

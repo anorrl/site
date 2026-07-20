@@ -15,7 +15,8 @@
 
 	$user = SESSION->user;
 
-	$id = intval($_GET['id']);
+	if(!isset($id))
+		redirect("/develop/creations");
 
 	$asset = Asset::FromID($id);
 	$universe = Universe::FromID($asset->universe);

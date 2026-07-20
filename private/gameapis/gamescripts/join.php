@@ -20,7 +20,7 @@
 	$place_id = 0;
 	$universe_id = $_GET['universeId'] ?? 0;
 	$place_creator_id = 0;
-	$place_chat_type = "ClassicAndBubble"; // $place->getChatType()->name();
+	$place_chat_type = "Classic";
 	$unknown = true;
 	$game_id = "00000000-0000-0000-0000-000000000000";
 	$ping_url = "";
@@ -52,6 +52,7 @@
 			$unknown = false;
 			$game_id = $serverDetails->jobid;
 			$ping_url = "http://{domain}/Game/GamerPinger.ashx?serverID={$serverDetails->id}&jobID={$game_id}";
+			$place_chat_type = $place->chat_option->internallabel();
 		}
 	}
 	
@@ -72,7 +73,7 @@
 		"MeasurementUrl" => "",
 		"WaitingForCharacterGuid" => "16be1dd8-5462-4ca5-a997-0725d997708b",
 		"BaseUrl" => "http://{domain}/",
-		"ChatStyle" => $place_chat_type, // move this to place soon
+		"ChatStyle" => $place_chat_type,
 		"CreatorId" => $place_creator_id,
 		"CreatorTypeEnum" => "User",
 		"MembershipType" => "None", // maybe

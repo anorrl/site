@@ -114,7 +114,7 @@ ANORRL.People = {
 		var backPager = pagercontainer.find("#back-pager");
 		var nextPager = pagercontainer.find("#next-pager");
 
-		$.get("/api/people", {q: query, p : page}, function(data) {
+		$.get("/api/vandals", {q: query, p : page}, function(data) {
 			fetchingRow.remove();
 			if(pagercontainer.css("display") == "none") {
 				pagercontainer.css("display", "block");

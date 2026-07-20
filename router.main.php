@@ -13,19 +13,19 @@
 	route('GET',      '/info/privacy', '/private/views/info/privacy.php', false);
 	route('GET',      '/info/terms', '/private/views/info/terms.php', false);
 	
-	route('GET|POST', '/edit', '/private/views/edit.php');
-
 	route('GET',      '/develop', '/private/views/develop/index.php');
 	route('GET',      '/develop/', '/private/views/develop/index.php');
 
-	// replace with library
+	// replace with creations
 	route('GET|POST', '/develop/create/[*:type]', '/private/views/develop/create.php');
 	route('GET',      '/develop/create/', '/private/views/develop/create.php');
 	route('GET',      '/develop/create',  '/private/views/develop/create.php');
 	
-	route('GET',      '/develop/library/[*:type]',  '/private/views/develop/library.php');
-	route('GET',      '/develop/library/',  '/private/views/develop/library.php');
-	route('GET',      '/develop/library',  '/private/views/develop/library.php');
+	route('GET',      '/develop/creations/[*:type]',  '/private/views/develop/creations.php');
+	route('GET',      '/develop/creations/',  '/private/views/develop/creations.php');
+	route('GET',      '/develop/creations',  '/private/views/develop/creations.php');
+
+	route('GET|POST', '/develop/[i:id]/configure', '/private/views/develop/configure.php');
 
 	// studio
 	route('GET|POST', '/develop/place/[i:placeId]/[*:type]', '/private/views/develop/place/create.php');

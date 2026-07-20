@@ -24,6 +24,12 @@
 		public int         $favourites_count;
 		public bool        $comments_enabled;
 
+		/**
+		 * if the user uploaded it for free and the item REQUIRES money for it to be uploaded.
+		 * this flag is enabled and it can NEVER. EVER. be put on sale.
+		 * @var bool
+		 */
+		public bool $owner_only;
 		public bool        $onsale;
 		public int         $price;
 		public int         $sales_count;
@@ -507,10 +513,12 @@
 				if($this->isOwner(\SESSION->user)) {
 					$db = Database::singleton();
 
+					$owners = $this->getSales();
+
 					$db->run("DELETE FROM `inventory` WHERE `assetid` = :id", [":id" => $this->id]);
 					$db->run("DELETE FROM `transactions` WHERE `asset` = :id", [":id" => $this->id]);
 					$db->run("DELETE FROM `favourites` WHERE `assetid` = :id", [":id" => $this->id]);
-					
+
 					$this->checkAndDeleteFiles();
 
 					if($this->type == AssetType::PLACE) {
@@ -545,6 +553,10 @@
 
 						$db->run("DELETE FROM `visits` WHERE `place` = :id", [":id" => $this->id]);
 						$db->run("DELETE FROM `places` WHERE `id` = :id", [":id" => $this->id]);
+					}
+
+					foreach($owners as $owner) {
+						$owner->updateOutfitHash();
 					}
 
 					$db->run("DELETE FROM `assets` WHERE `id` = :id", [":id" => $this->id]);

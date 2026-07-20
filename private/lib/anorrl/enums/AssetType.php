@@ -33,6 +33,7 @@
 		 * This is only for stuff api lol
 		 */
 		case BODYPARTS;
+		case GAME;
 
 		public static function index(int $ordinal): AssetType {
 			return match($ordinal) {
@@ -60,6 +61,7 @@
 				32 => AssetType::PACKAGE,
 				34 => AssetType::GAMEPASS,
 				61 => AssetType::EMOTE,
+				98 => AssetType::GAME,
 				99 => AssetType::BODYPARTS
 			};
 		}
@@ -90,7 +92,8 @@
 				AssetType::PACKAGE      => 32,
 				AssetType::GAMEPASS     => 34,
 				AssetType::EMOTE		=> 61,
-				AssetType::BODYPARTS    => 99
+				AssetType::GAME    		=> 98,
+				AssetType::BODYPARTS    => 99,
 			};
 		}
 

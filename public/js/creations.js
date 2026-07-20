@@ -28,6 +28,36 @@ ANORRL.Creations  = {
 	PrevPage: function() {
 		this.GrabAssets(this.CurrentCategory, this.CurrentPage - 1);
 	},
+	SetElementStuff: function(element, value) {
+		if(typeof(element.attr("href")) != "undefined") {
+			element.attr("href", value);
+		} else if(typeof(element.attr("src")) != "undefined") {
+			element.attr("src", value);
+		} else if(typeof(element.attr("title")) != "undefined") {
+			element.attr("title", value);
+		} else {
+			element.html(value);
+		}
+
+		if(typeof(element.attr("html")) != "undefined") {
+			element.html(value);
+		}
+	},
+	HandleCogClick: function(event) {
+		event.stopPropagation();
+
+		$(".cog").each(function() {
+			$(this).removeAttr("active");
+			$(this).parent().find("ul").css("display", "none");
+		});
+
+		$(this).attr("active",true);
+		$(this).parent().find("ul").css("display", "block");
+	},
+	HandleDropdownClick: function(event) {
+		/* override */
+		event.stopPropagation();
+	},
 	GrabAssets: function(category, page, query) {
 
 		if(this.CurrentlyLoadingCrapBruh) {
@@ -93,21 +123,30 @@ ANORRL.Creations  = {
 				for (var key in assets) {
 
 					var asset = assets[key];
-					var template = $($("div[template]").clone().prop('outerHTML'));
+					var template = $($("[template]").clone().prop('outerHTML'));
 
 					for(var item in asset) {
 						var element = template.find("#"+item);
 						var value = asset[item];
-						if(typeof(element.attr("href")) != "undefined") {
-							element.attr("href", value);
-						} else if(typeof(element.attr("src")) != "undefined") {
-							element.attr("src", value);
-						} else {
-							element.html(value);
+
+						if(typeof(template.attr("id")) != "undefined" && template.attr("id") == item) {
+							ANORRL.Creations.SetElementStuff(template, value);
 						}
 
+						if(element.length > 1) {
+							element.each(function() {
+								ANORRL.Creations.SetElementStuff($(this), value);
+							})
+						} else {
+							ANORRL.Creations.SetElementStuff(element, value);
+						}
 					}
-					
+
+					template.find(".cog").on("click", ANORRL.Creations.HandleCogClick);
+					template.find(".cog-dropdown li").on("click", ANORRL.Creations.HandleDropdownClick);
+					template.find(".cog-dropdown ul").attr("data-universeid", asset['universe']);
+					template.find(".cog-dropdown ul").attr("data-id", asset['id']);
+
 					template.removeAttr("template");
 
 					feedscontainer.append(template);
@@ -177,4 +216,13 @@ $(function(){
 	} else {
 		alert("no feckin container to load m8")
 	}
+
+	$(window).click(function() {
+		$(".cog").each(function() {
+			$(this).removeAttr("active");
+		})
+		$(".cog-dropdown ul").each(function() {
+			$(this).css("display", "none");
+		})
+	});
 });
