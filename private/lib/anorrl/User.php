@@ -27,10 +27,12 @@
 		 * How do you name this better...
 		 * @var bool
 		 */
-		public bool $setprofilepicture;
+		public bool $has_pfp_set;
+		public bool $has_banner_set;
 		public string $currentoutfitmd5;
 		public \DateTime $join_date;
 		public \DateTime $last_username_change_date;
+		public \DateTime $last_banner_change_date;
 		
 		/**
 		 * Attempts to grab userdata from given id.<br>
@@ -105,9 +107,11 @@
 			$this->id = $rowdata->id;
 			$this->name = $rowdata->name;
 			$this->blurb = str_replace("<", "&lt;", str_replace(">", "&gt;", $rowdata->blurb));
-			$this->setprofilepicture = boolval($rowdata->setprofilepicture);
+			$this->has_pfp_set = boolval($rowdata->has_pfp_set);
+			$this->has_banner_set = boolval($rowdata->has_banner_set);
 			$this->currentoutfitmd5 = $rowdata->currentappearancemd5;
 			$this->join_date = \DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->joindate);
+			$this->last_banner_change_date = \DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->last_banner_time);
 			$this->password = $rowdata->password;
 			$this->security_key = $rowdata->security;
 		}
@@ -1076,68 +1080,89 @@
 				$file_contents = file_get_contents($file['tmp_name']);
 				$file_type = ImageUtils::checkMimeType($file_contents);
 				if(str_starts_with($file_type,"image/")) {
-					if(!str_contains($file_type, "gif")) {
-						$pre_image = imagecreatefromstring($file_contents);
-						
-						if(!($pre_image instanceof \GdImage)) {
-							return ["error" => true, "reason" => "That wasn't an image brochacho!"];
-						}
-						
-						$width = imagesx($pre_image);
-						$height = imagesy($pre_image);
+					$pre_image = imagecreatefromstring($file_contents);
+					
+					if(!($pre_image instanceof \GdImage)) {
+						return ["error" => true, "reason" => "That wasn't an image brochacho!"];
+					}
+					
+					$width = imagesx($pre_image);
+					$height = imagesy($pre_image);
 
-						if($width > 16 && $height > 16) {
+					if($width > 16 && $height > 16) {
+						$size = $width;
+
+						if($width == $height) {
 							$size = $width;
-
-							if($width == $height) {
-								$size = $width;
-							} else if($height < $width) {
-								$size = $height;
-							}
-
-							$image = imagescale(ImageUtils::cropAlign($pre_image, $size, $size), 420, 420);
-							
-							imagepng($image, get_user_profile_path($this->id), 9);
-
-							if(!$this->setprofilepicture) {
-								Database::singleton()->run(
-									"UPDATE `users` SET `setprofilepicture` = 1 WHERE `id` = :user",
-									[ ":user" => $this->id ]
-								);
-							}
-
-							return ["error" => false];
+						} else if($height < $width) {
+							$size = $height;
 						}
 
-						return ["error" => true, "reason" => "Image was wayyy too small! (16x16 minimum)"];
-					}
-					else {
-						list($width, $height, $type, $attr) = getimagesize($file['tmp_name']);
+						$image = imagescale(ImageUtils::cropAlign($pre_image, $size, $size), 420, 420);
+						
+						imagepng($image, get_user_profile_path($this->id), 9);
 
-						if($width > 16 && $height > 16 && $width < 420 && $height < 420 && $width == $height) {
-							move_uploaded_file($file['tmp_name'], get_user_profile_path($this->id));
-
-							if(!$this->setprofilepicture) {
-								Database::singleton()->run(
-									"UPDATE `users` SET `setprofilepicture` = 1 WHERE `id` = :user",
-									[ ":user" => $this->id ]
-								);
-							}
-
-							return ["error" => false];
-						} else {
-							if($width < 16 || $height < 16) {
-								return ["error" => true, "reason" => "GIF was wayyy too small! (16x16 minimum)"];
-							} else if($width > 256 || $height > 256) {
-								return ["error" => true, "reason" => "GIF was wayyy too big! (256x256 maximum)"];
-							} else if($width != $height) {
-								return ["error" => true, "reason" => "Must be a damn square! SQUARE!!!"];
-							} else {
-								return ["error" => true, "reason" => "I hate your image. (what the fuck is this resolution)"];
-							}
-							
+						if(!$this->has_pfp_set) {
+							Database::singleton()->run(
+								"UPDATE `users` SET `has_pfp_set` = 1 WHERE `id` = :user",
+								[ ":user" => $this->id ]
+							);
 						}
+
+						return ["error" => false];
 					}
+
+					return ["error" => true, "reason" => "Image was wayyy too small! (16x16 minimum)"];
+				}
+				return ["error" => true, "reason" => "Something went wrong when uploading! ($file_type)"];
+			}
+			
+			if($file['size'] > 524288) {
+				return ["error" => true, "reason" => "Image too large! 512kb max!"];
+			} else {
+				return ["error" => true, "reason" => "Something went wrong when uploading!"];
+			}
+			
+		}
+
+		function setBannerPicture(array $file): array {
+			if($file['error'] == 0 && $file['size'] > 0 && $file['size'] <= 524288) { // 512kb cap
+				$file_contents = file_get_contents($file['tmp_name']);
+				$file_type = ImageUtils::checkMimeType($file_contents);
+				if(str_starts_with($file_type,"image/")) {
+					$pre_image = imagecreatefromstring($file_contents);
+					
+					if(!($pre_image instanceof \GdImage)) {
+						return ["error" => true, "reason" => "That wasn't an image brochacho!"];
+					}
+					
+					$width = imagesx($pre_image);
+					$height = imagesy($pre_image);
+
+					if($width > 97 && $height > 22) {
+						//$size = $width;
+
+						//$image = imagescale(ImageUtils::cropAlign($pre_image, $size, $size), 420, 420);
+						
+						imagejpeg($pre_image, get_user_banner_path($this->id));
+
+						if(!$this->has_banner_set) {
+							Database::singleton()->run(
+								"UPDATE `users` SET `has_banner_set` = 1, `last_banner_time` = now() WHERE `id` = :user",
+								[ ":user" => $this->id ]
+							);
+						}
+						else {
+							Database::singleton()->run(
+								"UPDATE `users` SET `last_banner_time` = now() WHERE `id` = :user",
+								[ ":user" => $this->id ]
+							);
+						}
+
+						return ["error" => false];
+					}
+
+					return ["error" => true, "reason" => "Image was wayyy too small! (97x22 minimum)"];
 				}
 				return ["error" => true, "reason" => "Something went wrong when uploading! ($file_type)"];
 			}
@@ -1151,13 +1176,26 @@
 		}
 
 		function resetProfilePicture() {
-			if($this->setprofilepicture) {
+			if($this->has_pfp_set) {
 				if(file_exists(get_user_profile_path($this->id))) {
 					unlink(get_user_profile_path($this->id));
 				}
 
 				Database::singleton()->run(
-					"UPDATE `users` SET `setprofilepicture` = 0 WHERE `id` = :user",
+					"UPDATE `users` SET `has_pfp_set` = 0 WHERE `id` = :user",
+					[ ":user" => $this->id ]
+				);
+			}
+		}
+
+		function resetBannerPicture() {
+			if($this->has_banner_set) {
+				if(file_exists(get_user_banner_path($this->id))) {
+					unlink(get_user_banner_path($this->id));
+				}
+
+				Database::singleton()->run(
+					"UPDATE `users` SET `has_banner_set` = 0 WHERE `id` = :user",
 					[ ":user" => $this->id ]
 				);
 			}
@@ -1169,7 +1207,7 @@
 			else
 				$settings = UserSettings::Get();
 
-			$type = ($this->setprofilepicture ? 
+			$type = ($this->has_pfp_set ? 
 					($settings->headshots ? "headshot" : "profile")
 					: "headshot");
 			$path = "/profiles/{$this->id}.png";
@@ -1195,6 +1233,14 @@
 			return (\CONFIG->prefer_https ? "https":"http")."://cdn.".\CONFIG->baseurl."/profiles/{$this->id}.png";
 		}
 
+		function getThumbsUrlBanner(): string {
+
+			if(!file_exists(get_user_banner_path($this->id)))
+				return "/api/background?t=".md5($this->name);
+			
+			return (\CONFIG->prefer_https ? "https":"http")."://cdn.".\CONFIG->baseurl."/banners/{$this->id}.jpg?t=".$this->last_banner_change_date->getTimestamp();
+		}
+
 		function getThumbsUrlAvatar(int $size_x = -1, int $size_y = -1): string {
 
 			/*$size_params = "";
@@ -1205,8 +1251,6 @@
 				$size_params = "&sx=$size_x&sy=$size_y";
 
 			return "/thumbs/$service?id={$this->id}{$size_params}";*/
-
-
 
 			if(!file_exists(get_user_render_path($this->currentoutfitmd5, ARLRENDER)))
 				return "/public/images/thumbnails/unavailable.jpg";

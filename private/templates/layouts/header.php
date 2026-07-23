@@ -40,10 +40,10 @@
 				<div id="container">
 					<div id="links">
 						<a class="header-link" href="/my/home" <?php if($this->internal_name == "my/home"):  ?>selected<?php endif ?>>Home</a>
-						<a class="header-link" href="/games" <?php if($this->internal_name == "games"):  ?>selected<?php endif ?>>Games</a>
+						<a class="header-link" href="/games"   <?php if($this->internal_name == "games"):    ?>selected<?php endif ?>>Games</a>
 						<a class="header-link" href="/catalog" <?php if($this->internal_name == "catalog"):  ?>selected<?php endif ?>>Catalog</a>
-						<a class="header-link" href="/vandals" <?php if($this->internal_name == "vandals"):  ?>selected<?php endif ?>>Vandals</a>
 						<a class="header-link" href="/develop" <?php if(str_starts_with($this->internal_name, "develop")):  ?>selected<?php endif ?>>Develop</a>
+						<a class="header-link" href="/vandals" <?php if($this->internal_name == "vandals"):  ?>selected<?php endif ?>>Vandals</a>
 					</div>
 				</div>
 			</div>
@@ -63,7 +63,7 @@
 							<table id="profile">
 								<tbody>
 									<tr>
-										<td width="40" title="Hey! That's you!"><img src="<?= $auth_user->getThumbsUrl() ?>" width="42"></td>
+										<td width="40" title="Hey! That's you!"><img class="header-pfp-image" src="<?= $auth_user->getThumbsUrl() ?>" width="42"></td>
 										<td title="Hey! That's you!"><a href="/users/<?= $auth_user->id ?>/profile"><?= $auth_user->name ?></a></td>
 									</tr>
 								</tbody>

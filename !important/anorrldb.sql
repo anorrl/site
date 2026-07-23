@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 23, 2026 at 10:56 AM
+-- Generation Time: Jul 23, 2026 at 03:32 PM
 -- Server version: 12.3.2-MariaDB
 -- PHP Version: 8.5.8
 
@@ -392,7 +392,9 @@ CREATE TABLE `users` (
   `password` varchar(256) NOT NULL,
   `security` varchar(255) NOT NULL,
   `lastprofileupdate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `setprofilepicture` int(1) NOT NULL DEFAULT 0,
+  `has_pfp_set` int(1) NOT NULL DEFAULT 0,
+  `has_banner_set` int(1) NOT NULL DEFAULT 0,
+  `last_banner_time` timestamp NOT NULL DEFAULT current_timestamp(),
   `currentappearancemd5` varchar(255) NOT NULL DEFAULT 'e729ef49ab16651b0826febda215862b',
   `online` int(1) NOT NULL DEFAULT 0,
   `joindate` timestamp NOT NULL DEFAULT current_timestamp()

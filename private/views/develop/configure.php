@@ -28,7 +28,7 @@
 	$sellable = AssetTypeUtils::IsSellable($asset->type) && !$asset->owner_only;
 	$updateable = AssetTypeUtils::IsUpdateable($asset->type);
 
-	$page = new Page("editing: ".htmlspecialchars($asset->name, ENT_QUOTES));
+	$page = new Page("editing: ".htmlspecialchars($asset->name, ENT_QUOTES), "develop");
 	$page->clearAll();
 	$page->addScript("/js/core/jquery.js");
 

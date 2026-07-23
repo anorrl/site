@@ -9,7 +9,7 @@
 
 	$user = SESSION->user;
 
-	$page = new Page("Creations");
+	$page = new Page("Creations", "develop");
 
 	$page->clearAll();
 	$page->addScript("/js/core/jquery.js");

@@ -39,14 +39,19 @@
 	}
 ?>
 <script src="/public/wimpy/wimpy.js"></script>
+<link rel="stylesheet" href="/public/css/cropper.min.css">
+<script src="/public/js/core/cropper.min.js"></script>
+<script src="/public/js/core/jquery-cropper.min.js"></script>
+<script src="/public/js/core/jquery-modal.js"></script>
 <style>
 	#profile-container {
 		position:relative;
 		width: 970px;
 		height: 220px;
 		background-color:black;
-		background-image: url('/api/background?t=<?= time() ?>');
+		background-image: url('<?= $user->getThumbsUrlBanner() ?>');
 		border: 2px solid var(--border-color);
+		background-size: 100%;
 	}
 
 	#profile-picture {
@@ -74,6 +79,11 @@
 	#profile-picture:hover #controls {
 		opacity: 1;
 		cursor: pointer;
+		pointer-events: none;
+	}
+	
+	#profile-picture:hover #controls * {
+		pointer-events: all;
 	}
 
 	#profile-picture img {
@@ -163,16 +173,150 @@
 		padding: 10px;
 	}
 </style>
+<script>
+	$(function(){
+		$("#pfpfile").on("change", function() {
+			var reader = new FileReader();
+
+			reader.onload = function (e) {
+				$("#pfp-modal").modal({showClose: false});
+				
+				$('#pfp-crop-img').attr('src', e.target.result).width(500);
+				
+				$('#pfp-crop-img').cropper({
+					aspectRatio: 970 / 220,
+					aspectRatio: 1/1,
+					viewMode: 1
+				});
+				$('#pfp-crop-img').data("cropper").replace(e.target.result);
+				
+			};
+
+			reader.readAsDataURL(this.files[0]);
+		})
+
+		$("#bannerfile").on("change", function() {
+			var reader = new FileReader();
+
+			reader.onload = function (e) {
+				$("#banner-modal").modal({showClose: false});
+				
+				$('#banner-crop-img').attr('src', e.target.result).width(500);
+				
+				$('#banner-crop-img').cropper({
+					aspectRatio: 970 / 220,
+					viewMode: 1
+				});
+				$('#banner-crop-img').data("cropper").replace(e.target.result);
+				
+			};
+
+			reader.readAsDataURL(this.files[0]);
+		})
+
+		$("#pfp-modal button[rel='save']").click(function() {
+			$('#pfp-crop-img').data("cropper").getCroppedCanvas().toBlob((blob) => {
+			const formData = new FormData();
+			formData.append('croppedImage', blob);
+			$.ajax('/users/update/pfp', {
+				method: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success() {
+					var image = $("#pfp-crop-img").cropper("getCroppedCanvas").toDataURL("image/jpeg");
+					$("#profile-picture img").attr("src", image);
+					$(".header-pfp-image").attr("src", image);
+				},
+				error() {
+					alert('Upload error');
+				},
+			});
+			}, 'image/jpeg');
+		})
+
+		$("#banner-modal button[rel='save']").click(function() {
+			$('#banner-crop-img').data("cropper").getCroppedCanvas().toBlob((blob) => {
+			const formData = new FormData();
+			formData.append('croppedImage', blob);
+			$.ajax('/users/update/banner', {
+				method: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success() {
+					var image = $("#banner-crop-img").cropper("getCroppedCanvas").toDataURL("image/jpeg");
+					$("#profile-container").css("background-image", "url("+image+")");
+				},
+				error() {
+					alert('Upload error');
+				},
+			});
+			}, 'image/jpeg');
+		})
+
+		$("button[data-method]").click(function() {
+			var method = $(this).attr("data-method");
+
+			if(method == "upload-pfp")
+				$("#pfpfile").trigger("click");
+			else if(method == "remove-pfp")
+				$.post("/users/remove/pfp", function() {window.location.reload();})
+			else if(method == "upload-banner")
+				$("#bannerfile").trigger("click");
+			else if(method == "remove-banner")
+				$.post("/users/remove/banner", function() {window.location.reload();})
+		})
+	});
+</script>
+<style>
+	#pfp-modal, #banner-modal {
+		margin-top: 27px !important;
+		margin: 0px !important;
+		transform: translate(-50%, -50%);
+		z-index: 10000 !important;
+		padding: 10px;
+		text-align: center;
+	}
+
+	.jquery-modal.blocker {
+		z-index: 9999 !important;
+	}
+</style>
+<div id="pfp-modal" class="box" style="display: none;">
+	<h2>crop yo shit!</h2>
+	<img id="pfp-crop-img">
+	<div style="margin-top: 5px;">
+		<!-- evil -->
+		<a href="#"  rel="modal:close" style="color:white">
+			<button class="button">cancel</button>
+			<button class="button" rel="save">save</button>
+		</a>
+	</div>
+</div>
+<div id="banner-modal" class="box" style="display: none;">
+	<h2>crop yo shit!</h2>
+	<img id="banner-crop-img">
+	<div style="margin-top: 5px;">
+		<!-- evil -->
+		<a href="#"  rel="modal:close" style="color:white">
+			<button class="button">cancel</button>
+			<button class="button" rel="save">save</button>
+		</a>
+	</div>
+</div>
+<input id="pfpfile" type="file" hidden/>
+<input id="bannerfile" type="file" hidden/>
 <div id="profile-container">
 	<div style="padding: 30px; display: flex;">
 		<div id="profile-picture">
 			<?php if($owner): ?>
 			<div id="controls">
-				<button class="button">change</button>
-				<button class="button">delete</button>
+				<button class="button" data-method="upload-pfp">change</button>
+				<button class="button" data-method="remove-pfp">delete</button>
 			</div>
 			<?php endif ?>
-			<img src="<?= $user->getThumbsUrl(161)?>">
+			<a title="<?= $owner ? "your" : "{$user->name}'s" ?> profile pic!" href="<?= $user->getThumbsUrl(161)?>" target="__blank"><img src="<?= $user->getThumbsUrl(161)?>"></a>
 		</div>
 
 		<div id="profile-stats"> 
@@ -195,8 +339,8 @@
 			</div>
 			<?php if($owner): ?>
 			<div id="banner-controls">
-				<button class="button">change</button>
-				<button class="button">delete</button>
+				<button class="button" data-method="upload-banner">change</button>
+				<button class="button" data-method="remove-banner">delete</button>
 			</div>
 			<?php endif ?>
 		</div>	

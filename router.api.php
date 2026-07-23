@@ -24,7 +24,11 @@
 	route('POST', "/asset/[i:id]/refund",   "/private/api/asset/refund.php");
 	route('POST', "/asset/[i:id]/setversion/[i:vid]",   "/private/api/asset/setversion.php");
 
-	route('GET', '/users/[i:id]/css',        '/private/api/users/css.php');
+	route('GET',  '/users/[i:id]/css',       '/private/api/users/css.php');
+	route('POST', '/users/update/pfp',       '/private/api/users/updatepfp.php');
+	route('POST', '/users/remove/pfp',       '/private/api/users/removepfp.php');
+	route('POST', '/users/update/banner',    '/private/api/users/updatebanner.php');
+	route('POST', '/users/remove/banner',    '/private/api/users/removebanner.php');
 	route('GET', '/api/background', '/private/api/background.php');
 
 	route_api('GET|POST', 'gameservers/close');

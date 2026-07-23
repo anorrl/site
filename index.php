@@ -112,6 +112,10 @@
 		return get_path_file("users/profiles/{$id}.png");
 	}
 
+	function get_user_banner_path(int $id) {
+		return get_path_file("users/banners/{$id}.jpg");
+	}
+
 	function get_user_render_path(string $md5, int $type) {
 		$path = get_path_file("users/renders/{$md5}");
 		switch($type) {
@@ -129,7 +133,8 @@
 	create_folder("../assets/thumbs");
 	create_folder("../assets/3d");
 	create_folder("../users/profiles");
-	create_folder("../users/renders/");
+	create_folder("../users/banners");
+	create_folder("../users/renders");
 
 	require_once __DIR__ . "/router.php";
 
