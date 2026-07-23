@@ -44,7 +44,7 @@
 	<h2>up for something new? try developing a game for once!</h2>
 	<h4>what's it up for you? well me of course! get on with it!</h4>
 	<input class="button" type="submit" value="Open ANORRL Studio"><br><br>
-	<a href="/develop/library">oh just want to check your items? yeah ok thats fine i guess.</a>
+	<a href="/develop/creations/games">oh just want to check your items? yeah ok thats fine i guess.</a>
 </div>
 <div id="cards">
 	<div class="box">

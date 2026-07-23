@@ -1,4 +1,5 @@
-<div style="position: fixed;top: 10px;left: 10px;width: 300px;height: 70px;z-index: 9999; white-space: nowrap;">
+<!-- remove this -->
+<div style="position: absolute;bottom: 33px;left: 10px;width: 300px;height: 70px;z-index: 9999; white-space: nowrap;">
 	<div 
 		data-wimpyplayer=""
 		data-skin="/public/wimpy/skins/Slick_modified.tsv"
@@ -15,7 +16,9 @@
 			<a href="<?= $this->link ?>"><?= $this->name ?></a>
 		<?php endif ?>
 	</div>
+	<?php if($this->cover_art != ""): ?>
 	<div style="border: 2px solid black;margin-left:-2px; height: 298px; border-top: none">
 		<img src="<?= $this->cover_art ?>" style="width: 298px; height: 298px; background: #111;">
 	</div>
+	<?php endif ?>
 </div>

@@ -2,6 +2,7 @@
 
 :root {
 	--border-color: rgb(141, 29, 216);
+	--lighter-border-color: rgb(159, 96, 201);
 }
 
 @font-face {
@@ -111,7 +112,7 @@ hr {
 	padding: 3px 10px;
 }
 
-#submenu > #container a:hover {
+#submenu > #container a:hover, #submenu > #container a[selected] {
 	color:white;
 	background: #222;
 	background: linear-gradient(0deg,#222 0%, #444 100%);
@@ -233,7 +234,7 @@ hr {
 #footer #container .legalese {
 	float:right;
 	display: block;
-	border-left: 1px solid rgb(159, 96, 201);
+	border-left: 1px solid var(--lighter-border-color);
 	padding: 10px;
 	margin-top: -10px;
 }

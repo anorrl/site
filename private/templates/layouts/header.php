@@ -63,7 +63,7 @@
 							<table id="profile">
 								<tbody>
 									<tr>
-										<td width="40" title="Hey! That's you!"><img src="/thumbs/player?id=<?= $auth_user->id ?>&amp;sxy=42"></td>
+										<td width="40" title="Hey! That's you!"><img src="<?= $auth_user->getThumbsUrl() ?>" width="42"></td>
 										<td title="Hey! That's you!"><a href="/users/<?= $auth_user->id ?>/profile"><?= $auth_user->name ?></a></td>
 									</tr>
 								</tbody>
@@ -96,5 +96,5 @@
 			</div>
 		</div>
 		</div>
-		<div id="body" style="<?php if(!SESSION): ?>margin-top:72px;<?php else: ?>margin-top: 95px;<?php endif ?> min-height: calc(100vh - 260px)">
+		<div id="body" style="<?php if(!SESSION): ?>margin-top:72px;<?php else: ?>margin-top: 95px;<?php endif ?> min-height: calc(100vh - 260px); position: relative">
 			<div id="container">

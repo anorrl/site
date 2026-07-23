@@ -75,13 +75,14 @@
 				$this->id = $rowdata->id;
 				$this->creator = User::FromID($rowdata->creator);
 				$this->type = AssetType::index($rowdata->type);
-				$this->name = str_replace("<", "&lt;", str_replace(">", "&gt;", $rowdata->name));
-				$this->description = str_replace("<", "&lt;", str_replace(">", "&gt;", $rowdata->description));
+				$this->name = htmlspecialchars($rowdata->name);
+				$this->description = htmlspecialchars($rowdata->description);
 				$this->public = boolval($rowdata->public);
 
 				$this->favourites_count = $rowdata->favourites_count;
 				$this->comments_enabled = boolval($rowdata->comments_enabled);
 	
+				$this->owner_only = boolval($rowdata->owner_only);
 				$this->onsale = boolval($rowdata->onsale);
 				$this->price = $rowdata->price;
 				$this->sales_count = $rowdata->sales_count;
@@ -109,7 +110,9 @@
 				$this->favourites_count = $asset_data->favourites_count;
 				$this->comments_enabled = $asset_data->comments_enabled;
 	
+				$this->owner_only = $asset_data->owner_only;
 				$this->onsale = $asset_data->onsale;
+				$this->price = $asset_data->price;
 				$this->sales_count = $asset_data->sales_count;
 				
 				$this->notcatalogueable = $asset_data->notcatalogueable;
@@ -170,21 +173,21 @@
 		function removeFrom(User|null $user = null): array {
 			
 			if(!$user)
-				return ["error" => true, "reason" => "User not authorised to perform this action!"];
+				return ["success" => false, "reason" => "User not authorised to perform this action!"];
 			
 			if($this->type == AssetType::BADGE) {
-				return ["error" => false];
+				return ["success" => true];
 			}
 			
 			if(!$user->owns($this))
-				return ["error" => true, "reason" => "You don't own this item!"];
+				return ["error" => false, "reason" => "You don't own this item!"];
 
-			if($this->isOwner($user, true))
-				return ["error" => true, "reason" => "Hang on a second you CREATED this."];
+			if($this->isOwner($user, false))
+				return ["error" => false, "reason" => "Hang on a second you CREATED this."];
 
 			TransactionUtils::UndoTransaction($user, $this);
 
-			return ["error" => false];
+			return ["error" => true];
 		}
 
 		function getFileContents(int $version = -1) {
@@ -245,10 +248,33 @@
 			return "/catalog/{$this->id}/{$this->getURLTitle()}";
 		}
 
-		function getAllVersions(): array {
+		function getAllVersionsCount() {
+			$sql = "SELECT COUNT(`id`) FROM `asset_versions` WHERE `assetid` = :aid";
+			$params = [":aid" => $this->id];
+
+			$row = Database::singleton()->run(
+				$sql,
+				$params
+			)->fetch(\PDO::FETCH_ASSOC);
+
+			return $row ? $row['COUNT(`id`)'] : -1;
+		}
+
+		function getAllVersions(int $page = -1, int $count = 10): array {
+			$paged = $page > 0;
+			$sql = "SELECT `id` FROM `asset_versions` WHERE `assetid` = :aid ORDER BY `id` DESC";
+			$params = [":aid" => $this->id];
+
+			if($paged) {
+				$sql = "$sql LIMIT :page, :count";
+				$params[":page"] = (($page-1)*$count);
+				$params[":count"] = $count;
+			}
+
+
 			$rows = Database::singleton()->run(
-				"SELECT `id` FROM `asset_versions` WHERE `assetid` = :aid ORDER BY `id` DESC",
-				[ ":aid" => $this->id ]
+				$sql,
+				$params
 			)->fetchAll(\PDO::FETCH_OBJ);
 
 			$result_array = [];
@@ -293,13 +319,13 @@
 						]
 					);
 
-					return ["error" => false];
+					return ["success" => true];
 				}
 
-				return ["error" => true, "reason" => "Version is already set to this?"];
+				return ["success" => false, "reason" => "Version is already set to this?"];
 			}
 
-			return ["error" => true, "reason" => "Version was not found and cannot be applied!"];
+			return ["success" => false, "reason" => "Version was not found and cannot be applied!"];
 		}
 
 		function favourite(User|int $user) {
@@ -674,14 +700,47 @@
 		}
 
 		function getThumbsUrl(int $size_x = -1, int $size_y = -1, bool $nocompress = false): string {
-			$size_params = "";
+			// maybe in the future these could be used but right now this new cdn/thumbs solution is much better
+
+			/*$size_params = "";
 			if($size_x > 0 && $size_y <= 0)
 				$size_params = "&sxy=$size_x";
 		 	
 			else if($size_x > 0 && $size_y > 0)
 				$size_params = "&sx=$size_x&sy=$size_y";
 
-			return "/thumbs/?id=" . $this->id . $size_params . ($nocompress ? "&nocompress" : "");
+			return "/thumbs/?id=" . $this->id . $size_params . ($nocompress ? "&nocompress" : "");*/
+
+			$version = $this->getLatestVersionDetails();
+			$md5 = $version->md5sig;
+			$thumbsmd5 = $version->md5thumb;
+
+			if(file_exists(get_path_file("assets/thumbs/{$this->id}")))
+				$thumbsmd5 = $this->id;
+
+			if($this->type == AssetType::AUDIO && ($thumbsmd5 == "sound" || $md5 == $thumbsmd5))
+				return "/public/images/thumbnails/audio.png";
+
+			if($this->type == AssetType::EMOTE)
+				return "/public/images/thumbnails/emotes.png";
+			
+			if(($this->type == AssetType::FACE || $this->type == AssetType::DECAL)) {
+				$image = $this->getRelatedAssets()[0];
+				$version = $image->getLatestVersionDetails();
+				$md5 = $version->md5sig;
+				$thumbsmd5 = $version->md5thumb;
+
+				if(!file_exists(get_path_file("assets/thumbs/$thumbsmd5"))) {
+					copy(get_path_file("assets/$md5"), get_path_file("assets/thumbs/$thumbsmd5"));
+				}
+
+				
+			}
+
+			if(!file_exists(get_path_file("assets/thumbs/$thumbsmd5")))
+				return "/public/images/thumbnails/unavailable.png";
+
+			return (\CONFIG->prefer_https ? "https":"http")."://thumbs.".\CONFIG->baseurl."/".$thumbsmd5;
 		}
 
 		function isOwner(User|null $user, bool $explicit = false) {

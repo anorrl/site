@@ -4,8 +4,6 @@
 	use anorrl\Asset;
 	use anorrl\User;
 
-	/* araki, what the fuck am i doing */
-	/* paranoia */
 	class Thumbnail {
 		// https://stackoverflow.com/a/14300703
 		private static function IsValidHash($hash) {

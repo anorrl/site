@@ -93,7 +93,7 @@
 				<div class="thumbnail-holder" style="width: 260px; height: 260px;">
 					<button id="ThumbnailSwitcher" data-3d="false"></button>
 					<span class="thumbnail-span" data-3d-url="/thumbnail/get?userid=<?= SESSION->user->id ?>" style="display: none;"></span>
-					<img src="<?= SESSION->user->getThumbsUrlService("player", 260) ?>" width="260">
+					<img src="<?= SESSION->user->getThumbsUrlAvatar(260) ?>" width="260">
 				</div>
 				
 				<div id="Buttons">

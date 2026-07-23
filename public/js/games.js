@@ -126,7 +126,8 @@ ANORRL.Games = {
 
 					template.attr("title", asset['name'] + " by " + asset['creator']['name']);
 
-					template.find("img").attr("src", asset['thumbnail']);
+					template.find("img").attr("data-src", asset['thumbnail']);
+					template.find("img").lazy();
 					template.find("#name").html(asset['name']);
 					template.find(" > a").attr("href", asset['url']);
 					template.find("#creator > a").html(asset['creator']['name']);

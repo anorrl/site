@@ -23,6 +23,12 @@
 
 .game img {
 	width: 180px;
+	min-height:101px;
+	max-height:101px;
+}
+
+.game img[loading], .game img[data-src] {
+	object-fit: contain;
 }
 
 .game:hover {

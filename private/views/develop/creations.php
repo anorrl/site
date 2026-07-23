@@ -2,10 +2,10 @@
 	use anorrl\Page;
 
 	if(!isset($type))
-		redirect("/develop/creations/places");
+		redirect("/develop/creations/games");
 
 	if(!file_exists(__DIR__."/library/$type.php"))
-		redirect("/develop/creations/places");
+		redirect("/develop/creations/games");
 
 	$user = SESSION->user;
 

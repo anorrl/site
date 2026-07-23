@@ -16,7 +16,16 @@
 	route_api('GET|POST', 'user');
 	route_api('GET|POST', 'placestuff');
 	
-	route('POST', "/api/universes/[i:id]/shutdown", "/private/api/universes/shutdown.php");
+	route('POST', "/universes/[i:id]/shutdown", "/private/api/universes/shutdown.php");
+
+	route('GET',  "/asset/[i:id]/versions", "/private/api/asset/versions.php");
+	route('POST', "/asset/[i:id]/render",   "/private/api/asset/render.php");
+	route('POST', "/asset/[i:id]/delete",   "/private/api/asset/delete.php");
+	route('POST', "/asset/[i:id]/refund",   "/private/api/asset/refund.php");
+	route('POST', "/asset/[i:id]/setversion/[i:vid]",   "/private/api/asset/setversion.php");
+
+	route('GET', '/users/[i:id]/css',        '/private/api/users/css.php');
+	route('GET', '/api/background', '/private/api/background.php');
 
 	route_api('GET|POST', 'gameservers/close');
 	route_api('GET|POST', 'gameservers/removeplayer');
@@ -25,7 +34,4 @@
 	route_api('GET',      'gameservers/get');
 	route_api('POST',     'gameservers/shutdown');
 
-	route_api('POST', 'asset/render');
-	route_api('POST', 'asset/delete');
-	route_api('POST', 'asset/refund');
 ?>

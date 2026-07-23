@@ -284,7 +284,7 @@
 					return ["error" => true, "reason" => "I'm pretty sure you've already uploaded this?"];
 				}
 
-				$new_versionid = count($asset->getAllVersions())+1;
+				$new_versionid = $asset->getAllVersionsCount()+1;
 
 				$db->run(
 					'INSERT INTO `asset_versions`(`assetid`, `md5sig`, `md5thumb`, `subid`) VALUES (:assetid, :md5, :md5, :subid)',

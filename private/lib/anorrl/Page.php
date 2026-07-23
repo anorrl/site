@@ -150,7 +150,7 @@
 			$this->loadTemplate("layouts/footer");
 		}
 
-		function loadWimpy(string $url, string $name, string $cover_art, string $link = "") {
+		function loadWimpy(string $url, string $name, string $cover_art = "", string $link = "") {
 			$this->url = $url;
 			$this->name = $name;
 			$this->cover_art = $cover_art;

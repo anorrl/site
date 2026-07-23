@@ -7,11 +7,11 @@
 
 	$result = ["error" => true, "reason" => "Request failed."];
 	
-	if(!isset($_POST['id'])) {
+	if(!isset($id)) {
 		die(json_encode($result));
 	}
 
-	$asset = Asset::FromID(intval($_POST['id']));
+	$asset = Asset::FromID($id);
 
 	if(!$asset) {
 		$result['reason'] = "Failed to retrieve asset.";

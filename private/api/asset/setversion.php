@@ -1,5 +1,6 @@
 <?php
 	use anorrl\Asset;
+	use anorrl\AssetVersion;
 
 	$user = SESSION ? SESSION->user : null;
 
@@ -7,16 +8,21 @@
 
 	$result = ["success" => false, "reason" => "Request failed."];
 	
-	if(!isset($id)) {
+	if(!isset($id) || !isset($vid)) {
 		die(json_encode($result));
 	}
 
-	$asset = Asset::FromID(intval($_POST['id']));
+	$asset = Asset::FromID($id);
 
 	if(!$asset) {
 		$result['reason'] = "Failed to retrieve asset.";
 		die(json_encode($result));
 	}
 
-	die(json_encode($asset->removeFrom($user)));
+	if(!$asset->isOwner($user)) {
+		$result['reason'] = "You are not authorised to perform this action.";
+		die(json_encode($result));
+	}
+	
+	die(json_encode($asset->setVersion(AssetVersion::FromID($vid))));
 ?>

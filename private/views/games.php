@@ -9,6 +9,7 @@
 	$page->clearAll();
 
 	$page->addScript("/js/core/jquery.js");
+	$page->addScript("/js/jquery.lazy.min.js");
 
 	$page->addScript("/js/games.js?t=1777052041");
 	$page->addStylesheet("/css/games.css");
@@ -17,7 +18,7 @@
 ?>
 <div class="game" title="" template>
 	<a href="">
-		<img src="" width="128">
+		<img src="/public/images/spinner100x100_white.gif" width="128">
 		<div id="name"></div>
 	</a>
 	<div id="currently-playing"></div>

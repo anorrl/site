@@ -21,6 +21,7 @@ textarea.box.input {
 
 .feed-item #user img {
 	margin-right: 5px;
+	width: 75px;
 }
 
 .feed-item #content code {

@@ -23,7 +23,6 @@
 		public string $blurb;
 		public string $password;
 		public string $security_key;
-		public \DateTime $last_update;
 		/**
 		 * How do you name this better...
 		 * @var bool
@@ -106,7 +105,6 @@
 			$this->id = $rowdata->id;
 			$this->name = $rowdata->name;
 			$this->blurb = str_replace("<", "&lt;", str_replace(">", "&gt;", $rowdata->blurb));
-			$this->last_update = \DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->lastprofileupdate);
 			$this->setprofilepicture = boolval($rowdata->setprofilepicture);
 			$this->currentoutfitmd5 = $rowdata->currentappearancemd5;
 			$this->join_date = \DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->joindate);
@@ -958,16 +956,6 @@
 
 		function updateBio(string $bio): array {
 			if(!$this->isBanned()) {
-				// check if user hasn't posted one in 30s
-
-				$difference = UtilUtils::GetSecondsElapsedFrom($this->last_update);
-
-				$calculated_time = 30 - $difference; 
-
-				if($difference < 30) {
-					return ["error"=> true, "reason" => "You need to wait $calculated_time seconds before updating again."];
-				}
-
 				$bio_content = UtilUtils::StripUnicode($bio);
 
 				if(strlen($bio_content) > 1000) {
@@ -975,7 +963,7 @@
 				}
 
 				Database::singleton()->run(
-					"UPDATE `users` SET `blurb` = :blurb, `lastprofileupdate` = now() WHERE `id` = :id",
+					"UPDATE `users` SET `blurb` = :blurb WHERE `id` = :id",
 					[
 						":blurb" => $bio_content,
 						":id" => $this->id
@@ -1175,39 +1163,55 @@
 			}
 		}
 
-		function getThumbnail(): mixed {
-			return null;
-		}
-
-		/**
-		 * Lowkey start using this more
-		 */
 		function getThumbsUrl(int $size_x = -1, int $size_y = -1): string {
 			if(\SESSION)
 				$settings = \SESSION->settings;
 			else
 				$settings = UserSettings::Get();
 
-			return $this->getThumbsUrlService(
-				($this->setprofilepicture ? 
+			$type = ($this->setprofilepicture ? 
 					($settings->headshots ? "headshot" : "profile")
-					: "headshot"),
-				
-				$size_x,
-				$size_y
-			);
+					: "headshot");
+			$path = "/profiles/{$this->id}.png";
+			if($type == "headshot")
+				$path = "/renders/headshots/{$this->currentoutfitmd5}";
+			
+			if(!file_exists(get_path_file("users{$path}")))
+				return "/public/images/thumbnails/unavailable.jpg";
+
+			return (\CONFIG->prefer_https ? "https":"http")."://cdn.".\CONFIG->baseurl.$path;
 		}
 
-		function getThumbsUrlService(string $service = "headshot", int $size_x = -1, int $size_y = -1): string {
+		function getThumbsUrlProfile(int $size_x = -1, int $size_y = -1): string {
 
-			$size_params = "";
+			if(!file_exists(get_user_profile_path($this->id))) {
+				$pictures = UtilUtils::GetFilesArray("/public/images/profile_pictures/");
+					
+				$rand_pic = 1+rand(0, count($pictures) - 1);
+				
+				"/public/images/profile_pictures/pfp_$rand_pic.png";
+			}
+			
+			return (\CONFIG->prefer_https ? "https":"http")."://cdn.".\CONFIG->baseurl."/profiles/{$this->id}.png";
+		}
+
+		function getThumbsUrlAvatar(int $size_x = -1, int $size_y = -1): string {
+
+			/*$size_params = "";
 			if($size_x > 0 && $size_y <= 0)
 				$size_params = "&sxy=$size_x";
 		 	
 			else if($size_x > 0 && $size_y > 0)
 				$size_params = "&sx=$size_x&sy=$size_y";
 
-			return "/thumbs/$service?id={$this->id}{$size_params}";
+			return "/thumbs/$service?id={$this->id}{$size_params}";*/
+
+
+
+			if(!file_exists(get_user_render_path($this->currentoutfitmd5, ARLRENDER)))
+				return "/public/images/thumbnails/unavailable.jpg";
+
+			return (\CONFIG->prefer_https ? "https":"http")."://cdn.".\CONFIG->baseurl."/renders/{$this->currentoutfitmd5}/image.png";
 		}
 
 		function getAccountAge(): int {

@@ -221,7 +221,7 @@
 	<div id="PlaceDetails">
 		<div id="Content">
 			<div id="PlaceImageContainer">
-				<img src="<?= $place->getThumbsUrl(623, 350) ?>&nocompress">
+				<img src="<?= $place->getThumbsUrl(623, 350) ?>">
 				<?php if($universe->original): ?>
 				<div id="OriginalLabel">Original</div>
 				<?php endif ?>
@@ -238,7 +238,7 @@
 						
 						<div class="Row">
 							<img src="/public/images/icons/wrench_orange.png">
-							<a href="/edit?id=<?= $place->id ?>">Configure</a>
+							<a href="/develop/<?= $place->id ?>/configure">Configure</a>
 						</div>
 						<?php if($place->isUsable()): ?>
 						<div class="Row">
@@ -258,7 +258,7 @@
 					</div>
 				</div>
 				<?php endif ?>
-				<a href="/users/<?= $place->creator->id ?>/profile"><img src="<?= $place->creator->getThumbsUrlService("player", 110)?>" style="width: 110px;display:block;margin:0 auto;"></a>
+				<a href="/users/<?= $place->creator->id ?>/profile"><img src="<?= $place->creator->getThumbsUrlAvatar(110)?>" style="width: 110px;display:block;margin:0 auto;"></a>
 				<div id="AssetInfoStuff">
 					<span>Created by <a href="/users/<?= $place->creator->id ?>/profile"><?= $place_creator_name ?></a></span>
 					<span><b>Favourited</b>: <?= $favourites_label ?></span>

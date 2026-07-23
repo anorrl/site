@@ -62,7 +62,7 @@
 <table class="feed-item" template style="display: none">
 	<td id="user">
 		<a href="">
-			<img src="">
+			<img src="/public/images/spinner100x100_white.gif">
 		</a>
 	</td>
 	<td id="content">
@@ -135,7 +135,7 @@
 						<table class="friend">
 							<td id="user">
 								<a href="/users/<?= $friend->id ?>/profile">
-									<img src="<?= $friend->getThumbsUrl() ?>&amp;sxy=50">
+									<img src="<?= $friend->getThumbsUrl() ?>" width="50">
 								</a>
 							</td>
 							<td id="content" style="vertical-align: top;">

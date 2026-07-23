@@ -17,7 +17,7 @@
 ?>
 <div class="asset" title="" template>
 	<a href="">
-		<img src="" width="130">
+		<img src="/public/images/spinner100x100_white.gif" width="130">
 		<div id="name"></div>
 	</a>
 	<div id="price"></div>

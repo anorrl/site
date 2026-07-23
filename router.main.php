@@ -33,7 +33,6 @@
 	route('GET|POST', '/ide/publish', '/private/views/develop/projects.php');
 
 	route('GET|POST', '/users/[i:id]/profile', '/private/views/users/profile.php');
-	route('GET',      '/users/[i:id]/css', '/private/views/users/css.php');
 	route('GET',      '/users/[i:id]/followers', '/private/views/users/followers.php');
 	route('GET',      '/users/[i:id]/following', '/private/views/users/following.php');
 	route('GET',      '/users/[i:id]/friends', '/private/views/users/friends.php');
@@ -44,9 +43,6 @@
 	route('GET|POST', '/my/stuff', '/private/views/my/stuff.php');
 	route('GET|POST', '/my/friends', '/private/views/my/friends.php');
 
-	route('GET',      '/thumbs/profile', '/private/thumbs/profile.php');
-	route('GET',      '/thumbs/player', '/private/thumbs/player.php');
-	route('GET',      '/thumbs/headshot', '/private/thumbs/headshot.php');
 	route('GET',      '/thumbs/', '/private/thumbs/index.php');
 
 	route('GET',      '/thumbnail/avatar/[*:hash]/mtl', '/private/api/thumbnail/avatar/getters/mtl.php');

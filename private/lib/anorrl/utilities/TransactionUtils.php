@@ -55,8 +55,9 @@
 		public static function UndoTransaction(User $user, Asset $asset) {
 			if($asset->isOwner($user, true))
 				return;
+			$db = Database::singleton();
 			
-			Database::singleton()->run(
+			$db->run(
 				"DELETE FROM `transactions` WHERE `userid` = :uid AND `assetcreator` = :auid AND `asset` = :aid",
 				[
 					":uid"    => $user->id,
@@ -65,6 +66,15 @@
 				]
 			);
 
+			$db->run(
+				"DELETE FROM `inventory` WHERE `assetid` = :id AND `userid` = :user",
+				[
+					":id"   => $asset->id,
+					":user" => $user->id
+				]
+			);
+
+			$user->updateOutfitHash();
 			$asset->updateSalesCount();
 		}
 	}

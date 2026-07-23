@@ -99,6 +99,7 @@
 <script src="/public/js/3D/OBJMTLLoader.js?v=1"></script>
 <script src="/public/js/3D/tween.js"></script>
 <script src="/public/js/3D/PolygonOrbitControls.js"></script>
+
 <style>
 	h2, h3, h4 {
 		margin: 0;
@@ -225,14 +226,14 @@
 	<div id="ItemDetails">
 		<div id="Content">
 			<?php if($asset->type == AssetType::AUDIO): ?>
-			<img src="<?= $asset->getThumbsUrl(190) ?>&nocompress">
+			<img src="<?= $asset->getThumbsUrl(190) ?>">
 			<div
 				data-wimpyplayer=""
 				data-skin="/public/wimpy/skins/Slick_modified.tsv"
 				data-loop="0"
 				data-disablecontrols="next,playlist,rewind,getid3"
 				style="text-align: center; width: 245px;height: 50px; white-space: nowrap;"
-				data-media="asset/?id=<?= $asset->id ?>.mp3"
+				data-media="/asset/?id=<?= $asset->id ?>.mp3"
 				data-volume="0.4"
 			></div>
 	
@@ -241,18 +242,18 @@
 					<div class="thumbnail-holder" style="width: 240px; height: 240px;">
 						<button id="ThumbnailSwitcher" data-3d></button>
 						<span class="thumbnail-span" data-3d-url="/thumbnail/get?assetid=<?= $asset->id ?>" style="display: none;"></span>
-						<img src="<?= $asset->getThumbsUrl(240) ?>&nocompress">
+						<img src="<?= $asset->getThumbsUrl(240) ?>" width="240">
 					</div>
 				<?php else: ?>
-					<a href="<?= $asset->getThumbsUrl() ?>&nocompress" target="_blank">
-						<img src="<?= $asset->getThumbsUrl() ?>&nocompress" style="width: 240px;height: 240px;">
+					<a href="<?= $asset->getThumbsUrl() ?>" target="_blank">
+						<img src="<?= $asset->getThumbsUrl() ?>" style="width: 240px;height: 240px;">
 					</a>
 				<?php endif ?>
 			<?php endif ?>
 		</div>
 		<div id="Information">
 			<div id="UserCard">
-				<a href="/users/<?= $asset->creator->id ?>/profile"><img src="<?= $asset->creator->getThumbsUrlService("player", 100) ?>" style="width: 100px;"></a>
+				<a href="/users/<?= $asset->creator->id ?>/profile"><img src="<?= $asset->creator->getThumbsUrlAvatar(100) ?>" style="width: 100px;"></a>
 				<div id="AssetInfoStuff">
 					<span>Created by <a href="/users/<?= $asset->creator->id ?>/profile"><?= $asset_creator_name ?></a></span>
 					<span><b>Created on</b>: <?= $asset->created_at->format('d/m/Y H:i'); ?></span>

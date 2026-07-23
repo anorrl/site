@@ -29,7 +29,7 @@
 	route('GET',      '/thumbs/avatar.ashx', '/private/thumbs/player.php');
 	route('GET',      '/Thumbs/RawAsset.ashx', '/private/thumbs/rawasset.php');
 	route('GET',      '/Thumbs/Asset.ashx', '/private/thumbs/rawasset.php');
-	route('GET',      '/thumbnail/avatar-headshot', '/private/thumbs/fakeheadshot.php');
+	route('GET',      '/thumbnail/avatar-headshot', '/private/thumbs/headshot.php');
 
 	route('GET',      '/Game/LuaWebService/HandleSocialRequest.ashx', '/private/gameapis/social/socialrequests.php');
 	route('GET|POST', '/game/PlaceLauncher.ashx', '/private/gameapis/gamescripts/placelauncher.php');

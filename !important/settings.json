@@ -18,5 +18,9 @@
 		"key": "access key for acc",
 		"disabled": false
 	},
-	"domain": "arl.lambda.cam"
+	"prefer_https": true,
+	"domain": "arl.lambda.cam",
+	"baseurl": "lambda.cam",
+	"blog": "https://blog.lambda.cam/"
 }
+

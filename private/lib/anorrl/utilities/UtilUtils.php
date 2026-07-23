@@ -198,5 +198,39 @@
 			return true;
 		}
 
+		// https://stackoverflow.com/a/58329980
+		public static function TurnUrlIntoHyperlink(string $string){
+
+			//The Regular Expression filter
+			$reg_exUrl = "/(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/";
+			$replace = "";
+			// Check if there is a url in the text
+			if(preg_match_all($reg_exUrl, $string, $url)) {
+
+				// Loop through all matches
+				foreach($url[0] as $key => $newLinks){
+
+					if(strstr( $newLinks, ":" ) === false){
+						$url = 'https://'.$newLinks;
+					}else{
+						$url = $newLinks;
+					}
+
+					// Create Search and Replace strings
+					$replace .= '<a href="'.$url.'" title="'.$url.'" target="_blank" class="external">'.$url.'</a>,';
+					$newLinks = '/'.preg_quote($newLinks, '/').'/';
+					$string = preg_replace($newLinks, '{'.$key.'}', $string, 1);
+
+				}
+				$arr_replace = explode(',', $replace);
+				foreach ($arr_replace as $key => $link) {
+					$string = str_replace('{'.$key.'}', $link, $string);
+				}
+			}
+
+			//Return result
+			return $string;
+		}
+
 	}
 ?>
