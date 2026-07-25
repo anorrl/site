@@ -244,15 +244,20 @@
 				data: formData,
 				processData: false,
 				contentType: false,
-				success() {
-					var image = $("#banner-crop-img").cropper("getCroppedCanvas").toDataURL("image/jpeg");
-					$("#profile-container").css("background-image", "url("+image+")");
+				success(data) {
+					if(data['success']) {
+						var image = $("#banner-crop-img").cropper("getCroppedCanvas").toDataURL("image/png");
+						$("#profile-container").css("background-image", "url("+image+")");
+					}
+					else {
+						alert("Something went wrong: " + data['reason']);
+					}
 				},
 				error() {
 					alert('Upload error');
 				},
 			});
-			}, 'image/jpeg');
+			}, 'image/png');
 		})
 
 		$("button[data-method]").click(function() {

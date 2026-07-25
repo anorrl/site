@@ -113,7 +113,7 @@
 	}
 
 	function get_user_banner_path(int $id) {
-		return get_path_file("users/banners/{$id}.jpg");
+		return get_path_file("users/banners/{$id}");
 	}
 
 	function get_user_render_path(string $md5, int $type) {

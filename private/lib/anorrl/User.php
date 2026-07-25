@@ -1126,14 +1126,14 @@
 		}
 
 		function setBannerPicture(array $file): array {
-			if($file['error'] == 0 && $file['size'] > 0 && $file['size'] <= 524288) { // 512kb cap
+			if($file['error'] == 0 && $file['size'] > 0 && $file['size'] <= 5242880) { // 512kb cap
 				$file_contents = file_get_contents($file['tmp_name']);
 				$file_type = ImageUtils::checkMimeType($file_contents);
 				if(str_starts_with($file_type,"image/")) {
 					$pre_image = imagecreatefromstring($file_contents);
 					
 					if(!($pre_image instanceof \GdImage)) {
-						return ["error" => true, "reason" => "That wasn't an image brochacho!"];
+						return ["success" => false, "reason" => "That wasn't an image brochacho!"];
 					}
 					
 					$width = imagesx($pre_image);
@@ -1144,7 +1144,10 @@
 
 						//$image = imagescale(ImageUtils::cropAlign($pre_image, $size, $size), 420, 420);
 						
-						imagejpeg($pre_image, get_user_banner_path($this->id));
+						if($width < 970 && $height < 220)
+							imagepng($pre_image, get_user_banner_path($this->id),9);
+						else
+							imagejpeg($pre_image, get_user_banner_path($this->id));
 
 						if(!$this->has_banner_set) {
 							Database::singleton()->run(
@@ -1159,18 +1162,18 @@
 							);
 						}
 
-						return ["error" => false];
+						return ["success" => true];
 					}
 
-					return ["error" => true, "reason" => "Image was wayyy too small! (97x22 minimum)"];
+					return ["success" => false, "reason" => "Image was wayyy too small! (97x22 minimum)"];
 				}
-				return ["error" => true, "reason" => "Something went wrong when uploading! ($file_type)"];
+				return ["success" => false, "reason" => "Something went wrong when uploading! ($file_type)"];
 			}
 			
-			if($file['size'] > 524288) {
-				return ["error" => true, "reason" => "Image too large! 512kb max!"];
+			if($file['size'] > 5242880) {
+				return ["success" => false, "reason" => "Image too large! 512kb max!"];
 			} else {
-				return ["error" => true, "reason" => "Something went wrong when uploading!"];
+				return ["success" => false, "reason" => "Something went wrong when uploading!"];
 			}
 			
 		}
@@ -1238,7 +1241,7 @@
 			if(!file_exists(get_user_banner_path($this->id)))
 				return "/api/background?t=".md5($this->name);
 			
-			return (\CONFIG->prefer_https ? "https":"http")."://cdn.".\CONFIG->baseurl."/banners/{$this->id}.jpg?t=".$this->last_banner_change_date->getTimestamp();
+			return (\CONFIG->prefer_https ? "https":"http")."://cdn.".\CONFIG->baseurl."/banners/{$this->id}?t=".$this->last_banner_change_date->getTimestamp();
 		}
 
 		function getThumbsUrlAvatar(int $size_x = -1, int $size_y = -1): string {
