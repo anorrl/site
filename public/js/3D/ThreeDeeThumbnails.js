@@ -190,6 +190,7 @@
         this.each(function () {
             try {
                 var container = $(this);
+				console.log(container);
                 // var scriptsCsv = container.data("js-files");
                 var loadThreeDee = function () {
 
@@ -209,14 +210,13 @@
 
                     function startLoading() {
                         loaderVisible = true;
-                        placeholder.height(container.width());
+                        //placeholder.height(container.height());
                         placeholder.show();
                         placeholder.empty();
                         setTimeout(function () {
                             if (loaderVisible) {
-                                placeholder.addClass("text-center");
                                 // placeholder.html("<div class='loader' style='line-height:" + container.height().toString() + "px'>Loading</div><div></div>");
-                                placeholder.html("<div class='loader' style='line-height:" + container.width().toString() + "px'>Loading</div><div></div>");
+                                placeholder.html("<img src='/public/images/spinner100x100_white.gif'><div></div>");
                             }
                         }, loadingWaitBeforeShowingSpinner);
                     }

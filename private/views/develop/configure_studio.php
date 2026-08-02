@@ -188,13 +188,13 @@
 	$page->loadBasicHeader();
 ?>
 <style>
-			h2 {
-				margin-top: 0px;
-			}
-			#BodyContainer {
-				border-top: 4px solid black;
-			}
-		</style>
+	h2 {
+		margin-top: 0px;
+	}
+	#BodyContainer {
+		border-top: 4px solid black;
+	}
+</style>
 <div id="Container">
 			<div id="Body">
 				<div id="BodyContainer">

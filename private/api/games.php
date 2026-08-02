@@ -84,11 +84,8 @@
 		if($total_pages < $page && $total_pages != $page && $page != 1) {
 			redirect("/api/games?q=$query&p=1");
 		}
-		set_encoding("gzip");
 		unset($_SESSION['ANORRL$Games$OriginalOnly']);
-		ob_start("ob_gzhandler");
 		echo (json_encode(["games" => $assets, "page" => $page, "total_pages" => $total_pages]));
-		ob_end_flush();
 	} else {
 		unset($_SESSION['ANORRL$Games$OriginalOnly']);
 		$placeid = intval($_GET['placeid']);

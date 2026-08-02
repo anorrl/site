@@ -1,28 +1,42 @@
 <?php
 	use anorrl\User;
 	use anorrl\Page;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\UserSettings;
 
-	if(!UtilUtils::HasBeenRewritten()) {
-		redirect("/my/home");
-	}
-	
+	use Michelf\MarkdownExtra;
+
 	// No id parameter? GET OUT!
-	
 	if(!isset($id)) {
 		redirect("/my/home");
 	}
 
 	$user = User::FromID(intval($id));
 
-	if($user == null) {
+	if(!$user) {
 		redirect("/my/home");
 	}
 
-	$settings = SESSION->settings;
 	$bgm = null;
+	$owner = false;
+	$online = $user->isOnline();
+	$items = $user->getWearing(null, true);
+	$friends = $user->getFriends();
+	$friends_count = count($friends);
+	$followers_count = $user->getFollowersCount();
+	$following_count = $user->getFollowingCount();
 
-	$owner = $user->id == SESSION->user->id;
+
+	if(ARLAUTH) {
+		$settings = SESSION->settings;
+		$owner = $user->id == SESSION->user->id;
+	} else {
+		$settings = UserSettings::Get();
+	}
+	
+
+	//str_replace("\n", "<br>", UtilUtils::RecurseRemove(UtilUtils::TurnUrlIntoHyperlink($user->blurb), "\r\n\r\n\r\n", "\n\n"))
+
+	$bio = MarkdownExtra::defaultTransform($user->blurb);
 
 	$page = new Page($owner ? "Your Profile" : "{$user->name}'s Profile", $owner ? "user_profile" : null);
 	
@@ -34,8 +48,23 @@
 			$bgm = null;
 		}
 
-		if($bgm)
-			$page->loadWimpy("/asset/?id={$bgm->id}", $bgm->name, "", $bgm->getURL());
+		//if($bgm)
+			//$page->loadWimpy("/asset/?id={$bgm->id}", $bgm->name, "", $bgm->getURL());
+	}
+
+	$owner_look = "it's you.";
+
+	if($owner) {
+		if(!isset($_SESSION['ANORRL$Owner$StopLooking']))
+			$_SESSION['ANORRL$Owner$StopLooking'] = 0;
+
+		$_SESSION['ANORRL$Owner$StopLooking']++;
+
+		if($_SESSION['ANORRL$Owner$StopLooking'] > 10)
+			$owner_look = "still you...";
+		
+		if($_SESSION['ANORRL$Owner$StopLooking'] > 20)
+			$owner_look = "you must really like yourself...";
 	}
 ?>
 <script src="/public/wimpy/wimpy.js"></script>
@@ -43,6 +72,14 @@
 <script src="/public/js/core/cropper.min.js"></script>
 <script src="/public/js/core/jquery-cropper.min.js"></script>
 <script src="/public/js/core/jquery-modal.js"></script>
+<script src="/public/js/3D/ThreeDeeThumbnails.js?v=3"></script>
+<script src="/public/js/3D/three.min.js"></script>
+<script src="/public/js/3D/MTLLoader.js?v=1"></script>
+<script src="/public/js/3D/OBJMTLLoader.js?v=1"></script>
+<script src="/public/js/3D/tween.js"></script>
+<script src="/public/js/3D/PolygonOrbitControls.js"></script>
+<script src="/public/js/thumbnails.js"></script>
+
 <style>
 	#profile-container {
 		position:relative;
@@ -71,9 +108,9 @@
 		background-color: rgba(0,0,0, 0.3);
 		transition: opacity 0.25s;
 		opacity: 0;
-		inset: 0px;
-		right: -6px;
-		bottom: -6px;
+		inset: -3px;
+		left: 3px;
+		top: 3px;
 	}
 
 	#profile-picture:hover #controls {
@@ -123,13 +160,21 @@
 	#profile-stats a:hover {
 		font-weight: bold;
 		*text-decoration: none;
-		font-size: 14px;
+		*font-size: 14px;
+		display:inline-block;
+		margin-left: -1px;
+		margin-right: -1px;
 	}
 
 	#profile-stats #profile-name {
 		font-size: 18px;
 		font-style: italic;
 		font-weight: bold;
+	}
+
+	#profile-stats #profile-name img {
+		margin-right: 7px;
+		image-rendering:pixelated;
 	}
 
 	.quote {
@@ -172,146 +217,128 @@
 		flex: 1;
 		padding: 10px;
 	}
-</style>
-<script>
-	$(function(){
-		$("#pfpfile").on("change", function() {
-			var reader = new FileReader();
 
-			reader.onload = function (e) {
-				$("#pfp-modal").modal({showClose: false});
-				
-				$('#pfp-crop-img').attr('src', e.target.result).width(500);
-				
-				$('#pfp-crop-img').cropper({
-					aspectRatio: 970 / 220,
-					aspectRatio: 1/1,
-					viewMode: 1
-				});
-				$('#pfp-crop-img').data("cropper").replace(e.target.result);
-				
-			};
-
-			reader.readAsDataURL(this.files[0]);
-		})
-
-		$("#bannerfile").on("change", function() {
-			var reader = new FileReader();
-
-			reader.onload = function (e) {
-				$("#banner-modal").modal({showClose: false});
-				
-				$('#banner-crop-img').attr('src', e.target.result).width(500);
-				
-				$('#banner-crop-img').cropper({
-					aspectRatio: 970 / 220,
-					viewMode: 1
-				});
-				$('#banner-crop-img').data("cropper").replace(e.target.result);
-				
-			};
-
-			reader.readAsDataURL(this.files[0]);
-		})
-
-		$("#pfp-modal button[rel='save']").click(function() {
-			$('#pfp-crop-img').data("cropper").getCroppedCanvas().toBlob((blob) => {
-			const formData = new FormData();
-			formData.append('croppedImage', blob);
-			$.ajax('/users/update/pfp', {
-				method: 'POST',
-				data: formData,
-				processData: false,
-				contentType: false,
-				success() {
-					var image = $("#pfp-crop-img").cropper("getCroppedCanvas").toDataURL("image/jpeg");
-					$("#profile-picture img").attr("src", image);
-					$(".header-pfp-image").attr("src", image);
-				},
-				error() {
-					alert('Upload error');
-				},
-			});
-			}, 'image/jpeg');
-		})
-
-		$("#banner-modal button[rel='save']").click(function() {
-			$('#banner-crop-img').data("cropper").getCroppedCanvas().toBlob((blob) => {
-			const formData = new FormData();
-			formData.append('croppedImage', blob);
-			$.ajax('/users/update/banner', {
-				method: 'POST',
-				data: formData,
-				processData: false,
-				contentType: false,
-				success(data) {
-					if(data['success']) {
-						var image = $("#banner-crop-img").cropper("getCroppedCanvas").toDataURL("image/png");
-						$("#profile-container").css("background-image", "url("+image+")");
-					}
-					else {
-						alert("Something went wrong: " + data['reason']);
-					}
-				},
-				error() {
-					alert('Upload error');
-				},
-			});
-			}, 'image/png');
-		})
-
-		$("button[data-method]").click(function() {
-			var method = $(this).attr("data-method");
-
-			if(method == "upload-pfp")
-				$("#pfpfile").trigger("click");
-			else if(method == "remove-pfp")
-				$.post("/users/remove/pfp", function() {window.location.reload();})
-			else if(method == "upload-banner")
-				$("#bannerfile").trigger("click");
-			else if(method == "remove-banner")
-				$.post("/users/remove/banner", function() {window.location.reload();})
-		})
-	});
-</script>
-<style>
-	#pfp-modal, #banner-modal {
+	#crop-modal {
 		margin-top: 27px !important;
 		margin: 0px !important;
 		transform: translate(-50%, -50%);
 		z-index: 10000 !important;
 		padding: 10px;
 		text-align: center;
+		display: none;
+	}
+
+	#crop-modal a[rel] {
+		text-transform: none;
+		text-decoration: none;
 	}
 
 	.jquery-modal.blocker {
 		z-index: 9999 !important;
 	}
+
+	#profile-bio {
+		padding: 15px 30px;
+		font-size: 13px; 
+		font-family: 'Fira Mono';
+		max-height: 300px;
+		overflow: auto;
+		max-width:596px;
+		overflow-wrap: break-word;
+	}
 </style>
-<div id="pfp-modal" class="box" style="display: none;">
+<script>
+	$(function(){
+		$("input[type='file'][hidden]").on("change", function() {
+			var type = $(this).attr("data-type");
+			if(type != "pfp" && type != "banner") {
+				alert("Something went wrong!");
+				return;
+			}
+
+			var reader = new FileReader();
+
+			reader.onload = function (e) {
+				$("#crop-modal").attr("type", type);
+				$("#crop-modal").modal({showClose: false});
+				$('#cropper-img').attr('src', e.target.result).width(500);
+				$('#cropper-img').cropper({
+					aspectRatio: type == "banner" ? 970 / 220 : 1/1,
+					viewMode: 1
+				});
+				$('#cropper-img').data("cropper").replace(e.target.result);	
+			};
+
+			reader.readAsDataURL(this.files[0]);
+		})
+
+		$("#crop-modal button[rel='save']").click(function() {
+			var type = $('#cropper-img').parent().attr("type");
+			if(type != "pfp" && type != "banner") {
+				alert("Something went wrong!");
+				return;
+			}
+			$('#cropper-img').data("cropper").getCroppedCanvas().toBlob((blob) => {
+				const formData = new FormData();
+				formData.append('croppedImage', blob);
+				$.ajax('/users/update/' + type, {
+					method: 'POST',
+					data: formData,
+					processData: false,
+					contentType: false,
+					success(data) {
+						if(data['success']) {
+							var image = $("#cropper-img").cropper("getCroppedCanvas").toDataURL(type == "banner" ?  'image/png' :  'image/jpeg');
+							
+							if(type == "banner") {
+								$("#profile-container").css("background-image", "url("+image+")");
+							} else {
+								$("#profile-picture img").attr("src", image);
+								$(".header-pfp-image").attr("src", image);
+							}
+						}
+						else {
+							alert("Something went wrong: " + data['reason']);
+						}
+					},
+					error() {
+						alert('Upload error');
+					},
+				});
+				
+				
+			}, type == "banner" ?  'image/png' :  'image/jpeg');
+		})
+
+		$("button[data-method]").click(function() {
+			var method = $(this).attr("data-method");
+
+			if(method.startsWith("upload-")) {
+				var type = method.replaceAll("upload-", "");
+				var file = $("input[type='file'][hidden]");
+
+				file.attr("data-type", type);
+				file.trigger("click");
+			}
+			else if(method.startsWith("remove-")) {
+				var type = method.replaceAll("remove-", "");
+				$.post("/users/remove/"+type, function() {window.location.reload();})
+			}
+		})
+	});
+</script>
+<div id="crop-modal" class="box">
 	<h2>crop yo shit!</h2>
-	<img id="pfp-crop-img">
+	<img id="cropper-img">
 	<div style="margin-top: 5px;">
 		<!-- evil -->
-		<a href="#"  rel="modal:close" style="color:white">
+		<a href="#" rel="modal:close" style="color:white">
 			<button class="button">cancel</button>
 			<button class="button" rel="save">save</button>
 		</a>
 	</div>
 </div>
-<div id="banner-modal" class="box" style="display: none;">
-	<h2>crop yo shit!</h2>
-	<img id="banner-crop-img">
-	<div style="margin-top: 5px;">
-		<!-- evil -->
-		<a href="#"  rel="modal:close" style="color:white">
-			<button class="button">cancel</button>
-			<button class="button" rel="save">save</button>
-		</a>
-	</div>
-</div>
-<input id="pfpfile" type="file" hidden/>
-<input id="bannerfile" type="file" hidden/>
+<input type="file" hidden accept="image/*"/>
 <div id="profile-container">
 	<div style="padding: 30px; display: flex;">
 		<div id="profile-picture">
@@ -325,22 +352,26 @@
 		</div>
 
 		<div id="profile-stats"> 
-			<div id="profile-name"><?= $user->name ?></div>
+			<div id="profile-name"><img <?php if(!$owner): ?>title="this means they're <?= $online ? "online" : "offline" ?>!"<?php endif ?> src="/public/images/OnlineStatusIndicator_Is<?= $online ? "Online" : "Offline" ?>.png" width="12"><?= $user->name ?></div>
 			<?php if($user->getLatestStatus()): ?>
 			<div style="padding-top: 5px; font-style: italic">
 				<span class="quote">"</span><?= $user->getLatestStatus()->content ?><span class="quote">"</span>
 			</div>
 			<?php endif ?>
 			<div style="padding-top: 5px;">
-				<a href="/users/<?= $user->id ?>/friends"><b><?= $user->getFriendsCount() ?></b> Friends</a> |
-				<a href="/users/<?= $user->id ?>/followers"><b><?= $user->getFollowersCount() ?></b> Followers</a> |
-				<a href="/users/<?= $user->id ?>/following"><b><?= $user->getFollowingCount() ?></b> Following</a>
+				<a href="/users/<?= $user->id ?>/friends"><b><?= $friends_count ?></b> Friend<?= $friends_count == 1 ? "" : "s"  ?></a> |
+				<a href="/users/<?= $user->id ?>/followers"><b><?= $followers_count ?></b> Follower<?= $followers_count == 1 ? "" : "s"  ?></a> |
+				<a href="/users/<?= $user->id ?>/following"><b><?= $following_count ?></b> Following</a>
 			</div>
 			
-			<div style="*background: none; *padding: 0px; margin-top: 5px;">
-				<button class="button">follow</button>
-				<button class="button">friend</button>
-				<button class="button">block</button>
+			<div style="margin-top: 5px;">
+				<?php if($owner): ?>
+					<button class="button"><?= $owner_look ?></button>
+				<?php else: ?>
+					<button class="button">follow</button>
+					<button class="button">friend</button>
+					<button class="button">block</button>
+				<?php endif ?>
 			</div>
 			<?php if($owner): ?>
 			<div id="banner-controls">
@@ -353,21 +384,139 @@
 	</div>
 </div>
 
-<?php if($user->blurb != ""): ?>
-<h4 class="page-title">.about</h4>
-<div class="box" style="padding: 15px 30px; font-size: 13px;  font-family: 'Fira Mono';" >
-	<?= UtilUtils::TurnUrlIntoHyperlink($user->blurb) ?>
+<div style="display: flex; gap: 10px;">
+	<?php if($user->blurb != ""): ?>
+	<div style="flex: 1;">
+		<h4 class="page-title">.about</h4>
+		<div class="box" id="profile-bio" ><?= $bio ?></div>
+	</div>
+	<?php endif ?>
+	<?php if($bgm): ?>
+	<div style="margin: 0 auto;">
+		<h4 class="page-title">.music</h4>
+		<div style="margin-bottom: 5px;">
+			<div style="width: 300px; white-space: nowrap;">
+				<div class="box" style="margin-left:-2px; text-align: center;">
+					<a href="<?= $bgm->getURL() ?>">
+						<div style="border-bottom: 1px solid var(--lighter-border-color); padding: 5px 0px;">
+							<img src="<?= $bgm->getThumbsUrl(); ?>" style="width: 206px;">
+						</div>
+						<div >
+							<h4 style="margin: 5px 0px; margin-bottom: 3px;"><?= $bgm->name ?></h4>
+						</div>
+					</a>
+				</div>
+				<div 
+					data-wimpyplayer
+					data-skin="/public/wimpy/skins/Slick_modified.tsv"
+					data-loop="2"
+					data-disablecontrols="next,playlist,rewind,getid3"
+					style="text-align: center; margin-top: 5px;"
+					data-media="/asset/?id=<?=$bgm->id?>.mp3"
+					data-volume="0.4"
+				></div>
+			</div>
+		</div>
+	</div>
+	<?php endif ?>
 </div>
-<?php endif ?>
 
-<h4 class="page-title">.character</h4>
-<div class="box" id="character-container">
+<style>
+	.thumbnail-holder button {
+		background: none;
+		background-image: url("/public/images/thumbnails/viewer/3D.png");
+		background-position: -10px -10px;
+		width: 48px;
+		height: 48px;
+		border: none;
+		position: absolute;
+		right: 0px;
+		cursor: pointer;
+	}
+
+	.thumbnail-holder button:hover {
+		background-image: url("/public/images/thumbnails/viewer/3DHover.png");
+	}
+
+	.thumbnail-holder button[data-3d="true"] {
+		background-image: url("/public/images/thumbnails/viewer/2D.png");
+	}
+
+	.thumbnail-holder button[data-3d="true"]:hover {
+		background-image: url("/public/images/thumbnails/viewer/2DHover.png");
+	}
+
+	.thumbnail-holder {
+		margin: 0 auto;
+		position: relative
+	}
+
+	.thumbnail-span {
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
+
+	.thumbnail-spinner {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 300px;
+	}
+</style>
+<style>
+	.accoutrement-item {
+		text-align: center;
+		height: 100px;
+		width: 100px;
+		margin: 0 auto;
+	}
+
+	.accoutrement-item:hover {
+		border: 2px solid var(--border-color);
+		margin: -2px auto;
+		background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	}
+
+	#character-items {
+		display: grid; grid-template-columns: repeat(4, 1fr);
+		gap: 5px;
+		height: 300px;
+		overflow: auto;
+		border-left: 1px solid var(--lighter-border-color);
+	}
+</style>
+<div class="multi-titles">
 	<div>
-		hi
+		<h4 class="page-title">.character</h4>
 	</div>
-	<div style="border-left: 1px solid var(--lighter-border-color)">
-		hi
+	<div>
+		<h4 class="page-title">.items</h4>
 	</div>
+</div>
+<div class="box" id="character-container" style="z-index: 2">
+	<div style="text-align: center;">
+		<div class="thumbnail-holder" width="300" height="300">
+			<button id="thumbnail-switcher" data-3d></button>
+			<span class="thumbnail-span" data-3d-url="/thumbnail/get?user=<?= $user->id ?>" style="display: none;"></span>
+			<img src="<?= $user->getThumbsUrlAvatar() ?>" width="300">
+		</div>
+	</div>
+	<?php if(count($items) > 0): ?>
+	<div style="" id="character-items">
+		<?php foreach($items as $item): ?>
+			<div class="accoutrement-item">
+				<a href="<?= $item->getURL() ?>" title="<?= $item->name ?>">
+					<img src="<?= $item->getThumbsUrl() ?>" width="100" height="100">
+				</a>
+			</div>
+		<?php endforeach ?>
+	</div>
+	<?php else :?>
+	<div style="display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--lighter-border-color); font-size: 16px; font-family: 'Fira Mono'">
+		<b><?= $user->name ?> has no items!</b>
+	</div>
+	<?php endif ?>
 </div>
 
 <div id="report-banner" class="box">

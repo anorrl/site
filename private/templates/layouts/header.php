@@ -4,7 +4,8 @@
 	if(session_status() == PHP_SESSION_NONE)
 		session_start();
 
-	// todo: something!
+	if($this->internal_name != "user_profile")
+		unset($_SESSION['ANORRL$Owner$StopLooking']);
 ?>
 <!DOCTYPE html>
 <html>

@@ -2,10 +2,10 @@
 	use anorrl\User;
 	use anorrl\Asset;
 
-	if(!isset($_GET['userid']) && !isset($_GET['assetid']))
+	if(!isset($_GET['user']) && !isset($_GET['asset']))
 		exit_http(500);
 	
-	$data = isset($_GET['userid']) ? User::FromID(intval($_GET['userid'])) : Asset::FromID(intval($_GET['assetid']));
+	$data = isset($_GET['user']) ? User::FromID(intval($_GET['user'])) : Asset::FromID(intval($_GET['asset']));
 
 	if(!$data)
 		exit_http(500);

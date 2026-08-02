@@ -5,8 +5,8 @@
 	use anorrl\enums\AssetType;
 	use anorrl\enums\CatalogFilter;
 
-	if(!SESSION)
-		die("{}");
+	//if(!SESSION)
+	//	die("{}");
 
 	$type = AssetType::HAT->ordinal();
 	$filter = CatalogFilter::MostSold->ordinal();
@@ -83,8 +83,5 @@
 		}
 	}
 		
-	set_encoding("gzip");
-	ob_start("ob_gzhandler");
 	echo (json_encode(["assets" => $assets_raw, "page" => $page, "total_pages" => $total_pages]));
-	ob_end_flush();
 ?>

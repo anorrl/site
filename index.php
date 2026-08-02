@@ -36,6 +36,13 @@
 	}
 
 	/**
+	 * ARLAUTH = false/true
+	 * false = logged out
+	 * true  = logged in
+	 */
+	define('ARLAUTH', SESSION != false);
+
+	/**
 	 * Macro for header()
 	 * @param string $name
 	 * @param string $value

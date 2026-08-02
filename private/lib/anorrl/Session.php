@@ -203,12 +203,12 @@
 
 		static function setCookies(string $security): void {
 			unset($_COOKIE['ANORRLSECURITY']);
-			setcookie("ANORRLSECURITY", $security, time() + (460800* 30), "/", \CONFIG->domain);
+			setcookie("ANORRLSECURITY", $security, time() + (460800* 30), "/", ".".\CONFIG->baseurl);
 		}
 
 		public static function removeCookies(): void {
 			unset($_COOKIE['ANORRLSECURITY']);
-			setcookie("ANORRLSECURITY", "", -1, "/", \CONFIG->domain);
+			setcookie("ANORRLSECURITY", "", -1, "/", ".".\CONFIG->baseurl);
 		}
 	}
 

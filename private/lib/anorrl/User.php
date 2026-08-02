@@ -8,7 +8,6 @@
 	use anorrl\Universe;
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\AssetTypeUtils;
-	use anorrl\utilities\UserUtils;
 	use anorrl\utilities\UtilUtils;
 	use anorrl\utilities\ImageUtils;
 	use anorrl\utilities\Renderer;
@@ -23,15 +22,12 @@
 		public string $blurb;
 		public string $password;
 		public string $security_key;
-		/**
-		 * How do you name this better...
-		 * @var bool
-		 */
 		public bool $has_pfp_set;
 		public bool $has_banner_set;
 		public string $currentoutfitmd5;
 		public \DateTime $join_date;
 		public \DateTime $last_username_change_date;
+		public \DateTime $last_pfp_change_date;
 		public \DateTime $last_banner_change_date;
 		
 		/**
@@ -781,7 +777,7 @@
 			return $ids;
 		}
 
-		function getWearing(AssetType|null $type = null): array {
+		function getWearing(AssetType|null $type = null, bool $exclude_emotes = false): array {
 			$db = Database::singleton();
 			
 			if($type) {
@@ -794,8 +790,8 @@
 				)->fetchAll(\PDO::FETCH_OBJ);
 			} else {
 				$items = $db->run(
-					"SELECT DISTINCT `assetid` FROM `inventory` WHERE `userid` = :userid",
-					[ ":userid" => $this->id ]
+					"SELECT DISTINCT `assetid` FROM `inventory` WHERE `userid` = :userid AND `assettype` != :assettype",
+					[ ":userid" => $this->id, ":assettype" => $exclude_emotes ? AssetType::EMOTE->ordinal() : -1 ]
 				)->fetchAll(\PDO::FETCH_OBJ);
 			}
 			
@@ -1083,7 +1079,7 @@
 					$pre_image = imagecreatefromstring($file_contents);
 					
 					if(!($pre_image instanceof \GdImage)) {
-						return ["error" => true, "reason" => "That wasn't an image brochacho!"];
+						return ["success" => false, "reason" => "That wasn't an image brochacho!"];
 					}
 					
 					$width = imagesx($pre_image);
@@ -1109,18 +1105,18 @@
 							);
 						}
 
-						return ["error" => false];
+						return ["success" => true];
 					}
 
-					return ["error" => true, "reason" => "Image was wayyy too small! (16x16 minimum)"];
+					return ["success" => false, "reason" => "Image was wayyy too small! (16x16 minimum)"];
 				}
-				return ["error" => true, "reason" => "Something went wrong when uploading! ($file_type)"];
+				return ["success" => false, "reason" => "Something went wrong when uploading! ($file_type)"];
 			}
 			
 			if($file['size'] > 524288) {
-				return ["error" => true, "reason" => "Image too large! 512kb max!"];
+				return ["success" => false, "reason" => "Image too large! 512kb max!"];
 			} else {
-				return ["error" => true, "reason" => "Something went wrong when uploading!"];
+				return ["success" => false, "reason" => "Something went wrong when uploading!"];
 			}
 			
 		}
@@ -1437,9 +1433,6 @@
 			return $places;
 		}
 
-		/* araki, what the fuck am i doing */
-		/* paranoia */
-
 		function render(bool $headshot = false, bool $is3D = false) {
 			if($headshot && $is3D) {
 				return;
@@ -1538,8 +1531,6 @@
 
 			if(!Session::isUsernameAvailable($processed_new_name))
 				return ["error" => true, "reason" => "Username has already been taken!"];
-
-			// todo: add uhm sql implementation and time check...
 
 			$difference = UtilUtils::GetSecondsElapsedFrom(UserSettings::Get($this)->last_username_change);
 

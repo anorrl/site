@@ -1,6 +1,4 @@
 <?php
-//note from skyler: /images/noassets.png is temporary until a new image is made
-
 	use anorrl\Page;
 
 	$page = new Page("500");
@@ -13,7 +11,7 @@
 		<h1>500</h1>
 		<a href="/public/images/would-you-error.jpg"><img src="/public/images/would-you-error.jpg" alt="Error" width="220"></a>
 		<h1>uh oh!</h1>
-		<h3>A fucky wucky occurred! (Do NOT spam refresh). Tell grace to FIX IT!</h3>
+		<h3>a fucky wucky occurred! (do NOT spam refresh). <i>tell kuro to FIX IT!</i></h3>
 		<hr>
 		<br>
 		<b>try doing something else next time...</b>
@@ -21,7 +19,7 @@
 	<div class="buttons">
 		<button class="button" onclick="window.history.back();">Back</button>
 		<form action="/my/home" method="get">
-			<input  class="button" id="HomeSubmit" type="submit" value="Home">
+			<input  class="button" id="HomeSubmit" type="submit" value="go home!">
 		</form>
 	</div>
 </div>

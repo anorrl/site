@@ -9,8 +9,8 @@
 		global $router;
 		$router->map($method, $path, function(...$params) use ($path, $file, $auth_reroute) {
 
-			if($auth_reroute && str_starts_with($file, "/private/views/") && !SESSION) {
-				redirect("/");
+			if($auth_reroute && str_starts_with($file, "/private/views/") && !ARLAUTH) {
+				redirect("/?redirect=".$_SERVER['REQUEST_URI']);
 			}
 
 			foreach ($params as $key => $value) {
@@ -48,14 +48,16 @@
 		$file = "/private/api/$path.php";
 
 		$router->map($method, "/api/$path", function(...$params) use ($path, $file) {
-			if(SESSION || (str_starts_with($path, "gameserver") && !str_ends_with($path,"/get"))) {
-				foreach ($params as $key => $value) {
-					$$key = $value;
-				}
-				require __DIR__.$file;
+			/*if(SESSION || (str_starts_with($path, "gameserver") && !str_ends_with($path,"/get"))) {
+				
 			} else {
 				exit_http(401);
+			}*/
+
+			foreach ($params as $key => $value) {
+				$$key = $value;
 			}
+			require __DIR__.$file;
 		});
 	}
 

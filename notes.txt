@@ -1,0 +1,16 @@
+"9"  = .places
+"13" = .decals
+"3"  = .audio
+"4"  = .meshes
+"10" = .models
+"24" = .animations
+"8"  = .hats
+"18" = .faces
+"11" = .shirts
+"2"  = .t-shirts
+"12" = .pants
+"99" = .body_type
+"61" = .emotes
+"19" = .gears
+"1"  = .images
+"5"  = .lua

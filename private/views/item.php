@@ -12,8 +12,11 @@
 		redirect("/my/stuff");
 
 	$asset = Asset::FromID($id);
-	$user = SESSION->user;
-	$domain = CONFIG->domain;
+	$user = ARLAUTH ? SESSION->user: null;
+
+	$is_creator = false;
+	$is_favourited = false;
+	$is_bought = false;
 
 	if($asset != null) {
 		if($asset->getURLTitle() != $name || $asset->type == AssetType::PLACE) {
@@ -67,27 +70,16 @@
 	$sales = $asset->getSales();
 
 	$page = new Page(htmlspecialchars($asset->name, ENT_QUOTES));
+	
 	$page->addStylesheet("/css/new/item/item.css?v=2");
 	$page->addStylesheet("/css/new/comments.css?v=1");
 	$page->addStylesheet("/css/new/my/home.css?v=2");
 	$page->addStylesheet("/css/new/thumbnail.css");
-
 	$page->addScript("/js/item.js?t=1776708791");
 
-	$page->addMeta("title", htmlspecialchars($asset->name, ENT_QUOTES));
-	$page->addMeta("description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
-	$page->addMeta("og:type", "website");
-	$page->addMeta("og:site_name", "ANORRL");
-	$page->addMeta("og:url", "https://{$domain}{$asset->getURL()}");
-	$page->addMeta("og:title", htmlspecialchars($asset->name, ENT_QUOTES));
-	$page->addMeta("og:description", htmlspecialchars(substr($asset->description, 0, 128), ENT_QUOTES));
-	$page->addMeta("og:image", "https://{$domain}{$asset->getThumbsUrl()}");
+	$asset->loadEmbed($page);
 
 	$page->loadHeader();
-
-	if($user == null) {
-		die();
-	}
 
 	$linktype = strtolower($asset->type->label());
 	$plural_linktype = !str_ends_with($linktype, "s") ? $linktype."s" : $linktype;
@@ -241,7 +233,7 @@
 				<?php if(AssetTypeUtils::IsRenderable($asset->type)): ?>
 					<div class="thumbnail-holder" style="width: 240px; height: 240px;">
 						<button id="ThumbnailSwitcher" data-3d></button>
-						<span class="thumbnail-span" data-3d-url="/thumbnail/get?assetid=<?= $asset->id ?>" style="display: none;"></span>
+						<span class="thumbnail-span" data-3d-url="/thumbnail/get?asset=<?= $asset->id ?>" style="display: none;"></span>
 						<img src="<?= $asset->getThumbsUrl(240) ?>" width="240">
 					</div>
 				<?php else: ?>

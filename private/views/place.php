@@ -8,10 +8,12 @@
 	use anorrl\Place;
 	use anorrl\Universe;
 
-	$user = SESSION->user;
+	$user = ARLAUTH ? SESSION->user : null;
 
 	$place = Place::FromID($id);
-	$domain = CONFIG->domain;
+
+	$is_creator = false;
+	$is_favourited = false;
 
 	if($place != null) {
 		
@@ -24,7 +26,6 @@
 		if($user != null) {
 			$is_creator = $place->isOwner($user);
 			$is_favourited = $place->hasUserFavourited($user);
-			$is_bought = $user->owns($place);
 			
 			if(
 				isset($_POST['ANORRL$Comment$Post$Contents']) &&
@@ -67,32 +68,18 @@
 	$header_data = $place;
 
 	$page = new Page(htmlspecialchars($place->name, ENT_QUOTES));
-	
 	$page->addStylesheet("/css/new/comments.css?v=1");
 	$page->addStylesheet("/css/new/item/item.css?v=2");
 	$page->addStylesheet("/css/new/item/place.css?v=5");
 	$page->addStylesheet("/css/new/my/home.css?v=2");
 	$page->addStylesheet("/css/new/window.css");
 	$page->addStylesheet("/css/new/placelauncher.css?");
-	
-
 	$page->addScript("/js/item.js?t=1776186351");
 	$page->addScript("/js/placelauncher.js?t=1777822582");
-
-	$page->addMeta("title", htmlspecialchars($place->name, ENT_QUOTES));
-	$page->addMeta("description", htmlspecialchars(substr($place->description, 0, 128), ENT_QUOTES));
-	$page->addMeta("og:type", "website");
-	$page->addMeta("og:site_name", "ANORRL");
-	$page->addMeta("og:url", "https://{$domain}{$place->getURL()}");
-	$page->addMeta("og:title", htmlspecialchars($place->name, ENT_QUOTES));
-	$page->addMeta("og:description", htmlspecialchars(substr($place->description, 0, 128), ENT_QUOTES));
-	$page->addMeta("og:image", "https://{$domain}{$place->getThumbsUrl()}");
-
+	
+	$asset->loadEmbed($page);
+	
 	$page->loadHeader();
-
-	if($user == null) {
-		die();
-	}
 
 ?>
 <script>

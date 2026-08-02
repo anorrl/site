@@ -26,6 +26,10 @@ class ComposerStaticInite9b45928129cab742a8bb70992074cec
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
         ),
+        'M' =>
+        array (
+            'Michelf\\' => 8,
+        ),
         'C' =>
         array (
             'CSSValidator\\' => 13,
@@ -56,6 +60,10 @@ class ComposerStaticInite9b45928129cab742a8bb70992074cec
         'Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Michelf\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/michelf/php-markdown/Michelf',
         ),
         'CSSValidator\\' =>
         array (

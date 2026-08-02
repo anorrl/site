@@ -127,7 +127,10 @@
 		}
 
 		function loadBasicFooter() {
-			$this->loadTemplate("basicfooter");
+			echo <<<EOT
+				</body>
+			</html>
+			EOT;
 		}
 
 		function loadHeader() {
@@ -135,7 +138,13 @@
 		}
 
 		function loadFooter() {
-			$this->loadTemplate("footer");
+			echo <<<EOT
+							</div>
+						</div>
+					</div>
+				</body>
+			</html>
+			EOT;
 		}
 
 		function loadHeader2() {

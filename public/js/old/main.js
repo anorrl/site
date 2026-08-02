@@ -55,17 +55,6 @@ if(ANORRL.GetInternetExplorerVersion() != -1) {
 	})
 }
 
-$(function() {
-	if('ontouchstart' in document.documentElement) {
-		if($.cookie("MobileKnowsThis") == undefined) {
-			$(".DisplayMobileWarning").css("display", "block");
-		}
-		
-	} else {
-		$(".DisplayMobileWarning").css("display", "none");
-	}
-})
-
 function copyToClipboard(textToCopy) {
 	// https://stackoverflow.com/a/65996386
 	if (navigator.clipboard && window.isSecureContext) {

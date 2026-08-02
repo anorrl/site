@@ -224,6 +224,7 @@ hr {
 	text-align: center;
 	/*background: rgb(82, 19, 123);*/
 	border-top: 1px solid rgb(171, 70, 238);
+	margin-bottom: 60px;
 }
 
 #footer #container {
@@ -417,4 +418,17 @@ ul.special li[data-category] span img {
 	text-align: center;
 	margin: 30px auto;
 	display: none;
+}
+
+.multi-titles {
+	display: flex;
+}
+
+.multi-titles > div {
+	flex: 1;z-index: 1;
+}
+
+.multi-titles .page-title {
+	padding-bottom: 3px;
+	margin-bottom: 0px;
 }

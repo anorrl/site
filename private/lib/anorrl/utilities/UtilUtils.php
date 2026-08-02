@@ -34,7 +34,7 @@
 
 		public static function RecurseRemove($input, $find, $replace) {
 			
-			$result = str_replace($find, $replace,$input);
+			$result = str_replace($find, $replace, $input);
 
 			if(str_contains($result, $find)) {
 				return self::RecurseRemove($result, $find, $replace);

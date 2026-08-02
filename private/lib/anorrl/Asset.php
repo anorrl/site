@@ -720,6 +720,9 @@
 
 			if($this->type == AssetType::AUDIO && ($thumbsmd5 == "sound" || $md5 == $thumbsmd5))
 				return "/public/images/thumbnails/audio.png";
+			elseif($this->type == AssetType::AUDIO && !file_exists(get_path_file("assets/thumbs/$thumbsmd5"))) {
+				copy(get_path_file("assets/$thumbsmd5"), get_path_file("assets/thumbs/$thumbsmd5"));
+			}
 
 			if($this->type == AssetType::EMOTE)
 				return "/public/images/thumbnails/emotes.png";
@@ -779,6 +782,27 @@
 					":name" => $name
 				]
 			);
+		}
+
+		function loadEmbed(Page $page) {
+			$item = $this->type == AssetType::PLACE ? "place" : "item";
+			$embed_title = htmlspecialchars("\"{$this->name}\" an {$item} by {$this->creator->name}", ENT_QUOTES);
+			$desc = substr($this->description, 0, 128);
+			if(strlen($desc) < strlen($this->description)) {
+				$desc .= "...";
+			}
+
+			$embed_description = htmlspecialchars($desc, ENT_QUOTES);
+			$domain = \CONFIG->domain;
+			
+			$page->addMeta("title", $embed_title);
+			$page->addMeta("description", $embed_description);
+			$page->addMeta("og:type", "website");
+			$page->addMeta("og:site_name", "ANORRL");
+			$page->addMeta("og:url", "https://{$domain}{$this->getURL()}");
+			$page->addMeta("og:title", $embed_title);
+			$page->addMeta("og:description", $embed_description);
+			$page->addMeta("og:image", $this->getThumbsUrl());
 		}
 
 	}

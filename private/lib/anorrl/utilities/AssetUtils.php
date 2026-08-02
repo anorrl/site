@@ -12,19 +12,19 @@
 	class AssetUtils {
 		
 		public static function Get(AssetType $type, string $query = "", int $page = -1, int $count = -1): array {
-			if(!\SESSION) 
-				return [];
+			//if(!\SESSION) 
+			//	return [];
 
-			$user = \SESSION->user;
+			//$user = \SESSION->user;
 			$db = Database::singleton();
 
-			if($user == null) 
-				return [];
+			/*if($user == null) 
+				return [];*/
 			
 			$query_filter = "AND `public` = 1 AND `nevershow` = 0";
-			if($user->isAdmin()) {
+			/*if($user->isAdmin()) {
 				$query_filter = "AND `nevershow` = 0";
-			}
+			}*/
 			
 			$stmt_query = "%$query%";
 			$stmt_type = $type->ordinal();
@@ -76,12 +76,12 @@
 
 			$is_bodyparts = $type == AssetType::BODYPARTS;
 
-			if(!\SESSION) 
+			/*if(!\SESSION) 
 				return [];
 
 			$user = \SESSION->user;
 			if($user == null) 
-				return [];
+				return [];*/
 			
 			$query_filter = "AND `assets`.`public` = 1 AND `nevershow` = 0";
 			// if($user->isAdmin()) { $query_filter = "AND `nevershow` = 0"; }
@@ -151,8 +151,8 @@
 
 			$is_bodyparts = $type == AssetType::BODYPARTS;
 
-			if(!\SESSION)
-				return 0;
+			/*if(!\SESSION)
+				return 0;*/
 			
 			$query_filter = "AND `public` = 1 AND `nevershow` = 0";
 			// if($user->isAdmin()) { $query_filter = "AND `nevershow` = 0"; }

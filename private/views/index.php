@@ -14,37 +14,18 @@
 		$result = Session::login($username, $password);
 
 		if($result["success"]) {
-			redirect("/my/home");
+			if(isset($_GET['redirect']))
+				redirect($_GET['redirect']);
+			else
+				redirect("/my/home");
 		} else {
 			$_SESSION['login_errors'] = $result["errors"];
-			redirect("/");
-		}
-	} else if(isset($_POST['ANORRL$Signup$Username']) &&
-	   isset($_POST['ANORRL$Signup$Password']) &&
-	   isset($_POST['ANORRL$Signup$ConfirmPassword']) &&
-	   isset($_POST['ANORRL$Signup$AccessKey']) &&
-	   isset($_POST['ANORRL$Signup$Submit'])) {
-		$username = trim($_POST['ANORRL$Signup$Username']);
-		$password = trim($_POST['ANORRL$Signup$Password']);
-		$confirm_password = trim($_POST['ANORRL$Signup$ConfirmPassword']);
-		$accesskey = trim($_POST['ANORRL$Signup$AccessKey']);
-
-		$result = Session::register($username, $password, $confirm_password, $accesskey);
-
-		if($result["success"]) {
-			redirect("/my/home");
-		} else {
-			$_SESSION['signup_errors'] = $result["errors"];
-			redirect("/register");
+			redirect($_SERVER['REQUEST_URI']);
 		}
 	}
 
-
-
 	$random = rand(0, 100000);
-
 	$deceptacon = $random >= 50000 && $random <= 55000;
-
 	$music = $deceptacon ? "deceptacon" : "sonic2013menu";
 
 	$page->loadHeader2();
@@ -68,7 +49,7 @@
 		text-align: center;
 	}
 
-	.fieldset input {
+	.fieldset input, .fieldset textarea {
 		border: 2px solid rgb(141, 29, 216);
 		background: #482b5a;
 		color:beige;
@@ -83,14 +64,6 @@
 	.panel {
 		padding: 5px;
 		
-	}
-
-	#auth[data-selected="register"] a[href="javascript:openRegisterPanel()"],
-	#auth[data-selected="login"] a[href="javascript:openLoginPanel()"] {
-		font-size: 16px;
-		color: #fff;
-		text-decoration: underline;
-		font-family: 'arial-rounded bold'
 	}
 
 	.helperfield {
@@ -120,28 +93,6 @@
 
 </style>
 <script>
-	function openLoginPanel() {
-		if(!$("#login").is(":visible")) {
-			$("#login").show();
-			$("#register").hide();
-			$("#auth").attr("data-selected", "login")
-		}
-	}
-
-	function openRegisterPanel() {
-		if(!$("#register").is(":visible")) {
-			$("#register").show();
-			$("#login").hide();
-			$("#auth").attr("data-selected", "register")
-		}
-	}
-
-	$(function() {
-		$("#login").show();
-		$("#register").hide();
-		$("#auth").attr("data-selected", "login")
-	})
-
 	$(function() {
 		$("audio").each(function() {
 			if($(this).attr("volume")) {
@@ -167,10 +118,16 @@
 </script>
 <?php if(isset($_SESSION['signup_errors'])): ?>
 	<div style="color: red; font-weight: bold; font-size: 20px;">there's errors with the registration</div>
+	<pre>
+		<?= print_r($_SESSION['signup_errors']) ?>
+	</pre>
 <?php endif ?>
 
 <?php if(isset($_SESSION['login_errors'])): ?>
 	<div style="color: red; font-weight: bold; font-size: 20px;">there's errors with the login</div>
+	<pre>
+		<?= print_r($_SESSION['login_errors']) ?>
+	</pre>
 <?php endif ?>
 <audio src="/public/<?= $music ?>.mp3" autoplay volume="<?= $deceptacon ? "0.1" : "0.2" ?>" loop></audio>
 <div style="position: fixed; background: black; padding: 10px;display:none" id="autoplay-warning">
@@ -187,11 +144,10 @@
 			<img src="/public/images/splash_16.png">
 			<h3 style="margin-bottom: 0px;">there's creativity to be had here!</h3>
 			<h4 style="margin-bottom: 0px;">what will you make?</h4>
-			<img src="/public/images/anorrl-fellas1.png" style="width: 245px; position: absolute;left: -100px;bottom: -62px;">
 		</div>
-		<div class="box" id="auth" style="flex: 0.5;<?= !SESSION ? "max-width: 207px;" : "" ?>">
-			<?php if(!SESSION): ?>
-			<h3><a href="javascript:openRegisterPanel()">.register</a> | <a href="javascript:openLoginPanel()">.login</a></h3>
+		<div class="box" id="auth" style="flex: 0.5;<?= !ARLAUTH ? "max-width: 207px;" : "" ?>">
+			<?php if(!ARLAUTH): ?>
+			<h3>.login</h3>
 			<div id="login" class="panel">
 				<h3 style="margin-top: 0px;">welcome back!</h3>
 				<form method="POST">
@@ -205,30 +161,10 @@
 					</div>
 					<input class="button" type="submit" value="login" name="ANORRL$Login$Submit">
 				</form>
-			</div>
-			<div id="register" class="panel">
-				<form method="POST">
-					<h3 style="margin-top: 0px;">are you new around here?</h3>
-					<div class="fieldset">
-						<label>.username <span class="form-asterisk">*</span></label>
-						<input name="ANORRL$Signup$Username" style="margin-bottom: 0px;" type="text" placeholder="thats your name right?" minlength="3" maxlength="20" required>
-						<label class="helperfield"> 3-20 alphanumeric characters, no spaces </label>
-					</div>
-					<div class="fieldset">
-						<label>.password <span class="form-asterisk">*</span></label>
-						<input name="ANORRL$Signup$Password" style="margin-bottom: 0px;" type="password" placeholder="thats your password right?" minlength="6" maxlength="20" required>
-						<label class="helperfield"> 6-20 characters, min 4 letters & 2 numbers </label>
-					</div>
-					<div class="fieldset">
-						<label>.confirm_password <span class="form-asterisk">*</span></label>
-						<input name="ANORRL$Signup$ConfirmPassword" type="password" placeholder="just in case... do it again..."  minlength="6" maxlength="20" required>
-					</div>
-					<div class="fieldset">
-						<label>.invite_key <span class="form-asterisk">*</span></label>
-						<input name="ANORRL$Signup$AccessKey" type="password" placeholder="sigh... you know the deal..." required>
-					</div>
-					<input name="ANORRL$Signup$Submit" class="button" type="submit" value="register">
-				</form>
+				<hr>
+				<h3>looking to join in on the fun?</h3>
+				<br>
+				<a href="" class="button" style="font-family:'arial-rounded bold'; text-decoration: none">.register</a>
 			</div>
 			<?php else: 
 				$user = SESSION->user; ?>
