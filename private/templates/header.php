@@ -173,61 +173,11 @@
 		<?php endif ?>
 		<div id="Container">
 			<div id="Header">
-				<?php if($header_check_user != null): 
-					$pendingreqscount = $header_check_user->GetPendingFriendRequestsCount();	
-				?>
-				<div id="ProfileSign" logged="true">
-					<div id="UsernameRow">
-						<a href="/users/<?= $header_check_user->id ?>/profile"><?= $header_check_user->name ?></a>
-					</div>
-					<table style="width: 100%">
-						<tr>
-							<td style="vertical-align: top;">
-								<a href="/my/profile"><img src="<?= $header_check_user->getThumbsUrl(64) ?>"></a>
-							</td>
-							<td style="vertical-align: top;">
-								<div id="CreditsRow">
-									<span title="Your pending requests"><a href="/my/friends"><img src="/public/images/icons/messages<?= $pendingreqscount == 0 ? "" : "_notify" ?>.png"> <?= $pendingreqscount ?></a></span><span class="Separator">|</span><span title="Your friends"><a href="/my/friends"><img src="/public/images/icons/friends.png"> <?= $header_check_user->getFriendsCount() ?></a></span>
-									<hr>
-									<span title="Message" style="width:auto"><?= $randomsignsplash ?></span>
-									<div style="position:absolute; right: -20px; bottom: -25px;">
-										<a href="/public/images/anorrl-smile.png" target="_blank"><img src="/public/images/anorrl-smile.png" style="width: 42px;image-rendering: optimizequality;"></a>
-									</div>
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<a id="LogoutSign" href="javascript:ANORRL.Logout()">LOGOUT</a>
-				<?php else: ?>
-				<div id="ProfileSign" logged="false">
-					<img id="background" src="/public/images/header/signs/profile.png"> <!-- DO NOT FUCKING REMOVE -->
-					<a href="/register" id="RegisterSign">Register</a>
-					<img src="/public/images/sign_2way.png" style="width: 72px;padding: 10px 0;padding-top: 30px;padding-bottom:5px;z-index: 2;position: relative;">
-					<a href="/login" id="LoginSign">Login</a>
-				</div>
-				<?php endif ?>
-				<div id="Logo">
-					<a href="/">
-						<img src="/public/images/header/logo.png">
-					</a>
-				</div>
 				
 				<?php if($header_check_user != null): ?>
 				<div id="Links">
-					<a href="/users/<?= $header_check_user->id ?>/profile">Profile</a>
-					<a href="/games">Games</a>
-					<a href="/catalog">Catalog</a>
-					<a href="/vandals">Vandals</a>
-				</div>
-				<div id="UserLinks" >
-					<a href="/my/home"      <?php if($this->internal_name == "my/home"		 ):?>selected<?php endif ?>>Home</a>
-					<a href="/my/profile"   <?php if($this->internal_name == "my/profile"	 ):?>selected<?php endif ?>>Account</a>
-					<a href="/my/character" <?php if($this->internal_name == "my/character"	 ):?>selected<?php endif ?>>Character</a>
-					<a href="/my/friends"   <?php if($this->internal_name == "my/friends"	 ):?>selected<?php endif ?>>Friends</a>
-					<a href="/create/"      <?php if($this->internal_name == "my/create"	 ):?>selected<?php endif ?>>Create</a>
-					<a href="/my/stuff"     <?php if($this->internal_name == "my/stuff"		 ):?>selected<?php endif ?>>Stuff</a>
-					<a href="/download"     <?php if($this->internal_name == "download/index"):?>selected<?php endif ?>>Download</a>
+					<a href="/my/home">GO HOME</a>
+					
 				</div>
 				<?php else: ?>
 				<div id="Links"></div>
@@ -244,4 +194,4 @@
 			<?php endif ?>
 			<div id="Body">
 				<div id="BodyContainer">
-					
+					<h1>this page is BROKEN on purpose because i haven't gotten to it</h1>

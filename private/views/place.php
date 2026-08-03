@@ -77,9 +77,11 @@
 	$page->addScript("/js/item.js?t=1776186351");
 	$page->addScript("/js/placelauncher.js?t=1777822582");
 	
-	$asset->loadEmbed($page);
+	$place->loadEmbed($page);
 	
 	$page->loadHeader();
+
+	
 
 ?>
 <script>

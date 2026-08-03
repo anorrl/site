@@ -11,7 +11,7 @@
 		<h1>404</h1>
 		<a href="/public/images/would-you-error.jpg"><img src="/public/images/would-you-error.jpg" alt="Error" width="220"></a>
 		<h1>awww shucks!</h1>
-		<h3>you tried to access &quot; <?=  $_SERVER['REQUEST_URI'] ?> &quot; aaaand that failed...</h3>
+		<h3>you tried to access &quot;<?=  $_SERVER['REQUEST_URI'] ?>&quot; aaaand that failed...</h3>
 		<hr>
 		<br>
 		<b>try doing something else next time...</b>
