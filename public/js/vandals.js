@@ -2,19 +2,7 @@ if(typeof(ANORRL) == "undefined") {
 	ANORRL = {}
 }
 
-if (!Object.keys) {
-	Object.keys = function(obj) {
-		var keys = [];
-		for (var i in obj) {
-			if (obj.hasOwnProperty(i)) {
-				keys.push(i);
-			}
-		}
-		return keys;
-	};
-}
-
-ANORRL.People = {
+ANORRL.Vandals = {
 	CurrentStatusPage: 1,
 	CurrentStatusQuery: "",
 	NextPage: function() {
@@ -120,8 +108,8 @@ ANORRL.People = {
 				pagercontainer.css("display", "block");
 			}
 			var users = data['users'];
-			ANORRL.People.CurrentStatusPage = data['page'];
-			var current_page = ANORRL.People.CurrentStatusPage;
+			ANORRL.Vandals.CurrentStatusPage = data['page'];
+			var current_page = ANORRL.Vandals.CurrentStatusPage;
 			var total_pages = data['total_pages'];
 
 			var index = 0;
@@ -129,7 +117,7 @@ ANORRL.People = {
 			for (var key in users) {
 				var user = users[key];
 
-				feedscontainer.append(ANORRL.People.CreatePlayerRow(user));
+				feedscontainer.append(ANORRL.Vandals.CreatePlayerRow(user));
 
 				index += 1;
 			}
@@ -153,15 +141,15 @@ ANORRL.People = {
 }
 
 $(function(){
-	ANORRL.People.GrabFeed();
+	ANORRL.Vandals.GrabFeed();
 
 	$("#UsersNavLinks").find("input").on("change", function() {
-		ANORRL.People.GrabFeed(ANORRL.People.CurrentStatusQuery, Number($(this).val()));
+		ANORRL.Vandals.GrabFeed(ANORRL.Vandals.CurrentStatusQuery, Number($(this).val()));
 	});
 
 	$("#SearchBox").on("keypress", function(e) {
 		if(e.keyCode == 13) {
-			ANORRL.People.Submit();
+			ANORRL.Vandals.Submit();
 		}
 	});
 });

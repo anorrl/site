@@ -2,24 +2,25 @@
 	use anorrl\GameServer;
 	use anorrl\utilities\Arbiter;
 	use anorrl\utilities\ClientDetector;
-	
+
 	if(!ClientDetector::HasAccess())
 		exit_http(403);
 
-	if(!isset($jobID))
+	if(!isset($jobID) && !isset($player))
 		exit_http(503);
+
 
 	$gameserver = GameServer::GetFromJobID($jobID);
 
 	if($gameserver)
-		die($gameserver->destroy());
+		die($gameserver->removePlayer(intval($player)));
 	
 	else {
 		$job = Arbiter::singleton()->getGSMJob($jobID);
 
-		if($job)
+		if($job) 
 			Arbiter::singleton()->requestGS("kill", ["pid" => $job->pid]);
 	}
 
-	
+	exit_http(503);
 ?>

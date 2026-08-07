@@ -26,23 +26,6 @@
 		if($user != null) {
 			$is_creator = $place->isOwner($user);
 			$is_favourited = $place->hasUserFavourited($user);
-			
-			if(
-				isset($_POST['ANORRL$Comment$Post$Contents']) &&
-				isset($_POST['ANORRL$Comment$Post$Submit']) &&
-				$place->comments_enabled
-			) {
-				$result = Comment::Post($place, $_POST['ANORRL$Comment$Post$Contents']);
-				
-				if($result['error']) {
-					$_SESSION['ANORRL$Comment$Post$Error'] = $result['reason'];
-				}
-
-				redirect($place->getURL());
-			}
-
-			$comments = Comment::GetCommentsOn($place);
-			$comments_count = count($comments);
 		}
 
 		$favourites_label = $place->favourites_count . " time". ($place->favourites_count != 1 ? "s" : "");
@@ -51,7 +34,7 @@
 		$place_description = $place->description;
 		if(strlen(trim($place_description)) == 0) {
 			$place_description = <<<EOT
-			<span id="NoDescription">Seems like $place_creator_name hasn't put anything here...</span>
+			<b>Seems like $place_creator_name hasn't put anything here...</b>
 			EOT;
 		} else {
 			$place_description = str_replace(PHP_EOL, "<br>", $place_description);
@@ -67,359 +50,521 @@
 	}
 	$header_data = $place;
 
+	$place_short_name = null;
+	if(strlen($place->name) > 35 ) {
+		$place_short_name = trim(substr($place->name, 0, 35)). "...";
+	}
+
 	$page = new Page(htmlspecialchars($place->name, ENT_QUOTES));
-	$page->addStylesheet("/css/new/comments.css?v=1");
-	$page->addStylesheet("/css/new/item/item.css?v=2");
-	$page->addStylesheet("/css/new/item/place.css?v=5");
-	$page->addStylesheet("/css/new/my/home.css?v=2");
-	$page->addStylesheet("/css/new/window.css");
-	$page->addStylesheet("/css/new/placelauncher.css?");
-	$page->addScript("/js/item.js?t=1776186351");
-	$page->addScript("/js/placelauncher.js?t=1777822582");
-	
+	$page->clearAll();
 	$place->loadEmbed($page);
 	
-	$page->loadHeader();
-
-	
-
+	$page->loadHeader2();
 ?>
-<script>
-	function ChangeTab(tabName) {
-		var tabToGoTo = tabName.toLowerCase();
-		$("#InfoHeaders td").each(function() {
-			if($(this).html().toLowerCase() != tabToGoTo) {
-				$(this).removeAttr("selected");
-			} else {
-				$(this).attr("selected", "true");
-			}
-		})
-
-		$("#InfoBox[content]").each(function() {
-			if($(this).attr("content").toLowerCase() != tabToGoTo) {
-				$(this).css("display", "none");
-			} else {
-				$(this).css("display", "block");
-				<?php if($user != null): ?>
-				if($(this).attr("content") == "Servers") {
-					ANORRL.PlaceLauncher.GrabGameservers(<?= $id ?>);
-				}
-				<?php endif ?>
-			}
-		});
-
-		ANORRL.ChangeUrl("", window.location.pathname+window.location.search+"#"+tabToGoTo);
+<style>
+		.cog img {
+		margin-bottom: -3px;
+		transition: transform 0.4s;
 	}
 
-	$(function() {
+	.cog[active] img {
+		transform: rotate(90deg)
+	}
 
-		var tab = window.location.hash != "" ? window.location.hash.replace("#", "") : "info";
-		//alert(tab);
-		ChangeTab(tab);
+	.cog[active] {
+		background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	}
 
-		$("#InfoHeaders td").click(function() {
-			ChangeTab($(this).html());
-			return false;
+	.cog-dropdown {
+		position: relative;
+	}
+
+	.cog-dropdown ul {
+		display:none;
+		position: absolute;
+		list-style: none;
+		text-align: left;
+		width: 130px;
+		min-width:fit-content;
+		background: magenta;
+		margin: 0px;
+		padding: 0px;
+		z-index: 10;
+		border: 2px solid var(--border-color);
+		left: 30px;
+		top: 0px;
+	}
+
+	.cog-dropdown li {
+		padding: 5px;
+		user-select: none;
+		background: linear-gradient(0deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+		border-top: 1px solid var(--border-color);
+		cursor: pointer;
+	}
+
+	.cog-dropdown li span.title {
+		display: inline;
+	} 
+
+	.cog-dropdown li span {
+		display: none;
+	}
+
+	.cog-dropdown li:hover span {
+		display: inline;
+	}
+
+	.cog-dropdown li:first-child {
+		border-top: none;
+	}
+
+
+	.cog-dropdown li:active {
+		background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+	}
+
+	.cog-dropdown li:hover {
+		filter: brightness(1.5)
+	}
+</style>
+<style>
+	.play-btn, .edit-btn {
+		font-size: 14px;
+		padding: 7px 50px;
+		text-align: center;
+		margin-bottom: 5px;
+		color: white;
+		width: 220px;
+		padding: 0px;
+		background: none;
+		background-size: 100%;
+		cursor: pointer;
+		height: 55px;
+		border: 0px;
+	}
+
+	.play-btn {
+		background-image: url("/public/images/buttons/play.png");
+	}
+
+	.edit-btn {
+		background-image: url("/public/images/buttons/edit.png");
+	}
+
+	.play-btn:hover,
+	.edit-btn:hover {
+		filter: brightness(1.15);
+	}
+
+	.play-btn:active,
+	.edit-btn:active {
+		background-position: 0 56px;
+	}
+
+	table#controls {
+		width: 100%;
+		text-align: left;
+		vertical-align: middle
+	}
+
+	#controls td {
+		vertical-align: middle;
+		height: 48px;
+	}
+
+	#controls button {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		user-select: none;
+		font-size: 14px;
+		font-family: 'Fira Mono';
+	}
+
+	#controls button:hover {
+		filter: brightness(1.25);
+	}
+
+	#controls button:active {
+		cursor:grab;
+		text-decoration:underline;
+	}
+
+	.ratings-bar {
+		border-radius: 2px;
+		height: 6px;
+		margin: 0px auto;
+		background: #666;
+		width: 86px;
+	}
+
+	.ratings-bar[red] {
+		background: #ff0944;
+	}
+
+	.ratings-bar[green] {
+		background: #19ac19;
+	}
+
+	.ratings-bar > div {
+		border-radius: 2px;
+		height: 100%;
+		background: #19ac19;
+	}
+
+	.image-container {
+		width: 576px;
+		height: 324px;
+		margin-right: 10px;
+	}
+
+	.image-container img {
+		width:100%;
+		height: 100%;
+		border: 1px solid var(--lighter-border-color);
+	}
+
+	#place-name, #place-short-name {
+		font-size: 25px;
+		font-weight: 400;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+
+	#place-short-name {
+		max-height: 69px;
+		overflow:hidden;
+		text-overflow:ellipsis;
+	}
+
+	#place-name {
+		height: auto;
+		background: linear-gradient(0deg,#1a0c23 0%, #492265 100%);
+		border: 1px solid var(--border-color);
+		margin-top:4px;
+	}
+
+	#place-name-container:hover #place-short-name {
+		display: none;
+	}
+
+	#place-name-container .hidden {
+		display: none;
+	}
+
+	#place-name-container:hover .hidden h2 {
+		position: absolute;
+	}
+
+	#place-name-container:hover .hidden {
+		display: block;
+		
+	}
+</style>
+<h2 class="page-title">.place</h2>
+<div class="box" style="display: flex; padding: 10px; position: relative;">
+	<div style="flex: 1">
+		<div class="image-container">
+			<a href="<?= $place->getThumbsUrl() ?>" target="__blank">
+				<img src="<?= $place->getThumbsUrl() ?>">
+			</a>
+		</div>
+	</div>
+	
+	<div style="flex: 1; text-align: center; margin: 10px; position: relative;">
+		<div style="min-height:97px; height: 97px; display: flex; flex-direction: column;">
+			<div id="place-name-container" style="flex: 1">
+				<?php if($place_short_name): ?>
+				<h2 id="place-short-name"><?= $place_short_name ?></h2>
+				<div class="hidden">
+					<h2 id="place-name"><?= $place->name ?></h2>
+					<div style="height: 78px;"></div>
+				</div>
+				<?php else: ?>
+					<h2 id="place-name" style="background: none; border: none; flex: 1"><?= $place->name ?></h2>
+				<?php endif ?>
+			</div>
+			<div style="font-size: 14px; font-style: italic; margin-bottom: 15px;">created by <a href=""><?= $place->creator->name ?></a></div>
+		</div>
+		<hr>
+		<div style="
+				padding-top: 5px;
+				height: 120px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+			">
+			<button class="play-btn"></button>
+			<?php if($is_creator): ?>
+			<button class="edit-btn"></button>
+			<?php endif ?>
+		</div>
+		<hr>
+		<table id="controls">
+			<tr>
+				<td width="90">
+					<button style="color: #ffdb5b;" id="fav-btn">
+						<img src="/public/images/buttons/favourite_star.gif" width="32">
+						<span id="fav-count"><?= $place->favourites_count ?></span>
+					</button>
+				</td>
+				<td>
+					<div style="display: flex;align-items: center" class="ratings-container">
+						<button style="color: #19ac19;" id="up-btn">
+							<span id="up-count">--</span>	
+							<img src="/public/images/buttons/thumbs_up.gif" width="32">	
+						</button>
+						<div style="flex: 1">
+							<div class="ratings-bar">
+								
+							</div>
+						</div>
+						<button style="color: #ff0944;" id="down-btn">
+							<img src="/public/images/buttons/thumbs_down.gif?v=2" width="32">
+							<span id="down-count">--</span>
+						</button>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="cog-dropdown" style="position: absolute; right: 10px">
+		<button class="button cog" style="padding: 2px 4px" class=""><img src="/public/images/icons/cog.png" ></button>
+		<ul>
+			<?php if($place->isStartingPlace()): ?>
+			<li data-actionid="1"><span>&gt;</span> configure</li>
+			<li data-actionid="2"><span>&gt;</span> advertise</li>
+			<li data-actionid="3"><span>&gt;</span> create badge</li>
+			<li data-actionid="4"><span>&gt;</span> shutdown all servers</li>
+			<li data-actionid="5"><span>&gt;</span> sex update</li>
+			<?php else: ?>
+			<li data-actionid="1"><span>&gt;</span> configure</li>
+			<li data-actionid="3"><span>&gt;</span> create badge</li>
+			<li data-actionid="4"><span>&gt;</span> shutdown all servers</li>
+			<?php endif ?>
+		</ul>
+	</div>
+</div>
+<style>
+	#buttons {
+		display: flex;
+		gap: 5px;
+		margin-top: 5px;
+		text-align: center;
+	}
+
+	#buttons .button {
+		flex: 1;
+		text-decoration: none;
+	}
+
+	#place-stats {
+		width: 100%;
+		text-align: center;
+		table-layout: fixed;
+		margin-bottom: 5px;
+	}
+
+	#place-stats td * {
+		display: block;
+	}
+
+	#place-stats td b {
+		font-family: monospace;
+		font-size: 11px;
+		border-bottom: 1px solid #6c3a8c;
+		width: 75px;
+		margin: 0 auto;
+		padding-bottom: 2px;
+		margin-bottom: 5px;
+	}
+
+	#place-stats td span {
+		*font-size: 13px;
+	}
+
+	.box[data-tab] {
+		display: none;
+	}
+
+	.button[selected] {
+		background: linear-gradient(0deg,#9c37df 0%, #512270 100%);
+		filter: brightness(1.15);
+		letter-spacing: 2px;
+		text-decoration: underline !important;
+	}
+</style>
+<div class="box" id="buttons">
+	<a class="button" href="#info" data-tab="info">info</a>
+	<a class="button" href="#store" data-tab="store">store</a>
+	<a class="button" href="#badges" data-tab="badges">badges</a>
+	<a class="button" href="#servers" data-tab="servers">servers</a>
+</div>
+<div style="margin-top: 5px;">
+	<div class="box" data-tab="info" >
+		<h3 style="margin: 5px;">.description</h3>
+		<hr style="margin-left: 5px; margin-right: 5px;">
+		<div style="margin: 10px 15px; line-height: 1.5em; font-family: monospace; font-size: 11px; color: #EFD8FF">
+			<?= $place_description ?>
+		</div>
+		<hr style="margin-left: 5px; margin-right: 5px;">
+		<table id="place-stats">
+			<td>
+				<b>.created</b>
+				<span><?= $place->created_at->format('d/m/Y'); ?></span>
+			</td>
+			<td>
+				<b>.updated</b>
+				<span><?= $place->last_updatetime->format('d/m/Y'); ?></span>
+			</td>
+			<td>
+				<b>.visits</b>
+				<span><?= $place->visit_count ?></span>
+			</td>
+			<td>
+				<b>.genre</b>
+				<span><?= $place->genre->label() ?></span>
+			</td>
+			<td>
+				<b>.server_size</b>
+				<span><?= $place->server_size ?></span>
+			</td>
+			<td>
+				<b>.copylocked</b>
+				<span><?= $place->copylocked ? "Yes" : "No" ?></span>
+			</td>
+		</table>
+	</div>
+	<div class="box" data-tab="store">
+		<h3 style="margin: 5px;">.store</h3>
+	</div>
+	<div class="box" data-tab="badges">
+		<h3 style="margin: 5px;">.badges</h3>
+	</div>
+	<div class="box" data-tab="servers">
+		<h3 style="margin: 5px;">.servers</h3>
+	</div>
+</div>
+<div style="margin-top: 5px;">
+	<h4 class="page-title">.commentary</h4>
+	<div class="box" style="padding: 10px 20px">
+		<h3 class="page-slogan">.post_something_cool_about_this!</h3>
+		<textarea maxlength="256" minlength="4" class="box input" style="width: 914px" placeholder="hurr durr i love this thing!"></textarea>
+		<button class="button" style="margin-top: 5px">submit</button>
+	</div>
+	<div class="box" style="border-top: none">
+		
+	</div>
+</div>
+<script>
+	$(window).click(function() {
+		$(".cog").each(function() {
+			$(this).removeAttr("active");
+		})
+		$(".cog-dropdown ul").each(function() {
+			$(this).css("display", "none");
+		})
+	});
+	<?php if($place->isStartingPlace()): ?>
+	$(".cog-dropdown li").click(function() {
+		var action = $(this).attr("data-actionid");
+
+		if(action == 1) {
+			window.location.href = "/develop/<?= $place->id ?>/configure";
+		}
+		else if(action == 4) {
+			$.post("/api/universes/"+universe+"/shutdown", function(data) {
+				if(!data['success'])
+					alert(data['reason']);
+				else
+					alert("success!");
+			})
+		}
+		else if(action == 5) {
+			alert("not legible for sex...");
+		}
+	});
+	<?php endif ?>
+
+	$(".cog").click(function() {
+		event.stopPropagation();
+
+		$(".cog").each(function() {
+			$(this).removeAttr("active");
+			$(this).parent().find("ul").css("display", "none");
 		});
+
+		$(this).attr("active",true);
+		$(this).parent().find("ul").css("display", "block");
+	})
+	$(".button[data-tab]").click(function() {
+		var type = $(this).attr("data-tab");
+		$(".box[data-tab]").hide();
+		$(".box[data-tab='"+type+"']").show();
+		$(".button[data-tab]").removeAttr("selected");
+		$(this).attr("selected", "yes");
 	})
 	
-	<?php if($is_creator): ?>
-	var rendering = false;
-	function Render() {
-		if(rendering) {
-			return;
+	function setType(type) {
+		if($(".button[data-tab='"+type+"']").length != 0) {
+			$(".button[data-tab='"+type+"']").attr("selected", "yes");
+			$(".box[data-tab='"+type+"']").show();
 		}
-
-		rendering = true;
-		if(window.confirm("Are you sure you want to render this asset?")) {
-			$("#RenderButton").html("Rendering...");
-			$.post( "/api/asset/render", { id: <?= $place->id ?> }).done(function( data ) {
-				if(data['error']) {
-					window.alert(data['reason']);
-				}
-				window.location.reload();
-			});
-		}
-	}
-	
-	function Delete() {
-		if(window.confirm("Are you sure you want to delete this??")) {
-			$.post( "/api/asset/delete", { id: <?= $place->id ?> }).done(function( data ) {
-				if(data['error']) {
-					window.alert(data['reason']);
-				}
-				window.location.reload();
-			});
+		else {
+			setType("info");
+			window.location.hash = "info";
 		}
 	}
 
-	function Shutdown() {
-		if(window.confirm("Are you sure you want to shutdown ALL servers??")) {
-			$.post( "/api/gameservers/shutdown", { placeID: <?= $place->id ?> }).done(function( data ) {
-				ANORRL.PlaceLauncher.GrabGameservers(<?= $place->id ?>);
-				toggleToolbar();
-				if(data['error']) {
-					window.alert(data['reason']);
-				}
-			});
+	var hash = window.location.hash;
+	if(hash.startsWith("#"))
+		hash = hash.substring(1);
+
+	setType(hash);
+
+	$("#fav-btn").click(function() {
+		$.post("/asset/<?= $place->id ?>/favourite", function (data) {
+			if(!data['success'])
+				alert(data['reason']);
+			else
+				$("#fav-count").html(data['count']);
+		})
+	});
+
+	function updateRatings(data) {
+		if(!data['can_vote'])
+			$("#controls").css("pointer-events","none");
+		else
+			$("#controls").removeAttr("style");
+
+		var upvotes = data['positives'];
+		var downvotes = data['negatives'];
+		var total = upvotes+downvotes;
+
+		$("#up-count").html(upvotes);
+		$("#down-count").html(downvotes);
+
+		if(total != 0) {
+			if(upvotes == 0)
+				$(".ratings-bar").attr("red", "yeah")
+			else if(downvotes == 0)
+				$(".ratings-bar").attr("green", "yeah")
+			else {
+				$(".ratings-bar").attr("red", "yeah")
+				var progress = $("<div></div>");
+
+				progress.width((upvotes/total)*100+"%");
+
+				$(".ratings-bar").append(progress);
+			}
 		}
 	}
 
-	function toggleToolbar() {
-		if($("#OptionsToolbar").attr("enabled") == undefined) {
-			$("#OptionsToolbar").attr("enabled", "");
-		} else {
-			$("#OptionsToolbar").removeAttr("enabled");
-		}
-	}
-	<?php endif ?>
+	$.get("/asset/<?= $place->id ?>/ratings", updateRatings)
 </script>
-
-<div id="LaunchingGameContainer">
-	<div class="Window">
-		<div id="Name">ANORRL</div>
-		<div id="Contents" style="padding: 20px;">
-			<div id="LoadingAreaContainer">
-				<div id="RunningGuy">
-					<img src="/public/images/ProgressIndicator4White.gif" width="100">
-				</div>
-				<p id="LaunchingTextContainer">
-					<span id="LaunchingText">ANORRL is launching!</span>
-					<img src="/public/images/spinner16x16.gif">
-				</p>
-				<p id="LauncherQuote">Have you checked the oven recently?</p>
-			</div>
-			<div id="DownloadClientContainer" style="display: none">
-				<img src="/public/images/download/client.png" width="100">
-				<p>You should probably <a href="/download">download</a> the client if you haven't already...</p>
-			</div>
-			<div id="DownloadStudioContainer" style="display: none">
-				<img src="/public/images/download/studio.png" width="100">
-				<p>You should probably <a href="/download">download</a> the studio if you haven't already...</p>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="ItemContainer">
-	<h4>ANORRL <?= $place->type->label(); ?></h4>
-	<h2><a class="FavouriteButton" href="#" data-assetid="<?= $place->id ?>" <?= $is_favourited ? 'favourited="true"' : "" ?>></a><?= $place->name ?></h2>
-	<?php if($universe->starting_place->id != $place->id): ?>
-	<h3 style="color: #CCC;font-style: italic;width: 830px;text-align: center;">This place is belongs to: <a href="<?= $universe->starting_place->getURL() ?>"><?= $universe->starting_place->name ?></a></h3>
-	<?php endif ?>
-	<div id="PlaceDetails">
-		<div id="Content">
-			<div id="PlaceImageContainer">
-				<img src="<?= $place->getThumbsUrl(623, 350) ?>">
-				<?php if($universe->original): ?>
-				<div id="OriginalLabel">Original</div>
-				<?php endif ?>
-			</div>
-		</div>
-		<div id="Information">
-			<div id="UserCard">
-				<?php if($is_creator): ?>
-				<div id="OptionsToolbar">
-					<button id="OptionsClicker" onclick="toggleToolbar()">
-						<img src="/public/images/icons/cog.png">
-					</button>
-					<div id="OptionsMenu">
-						
-						<div class="Row">
-							<img src="/public/images/icons/wrench_orange.png">
-							<a href="/develop/<?= $place->id ?>/configure">Configure</a>
-						</div>
-						<?php if($place->isUsable()): ?>
-						<div class="Row">
-							<img src="/public/images/icons/camera.png">
-							<a href="javascript:Render()" id="RenderButton">Render this asset</a>
-						</div>
-						<div class="Row">
-							<img src="/public/images/icons/world.png">
-							<a href="javascript:Shutdown()">Shutdown all servers</a>
-						</div>
-						<?php endif ?>
-						<div class="Row">
-							<img src="/public/images/icons/delete.png">
-							<a href="javascript:Delete()">Delete this asset</a>
-						</div>
-						
-					</div>
-				</div>
-				<?php endif ?>
-				<a href="/users/<?= $place->creator->id ?>/profile"><img src="<?= $place->creator->getThumbsUrlAvatar(110)?>" style="width: 110px;display:block;margin:0 auto;"></a>
-				<div id="AssetInfoStuff">
-					<span>Created by <a href="/users/<?= $place->creator->id ?>/profile"><?= $place_creator_name ?></a></span>
-					<span><b>Favourited</b>: <?= $favourites_label ?></span>
-					<?php if($place->gears_enabled): ?>
-					<span id="GearsEnabled">Gears enabled!</span>
-					<?php endif ?>
-				</div>
-				<hr>
-				<div id="GameButtons" >
-					<?php if($place->isUsable()): ?>
-						<button class="PlaceButton" onclick="ANORRL.PlaceLauncher.LetsJoinAndPlay(<?= $id ?>)" Play></button>
-						<?php if($is_creator || !$place->copylocked): ?>
-						<button class="PlaceButton" onclick="ANORRL.PlaceLauncher.EditPlace(<?= $id ?>)" Edit></button>
-						<?php endif ?>
-					<?php else: ?>
-					<div id="NotOnSale">This place is broken and needs to be republished.</div>
-					<?php endif?>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<?php
-	$teamcreate = $universe->teamcreate && count($universe->getCloudEditors()) > 1; // assume creator if 1
-	if($user != null && $teamcreate): ?>
-	<div id="CommentsContainer">
-		<h3>Users worked on this!</h3>
-		<div id="CommentSection">
-			<div id="FriendsContainer">
-				<ul id="Friends" style="width: 848px;border: 0px;background: none;padding: 0px;text-align: center;height: 140px;">
-					<?php $users = $universe->getCloudEditors(); foreach($users as $u): ?>
-						<li class="Friend">
-							<a id="ProfileLink" href="/users/<?= $u->id ?>/profile">
-								<img id="Profile" src="<?= $u->getThumbsUrl(100) ?>">
-								<div id="Name"><?= $u->name ?></div>
-							</a>
-						</li>							
-					<?php endforeach ?>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<?php endif ?>
-
-	<div id="PlaceInfoArea">
-		<table id="InfoHeaders">
-			<td>Info</td>
-			<td>Badges</td>
-			<td>Servers</td>
-		</table>
-		<div id="InfoBox" content="Info" style="display:none">
-			<b>Description</b>
-			<hr>
-			<div id="Description">
-				<?= $place_description ?>
-			</div>
-			<hr>
-			<table id="BigNumbersArea">
-				<td id="Detail">
-					<b>Created</b>
-					<span><?= $place->created_at->format('d/m/Y H:i'); ?></span>
-				</td>
-				<td id="Detail">
-					<b>Updated</b>
-					<span><?= $place->last_updatetime->format('d/m/Y H:i'); ?></span>
-				</td>
-				<td id="Detail">
-					<b>Visits</b>
-					<span><?= $place->visit_count ?></span>
-				</td>
-				<td id="Detail">
-					<b>Active</b>
-					<span><?= $place->current_playing_count ?></span>
-				</td>
-				<td id="Detail">
-					<b>Server Size</b>
-					<span><?= $place->server_size ?></span>
-				</td>
-				<td id="Detail">
-					<b>Copylocked</b>
-					<span><?= $place->copylocked ? "Yes" : "No" ?></span>
-				</td>
-			</table>
-		</div>
-		<div id="InfoBox" content="Badges" style="display:none">
-			<b>Badges <?php if($place->isOwner($user, true)): ?> <a href="/create/<?= $id ?>/badge">[[ Create ]]</a><?php endif ?></b>
-			<hr>
-			<?php if(count($place->getBadges()) != 0): ?>
-			<table id="Badges">
-				<?php foreach($place->getBadges() as $badge): ?>
-				<tr>
-					<td width="128">
-						<img src="<?= $badge->getThumbsUrl(128) ?>">
-					</td>
-					<td>
-						<div class="BadgeName"><h3><?= $badge->name ?></h3></div>
-						<div class="BadgeDesc"><?= strlen(trim($badge->description)) == 0 ? "<b>Seems like no description was set...</b>" : $badge->description ?></div>
-					</td>
-					<td width="200">
-						<table style="border: 2px solid black; padding: 21px; width: 200px; background: #111;">
-							<tr>
-								<td>Rarity</td>
-								<td><?= $badge->getRarity() ?>%</td>
-							</tr>
-							<tr>
-								<td>Won Yesterday</td>
-								<td><?= $badge->getWonYesterdayTimes() ?></td>
-							</tr>
-							<tr>
-								<td>Won Ever</td>
-								<td><?= $badge->getWonEverTimes() ?></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<?php endforeach ?>
-			</table>
-			<?php else: ?>
-				<div style="font-size: 14px;margin: 25px 10px;text-align: center;">This place has no badges! Find one that does I guess...</div>
-			<?php endif ?>
-		</div>
-		<div id="InfoBox" content="Servers" style="display:none">
-			<div class="Window" style="margin: 0 auto; width: 100%">
-				<div id="Name">Servers<?php if($user): ?> <button onclick="ANORRL.PlaceLauncher.GrabGameservers(<?= $id ?>);">Refresh</button><?php endif ?></div>
-				<div id="Contents">
-					<div id="ServersBox" style="border: none; background: none; padding: none;">
-						<?php if($user == null): ?>
-						<p id="NoGamesWarning">You need to be logged in to see the servers for this game!</p>
-						<?php else: ?>
-							<p id="NoGamesWarning">There are no servers for this game!</p>
-						<?php endif ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="CommentsContainer">
-		<?php if($user == null || !$place->comments_enabled): ?>
-		<h3>Comments</h3>
-		<div id="CommentSection">
-			<?php if($user == null): ?>
-			<div id="CommentsDisabled">You need to be logged in to comment on this item!</div>
-			<?php else: ?>
-			<div id="CommentsDisabled">Comments have been disabled for this item.</div>
-			<?php endif ?>
-		</div>
-		<?php else: ?>
-		<h3>Comments (<?= $comments_count ?>)</h3>
-		<div id="CommentPostArea">
-			<?php if(isset($_SESSION['ANORRL$Comment$Post$Error'])): ?>
-			<div class="Error">Error: <?= $_SESSION['ANORRL$Comment$Post$Error'] ?></div>
-			<?php endif ?>
-			<form method="POST">
-				<h4 style="margin: 0; letter-spacing: 5px;">Post a comment or something</h4>
-				<textarea placeholder="Write a wonderful comment about this place!" name="ANORRL$Comment$Post$Contents" maxlength="256" minlength="4"></textarea>
-				<input type="submit" value="Submit!" name="ANORRL$Comment$Post$Submit">
-			</form>
-		</div>
-		<div id="CommentSection">
-			<?php if($comments_count != 0):
-				foreach($comments as $comment) {
-					if($comment instanceof Comment) {
-						$comment->PrintComment();
-					}
-				}
-			else: ?>
-			<div id="CommentsDisabled">It's pretty empty in here... :<</div>
-			<?php endif ?>
-		</div>
-		<?php endif ?>
-	</div>
-</div>
-<?php 
-$page->loadFooter();
-unset($_SESSION['ANORRL$Comment$Post$Error']); ?>
+<?php $page->loadFooter2(); ?>

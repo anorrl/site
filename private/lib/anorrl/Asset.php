@@ -360,6 +360,8 @@
 				"UPDATE `assets` SET `favourites_count` = :favcount WHERE `id` = :id",
 				[":id" => $this->id, ":favcount" => $favcount]
 			);
+
+			$this->favourites_count = $favcount;
 		}
 
 		function unfavourite(User|int $user) {
@@ -726,8 +728,12 @@
 
 			if($this->type == AssetType::EMOTE)
 				return "/public/images/thumbnails/emotes.png";
+
+			if($this->type == AssetType::BADGE && !file_exists(get_path_file("assets/thumbs/$thumbsmd5"))) {
+				copy(get_path_file("assets/$md5"), get_path_file("assets/thumbs/$thumbsmd5"));
+			}
 			
-			if(($this->type == AssetType::FACE || $this->type == AssetType::DECAL)) {
+			if(($this->type == AssetType::FACE || $this->type == AssetType::DECAL )) {
 				$image = $this->getRelatedAssets()[0];
 				$version = $image->getLatestVersionDetails();
 				$md5 = $version->md5sig;
@@ -785,8 +791,8 @@
 		}
 
 		function loadEmbed(Page $page) {
-			$item = $this->type == AssetType::PLACE ? "place" : "item";
-			$embed_title = htmlspecialchars("\"{$this->name}\" an {$item} by {$this->creator->name}", ENT_QUOTES);
+			$item = $this->type == AssetType::PLACE ? "a place" : "an item";
+			$embed_title = htmlspecialchars("\"{$this->name}\" {$item} by {$this->creator->name}", ENT_QUOTES);
 			$desc = substr($this->description, 0, 128);
 			if(strlen($desc) < strlen($this->description)) {
 				$desc .= "...";

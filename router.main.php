@@ -31,7 +31,8 @@
 
 	// studio
 	route('GET|POST', '/develop/place/[i:placeId]/[*:type]', '/private/views/develop/place/create.php');
-	route('GET|POST', '/develop/projects', '/private/views/develop/projects.php');
+	route('GET',      '/develop/projects', '/private/views/develop/projects.php', '/develop/login');
+	route('GET|POST', '/develop/login', '/private/views/develop/login.php');
 	route('GET|POST', '/ide/publish', '/private/views/develop/projects.php');
 
 	route('GET|POST', '/users/[i:id]/profile', '/private/views/users/profile.php', false);

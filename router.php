@@ -5,10 +5,13 @@
 	$dir = __DIR__."/private";
 	$router = new AltoRouter();
 
-	function route($method, $path, $file, $auth_reroute = true) {
+	function route($method, $path, $file, bool|string $auth_reroute = true) {
 		global $router;
 		$router->map($method, $path, function(...$params) use ($path, $file, $auth_reroute) {
 
+			if(is_string($auth_reroute) && !ARLAUTH) {
+				redirect($auth_reroute."?redirect=".$_SERVER['REQUEST_URI']);
+			}
 			if($auth_reroute && str_starts_with($file, "/private/views/") && !ARLAUTH) {
 				redirect("/?redirect=".$_SERVER['REQUEST_URI']);
 			}
@@ -73,7 +76,7 @@
 		require $path;
 	}
 
-	//route('GET',      '/test', '/private/views/test.php');
+	route('GET',      '/test', '/private/views/test.php');
 
 	load("main");
 	load("api");

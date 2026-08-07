@@ -13,16 +13,12 @@
 		$user = User::FromID(1);
 	}
 
-	$domain = CONFIG->domain;
 	$thumbsurl = $user->getThumbsUrl();
-
-	if(str_starts_with($thumbsurl, "/"))
-		$thumbsurl .= "http://".CONFIG->domain.$thumbsurl;
 
 	die(json_encode([
 		"Final" => true,
-		"Url" => "http://{$domain}{$thumbsurl}",
-		"RetryUrl" => "http://{$domain}{$thumbsurl}",
+		"Url" => $thumbsurl,
+		"RetryUrl" => $thumbsurl,
 	]));
 
 ?>

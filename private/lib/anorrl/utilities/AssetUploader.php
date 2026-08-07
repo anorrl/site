@@ -378,8 +378,8 @@
 					return ["error" => true, "reason" => "You need to enter a name doofus!"];
 				}
 
-				if(strlen($name) > 128) {
-					$name = substr($name, 0, 128);
+				if(strlen($name) > 110) {
+					$name = substr($name, 0, 110);
 				}
 
 				if(AssetTypeUtils::IsRBX($type)) {
@@ -578,8 +578,8 @@
 						return ["error" => true, "reason" => "You need to enter a name doofus!"];
 					}
 
-					if(strlen($name) > 128) {
-						$name = substr($name, 0, 128);
+					if(strlen($name) > 110) {
+						$name = substr($name, 0, 110);
 					}
 
 					if($data != null) {
@@ -731,30 +731,35 @@
 									}
 
 									$image = imagescale($original_image, $size, $size);
-									$w = imagesx($image);
-									$h = imagesy($image);
-									
-									// https://stackoverflow.com/a/36958441
-									$newpic = imagecreatetruecolor($w,$h);
-									imagealphablending($newpic,false);
-									$transparent = imagecolorallocatealpha($newpic, 0, 0, 0, 127);
-									$r=$w/2;
-									for($x=0;$x<$w;$x++) {
-										for($y=0;$y<$h;$y++){
-											$c = imagecolorat($image,$x,$y);
-											$_x = $x - $w/2;
-											$_y = $y - $h/2;
-											if((($_x*$_x) + ($_y*$_y)) < ($r*$r)){
-												imagesetpixel($newpic,$x,$y,$c);
-											}else{
-												imagesetpixel($newpic,$x,$y,$transparent);
+
+									$cropping_enabled = isset(\CONFIG->asset->badge_cropping) && \CONFIG->asset->badge_cropping;
+
+									if($cropping_enabled) {
+										$w = imagesx($image);
+										$h = imagesy($image);
+										
+										// https://stackoverflow.com/a/36958441
+										$newpic = imagecreatetruecolor($w,$h);
+										imagealphablending($newpic,false);
+										$transparent = imagecolorallocatealpha($newpic, 0, 0, 0, 127);
+										$r=$w/2;
+										for($x=0;$x<$w;$x++) {
+											for($y=0;$y<$h;$y++){
+												$c = imagecolorat($image,$x,$y);
+												$_x = $x - $w/2;
+												$_y = $y - $h/2;
+												if((($_x*$_x) + ($_y*$_y)) < ($r*$r)){
+													imagesetpixel($newpic,$x,$y,$c);
+												}else{
+													imagesetpixel($newpic,$x,$y,$transparent);
+												}
 											}
 										}
+										imagesavealpha($newpic, true);
 									}
-									imagesavealpha($newpic, true);
 
 									ob_start();
-									imagepng($newpic);
+									imagepng($cropping_enabled ? $image : $newpic);
 									$data = ob_get_contents();
 									ob_end_clean();
 								}

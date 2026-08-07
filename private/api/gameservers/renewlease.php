@@ -6,19 +6,17 @@
 	if(!ClientDetector::HasAccess())
 		exit_http(403);
 
-	if(isset($_GET['jobID'])) {
-		$gameserver = GameServer::GetFromJobID($_GET['jobID']);
+	if(!isset($jobID))
+		exit_http(503);
 
-		if($gameserver) {
-			$gameserver->renewLease();
-			die();
-		} else {
-			$job = Arbiter::singleton()->getGSMJob($_GET['jobID']);
+	$gameserver = GameServer::GetFromJobID($jobID);
 
-			if($job) 
-				Arbiter::singleton()->requestGS("kill", ["pid" => $job->pid]);
-		}
+	if($gameserver)
+		die($gameserver->renewLease());
+
+	else {
+		$job = Arbiter::singleton()->getGSMJob($jobID);
+		if($job) 
+			Arbiter::singleton()->requestGS("kill", ["pid" => $job->pid]);
 	}
-	
-	exit_http(503);
 ?>

@@ -110,12 +110,11 @@
 	route('POST',     '/universes/setrootplace',      '/private/gameapis/universes/setrootplace.php');
 
 	route('GET',      '/developerproducts/list', '/private/gameapis/universes/developerproducts.php');
-	route('GET',      '/badges/list-badges-for-place/json', '/private/gameapis/places/list-badges-for-place.php');
-
+	route('GET',      '/universes/[i:universeId]/badges', '/private/gameapis/universes/badges.php');
+	
 	route('GET',      '/ide/places/defaultsettings', '/private/gameapis/places/defaultsettings.php');
 	route('POST',     '/ide/places/create',          '/private/gameapis/places/new.php');
 	route('POST',     '/ide/places/[i:placeId]/updatesettings', '/private/gameapis/places/edit.php');
-	
 
 	// aliases
 	route('GET',      '/universes/get-aliases',  '/private/gameapis/universes/alias/get.php');
@@ -131,7 +130,6 @@
 	route('GET',      '/universes/[i:universeId]/listcloudeditors', '/private/gameapis/universes/cloudedit/editors/list.php');
 	route('POST',     '/universes/[i:universeId]/addcloudeditor',   '/private/gameapis/universes/cloudedit/editors/add.php');
 	route('POST',     '/universes/[i:universeId]/removecloudeditor','/private/gameapis/universes/cloudedit/editors/remove.php');
-	
 	
 	route('POST',     '/data/upload/json', '/private/gameapis/universes/upload.php');
 

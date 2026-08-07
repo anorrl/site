@@ -2,5 +2,9 @@
 	"DFFlagScriptExecutionContextApi": "True",
 	"DFFlagCleanUpInterpolationTimestamps": "False",
 	"DFFlagMinMaxDistanceEnabled": "True",
-	"FFlagFindRightGripAttachment": "False"
+	"FFlagFindRightGripAttachment": "False",
+	"DFFlagUseStarterPlayer": "True",
+	"DFFlagUseStarterPlayerCharacter": "True",
+	"DFFlagUseStarterPlayerCharacterScripts": "True",
+	"DFFlagUseStarterPlayerHumanoid": "True"
 }

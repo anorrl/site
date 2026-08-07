@@ -1,8 +1,8 @@
 /** todo: add variables */
 
 :root {
-	--border-color: rgb(141, 29, 216);
-	--lighter-border-color: rgb(159, 96, 201);
+	--border-color: #8d1dd8;
+	--lighter-border-color: #9f60c9;
 }
 
 @font-face {
@@ -31,9 +31,9 @@
 }
 
 html {
-	background: rgb(82, 19, 123);
+	background: #52137b;
 	min-height: 100vh;
-	background: linear-gradient(180deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	background: linear-gradient(180deg,#9c37df 0%, #512270);
 	font-family: Arial,Helvetica,sans-serif;
 	color: #eee;
 	font-size: 12px;
@@ -114,7 +114,7 @@ hr {
 
 #submenu > #container a:hover, #submenu > #container a[selected] {
 	color:white;
-	background: #222;
+	background: #333;
 	background: linear-gradient(0deg,#222 0%, #444 100%);
 	font-weight: bold;
 }
@@ -127,7 +127,7 @@ hr {
 .header-link {
 	color: white;
 	padding: 1px 1.5em;
-	background: rgb(0,0,0);
+	background: #000000;
 	border: 2px solid black;
 	font-family: punk;
 	font-size: 16px;
@@ -136,6 +136,7 @@ hr {
 .header-link:hover, .header-link[selected] {
 	text-decoration: underline;
 	background: #222;
+	background: #333;
 	background: linear-gradient(0deg,#222 0%, #444 100%);
 	color: white;
 }
@@ -145,7 +146,8 @@ hr {
 	width: 120px;
 	height: 30px;
 	display: inline-block;
-	background: linear-gradient(90deg,rgb(191, 181, 0) 0%, rgba(173, 139, 15, 0.76) 50%, rgba(0, 0, 0, 0) 100%);
+	background: none;
+	background: linear-gradient(90deg,#bfb500 0%, #ad8b0fc2 50%, #00000000 100%);
 	
 }
 
@@ -223,7 +225,7 @@ hr {
 	padding: 20px 0;
 	text-align: center;
 	/*background: rgb(82, 19, 123);*/
-	border-top: 1px solid rgb(171, 70, 238);
+	border-top: 1px solid #ab46ee;
 	margin-bottom: 60px;
 }
 
@@ -275,7 +277,8 @@ hr {
 	border: 2px solid var(--border-color);
 	padding: 5px;
 	color: white;
-	background: linear-gradient(0deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+	background: #492265;
+	background: linear-gradient(0deg,#1a0c23 0%, #492265 100%);
 }
 
 .box.rounded {
@@ -283,7 +286,8 @@ hr {
 }
 
 .box.input {
-	background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+	background: #492265;
+	background: linear-gradient(180deg,#1a0c23 0%, #492265 100%);
 }
 
 .button {
@@ -291,7 +295,8 @@ hr {
 	font-size: 14px;
 	padding: 5px 15px;
 	font-weight: bold;
-	background: linear-gradient(180deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	background: #512270;
+	background: linear-gradient(180deg,#9c37df 0%, #512270 100%);
 	color: white;
 	cursor: pointer;
 	user-select: none;
@@ -303,7 +308,8 @@ hr {
 }
 
 .button:active {
-	background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	background: #512270;
+	background: linear-gradient(0deg,#9c37df 0%, #512270 100%);
 	filter: brightness(1.15);
 }
 
@@ -315,7 +321,7 @@ hr {
 }
 
 .success-text {
-	color: rgb(242, 83, 255);
+	color: #f253ff;
 	font-weight: bold;
 	margin-bottom: 5px;
 	font-style: italic;
@@ -376,7 +382,7 @@ ul.special li[data-category][selected] {
 	font-size: 14px;
 	text-decoration: underline;
 	filter:brightness(1.5);
-	background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
+	background: linear-gradient(0deg,#9c37df 0%, #512270 100%);
 	letter-spacing: 2px;
 }
 

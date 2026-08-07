@@ -2,21 +2,9 @@ if(typeof(ANORRL) == "undefined") {
 	ANORRL = {}
 }
 
-if (!Object.keys) {
-	Object.keys = function(obj) {
-		var keys = [];
-		for (var i in obj) {
-			if (obj.hasOwnProperty(i)) {
-				keys.push(i);
-			}
-		}
-		return keys;
-	};
-}
-
 ANORRL.Thumbnails = {
 	// http://stackoverflow.com/questions/11871077/proper-way-to-detect-webgl-support
-	// polygon stuff
+	// polygon function
 	Supports3D: function() {
 		try {
 			var canvas = document.createElement("canvas");

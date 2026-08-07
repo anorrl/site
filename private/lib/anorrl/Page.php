@@ -22,21 +22,19 @@
 		 */
 		private bool $cleared = false;
 
-		/* wimpy stuff */
-		private string $url;
-		private string $name;
-		private string $cover_art;
-		private string $link = "";
+		private bool $ignore_anorrl = false;
 
-		function __construct(string $title, string|null $internal_name = null) {
-			if(ClientDetector::IsAClient() && $title != "Login" && !str_starts_with($internal_name, "ide")) // assume studio
-				redirect("/develop/projects");
+		function __construct(string $title, string|null $internal_name = null, bool $ignore_anorrl = true) {
+//			if(ClientDetector::IsAClient() && $title != "Login" && !str_starts_with($internal_name, "ide")) // assume studio
+//				redirect("/develop/projects");
 
 			$this->title = $title;
 			if(!$internal_name)
 				$this->internal_name = $title;
 			else
 				$this->internal_name = $internal_name;
+
+			$this->ignore_anorrl = $ignore_anorrl;
 
 			$this->lucky_number = rand(0, 100000);
 			$this->bad_apple = $this->lucky_number > 6500 && $this->lucky_number < 6515;
@@ -150,7 +148,7 @@
 		function loadHeader2() {
 			if(!$this->cleared)
 				$this->clearAll();
-			$this->addStylesheet("/css/base.css");
+			$this->addStylesheet("/css/base.css?v=2026");
 			$this->addScript("/js/core/jquery.js");
 			$this->loadTemplate("layouts/header");
 		}
@@ -158,14 +156,5 @@
 		function loadFooter2() {
 			$this->loadTemplate("layouts/footer");
 		}
-
-		function loadWimpy(string $url, string $name, string $cover_art = "", string $link = "") {
-			$this->url = $url;
-			$this->name = $name;
-			$this->cover_art = $cover_art;
-			$this->link = $link;
-			$this->loadTemplate("wimpy");
-		}
-
 	}
 ?>

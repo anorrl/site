@@ -4,8 +4,6 @@
 	use anorrl\Alias;
 	use anorrl\Place;
 	use anorrl\User;
-	use anorrl\utilities\Arbiter;
-	use anorrl\GameServer;
 	use anorrl\Database;
 	use anorrl\enums\AssetType;
 
@@ -113,6 +111,39 @@
 			}
 
 			return $products;
+		}
+
+		function getBadges(int $page = -1, int $count = -1): array {
+			if($page > 0 && $count > 0) {
+				$rows = Database::singleton()->run(
+					"SELECT `id` FROM `assets` WHERE `universe` = :id AND `type` = :badgetype LIMIT :page, :count",
+					[
+						":id" => $this->id,
+						":badgetype" => AssetType::BADGE->ordinal(),
+						":page" => (($page-1)*$count),
+						":count" => $count
+					]
+				)->fetchAll(\PDO::FETCH_OBJ);
+			} else {
+				$rows = Database::singleton()->run(
+					"SELECT `id` FROM `assets` WHERE `universe` = :id AND `type` = :badgetype",
+					[
+						":id" => $this->id,
+						":badgetype" => AssetType::BADGE->ordinal()
+					]
+				)->fetchAll(\PDO::FETCH_OBJ);
+			}
+
+			$badges = [];
+
+			foreach($rows as $row) {
+				$badge = Badge::FromID($row->id);
+
+				if($badge)
+					$badges[] = $badge;
+			}
+
+			return $badges;
 		}
 
 		function getAliases() {

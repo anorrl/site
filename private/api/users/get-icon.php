@@ -13,7 +13,7 @@
 	}
 	if(!$userid) {
 		echo json_encode([
-			"error" => true,
+			"success" => false,
 			"reason" => "the fuck is ur user doofus?"
 		]);
 		exit;
@@ -24,7 +24,7 @@
 	$icon = $user_settings->playerlisticon;
 
 	die(json_encode([
-		"error" => false,
+		"success" => true,
 		"icon" => $icon ? $icon->id : -1
 	]));
 ?>

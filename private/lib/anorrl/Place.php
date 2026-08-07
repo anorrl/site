@@ -244,39 +244,6 @@
 			);
 		}
 
-		function getBadges(int $page = -1, int $count = -1): array {
-			if($page > 0 && $count > 0) {
-				$rows = Database::singleton()->run(
-					"SELECT `id` FROM `assets` WHERE `relatedid` = :place AND `type` = :badgetype LIMIT :page, :count",
-					[
-						":place" => $this->id,
-						":badgetype" => AssetType::BADGE->ordinal(),
-						":page" => (($page-1)*$count),
-						":count" => $count
-					]
-				)->fetchAll(\PDO::FETCH_OBJ);
-			} else {
-				$rows = Database::singleton()->run(
-					"SELECT `id` FROM `assets` WHERE `relatedid` = :place AND `type` = :badgetype",
-					[
-						":place" => $this->id,
-						":badgetype" => AssetType::BADGE->ordinal()
-					]
-				)->fetchAll(\PDO::FETCH_OBJ);
-			}
-
-			$badges = [];
-
-			foreach($rows as $row) {
-				$badge = Badge::FromID($row->id);
-
-				if($badge)
-					$badges[] = $badge;
-			}
-
-			return $badges;
-		}
-
 		function getLastVisited(User $user) {
 			$row = Database::singleton()->run(
 				"SELECT `time` FROM `visits` WHERE `player` = :id AND `place` = :place", 

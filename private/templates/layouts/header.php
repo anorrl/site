@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><?= $this->title ?><?php if(!str_contains($this->title, "ANORRL")): ?> - ANORRL<?php endif ?></title>
+		<title><?= $this->title ?><?php if(!str_contains($this->title, "ANORRL") || $this->ignore_anorrl): ?> - ANORRL<?php endif ?></title>
 		<link rel="icon" type="image/x-icon" href="/favicon.ico">
 		
 		<?php foreach($this->scripts as $script): ?>
@@ -25,7 +25,7 @@
 		<meta property="<?= $meta['type'] ?>" content="<?= $meta['contents'] ?>">
 		<?php endforeach ?>
 	</head>
-	<body>
+	<body data-authenticated="<?= ARLAUTH ? "true" : "false" ?>">
 		<div style="position: fixed; left: 0px; right: 0px; top: 0px; z-index: 999">
 			<div id="header" <?= !SESSION ? "" : 'style="border-width: 2px;"' ?>>
 				<div id="logo" style="float: left;">

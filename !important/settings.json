@@ -7,7 +7,10 @@
 	},
 	"asset": {
 		"key": "uuid or something",
-		"webhook": "discord webhook for catalog drops"
+		"webhook": "discord webhook for catalog drops",
+		"canforward": true,
+		"roblosec": "roblox security token",
+		"badge_cropping": false
 	},
 	"arbiter": {
 		"location": {
@@ -19,6 +22,7 @@
 		"disabled": false
 	},
 	"prefer_https": true,
+	"api": false,
 	"domain": "arl.lambda.cam",
 	"baseurl": "lambda.cam",
 	"blog": "https://blog.lambda.cam/"

@@ -388,7 +388,7 @@
 	<?php if($user->blurb != ""): ?>
 	<div style="flex: 1;">
 		<h4 class="page-title">.about</h4>
-		<div class="box" id="profile-bio" ><?= $bio ?></div>
+		<div class="box" id="profile-bio" <?php if(!$bgm): ?>style="max-width:unset"<?php endif ?>><?= $bio ?></div>
 	</div>
 	<?php endif ?>
 	<?php if($bgm): ?>

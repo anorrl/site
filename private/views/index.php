@@ -2,7 +2,7 @@
 	use anorrl\Page;
 	use anorrl\Session;
 
-	$page = new Page("Welcome to ANORRL!");
+	$page = new Page("Welcome to ANORRL!", null, false);
 
 	if(isset($_POST['ANORRL$Login$Username']) &&
 	   isset($_POST['ANORRL$Login$Password']) &&
@@ -50,7 +50,7 @@
 	}
 
 	.fieldset input, .fieldset textarea {
-		border: 2px solid rgb(141, 29, 216);
+		border: 2px solid #8d1dd7;
 		background: #482b5a;
 		color:beige;
 		margin: 5px;

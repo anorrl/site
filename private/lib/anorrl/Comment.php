@@ -14,6 +14,16 @@
 		public string $contents;
 		public \DateTime $postdate;
 
+		public static function FromID(string $id): Comment|null {
+			
+			$row = Database::singleton()->run(
+				"SELECT * FROM `comments` WHERE `id` = :id LIMIT 1",
+				[ ":id" => $id ]
+			)->fetchObject();
+
+			return $row ? new self($row) : null;
+		}
+
 		function __construct(object $rowdata) {
 			$this->id = $rowdata->id;
 			$this->poster = User::FromID($rowdata->poster);
@@ -90,13 +100,13 @@
 
 			if(!$user)
 				return [
-					"error" => true,
+					"success" => false,
 					"reason" => "User is not authorised to perform this action!"
 				];
 
 			if(!$parent)
 				return [
-					"error" => true,
+					"success" => false,
 					"reason" => "Destination is null!"
 				];
 
@@ -141,42 +151,62 @@
 					);
 
 					return [
-						"error" => false,
+						"success" => true,
 						"id"    => $comment_id
 					];
 				} else {
 					return [
-						"error"  => true,
+						"success"  => false,
 						"reason" => $error_msg
 					];
 				}
 			
 			} else {
 				$sec_calc = $waittime-$difference_in_seconds;
-				return ['error'=>true, "reason" => "Wait $sec_calc seconds before replying again!"];
+				return ['success'=>false, "reason" => "Wait $sec_calc seconds before replying again!"];
 			}
 
 			
 		}
 
-		public static function GetCommentsOn(User|Asset $parent) {
+		public static function GetCommentsOn(User|Asset $parent, int $page = -1, int $limit = 10) {
 			$parent_id = "a!".$parent->id;
 			if($parent instanceof User) {
 				$parent_id = "u!".$parent->id;
 			}
 
-			$rows = Database::singleton()->run(
-				"SELECT * FROM `comments` WHERE `parent` = :parent ORDER BY `postdate` DESC;",
-				[ ":parent" => $parent_id ]
-			)->fetchAll(\PDO::FETCH_OBJ);
+			$paged = $page > 0;
+			$sql = "SELECT `id` FROM `comments` WHERE `parent` = :parent ORDER BY `postdate` DESC";
+			$params = [ ":parent" => $parent_id ];
+
+			if($paged) {
+				$sql = "$sql LIMIT :page, :count";
+				$params[":page"] = (($page-1)*$limit);
+				$params[":count"] = $limit;
+			}
+
+			$rows = Database::singleton()->run($sql, $params)->fetchAll(\PDO::FETCH_OBJ);
 
 			$comments = [];
 
 			foreach($rows as $row) {
-				$comments[] = new Comment($row);
+				$comments[] = Comment::FromID($row->id);
 			}
 			return $comments;
 		}
 
+		public static function GetCommentCountOn(User|Asset $parent) {
+			$parent_id = "a!".$parent->id;
+			if($parent instanceof User) {
+				$parent_id = "u!".$parent->id;
+			}
+
+			$sql = "SELECT COUNT(`id`) FROM `comments` WHERE `parent` = :parent";
+			$params = [":parent" => $parent_id];
+
+			$row = Database::singleton()->run($sql, $params)->fetch(\PDO::FETCH_ASSOC);
+
+			return $row ? $row['COUNT(`id`)'] : -1;
+		}
 	}
 ?>
