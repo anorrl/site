@@ -2,8 +2,8 @@
 	use anorrl\Universe;
 
 	set_content_type(ARLTYPEJSON);
-	if(isset($_GET['universeId'])) {
-		$universe = Universe::FromID(intval($_GET['universeId']));
+	if(isset($universeId)) {
+		$universe = Universe::FromID(intval($universeId));
 
 		if($universe != null) {
 			$places = [];
@@ -16,9 +16,7 @@
 			}
 
 			die(json_encode([
-				"AssetId" => $universe->starting_place->id,
 				"FinalPage" => true,
-				"RootPlace" => $universe->starting_place->id,
 				"Places" => $places,
 				"PageSize" => count($places)
 			]));

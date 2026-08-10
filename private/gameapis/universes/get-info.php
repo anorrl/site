@@ -17,6 +17,7 @@
 	if($place) {
 
 		echo json_encode([
+			"RootPlace" => $universe->starting_place->id,
 			"CurrentUserHasEditPermissions" => true,
 			"StudioAccessToApisAllowed" => true,
 			"TargetId" => $universe->id,

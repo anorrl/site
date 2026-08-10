@@ -10,23 +10,27 @@
 	$sessionToken = $_GET['sessionToken'] ?? '';
 	$server = $_GET['server'] ?? "localhost";
 
+	$user = Session::retrieveUser();
+
 	$port = 53640;
 	$user_name = "Player";
 	$user_id = 0;
-	$user_age = 0;
+	$user_age = is_null($user) ? 0 : $user->getAccountAge();
 	$user_ticket = "";
 	$session_id = "";
-	$roblox_place = false;
+	$roblox_place = is_null($user);
 	$place_id = 0;
 	$universe_id = $_GET['universeId'] ?? 0;
 	$place_creator_id = 0;
-	$place_chat_type = "Classic";
-	$unknown = true;
+	$place_chat_type = is_null($user) ? "Classic" : "ClassicAndBubble";
+	$unknown = is_null($user);
 	$game_id = "00000000-0000-0000-0000-000000000000";
 	$ping_url = "";
 	
 	$serverDetails = GameServer::Get($serverToken);
 	$sessionDetails = GameSession::Get($sessionToken);
+
+	
 
 	if($serverDetails && $sessionDetails) {
 		

@@ -32,14 +32,14 @@
 	} else {
 		$settings = UserSettings::Get();
 	}
-	
 
 	//str_replace("\n", "<br>", UtilUtils::RecurseRemove(UtilUtils::TurnUrlIntoHyperlink($user->blurb), "\r\n\r\n\r\n", "\n\n"))
 
 	$bio = MarkdownExtra::defaultTransform($user->blurb);
 
 	$page = new Page($owner ? "Your Profile" : "{$user->name}'s Profile", $owner ? "user_profile" : null);
-	
+	if($user->has_pfp_set)
+		$page->setIcon($user->getThumbsUrlProfile());
 	$page->loadHeader2();
 
 	if($settings->profile_music) {

@@ -3,7 +3,7 @@
 		redirect("/my/stuff");
 
 	use anorrl\Asset;
-	use anorrl\Comment;
+	use anorrl\User;
 	use anorrl\Page;
 	use anorrl\Place;
 	use anorrl\Universe;
@@ -457,8 +457,86 @@
 		<textarea maxlength="256" minlength="4" class="box input" style="width: 914px" placeholder="hurr durr i love this thing!"></textarea>
 		<button class="button" style="margin-top: 5px">submit</button>
 	</div>
+	<style>
+		.comment {
+			padding: 5px;
+			display: flex;
+			font-family: "Fira Mono", monospace;
+		}
+
+		.comment .profile-container img {
+			border: 2px solid var(--border-color);
+		}
+
+		.comment .contents-flex-container {
+			flex: 1;
+			padding: 0px 5px;
+			padding-left: 22px;
+		}
+
+		.comment .contents-container {
+			border: 2px solid var(--border-color);
+			max-height: 150px;
+			position: relative;
+		}
+
+		.comment .contents-container:after {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0px;
+			width: 0;
+			height: 0;
+			border: 20px solid transparent;
+			border-right-color: var(--border-color);
+			border-left: 0;
+			border-top: 0;
+			margin-top: -2px;
+			margin-left: -20px;
+		}
+
+		.comment #details {
+			font-size: 12px;
+			border-bottom: 1px solid var(--lighter-border-color);
+			padding-bottom: 5px;
+			color: #CCC;
+			font-size: 11px;
+			font-style: italic;
+		}
+
+		.comment #contents {
+			padding: 5px;
+			max-width: 730px;
+			max-height: 101px;
+			overflow: auto;
+			overflow-wrap: break-word;
+		}
+	</style>
 	<div class="box" style="border-top: none">
-		
+		<div class="comment">
+			<?php $com_test_user = User::FromID(1) ?>
+			<div class="profile-container">
+				<a href="<?= $com_test_user->getURL() ?>" target="__blank">
+					<img src="<?= $com_test_user->getThumbsUrl() ?>" width="150">
+				</a>
+			</div>
+			<div class="contents-flex-container">
+				<div class="contents-container">
+					<div style="padding: 10px">
+						<div id="details">
+							<div style="float: left">posted <span id="date">2 months ago</span> by <a href="">kuro</a></div>
+							<div style="float: right"><a href="">.report</a></div>
+							<div style="clear:both"></div>
+						</div>
+						<div id="contents">
+							Test Test wWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWwWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW test test wWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWwWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+							Test test test test test 
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <script>

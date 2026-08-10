@@ -39,31 +39,6 @@
 		
 		}
 
-		function PrintComment() {
-			$contents = str_replace(PHP_EOL, "<br>", $this->contents);
-			$user_id = $this->poster->id;
-			$formatted_datetime = $this->postdate->format("d/m/Y");
-
-			$timeago = UtilUtils::GetTimeAgo($this->postdate);
-
-			echo <<<EOT
-			<div class="Comment">
-				<div id="CommenterAvatar">
-					<a href="/users/$user_id/profile">
-						<img src="{$this->poster->getThumbsUrl()}">
-					</a>
-				</div>
-				<div id="CommentPartArea">
-					<div id="CommentInfoArea">
-						<a href="/users/$user_id/profile">{$this->poster->name}</a>&nbsp;<span>Posted on $formatted_datetime ($timeago)</span>
-					</div>
-					<code>$contents</code>
-				</div>
-				<div style="float: none; clear: both;"></div>
-			</div>
-			EOT;
-		}
-
 		static function GetRandomString(): string {
 			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 			$randomString = '';

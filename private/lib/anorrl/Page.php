@@ -11,6 +11,7 @@
 		private array $stylesheets = [];
 		private array $metas = [];
 
+		private string $icon = "/favicon.ico";
 		private string $title;
 		private string $internal_name;
 		private int $lucky_number;
@@ -155,6 +156,10 @@
 
 		function loadFooter2() {
 			$this->loadTemplate("layouts/footer");
+		}
+
+		function setIcon(string $icon) {
+			$this->icon = $icon;
 		}
 	}
 ?>

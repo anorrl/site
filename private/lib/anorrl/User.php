@@ -1257,6 +1257,10 @@
 			return (\CONFIG->prefer_https ? "https":"http")."://cdn.".\CONFIG->baseurl."/renders/{$this->currentoutfitmd5}/image.png";
 		}
 
+		function getURL() {
+			return "/users/{$this->id}/profile";
+		}
+
 		function getAccountAge(): int {
 			return UtilUtils::GetTimeDifference($this->join_date);
 		}

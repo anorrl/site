@@ -104,10 +104,12 @@
 	route('GET',      '/places/[i:placeId]/settings', '/private/gameapis/places/settings.php');
 	route('GET',      '/universes/get-info', '/private/gameapis/universes/get-info.php');
 	route('GET',      '/universes/validate-place-join', '/private/gameapis/universes/validate-place-join.php');
-	route('GET',      '/universes/get-universe-places', '/private/gameapis/universes/get-universe-places.php');
+	route('GET',      '/universes/[i:universeId]/get-places', '/private/gameapis/universes/get-universe-places.php');
 	route('GET',      '/universes/[i:universeId]/game-start-info', '/private/gameapis/universes/game-start-info.php');
-	route('POST',     '/universes/removeplace',      '/private/gameapis/universes/removeplace.php');
-	route('POST',     '/universes/setrootplace',      '/private/gameapis/universes/setrootplace.php');
+	route('POST',     '/universes/[i:universeId]/removeplace',     '/private/gameapis/universes/removeplace.php');
+	route('POST',     '/universes/[i:universeId]/setrootplace',    '/private/gameapis/universes/setrootplace.php');
+	route('POST',     '/universes/[i:universeId]/removebadge',    '/private/gameapis/universes/removebadge.php');
+	route('POST',     '/universes/[i:universeId]/togglebadge',    '/private/gameapis/universes/togglebadge.php');
 
 	route('GET',      '/developerproducts/list', '/private/gameapis/universes/developerproducts.php');
 	route('GET',      '/universes/[i:universeId]/badges', '/private/gameapis/universes/badges.php');

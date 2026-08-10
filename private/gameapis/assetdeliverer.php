@@ -9,7 +9,7 @@
 	use anorrl\utilities\ImageUtils;
 
 	if(!isset($_GET['id']) && !isset($_GET['ID']) && !isset($_GET['Id']) && !isset($_GET['assetName']) && !isset($_GET['universeId'])) {
-		die(http_response_code(500));
+		exit_http(500);
 	}
 
 	if(isset($_GET['id'])) {
@@ -63,7 +63,7 @@
 
 					if($error) {
 						if(!ClientDetector::HasAccess())
-							die(http_response_code(403));
+							exit_http(403);
 					}
 				}
 			} else{
@@ -72,8 +72,7 @@
 					$serverplace = Place::FromID(intval($_GET['serverplaceid']));
 					
 					if ($serverplace == null && intval($_GET['serverplaceid']) != 0) {
-						http_response_code(400);
-						die("Bad Request");
+						exit_http(400, "Bad Request");
 					}
 
 					if(intval($_GET['serverplaceid']) != 0 && !$serverplace->gears_enabled && $asset->type == AssetType::GEAR) {
@@ -95,7 +94,8 @@
 					}*/
 				}
 			}
-			// quick hack workaround, not gonna be in release.
+
+			// quick hack workaround, not gonna be in release. (FOR ANIMATIONS)
 			if(str_contains($contents, "<roblox")) {
 				$contents = str_replace("<roblox", "<anorrl", $contents);
 				$contents = str_replace("roblox>", "anorrl>", $contents);
@@ -107,8 +107,7 @@
 			die($contents);
 			
 		} else {
-			http_response_code(404);
-			die("Asset not found!");
+			exit_http(404, "Asset not found!");
 		}
 	} else {
 		$roblosec = CONFIG->asset->roblosec;
@@ -146,8 +145,7 @@
 						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id."_".$version, $contents);
 					}
 
-					echo "Unauthorised access to this roblox asset!";
-					die(http_response_code(500));
+					exit_http(500, "Unauthorised access to this roblox asset!");
 				} else {
 					set_content_type($mimetype);
 
@@ -178,13 +176,11 @@
 					}
 					set_content_type($mimetype);
 					if(str_contains(ImageUtils::checkMimeType($contents), "json")) {
-						echo "Unauthorised access to this roblox asset!";
 						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""), "");
-						die(http_response_code(500));
+						exit_http(500, "Unauthorised access to this roblox asset!");
 					}
 				} else {
-					http_response_code(404);
-					die("Asset not found!");
+					exit_http(404, "Asset not found!");
 				}
 				
 			}
@@ -192,17 +188,16 @@
 			set_attachment("rbx_{$id}");
 
 			if(str_contains($contents, "<roblox")) {
-                                $contents = str_replace("<roblox", "<anorrl", $contents);
-                                $contents = str_replace("roblox>", "anorrl>", $contents);
-                                $contents = str_replace("rbxasset", "arlasset", $contents);
-                        }
+				$contents = str_replace("<roblox", "<anorrl", $contents);
+				$contents = str_replace("roblox>", "anorrl>", $contents);
+				$contents = str_replace("rbxasset", "arlasset", $contents);
+			}
 
 			echo $contents;
 		
 		} else {
 			if(!file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""))) {
-				http_response_code(404);
-				die("Asset not found!");
+				exit_http(404, "Asset not found!");
 			} else {
 				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""));
 				$mimetype = ImageUtils::checkMimeType($contents);
@@ -213,11 +208,15 @@
 				}
 				set_content_type($mimetype);
 				if(str_contains(ImageUtils::checkMimeType($contents), "json")) {
-					echo "Unauthorised access to this roblox asset!";
 					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""), "");
-					die(http_response_code(500));
+					exit_http(500, "Unauthorised access to this roblox asset!");
 				}
 
+				if(str_contains($contents, "<roblox")) {
+					$contents = str_replace("<roblox", "<anorrl", $contents);
+					$contents = str_replace("roblox>", "anorrl>", $contents);
+					$contents = str_replace("rbxasset", "arlasset", $contents);
+				}
 				echo $contents;
 			}
 			

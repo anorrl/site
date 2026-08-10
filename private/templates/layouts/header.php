@@ -11,7 +11,7 @@
 <html>
 	<head>
 		<title><?= $this->title ?><?php if(!str_contains($this->title, "ANORRL") || $this->ignore_anorrl): ?> - ANORRL<?php endif ?></title>
-		<link rel="icon" type="image/x-icon" href="/favicon.ico">
+		<link rel="icon" type="image/x-icon" href="<?= $this->icon ?>">
 		
 		<?php foreach($this->scripts as $script): ?>
 		<script src="<?= $script ?>"></script>
@@ -51,7 +51,7 @@
 			<?php if($auth_user): ?>
 			<div id="submenu">
 				<div id="container">
-					<a href="/users/<?= $auth_user->id ?>/profile" <?php if($this->internal_name == "user_profile"):  ?>selected<?php endif ?>>Profile</a>
+					<a href="<?= $auth_user->getURL() ?>" <?php if($this->internal_name == "user_profile"):  ?>selected<?php endif ?>>Profile</a>
 					<a href="/my/profile" <?php                          if($this->internal_name == "my/profile"):    ?>selected<?php endif ?>>Account</a>
 					<a href="/my/character" <?php                        if($this->internal_name == "my/character"):  ?>selected<?php endif ?>>Character</a>
 					<a href="/my/friends" <?php                          if($this->internal_name == "my/friends"):    ?>selected<?php endif ?>>Friends</a>

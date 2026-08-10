@@ -13,7 +13,7 @@
 			$badges[] = [
 				"BadgeId" => $badge->id,
 				"Name" => $badge->name,
-				"Secret" => !$badge->public,
+				"Secret" => $badge->secret,
 				"Thumbnail" => [
 					"Url" => $badge->getThumbsUrl()
 				]

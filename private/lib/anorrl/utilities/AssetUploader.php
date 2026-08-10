@@ -718,7 +718,7 @@
 									if(!$original_image) {
 										return INVALIDFILE; 
 									}
-
+									imagesavealpha($original_image, true);
 									$width = imagesx($original_image);
 									$height = imagesy($original_image);
 									$size = $width;
@@ -731,7 +731,8 @@
 									}
 
 									$image = imagescale($original_image, $size, $size);
-
+									imagesavealpha($image, true);
+									$newpic = $image;
 									$cropping_enabled = isset(\CONFIG->asset->badge_cropping) && \CONFIG->asset->badge_cropping;
 
 									if($cropping_enabled) {
@@ -755,18 +756,19 @@
 												}
 											}
 										}
-										imagesavealpha($newpic, true);
 									}
 
+									imagesavealpha($newpic, true);
+
 									ob_start();
-									imagepng($cropping_enabled ? $image : $newpic);
+									imagepng($newpic);
 									$data = ob_get_contents();
 									ob_end_clean();
 								}
 
 
 
-								$result = self::CommitAsset($data, $type == AssetType::BADGE ? $type : AssetType::IMAGE, $name, "", false, false, $comments_enabled, $user);
+								$result = self::CommitAsset($data, $type == AssetType::BADGE ? $type : AssetType::IMAGE, $name, "", $public, false, $comments_enabled, $user);
 								if($result["error"]) {
 									return $result;
 								}

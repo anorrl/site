@@ -2,10 +2,10 @@
 	use anorrl\Place;
 	use anorrl\Universe;
 	
-	if(!SESSION || !isset($_GET['universeId']) || !isset($_GET['placeId']))
+	if(!SESSION || !isset($universeId) || !isset($_GET['placeId']))
 		exit_http(403);
 
-	$universe = Universe::FromID(intval($_GET['universeId']));
+	$universe = Universe::FromID(intval($universeId));
 	$place = Place::FromID(intval($_GET['placeId']));
 
 	if(!$universe || !$place)
