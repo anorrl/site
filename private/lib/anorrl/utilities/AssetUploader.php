@@ -61,6 +61,11 @@
 			return true;
 		}
 
+		// TODO: implement
+		private static function IsOBJModel(string $data): bool {
+			return false;
+		}
+
 		private static function IsValidMesh(string $data): bool {
 			return 
 				str_starts_with(trim($data), "version 1.0") || 
@@ -73,7 +78,10 @@
 		private static function IsSupportedMesh(string $data): bool {
 			return 
 				str_starts_with(trim($data), "version 1.0") || 
-				str_starts_with(trim($data), "version 2.0");
+				str_starts_with(trim($data), "version 2.0") ||
+				str_starts_with(trim($data), "version 3.0") ||
+				str_starts_with(trim($data), "version 4.0") ||
+				str_starts_with(trim($data), "version 5.0");
 		}
 
 		private static function GetMD5OfData(mixed $data) {
@@ -389,7 +397,7 @@
 
 					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
 					
-					if(!$result['error']) {
+					if(!$result['error'] && $type != AssetType::PLACE) {
 						self::ExecuteRender($asset->id, $type, $data);
 					}
 
@@ -514,7 +522,7 @@
 
 		public static function UploadAsset(
 			array|string|null $file,
-			AssetType $type,
+			AssetType $passed_type,
 			string $name,
 			string $description = "",
 			bool $public = true,
@@ -525,6 +533,9 @@
 			if($user == null && \SESSION) {
 				$user = \SESSION->user;
 			}
+
+			// handle accessories lol
+			$type = AssetTypeUtils::HandleType($passed_type);
 
 			if($file == null && $type != AssetType::PLACE && $type != AssetType::PACKAGE) {
 				return ["error" => true, "reason" => "Invalid action!"];
@@ -588,9 +599,9 @@
 								return INVALIDFILE;
 							}
 
-							$result = self::CommitAsset($data, $type, $name, $description, $public, $on_sale, $comments_enabled, $user);
+							$result = self::CommitAsset($data, $passed_type, $name, $description, $public, $on_sale, $comments_enabled, $user);
 							
-							if(!$result['error']) {
+							if(!$result['error'] && $type != AssetType::PLACE) {
 								self::ExecuteRender($result['id'], $type, $data);
 							}
 
@@ -600,17 +611,17 @@
 								if(!str_starts_with(ImageUtils::checkMimeType($data),"image/")) {
 									return INVALIDFILE; 
 								}
+
+								$original_image = imagecreatefromstring($data);
+								if(is_bool($original_image) && !$original_image) {
+									return INVALIDFILE; 
+								}
+								imagesavealpha($original_image, true);
+								
+								$width = imagesx($original_image);
+								$height = imagesy($original_image);
+
 								if($type == AssetType::DECAL || $type == AssetType::FACE) {
-									$original_image = imagecreatefromstring($data);
-									if(is_bool($original_image) && !$original_image) {
-										return INVALIDFILE; 
-									}
-									$width = imagesx($original_image);
-									$height = imagesy($original_image);
-
-									imagesavealpha($original_image, true);
-
-
 									if($width > $height) {
 										$new_width = 420;
 										$new_height = -1;
@@ -650,14 +661,7 @@
 									$data = ob_get_contents();
 									ob_end_clean();
 								} else if($type == AssetType::TSHIRT) {
-									$original_image = imagecreatefromstring($data);
-									if(is_bool($original_image) && !$original_image) {
-										return INVALIDFILE; 
-									}
-									imagesavealpha($original_image, true);
 									
-									$width = imagesx($original_image);
-									$height = imagesy($original_image);
 
 									$image = imagecreatetruecolor($width, $height);
 									$bga = imagecolorallocatealpha($image, 0, 0, 0, 127);
@@ -714,13 +718,6 @@
 									$data = ob_get_contents();
 									ob_end_clean();
 								} else if($type == AssetType::BADGE) {
-									$original_image = imagecreatefromstring($data);
-									if(!$original_image) {
-										return INVALIDFILE; 
-									}
-									imagesavealpha($original_image, true);
-									$width = imagesx($original_image);
-									$height = imagesy($original_image);
 									$size = $width;
 									if($width != $height) {
 										$size = $width > $height ? $width : $height;
@@ -826,7 +823,7 @@
 										return $mesh_result;
 								}
 
-								$result = self::CommitAsset($data, $type, $name, $description, $public, $on_sale, $comments_enabled, $user);
+								$result = self::CommitAsset($data, $passed_type, $name, $description, $public, $on_sale, $comments_enabled, $user);
 
 								if(!$result['error']) {
 									if(AssetTypeUtils::IsRenderable($type)) {
@@ -849,7 +846,7 @@
 									return ["error" => true, "reason" => "Audio file was not a valid format! (found $audio_mime_type instead)"];
 								}
 
-								return self::CommitAsset($data, $type, $name, $description, $public, $on_sale, $comments_enabled, $user);
+								return self::CommitAsset($data, $passed_type, $name, $description, $public, $on_sale, $comments_enabled, $user);
 
 							} else if(
 								$type == AssetType::HEAD	 ||

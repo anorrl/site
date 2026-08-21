@@ -157,7 +157,7 @@
 
 		<div id="PurchaseFreeItem">
 			<p>
-				The item "<?= $asset->name ?>" from <a target="__blank" href="/users/<?= $asset->creator->id ?>/profile"><?= $asset->creator->name ?></a> is available in the <b><i>Public Domain</i></b>. 
+				The item "<?= $asset->name ?>" from <a target="__blank" href="<?= $asset->creator->getURL() ?>"><?= $asset->creator->name ?></a> is available in the <b><i>Public Domain</i></b>. 
 			</p>
 			<p>
 				Would you like to add it to your inventory for <b><i>free</i></b>?
@@ -187,7 +187,7 @@
 		</div>
 		<div id="PurchaseSuccess" style="display: none">
 			<p>
-				Awesome sauce! You just bought "<?= $asset->name ?>" from <a target="__blank" href="/users/<?= $asset->creator->id ?>/profile"><?= $asset->creator->name ?></a>!
+				Awesome sauce! You just bought "<?= $asset->name ?>" from <a target="__blank" href="<?= $asset->creator->getURL() ?>"><?= $asset->creator->name ?></a>!
 			</p>
 			<?php if($asset->type->wearable()): ?>
 			<p>
@@ -245,9 +245,9 @@
 		</div>
 		<div id="Information">
 			<div id="UserCard">
-				<a href="/users/<?= $asset->creator->id ?>/profile"><img src="<?= $asset->creator->getThumbsUrlAvatar(100) ?>" style="width: 100px;"></a>
+				<a href="<?= $asset->creator->getURL() ?>"><img src="<?= $asset->creator->getThumbsUrlAvatar(100) ?>" style="width: 100px;"></a>
 				<div id="AssetInfoStuff">
-					<span>Created by <a href="/users/<?= $asset->creator->id ?>/profile"><?= $asset_creator_name ?></a></span>
+					<span>Created by <a href="<?= $asset->creator->getURL() ?>"><?= $asset_creator_name ?></a></span>
 					<span><b>Created on</b>: <?= $asset->created_at->format('d/m/Y H:i'); ?></span>
 					<span><b>Last updated</b>: <?= $asset->last_updatetime->format('d/m/Y H:i'); ?></span>
 					<span><b>Favourited</b>: <?= $favourites_count ?></span>
@@ -307,7 +307,7 @@
 					<ul id="Friends" style="width: 848px;border: 0px;background: none;padding: 0px;">
 						<?php foreach($sales as $u): ?>
 							<li class="Friend">
-								<a id="ProfileLink" href="/users/<?= $u->id ?>/profile">
+								<a id="ProfileLink" href="<?= $u->getURL() ?>">
 									<img id="Profile" src="<?= $u->getThumbsUrl(100) ?>">
 									<div id="Name"><?= $u->name ?></div>
 								</a>

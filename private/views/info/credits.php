@@ -118,11 +118,9 @@
 			if(in_array($user->id, $excludelist)) {
 				continue;
 			}
-			$userid = $user->id;
-			$username = $user->name;
-
+			
 			echo <<<EOT
-			<a href="/users/$userid/profile">$username,</a> 
+			<a href="{$user->getURL()}">{$user->name},</a> 
 			EOT;
 		}
 	?>

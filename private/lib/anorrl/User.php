@@ -549,14 +549,15 @@
 				return ["error" => false];
 			} else {
 				$item = Asset::FromID($assetid);
+				$type = AssetTypeUtils::HandleType($item->type);
 
-				if($item->type->wearable()) {
-					if($item->type->wearone()) {
+				if($type->wearable()) {
+					if($type->wearone()) {
 						$is_wearing_type = $db->run(
 							"SELECT `assetid` FROM `inventory` WHERE `userid` = :userid AND `assettype` = :assettype",
 							[
 								":userid" => $this->id,
-								":assettype" => $item->type->ordinal()
+								":assettype" => $type->ordinal()
 							]
 						)->rowCount() != 0;
 
@@ -566,7 +567,7 @@
 								[
 									":userid" => $this->id,
 									":assetid" => $item->id,
-									":assettype" => $item->type->ordinal()
+									":assettype" => $type->ordinal()
 								]
 							);
 
@@ -576,12 +577,12 @@
 								[
 									":userid" => $this->id,
 									":assetid" => $item->id,
-									":assettype" => $item->type->ordinal()
+									":assettype" => $type->ordinal()
 								]
 							);
 						}
 					} else {
-						$limit = AssetTypeUtils::WearableLimit($item->type);
+						$limit = AssetTypeUtils::WearableLimit($type);
 
 						$limitless = $limit == -1;
 						$wearable = $limitless;
@@ -591,7 +592,7 @@
 								"SELECT `assetid` FROM `inventory` WHERE `userid` = :userid AND `assettype` = :assettype",
 								[
 									":userid" => $this->id,
-									":assettype" => $item->type->ordinal()
+									":assettype" => $type->ordinal()
 								]
 							)->rowCount();
 
@@ -604,11 +605,11 @@
 								[
 									":userid" => $this->id,
 									":assetid" => $item->id,
-									":assettype" => $item->type->ordinal()
+									":assettype" => $type->ordinal()
 								]
 							);
 						} else {
-							return ["error" => true, "reason" => "Too many fucking ".strtolower($item->type->label())."s on"];
+							return ["error" => true, "reason" => "Too many fucking ".strtolower($type->label())."s on"];
 						}
 					}
 				} else {

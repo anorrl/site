@@ -28,6 +28,15 @@
 		case RIGHTLEG;
 		case PACKAGE;
 		case GAMEPASS;
+		case PLUGIN;
+		case MESHPART;
+		case HAIRACCESSORY;
+		case FACEACCESSORY;
+		case NECKACCESSORY;
+		case SHOULDERACCESSORY;
+		case FRONTACCESSORY;
+		case BACKACCESSORY;
+		case WAISTACCESSORY;
 		case EMOTE;
 		/**
 		 * This is only for stuff api lol
@@ -60,6 +69,15 @@
 				31 => AssetType::RIGHTLEG,
 				32 => AssetType::PACKAGE,
 				34 => AssetType::GAMEPASS,
+				38 => AssetType::PLUGIN,
+				40 => AssetType::MESHPART,
+				41 => AssetType::HAIRACCESSORY,
+				42 => AssetType::FACEACCESSORY,
+				43 => AssetType::NECKACCESSORY,
+				44 => AssetType::SHOULDERACCESSORY,
+				45 => AssetType::FRONTACCESSORY,
+				46 => AssetType::BACKACCESSORY,
+				47 => AssetType::WAISTACCESSORY,
 				61 => AssetType::EMOTE,
 				98 => AssetType::GAME,
 				99 => AssetType::BODYPARTS
@@ -91,6 +109,15 @@
 				AssetType::RIGHTLEG 	=> 31,
 				AssetType::PACKAGE      => 32,
 				AssetType::GAMEPASS     => 34,
+				AssetType::PLUGIN		=> 38,
+				AssetType::MESHPART		=> 40,
+				AssetType::HAIRACCESSORY 	 => 41,
+				AssetType::FACEACCESSORY	 => 42,
+				AssetType::NECKACCESSORY 	 => 43,
+				AssetType::SHOULDERACCESSORY => 44,
+				AssetType::FRONTACCESSORY 	 => 45,
+				AssetType::BACKACCESSORY 	 => 46,
+				AssetType::WAISTACCESSORY 	 => 47,
 				AssetType::EMOTE		=> 61,
 				AssetType::GAME    		=> 98,
 				AssetType::BODYPARTS    => 99,
@@ -112,6 +139,13 @@
 				AssetType::LEFTLEG 		=> true,
 				AssetType::RIGHTLEG 	=> true,
 				AssetType::EMOTE 		=> true,
+				AssetType::HAIRACCESSORY 	 => true,
+				AssetType::FACEACCESSORY	 => true,
+				AssetType::NECKACCESSORY 	 => true,
+				AssetType::SHOULDERACCESSORY => true,
+				AssetType::FRONTACCESSORY 	 => true,
+				AssetType::BACKACCESSORY 	 => true,
+				AssetType::WAISTACCESSORY 	 => true,
 				default => false
 			};
 		}
@@ -157,7 +191,16 @@
 				AssetType::RIGHTLEG 	=> "Right Leg",
 				AssetType::PACKAGE      => "Package",
 				AssetType::GAMEPASS     => "Gamepass",
-				AssetType::EMOTE		=> "Emote",
+				AssetType::PLUGIN    	=> "Plugin",
+				AssetType::MESHPART    	=> "Mesh Part",
+				AssetType::HAIRACCESSORY 	 => "Hair Accessory",
+				AssetType::FACEACCESSORY	 => "Face Accessory",
+				AssetType::NECKACCESSORY 	 => "Neck Accessory",
+				AssetType::SHOULDERACCESSORY => "Shoulder Accessory",
+				AssetType::FRONTACCESSORY 	 => "Front Accessory",
+				AssetType::BACKACCESSORY 	 => "Back Accessory",
+				AssetType::WAISTACCESSORY 	 => "Waist Accessory",
+				AssetType::EMOTE			 => "Emote",
 			};
 		}
 

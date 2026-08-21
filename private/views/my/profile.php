@@ -14,7 +14,7 @@
 			$_SESSION['ANORRL$Update$ProfileResult'] = $result['reason'];
 			redirect("/my/profile");
 		} else {
-			redirect("/users/{$user->id}/profile");
+			redirect($user->getUrl());
 		}
 	}
 
@@ -44,7 +44,7 @@
 			$_SESSION['ANORRL$Update$ProfileResult'] = "That was invalid css!";
 			redirect("/my/profile");
 		} else {
-			redirect("/users/{$user->id}/profile");
+			redirect($user->getURL());
 		}
 	}
 
@@ -58,7 +58,7 @@
 			$_SESSION['ANORRL$Update$ProfileResult'] = $result['reason'];
 			redirect("/my/profile");
 		} else {
-			redirect("/users/{$user->id}/profile");
+			redirect($user->getURL());
 		}
 	}
 

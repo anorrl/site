@@ -114,11 +114,11 @@
 					<?php foreach($recentlyplayed as $game): ?>
 					<td>
 						<div class="game">
-							<a href="/<?= $game->getUrl() ?>">
+							<a href="<?= $game->getUrl() ?>">
 								<img src="<?= $game->getThumbsUrl(160, 90) ?>" width="160" height="90">
 								<div id="name"><?= $game->name ?></div>
 							</a>
-							<div id="creator"><a href="/users/<?= $game->creator->id?>/profile"><?= $game->creator->name?></a></div>
+							<div id="creator"><a href="<?= $game->creator->getUrl() ?>"><?= $game->creator->name?></a></div>
 							<div id="played"><?= UtilUtils::GetTimeAgo($game->getLastVisited($user)) ?></div>
 						</div>
 					</td>
@@ -134,12 +134,12 @@
 						$status = $friend->getOnlineActivity(); ?>
 						<table class="friend">
 							<td id="user">
-								<a href="/users/<?= $friend->id ?>/profile">
+								<a href="<?= $friend->getUrl() ?>">
 									<img src="<?= $friend->getThumbsUrl() ?>" width="50">
 								</a>
 							</td>
 							<td id="content" style="vertical-align: top;">
-								<div id="name"><a href="/users/<?= $friend->id ?>/profile"><?= $friend->name ?></a></div>
+								<div id="name"><a href="<?= $friend->getUrl() ?>"><?= $friend->name ?></a></div>
 								<?php if($friend->isOnline()): ?>
 								<div id="activity" online><?= str_contains($status, "[") ? $status : "[ $status ]" ?></div>
 								<?php else: ?>

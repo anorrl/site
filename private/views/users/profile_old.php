@@ -37,7 +37,7 @@
 			$_SESSION['ANORRL$Comment$Post$Error'] = $result['reason'];
 		}
 
-		redirect("/users/{$get_user->id}/profile");
+		redirect($get_user->getURL());
 	}
 
 	$comments = Comment::GetCommentsOn($get_user);
@@ -217,7 +217,7 @@
 					foreach($friends as $friend): ?>
 
 						<li class="Friend">
-							<a id="ProfileLink" href="/users/<?= $friend->id ?>/profile">
+							<a id="ProfileLink" href="<?= $friend->getURL() ?>">
 								<img id="Profile" src="<?= $friend->getThumbsUrl(100) ?>">
 								<div id="Name"><?= $friend->name ?></div>
 							</a>
@@ -255,7 +255,7 @@
 								<img src="{$asset->getThumbsUrl(130)}">
 								<span>{$asset->name}</span>
 							</a>
-							<a id="Creator" href="/users/{$asset->creator->id}/profile"><span>{$asset->creator->name}</span></a>
+							<a id="Creator" href="{$asset->creator->getURL()}"><span>{$asset->creator->name}</span></a>
 						</div>
 					</li>
 					EOT;

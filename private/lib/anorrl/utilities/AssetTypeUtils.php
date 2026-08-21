@@ -101,6 +101,19 @@
 			};
 		}
 
+		public static function HandleType(AssetType $type): AssetType {
+			return match($type) {
+				AssetType::HAIRACCESSORY 	 => AssetType::HAT,
+				AssetType::FACEACCESSORY	 => AssetType::HAT,
+				AssetType::NECKACCESSORY 	 => AssetType::HAT,
+				AssetType::SHOULDERACCESSORY => AssetType::HAT,
+				AssetType::FRONTACCESSORY 	 => AssetType::HAT,
+				AssetType::BACKACCESSORY 	 => AssetType::HAT,
+				AssetType::WAISTACCESSORY 	 => AssetType::HAT,
+				default => $type // just return self
+			};
+		}
+
 		private static function GetTemplate(string $filename): string {
 			$file = file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/$filename.arlm");
 			return self::Replace("domain", \CONFIG->domain, $file);
