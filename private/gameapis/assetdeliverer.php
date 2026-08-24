@@ -4,6 +4,7 @@
 	use anorrl\Place;
 	use anorrl\Universe;
 	use anorrl\enums\AssetType;
+	use anorrl\utilities\AssetUploader;
 	use anorrl\utilities\MeshConverter;
 	use anorrl\utilities\ClientDetector;
 	use anorrl\utilities\ImageUtils;
@@ -149,12 +150,20 @@
 				} else {
 					set_content_type($mimetype);
 
-					$contents = str_replace("www.roblox.com", $domain, $output);
+					if(!str_starts_with($contents, "<anorrl!") || strlen(\CONFIG->domain) == strlen("www.roblox.com")) {
+						$contents = str_replace("www.roblox.com", $domain, $output);
+						$contents = str_replace("api.roblox.com", $domain, $output);
+						$contents = str_replace("roblox.com",     $domain, $output);
+					}
 
 					if(str_starts_with($contents, "version ")) {
-						$mesh_result = MeshConverter::Convert($contents);
-						if($mesh_result && !$mesh_result['error'])
-							$contents = $mesh_result['mesh'];
+						
+						if(!AssetUploader::IsSupportedMesh($contents)) {
+							$mesh_result = MeshConverter::Convert($contents);
+							if($mesh_result && !$mesh_result['error'])
+								$contents = $mesh_result['mesh'];
+						}
+						
 						// todo: do something with $mesh_result['reason']
 					}
 					

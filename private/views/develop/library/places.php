@@ -58,10 +58,6 @@
 		background-image: url("/public/images/OnlineStatusIndicator_IsOffline.png");
 	}
 
-	.game #slot[src="active"] span#picture {
-		background-image: url("/public/images/OnlineStatusIndicator_IsOnline.png");
-	}
-
 
 	
 </style>
@@ -72,17 +68,17 @@
 		var action = $(this).data("actionid");
 
 		if(action == 1) {
-			window.location.href = "/develop/universes/"+universe+"/configure";
+			window.location.href = "/develop/"+assetid+"/configure";
 		}
-		else if(action == 5) {
-			$.post("/api/universes/"+universe+"/shutdown", function(data) {
+		else if(action == 3) {
+			$.post("/universes/"+universe+"/shutdown", function(data) {
 				if(!data['success'])
 					alert(data['reason']);
 				else
 					alert("success!");
 			})
 		}
-		else if(action == 6) {
+		else if(action == 4) {
 			alert("not legible for sex...");
 		}
 	}
@@ -96,12 +92,7 @@
 		</td>
 		<td width="232">
 			<a id="url" href><span id="name"></span></a>
-			<table style="margin-top:10px;width: 100%">
-				<tr>
-					<td id="slot" src=""><span id="picture">&nbsp;</span><span id="slot" html></span></td>
-					<td>Updated <span id="updated"></span></td>
-				</tr>
-			</table>
+			<div style="margin-top:10px;">Updated <span id="updated"></span></div>
 		</td>
 		<td width="100"  style="vertical-align: middle;">
 			<div>Total Visitors: <span id="visits">0</span></div>
@@ -116,11 +107,9 @@
 				<button class="button cog" style="padding: 5px 10px" class=""><img src="/public/images/icons/cog.png" ></button>
 				<ul>
 					<li data-actionid="1"><span>&gt;</span> configure</li>
-					<li data-actionid="2"><span>&gt;</span> make active</li>
-					<li data-actionid="3"><span>&gt;</span> advertise</li>
-					<li data-actionid="4"><span>&gt;</span> create badge</li>
-					<li data-actionid="5"><span>&gt;</span> shutdown all servers</li>
-					<li data-actionid="6"><span>&gt;</span> sex update</li>
+					<li data-actionid="2"><span>&gt;</span> create badge</li>
+					<li data-actionid="3"><span>&gt;</span> shutdown all servers</li>
+					<li data-actionid="4"><span>&gt;</span> sex update</li>
 				</ul>
 			</div>
 		</td>
@@ -128,19 +117,9 @@
 </table>
 <div id="panel">
 	<div class="box" style="padding: 15px;">
-		<h2>.games</h2>
-		<hr>
-		<input type="submit" class="button" value="create a game"> <span style="font-family: road; font-size: 14px;">(5 slots left)</span>
-	</div>
-	<div class="box" style="padding: 15px; margin-top: 10px;">
-		<h2>.games <input class="box input" id="search-box" style="padding: 0px 5px;" placeholder="search whatever dude..."></h2>
+		<h2>.places <input class="box input" id="search-box" style="padding: 0px 5px;" placeholder="search whatever dude..."></h2>
 		<hr>
 		<?php generate_statuses() ?>
-		<div data-loadtype="98" data-limit="10"></div>
+		<div data-loadtype="9"></div>
 	</div>
 </div>
-<script>
-	$("input[type]").click(function() {
-		alert("noarrl say hi");
-	})
-</script>

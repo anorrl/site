@@ -6,19 +6,17 @@
 	$user = SESSION ? SESSION->user : null;
 
 	if($user != null) {
-
-		
 		$type = AssetType::HAT->ordinal();
 		if(isset($_GET['c'])) {
-			if($_GET['c'] != "body") {
-				$type = intval($_GET['c']);
-			} else {
-				$type = AssetType::BODYPARTS->ordinal();
-			}
+			$type = intval($_GET['c']);
 		}
 		$page = 1;
 		if(isset($_GET['p'])) {
 			$page = intval($_GET['p']);
+		}
+		$limit = 12;
+		if(isset($_GET['l'])) {
+			$limit = intval($_GET['l']);
 		}
 
 		$query = "";
@@ -37,13 +35,13 @@
 			$showcreatoronly = true;
 		}
 
-		$total_pages = floor($user->getOwnedAssetsCount(AssetType::index($type), $query, $showcreatoronly)/12)+1;
+		$total_pages = floor($user->getOwnedAssetsCount(AssetType::index($type), $query, $showcreatoronly)/$limit)+1;
 
 		if($total_pages < $page) {
-			redirect("/api/stuff?c=$type&p=1&q=$query".($showcreatoronly ? "&showcreatoronly" : ""));
+			redirect("/api/stuff?c=$type&p=1&q=$query&l=$limit".($showcreatoronly ? "&showcreatoronly" : ""));
 		}
 
-		$assets = $user->getOwnedAssets(AssetType::index($type), $query, $showcreatoronly, true, [], $page, 12);
+		$assets = $user->getOwnedAssets(AssetType::index($type), $query, $showcreatoronly, true, [], $page, $limit);
 
 		$assets_raw = [];
 
@@ -54,8 +52,6 @@
 		}
 		
 		die(json_encode(["assets" => $assets_raw, "page" => $page, "total_pages" => $total_pages]));
-	} else {
-		die(json_encode(["error" => true, "reason" => "User not logged in."]));
 	}
 	
 ?>

@@ -40,7 +40,7 @@ ANORRL.Publish = {
 $(function() {
 	$("#PublishPlaces .Place").each(function() {
 		$(this).click(function() {
-			ANORRL.Publish.HandleAction($(this).attr("data-placeid"));
+			ANORRL.Publish.HandleAction($(this).data("placeid"));
 		});
 	})
 })

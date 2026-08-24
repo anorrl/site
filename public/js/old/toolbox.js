@@ -182,7 +182,7 @@ function makeAssetVoteable(n) {
 			: ClientToolbox.CurrentTab == "Search" &&
 			  ((t = $("#tbSearch").val()),
 			  t != $("#tbSearch")[0].title || ClientToolbox.SearchTouch || (t = ""),
-			  (r = $(".SetList #activeOption").attr("data-value")),
+			  (r = $(".SetList #activeOption").data("value")),
 			  (i = $("#SortList").val())),
 			ClientToolbox.PopulateAssets(r, t, i, n);
 	}),
@@ -218,10 +218,10 @@ function makeAssetVoteable(n) {
 				$("#activeOption").css({ width: "53px" }),
 				$("#SearchMenu").css({ width: "76px" }),
 				$(".searchListOption").css({ width: "59px" })),
-			$("#activeOption").attr("data-value", n[0].ID),
+			$("#activeOption").data("value", n[0].ID),
 			$(".searchListOption").click(function () {
 				$("#activeOption").text($(this).text()),
-					$("#activeOption").attr("data-value", $(this).attr("data-value")),
+					$("#activeOption").data("value", $(this).data("value")),
 					$("#ToolboxItems").html(""),
 					ClientToolbox.FetchData(!1);
 			});

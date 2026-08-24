@@ -174,11 +174,11 @@ ANORRL.Catalog  = {
 $(function(){
 
 	$("li[data-category]").on("click",function() {
-		ANORRL.Catalog.GrabAssets(ANORRL.Catalog.CurrentFilter, $(this).attr("data-category"), ANORRL.Catalog.CurrentPage, "");
+		ANORRL.Catalog.GrabAssets(ANORRL.Catalog.CurrentFilter, $(this).data("category"), ANORRL.Catalog.CurrentPage, "");
 	});
 
 	$("li[data-filter]").on("click",function() {
-		ANORRL.Catalog.GrabAssets($(this).attr("data-filter"), ANORRL.Catalog.CurrentCategory, ANORRL.Catalog.CurrentPage, "");
+		ANORRL.Catalog.GrabAssets($(this).data("filter"), ANORRL.Catalog.CurrentCategory, ANORRL.Catalog.CurrentPage, "");
 	});
 	
 	ANORRL.Catalog.GrabAssets();

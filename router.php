@@ -81,6 +81,7 @@
 	load("main");
 	load("api");
 	load("gameapi");
+	load("reverse");
 
 	$match = $router->match();
 

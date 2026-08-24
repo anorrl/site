@@ -75,9 +75,9 @@
 <script>
 	$(function() {
 		$(".Place").on("click", function() {
-			var placeid = $(this).attr("data-place-id");
+			var placeid = $(this).data("place-id");
 			if(!Number(placeid)) {
-				window.location.href = "/develop/projects?universeId="+$(this).attr("data-universe-id");
+				window.location.href = "/develop/projects?universeId="+$(this).data("universe-id");
 			} else {
 				window.external.StartGame("http://<?= $domain ?>/","http://<?= $domain ?>/","http://<?= $domain ?>/game/edit.slua?placeId=" + placeid);
 			}
@@ -117,7 +117,7 @@
 			$(this).attr("href", "#");
 
 			$(this).on("click", function() {
-				var view = $(this).attr("data-view");
+				var view = $(this).data("view");
 
 				$("#Places > div").each(function() {
 					$(this).css("display", "none");

@@ -7,6 +7,7 @@ ANORRL.Creations  = {
 	CurrentCategory: 8,
 	CurrentlyLoadingCrapBruh: false,
 	CurrentQuery: "",
+	CurrentLimit: 12,
 	Submit: function() {
 		this.GrabAssets(this.CurrentCategory, this.CurrentPage, $("#search-box").val());
 	},
@@ -82,12 +83,17 @@ ANORRL.Creations  = {
 			$(this).remove();
 		});
 
+		this.CurrentLimit = Number(feedscontainer.data("limit"));
+		if(this.CurrentLimit < 3 || isNaN(this.CurrentLimit)) {
+			this.CurrentLimit = 12;
+		}
+
 		var pagercontainer = $("#pager");
 		
 		var backPager = pagercontainer.find("#back-pager");
 		var nextPager = pagercontainer.find("#next-pager");
 
-		$.get("/api/stuff?showcreatoronly", {c: category, p : page, q: query}, function(data) {
+		$.get("/api/stuff?showcreatoronly", {c: category, p : page, q: query, l: this.CurrentLimit}, function(data) {
 			
 			var assets = data['assets'];
 			ANORRL.Creations.CurrentPage = data['page'];
@@ -132,8 +138,8 @@ ANORRL.Creations  = {
 
 					template.find(".cog").on("click", ANORRL.Creations.HandleCogClick);
 					template.find(".cog-dropdown li").on("click", ANORRL.Creations.HandleDropdownClick);
-					template.find(".cog-dropdown ul").attr("data-universeid", asset['universe']);
-					template.find(".cog-dropdown ul").attr("data-id", asset['id']);
+					template.find(".cog-dropdown ul").data("universeid", asset['universe']);
+					template.find(".cog-dropdown ul").data("id", asset['id']);
 
 					template.removeAttr("template");
 
@@ -200,7 +206,7 @@ $(function(){
 			}
 		});
 
-		ANORRL.Creations.GrabAssets($("div[data-loadtype]").attr("data-loadtype"));
+		ANORRL.Creations.GrabAssets($("div[data-loadtype]").data("loadtype"));
 	} else {
 		alert("no feckin container to load m8")
 	}

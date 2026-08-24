@@ -3,7 +3,6 @@
 		redirect("/my/stuff");
 
 	use anorrl\Asset;
-	use anorrl\User;
 	use anorrl\Page;
 	use anorrl\Place;
 	use anorrl\Universe;
@@ -57,10 +56,50 @@
 
 	$page = new Page(htmlspecialchars($place->name, ENT_QUOTES));
 	$page->clearAll();
+	$page->addScript("/js/core/jquery.js");
+	$page->addScript("/js/comments.js");
+	$page->addScript("/js/ratings.js");
+	$page->addValue("asset", $place->id);
 	$place->loadEmbed($page);
 	
 	$page->loadHeader2();
 ?>
+<div class="comment" template>
+	<div class="profile-container">
+		<a target="__blank"><img width="100"></a>
+	</div>
+	<div class="contents-flex-container">
+		<div class="contents-container box">
+			<div style="padding: 10px">
+				<div id="details">
+					<div style="float: left">posted <span id="date"></span> by <a id="name"></a></div>
+					<div style="display: inline-block; width: 15px">&nbsp;</div>
+					<div style="float: right"><a>.report</a></div>
+					<div style="clear:both"></div>
+				</div>
+				<div id="contents"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="comment-right" template>
+	<div class="contents-flex-container">
+		<div class="contents-container box">
+			<div style="padding: 10px">
+				<div id="details">
+					<div style="float: left">posted <span id="date"></span> by <a id="name"></a></div>
+					<div style="display: inline-block; width: 15px">&nbsp;</div>
+					<div style="float: right"><a>.report</a></div>
+					<div style="clear:both"></div>
+				</div>
+				<div id="contents"></div>
+			</div>
+		</div>
+	</div>
+	<div class="profile-container">
+		<a target="__blank"><img width="100"></a>
+	</div>
+</div>
 <style>
 		.cog img {
 		margin-bottom: -3px;
@@ -333,6 +372,7 @@
 			</tr>
 		</table>
 	</div>
+	<?php if($is_creator): ?>
 	<div class="cog-dropdown" style="position: absolute; right: 10px">
 		<button class="button cog" style="padding: 2px 4px" class=""><img src="/public/images/icons/cog.png" ></button>
 		<ul>
@@ -349,6 +389,7 @@
 			<?php endif ?>
 		</ul>
 	</div>
+	<?php endif ?>
 </div>
 <style>
 	#buttons {
@@ -452,12 +493,20 @@
 </div>
 <div style="margin-top: 5px;">
 	<h4 class="page-title">.commentary</h4>
-	<div class="box" style="padding: 10px 20px">
+	<div class="box" style="padding: 10px 20px" id="comment-post-container">
 		<h3 class="page-slogan">.post_something_cool_about_this!</h3>
 		<textarea maxlength="256" minlength="4" class="box input" style="width: 914px" placeholder="hurr durr i love this thing!"></textarea>
+		<div class="comment-error">you did something bad: <span></span></div>
 		<button class="button" style="margin-top: 5px">submit</button>
 	</div>
 	<style>
+		.comment-error {
+			padding: 5px 2px;
+			padding-top: 8px;
+			font-weight: bold;
+			color: red;
+			display: none;
+		}
 		.comment {
 			padding: 5px;
 			display: flex;
@@ -474,25 +523,43 @@
 			padding-left: 22px;
 		}
 
-		.comment .contents-container {
+		.comment .contents-container, .comment[right] .contents-container {
 			border: 2px solid var(--border-color);
 			max-height: 150px;
 			position: relative;
+			width: fit-content;
 		}
 
-		.comment .contents-container:after {
+		.comment[right] .contents-container {
+			margin-left: auto;
+			margin-right: 20px;
+		}
+
+		.comment .contents-container:after, .comment[right] .contents-container:after {
 			content: '';
 			position: absolute;
-			left: 0;
 			top: 0px;
 			width: 0;
 			height: 0;
 			border: 20px solid transparent;
-			border-right-color: var(--border-color);
-			border-left: 0;
 			border-top: 0;
 			margin-top: -2px;
+		}
+
+		.comment .contents-container:after {
+			left: 0;
+			right: auto;
+			border-right-color: var(--border-color);
+			border-left: 0;
 			margin-left: -20px;
+		}
+
+		.comment[right] .contents-container:after {
+			left: auto;
+			right: 0;
+			border-left-color: var(--border-color);
+			border-right: 0;
+			margin-right: -20px;
 		}
 
 		.comment #details {
@@ -512,30 +579,25 @@
 			overflow-wrap: break-word;
 		}
 	</style>
-	<div class="box" style="border-top: none">
-		<div class="comment">
-			<?php $com_test_user = User::FromID(1) ?>
-			<div class="profile-container">
-				<a href="<?= $com_test_user->getURL() ?>" target="__blank">
-					<img src="<?= $com_test_user->getThumbsUrl() ?>" width="150">
-				</a>
+	<div style="padding: 5px">
+		<div id="statuses">
+			<div class="status" id="loading-status">
+				<img src="/public/images/ProgressIndicator4White.gif" width="90">
+				<br>
+				<b>loading comments...</b>
 			</div>
-			<div class="contents-flex-container">
-				<div class="contents-container">
-					<div style="padding: 10px">
-						<div id="details">
-							<div style="float: left">posted <span id="date">2 months ago</span> by <a href="">kuro</a></div>
-							<div style="float: right"><a href="">.report</a></div>
-							<div style="clear:both"></div>
-						</div>
-						<div id="contents">
-							Test Test wWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWwWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW test test wWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWwWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-							Test test test test test 
-							
-						</div>
-					</div>
-				</div>
+			<div class="status" id="nothing-status">
+				<img src="/public/images/noassets.png" width="110">
+				<br>
+				<b>there's no discussion here!</b>
 			</div>
+		</div>
+		<div id="comments-container"></div>
+		<div id="comments-pager" style="margin: 0 auto;text-align: center">
+			<hr>
+			<a href="javascript:ANORRL.Comments.PrevPage()" id="back-pager">&lt;&lt; back</a>
+			<input class="box input" type="text" maxlength="3" value="1" style="width: 25px;text-align: center;padding: 2px 4px;"> of <span id="page-counter">1</span>
+			<a href="javascript:ANORRL.Comments.NextPage()" id="next-pager">next &gt;&gt;</a>
 		</div>
 	</div>
 </div>
@@ -550,7 +612,7 @@
 	});
 	<?php if($place->isStartingPlace()): ?>
 	$(".cog-dropdown li").click(function() {
-		var action = $(this).attr("data-actionid");
+		var action = $(this).data("actionid");
 
 		if(action == 1) {
 			window.location.href = "/develop/<?= $place->id ?>/configure";
@@ -581,7 +643,7 @@
 		$(this).parent().find("ul").css("display", "block");
 	})
 	$(".button[data-tab]").click(function() {
-		var type = $(this).attr("data-tab");
+		var type = $(this).data("tab");
 		$(".box[data-tab]").hide();
 		$(".box[data-tab='"+type+"']").show();
 		$(".button[data-tab]").removeAttr("selected");
@@ -614,35 +676,12 @@
 		})
 	});
 
-	function updateRatings(data) {
-		if(!data['can_vote'])
-			$("#controls").css("pointer-events","none");
-		else
-			$("#controls").removeAttr("style");
+	$("#up-btn").click(function() {
+		ANORRL.Ratings.Rate(true);
+	})
 
-		var upvotes = data['positives'];
-		var downvotes = data['negatives'];
-		var total = upvotes+downvotes;
-
-		$("#up-count").html(upvotes);
-		$("#down-count").html(downvotes);
-
-		if(total != 0) {
-			if(upvotes == 0)
-				$(".ratings-bar").attr("red", "yeah")
-			else if(downvotes == 0)
-				$(".ratings-bar").attr("green", "yeah")
-			else {
-				$(".ratings-bar").attr("red", "yeah")
-				var progress = $("<div></div>");
-
-				progress.width((upvotes/total)*100+"%");
-
-				$(".ratings-bar").append(progress);
-			}
-		}
-	}
-
-	$.get("/asset/<?= $place->id ?>/ratings", updateRatings)
+	$("#down-btn").click(function() {
+		ANORRL.Ratings.Rate(false);
+	})
 </script>
 <?php $page->loadFooter2(); ?>

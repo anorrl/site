@@ -6,6 +6,8 @@
 
 	if($this->internal_name != "user_profile")
 		unset($_SESSION['ANORRL$Owner$StopLooking']);
+
+	$this->addValue("authenticated", ARLAUTH);
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,7 +27,11 @@
 		<meta property="<?= $meta['type'] ?>" content="<?= $meta['contents'] ?>">
 		<?php endforeach ?>
 	</head>
-	<body data-authenticated="<?= ARLAUTH ? "true" : "false" ?>">
+	<body
+	<?php foreach($this->data_values as $data) :?>
+	data-<?= $data['name'] ?>="<?= is_bool($data['value']) ? ($data['value'] ? "true":"false") : $data['value'] ?>"
+	<?php endforeach ?>
+	>
 		<div style="position: fixed; left: 0px; right: 0px; top: 0px; z-index: 999">
 			<div id="header" <?= !SESSION ? "" : 'style="border-width: 2px;"' ?>>
 				<div id="logo" style="float: left;">

@@ -58,7 +58,7 @@
 			loadTab(window.location.hash.substring(1));
 
 		$("li[data-category]").on("click", function() {
-			var type = $(this).attr("data-category");
+			var type = $(this).data("category");
 			
 
 			$("li[data-category]").each(function() {
@@ -76,7 +76,7 @@
 			
 
 			if(type == "universe") {
-				var universe = $(this).attr("data-uid");
+				var universe = $(this).data("uid");
 				// still wondering about /develop/place/<id>/configure... i think ill scrap it...
 				// but anyways universes are different stuff i dont want to fuck with and they have their OWN options sooo
 				// yeah

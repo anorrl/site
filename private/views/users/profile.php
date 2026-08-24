@@ -250,7 +250,7 @@
 <script>
 	$(function(){
 		$("input[type='file'][hidden]").on("change", function() {
-			var type = $(this).attr("data-type");
+			var type = $(this).data("type");
 			if(type != "pfp" && type != "banner") {
 				alert("Something went wrong!");
 				return;
@@ -311,13 +311,13 @@
 		})
 
 		$("button[data-method]").click(function() {
-			var method = $(this).attr("data-method");
+			var method = $(this).data("method");
 
 			if(method.startsWith("upload-")) {
 				var type = method.replaceAll("upload-", "");
 				var file = $("input[type='file'][hidden]");
 
-				file.attr("data-type", type);
+				file.data("type", type);
 				file.trigger("click");
 			}
 			else if(method.startsWith("remove-")) {

@@ -163,7 +163,7 @@
 <script>
 	$(function() {
 		$("li[data-category]").on("click", function() {
-			var type = $(this).attr("data-category");
+			var type = $(this).data("category");
 			if(type == "<?= $type ?>")
 				return;
 

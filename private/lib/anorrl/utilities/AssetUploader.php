@@ -66,7 +66,7 @@
 			return false;
 		}
 
-		private static function IsValidMesh(string $data): bool {
+		public static function IsValidMesh(string $data): bool {
 			return 
 				str_starts_with(trim($data), "version 1.0") || 
 				str_starts_with(trim($data), "version 2.0") ||
@@ -75,7 +75,7 @@
 				str_starts_with(trim($data), "version 5.0");
 		}
 
-		private static function IsSupportedMesh(string $data): bool {
+		public static function IsSupportedMesh(string $data): bool {
 			return 
 				str_starts_with(trim($data), "version 1.0") || 
 				str_starts_with(trim($data), "version 2.0") ||

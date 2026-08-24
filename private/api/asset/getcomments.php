@@ -23,11 +23,15 @@
 	if($page < 1)
 		$page = 1;
 
-	$pre_total_pages = Comment::GetCommentCountOn($asset)/10;
+	$pre_total_pages = Comment::GetCommentCountOn($asset)/5;
 
 	$uhmbullshitcalc = ((float)((int) $pre_total_pages))-$pre_total_pages;
 	if($uhmbullshitcalc < 0.5 && $uhmbullshitcalc != 0) {
 		$pre_total_pages += 0.5;
+	}
+
+	if($uhmbullshitcalc == 0) {
+		$pre_total_pages++;
 	}
 
 	$total_pages = round($pre_total_pages);
@@ -47,30 +51,34 @@
 	}
 
 
-	$comments = Comment::GetCommentsOn($asset, $page);
+	$comments = Comment::GetCommentsOn($asset, $page, 5);
 	$result = [];
-	
 	if(count($comments) != 0) {
 		foreach($comments as $comment) {
 			if($comment instanceof anorrl\Comment) {
 				$result[] = [
 					"id" => $comment->id,
-					"creator" => [
+					"poster" => [
 						"id" => $comment->poster->id,
+						"url" => $comment->poster->getURL(),
 						"name" => $comment->poster->name,
+						"img" => $comment->poster->getThumbsUrl()
 					],
-					"contents" => $comment->contents,
+					"creator" => $asset->isOwner($comment->poster, true),
+					"contents" => str_replace(PHP_EOL, "<br>", $comment->contents),
 					"date" => UtilUtils::GetTimeAgo($comment->postdate)
 				];
 			}
 		}
+
 	}
 
 	$response = [
 		"success" => true,
 		"comments" => $result,
 		"page" => $page,
-		"total_pages" => $total_pages
+		"total_pages" => $total_pages,
+		"bullshit" => $uhmbullshitcalc
 	];
 	die(json_encode($response));
 

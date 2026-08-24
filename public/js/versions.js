@@ -78,11 +78,11 @@ ANORRL.Versions = {
 						download_link.attr("target", "__blank");
 						download_link.attr("href", "/asset/?id="+ANORRL.Versions.CurrentAssetID+"&version="+version['sub_id']);
 
-						select_link.attr("data-versionid", version['id']);
+						select_link.data("versionid", version['id']);
 						select_link.attr("title", "click to make this the current version");
 
 						select_link.on("click", function() {
-							var vid = $(this).attr("data-versionid");
+							var vid = $(this).data("versionid");
 							$.post("/asset/"+ANORRL.Versions.CurrentAssetID+"/setversion/"+vid, function(data) {
 								if(!data['success']) {
 									alert(data['reason']);

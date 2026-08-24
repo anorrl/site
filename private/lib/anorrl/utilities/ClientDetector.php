@@ -5,7 +5,10 @@
 	class ClientDetector {
 		
 		public static function IsAClient(): bool {
-			return str_contains($_SERVER['HTTP_USER_AGENT'], "ANORRLStudio") || 
+			if(!isset(\CONFIG->studioUA))
+				throw new \Exception("Set a user agent or something BAKA!");
+
+			return strcmp($_SERVER['HTTP_USER_AGENT'], \CONFIG->studioUA) == 0 || 
 				str_contains(strtolower($_SERVER['HTTP_USER_AGENT']), "anorrl/wininet") ||
 				str_contains(strtolower($_SERVER['HTTP_USER_AGENT']), "anorrl/winhttp");
 		}

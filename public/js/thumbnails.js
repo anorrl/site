@@ -18,7 +18,7 @@ ANORRL.Thumbnails = {
 		if(!this.Has3DEnabled())
 			return false;
 
-		return $(".thumbnail-holder button").attr("data-3d") == "true";
+		return $(".thumbnail-holder button").data("3d") == "true";
 	},
 	Has3DEnabled: function() {
 		return $(".thumbnail-span").length != 0 && this.Supports3D();
@@ -27,7 +27,7 @@ ANORRL.Thumbnails = {
 		if(!this.Has3DEnabled())
 			return;
 
-		$(".thumbnail-holder button").attr("data-3d", true);
+		$(".thumbnail-holder button").data("3d", true);
 
 		$(".thumbnail-holder > img").css("display", "none");
 		$(".thumbnail-span").css("display", "block");
@@ -46,7 +46,7 @@ ANORRL.Thumbnails = {
 		if(!this.Has3DEnabled())
 			return;
 
-		$(".thumbnail-holder button").attr("data-3d", false);
+		$(".thumbnail-holder button").data("3d", false);
 
 		$(".thumbnail-holder > img").css("display", "inline");
 		$(".thumbnail-span").css("display", "none");
@@ -58,10 +58,10 @@ ANORRL.Thumbnails = {
 $(function() {
 	if(ANORRL.Thumbnails.Has3DEnabled()) {
 		$(".thumbnail-holder button").on("click", function() {
-			if($(this).attr("data-3d") == "true") {
+			if($(this).data("3d") == "true") {
 				ANORRL.Thumbnails.Load2D();
 			} else {
-				$(this).attr("data-3d", true);
+				$(this).data("3d", true);
 				ANORRL.Thumbnails.Load3D();
 			}
 		})

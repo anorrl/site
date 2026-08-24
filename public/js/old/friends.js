@@ -31,9 +31,9 @@ ANORRL.Friends = {
 
 $(() => {
 	$("a[data-placeid]").on("click", function() {
-		ANORRL.User.GrabPlaceInfo($(this).attr("data-placeid"));
+		ANORRL.User.GrabPlaceInfo($(this).data("placeid"));
 	});
 
 	var place = $("a[data-placeid]").first();
-	ANORRL.User.GrabPlaceInfo(place.attr("data-placeid"));
+	ANORRL.User.GrabPlaceInfo(place.data("placeid"));
 });

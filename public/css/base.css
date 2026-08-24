@@ -313,6 +313,20 @@ hr {
 	filter: brightness(1.15);
 }
 
+.button:disabled {
+	filter: brightness(0.8) grayscale();
+}
+
+.button:disabled:hover {
+	filter: brightness(0.7) grayscale();
+}
+
+.button:disabled:active {
+	filter: brightness(0.7) grayscale();
+	
+	background: linear-gradient(180deg,#9c37df 0%, #512270 100%);
+}
+
 .error-text {
 	color: red;
 	font-weight: bold;
@@ -361,7 +375,7 @@ hr {
 }
 
 *[template] {
-	display: none;
+	display: none !important;
 }
 
 ul.special {

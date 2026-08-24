@@ -27,7 +27,7 @@ ANORRL.Item = {
 				ANORRL.Item.State = 1;
 				$("#ModalPopup #PurchaseProcessing").css("display", "block");
 				window.setTimeout(function() {
-					$.post("/api/purchase", { asset_id: Number($("#ModalPopup").attr("data-assetid")) }, function(data) {
+					$.post("/api/purchase", { asset_id: Number($("#ModalPopup").data("assetid")) }, function(data) {
 						if(data['error']) {
 							ANORRL.Item.Purchasing.PresentError(data['message']);
 						} else {
@@ -103,7 +103,7 @@ ANORRL.Item = {
 
 $(function() {
 	$(".FavouriteButton").click(function() {
-		ANORRL.Item.Favourite($(this).attr("data-assetid"));
+		ANORRL.Item.Favourite($(this).data("assetid"));
 	});
 
 	$("#ModalPopup").on("click", function(evt) {
@@ -116,11 +116,11 @@ $(function() {
 
 	if(ANORRL.Item.Has3DEnabled()) {
 		$("#ThumbnailSwitcher").on("click", function() {
-			if($(this).attr("data-3d") == "true") {
-				$(this).attr("data-3d", false);
+			if($(this).data("3d") == "true") {
+				$(this).data("3d", false);
 				ANORRL.Item.Load2D();
 			} else {
-				$(this).attr("data-3d", true);
+				$(this).data("3d", true);
 				ANORRL.Item.Load3D();
 			}
 		})

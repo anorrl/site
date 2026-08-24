@@ -10,6 +10,7 @@
 		private array $scripts = [];
 		private array $stylesheets = [];
 		private array $metas = [];
+		private array $data_values = [];
 
 		private string $icon = "/favicon.ico";
 		private string $title;
@@ -64,6 +65,18 @@
 			}
 		}
 
+		function setTitle(string $title) {
+			$this->title = $title;
+		}
+
+		function setInternalName(string $name) {
+			$this->internal_name = $name;
+		}
+
+		function setIgnoreANORRL(bool $value) {
+			$this->ignore_anorrl = $value;
+		}
+
 		function load3DScripts() {
 			$this->addScript("/js/3D/ThumbnailView.js");
 			$this->addScript("/js/3D/three.min.js");
@@ -115,6 +128,13 @@
 			if($type == "stylesheet") {
 				$this->stylesheets[] = ($public ? "/public":"").$path;
 			}
+		}
+
+		function addValue(string $name, $value) {
+			$this->data_values[] = [
+				"name" => $name,
+				"value" => $value
+			];
 		}
 
 		function loadTemplate(string $template) {

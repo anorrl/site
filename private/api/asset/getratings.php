@@ -1,10 +1,19 @@
 <?php
+	use anorrl\Place;
+	use anorrl\Rating;
 	set_content_type(ARLTYPEJSON);
 
-	die(json_encode([
-		"positives" => 0,
-		"negatives" => 0,
-		"can_vote" => ARLAUTH,
-		"has_voted" => false
-	]));
+	$result = ["success" => false, "reason" => "Request failed."];
+
+	if(!isset($id))
+		die(json_encode($result));
+
+	$asset = Place::FromID($id);
+
+	if(!$asset) {
+		$result['reason'] = "Failed to retrieve place.";
+		die(json_encode($result));
+	}
+
+	die(json_encode(Rating::GetRatingsOn($asset)));
 ?>

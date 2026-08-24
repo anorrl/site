@@ -34,12 +34,14 @@
 		<h3 id="filters-heading">.filters</h3>
 		<hr>
 		<ul class="special">
-			<li data-filter="9" class="button" selected="selected"><span>.random</span></li>
-			<li data-filter="7" class="button"><span>.most_popular</span></li>
-			<li data-filter="8" class="button"><span>.most_visited</span></li>
-			<li data-filter="6" class="button"><span>.most_favourited</span></li>
-			<li data-filter="1" class="button"><span>.recently_created</span></li>
-			<li data-filter="2" class="button"><span>.recently_updated</span></li>
+			<li data-filter="11" class="button" selected="selected"><span>.random</span></li>
+			<li data-filter="7"  class="button"><span>.most_popular</span></li>
+			<li data-filter="8"  class="button"><span>.most_visited</span></li>
+			<li data-filter="6"  class="button"><span>.most_favourited</span></li>
+			<li data-filter="9"  class="button"><span>.highest_rated</span></li>
+			<li data-filter="10" class="button"><span>.lowest_rated</span></li>
+			<li data-filter="1"  class="button"><span>.recently_created</span></li>
+			<li data-filter="2"  class="button"><span>.recently_updated</span></li>
 		</ul>
 	</div>
 	<div style="flex: 1;">

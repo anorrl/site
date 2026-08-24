@@ -108,7 +108,7 @@ ANORRL.Games = {
 					
 					if(ANORRL.Games.MobileEnabled) {
 						template.on("click", function() {
-							window.location.href = "/games/start?placeid="+$(this).attr("data-placeid"); 
+							window.location.href = "/games/start?placeid="+$(this).data("placeid"); 
 						});
 					}
 
@@ -118,7 +118,7 @@ ANORRL.Games = {
 					
 					template.find("#FavouritesArea > span").html(asset['favouritescount']);
 
-					template.attr("data-placeid", asset['id']);*/
+					template.data("placeid", asset['id']);*/
 
 					var one_play = asset['visits'] == 1;
 					var one_player = asset['activeplayers'] == 1;
@@ -172,7 +172,7 @@ $(function() {
 	})
 
 	$("li[data-filter]").on("click",function() {
-		ANORRL.Games.LoadGames(ANORRL.Games.CurrentQuery, ANORRL.Games.CurrentPage, $(this).attr("data-filter"));
+		ANORRL.Games.LoadGames(ANORRL.Games.CurrentQuery, ANORRL.Games.CurrentPage, $(this).data("filter"));
 	});
 
 	$("#search-box").on("keypress", function(e) {

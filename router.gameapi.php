@@ -1,5 +1,6 @@
 <?php
 	// game apis
+	route('GET',      '//asset/', '/private/gameapis/assetdeliverer.php');
 	route('GET',      '/asset/', '/private/gameapis/assetdeliverer.php');
 	route('GET',      '/Asset/', '/private/gameapis/assetdeliverer.php');
 	
@@ -54,6 +55,7 @@
 
 	route('GET',      '/Setting/QuietGet/AndroidAppSettings/', '/private/gameapis/settings/ClientSettings.json');
 	route('GET',      '/Setting/QuietGet/ClientAppSettings/', '/private/gameapis/settings/ClientSettings.json');
+	route('GET',      '/Setting/QuietGet/StudioAppSettings/', '/private/gameapis/settings/ClientSettings.json');
 	route('GET',      '/Setting/QuietGet/ClientSettings/', '/private/gameapis/settings/ClientSettings.json');
 
 	route('GET',      '/Setting/QuietGet/ACCService'.CONFIG->arbiter->key.'/', '/private/gameapis/settings/ACCService.json');

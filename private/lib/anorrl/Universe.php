@@ -6,6 +6,7 @@
 	use anorrl\User;
 	use anorrl\Database;
 	use anorrl\enums\AssetType;
+	use Exception;
 
 	class Universe {
 
@@ -40,6 +41,18 @@
 			}
 
 			return null;
+		}
+
+		public static function IsActive(int $id): bool {
+			$row = Database::singleton()->run(
+				"SELECT `active` FROM `universes` WHERE `id` = :id",
+				[ ":id" => $id ]
+			)->fetchObject();
+
+			if(!$row)
+				throw new Exception("what the fuck");
+
+			return $row ? boolval($row->active) : false;
 		}
 
 		public static function FromID(?int $id): self|null {

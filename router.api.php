@@ -36,6 +36,8 @@
 	route("GET", "/users/[i:id]/comments",  "/private/api/users/getcomments.php", false);
 	route("GET", "/users/[i:id]/css",       "/private/api/users/css.php",         false);
 
+	route("POST", "/asset/[i:id]/rate",   "/private/api/asset/rate.php");
+
 	route("POST", "/users/[i:id]/comment",   "/private/api/users/comment.php");
 	route("POST", "/users/update/pfp",       "/private/api/users/update/pfp.php");
 	route("POST", "/users/update/banner",    "/private/api/users/update/banner.php");

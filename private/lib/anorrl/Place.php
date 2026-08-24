@@ -112,6 +112,7 @@
 		}
 
 		function getStuffResponse() {
+			
 			return [
 				"id" => $this->id,
 				"name" => $this->name,
@@ -122,7 +123,7 @@
 				"thumbnail" => $this->getThumbsUrl(200, 112),
 				"url" => $this->getURL(),
 				"updated" => $this->last_updatetime->format("d/m/Y"),
-				"slot" => "inactive",
+				"slot" => Universe::IsActive($this->universe) ? "active" : "inactive",
 				"visits" => $this->visit_count,
 				"weekly_visits" => $this->getWeeklyVisitCount(),
 				"universe" => $this->universe
@@ -130,7 +131,10 @@
 		}
 
 		function getWeeklyVisitCount() {
-			return 0;
+			return Database::singleton()->run(
+				'SELECT `place` FROM `visits` WHERE `place` = :id AND `time` >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY);',
+				[":id" => $this->id]
+			)->rowCount();
 		}
 
 		function getURL() {
