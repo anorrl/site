@@ -18,6 +18,7 @@
 
 	// probably should just put this in php.ini ...
 	date_default_timezone_set('Europe/London');
+	error_reporting(E_ALL ^ E_DEPRECATED);
 
 	require __DIR__ . "/vendor/autoload.php";
 

@@ -27,7 +27,7 @@ ANORRL.Thumbnails = {
 		if(!this.Has3DEnabled())
 			return;
 
-		$(".thumbnail-holder button").data("3d", true);
+		$(".thumbnail-holder button").attr("data-3d", true);
 
 		$(".thumbnail-holder > img").css("display", "none");
 		$(".thumbnail-span").css("display", "block");
@@ -46,7 +46,7 @@ ANORRL.Thumbnails = {
 		if(!this.Has3DEnabled())
 			return;
 
-		$(".thumbnail-holder button").data("3d", false);
+		$(".thumbnail-holder button").attr("data-3d", false);
 
 		$(".thumbnail-holder > img").css("display", "inline");
 		$(".thumbnail-span").css("display", "none");
@@ -61,7 +61,7 @@ $(function() {
 			if($(this).data("3d") == "true") {
 				ANORRL.Thumbnails.Load2D();
 			} else {
-				$(this).data("3d", true);
+				$(this).attr("data-3d", true);
 				ANORRL.Thumbnails.Load3D();
 			}
 		})

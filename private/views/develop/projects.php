@@ -67,6 +67,7 @@
 	$page->addStylesheet("/css/new/my/places.css?v=1");
 	$page->loadBasicHeader();
 ?>
+<script src="qrc:/qtwebchannel/qwebchannel.js"></script>
 <style>
 	.Place {
 		margin: 5px;
