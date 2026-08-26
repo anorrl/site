@@ -132,7 +132,7 @@ ANORRL.Home = {
 		if(ANORRL.Home.IsButtonDisabled() || !ANORRL.Home.IsInputValid())
 			return;
 
-		ANORRL.Home.GrabFeed();
+		ANORRL.Home.ShowResultMessage();
 
 		$.post("/api/home", {'ANORRL$Home$Status$Text': $("#feeds-post-container").find("textarea").val()}, function(data) {
 			ANORRL.Home.GrabFeed();
