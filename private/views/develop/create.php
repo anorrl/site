@@ -1,7 +1,7 @@
 <?php
 	use anorrl\Asset;
 	use anorrl\enums\CharacterMeshType;
-	use anorrl\Page;
+	use anorrl\PageOld;
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\AssetUploader;
 
@@ -95,7 +95,7 @@
 		}
 	}
 
-	$page = new Page("Create", "my/create");
+	$page = new PageOld("Create", "my/create");
 
 	$page->addStylesheet("/css/new/create.css?v=2");
 	$page->addStylesheet("/css/new/stuff.css?v=2");
@@ -197,7 +197,7 @@
 			<li data_category="24"><a>Animations</a></li>
 			
 			
-			<?php if($user->isAdmin()): ?>
+			<?php if($user->admin): ?>
 			<hr>
 			<h4>Admin</h4>
 			<li data_category="1"><a>Images</a></li>

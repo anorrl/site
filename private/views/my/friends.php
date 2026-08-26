@@ -1,5 +1,5 @@
 <?php
-	use anorrl\Page;
+	use anorrl\PaPageOldge;
 	use anorrl\User;
 	use anorrl\Database;
 
@@ -12,7 +12,7 @@
 
 	$number_of_friends = count($fetch);
 
-	$page = new Page("Your Friends", "my/friends");
+	$page = new PageOld("Your Friends", "my/friends");
 	$page->addStylesheet("/css/new/my/friends.css?v=1");
 	$page->addScript("/js/friends.js?t=1776011774");
 

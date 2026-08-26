@@ -6,14 +6,10 @@
 	$randomsplash = new FileSplasher("titles/catalog")->getRandomSplash();
 
 	$page = new Page("Catalog", "catalog");
-	$page->clearAll();
-
-	$page->addScript("/js/core/jquery.js");
-	$page->addScript("/js/catalog.js?t=1776186351");
-
+	$page->addScript("/js/catalog.js");
 	$page->addStylesheet("/css/catalog.css");
 
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <div class="asset" title="" template>
 	<a href="">
@@ -104,4 +100,4 @@
 	</div>
 </div>
 
-<?php $page->loadFooter2(); ?>
+<?php $page->loadFooter(); ?>

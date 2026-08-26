@@ -1,7 +1,7 @@
 <?php
 	
 	use anorrl\utilities\UserUtils;
-	use anorrl\Page;
+	use anorrl\PageOld;
 	use anorrl\User;
 
 	$user = SESSION->user;
@@ -39,7 +39,7 @@
 		}
 	}
 
-	$page = new Page("The Contributors!");
+	$page = new PageOld("The Contributors!");
 	$page->loadHeader();
 ?>
 <style>

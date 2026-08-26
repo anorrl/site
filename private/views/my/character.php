@@ -1,7 +1,7 @@
 <?php
-	use anorrl\Page;
+	use anorrl\PageOld;
 
-	$page = new Page("Your Character", "my/character");
+	$page = new PageOld("Your Character", "my/character");
 	
 	$page->addScript("/js/core/jquery-modal.js");
 	$page->addScript("/js/character.js?t=1776711792");

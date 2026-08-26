@@ -28,7 +28,7 @@
 	$deceptacon = $random >= 50000 && $random <= 55000;
 	$music = $deceptacon ? "deceptacon" : "sonic2013menu";
 
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <style>
 	#newfrontpage {
@@ -177,8 +177,8 @@
 				<a href="/my/stuff">.stuff</a>
 				<br>
 				<a href="/my/friends">.friends</a><span class="spacer">&nbsp;</span>
-				<a href="/users/<?= $user->id ?>/following">.following</a><span class="spacer">&nbsp;</span>
-				<a href="/users/<?= $user->id ?>/followers">.followers</a>
+				<a href="<?= $user->getTypedURL("following") ?>">.following</a><span class="spacer">&nbsp;</span>
+				<a href="<?= $user->getTypedURL("followers") ?>">.followers</a>
 				<br style="margin: 10px 0px;">
 				<a href="/api/logout?redirect=/" class="button">logout</a>
 				<br style="margin: 10px 0px;">
@@ -188,7 +188,7 @@
 	</div>
 
 </div>
-<?php $page->loadFooter2() ?>
+<?php $page->loadFooter() ?>
 <?php
 	unset($_SESSION['signup_errors']);
 	unset($_SESSION['login_errors']);

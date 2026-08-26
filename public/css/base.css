@@ -307,7 +307,7 @@ hr {
 	color: white;
 }
 
-.button:active {
+.button:active, .button.active, .button[selected] {
 	background: #512270;
 	background: linear-gradient(0deg,#9c37df 0%, #512270 100%);
 	filter: brightness(1.15);
@@ -451,4 +451,17 @@ ul.special li[data-category] span img {
 .multi-titles .page-title {
 	padding-bottom: 3px;
 	margin-bottom: 0px;
+}
+
+ul.horizontal  {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	overflow: hidden;
+	margin: auto;
+}
+
+ul.horizontal li {
+	float: left;
+	padding: 5px;
 }

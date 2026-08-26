@@ -1,0 +1,82 @@
+.comment-error {
+	padding: 5px 2px;
+	padding-top: 8px;
+	font-weight: bold;
+	color: red;
+	display: none;
+}
+.comment {
+	padding: 5px;
+	display: flex;
+	font-family: "Fira Mono", monospace;
+}
+
+.comment .profile-container img {
+	border: 2px solid var(--border-color);
+}
+
+.comment .contents-flex-container {
+	flex: 1;
+	padding: 0px 5px;
+	padding-left: 22px;
+}
+
+.comment .contents-container, .comment[right] .contents-container {
+	border: 2px solid var(--border-color);
+	max-height: 150px;
+	position: relative;
+	width: fit-content;
+}
+
+.comment[right] .contents-container {
+	margin-left: auto;
+	margin-right: 20px;
+}
+
+.comment .contents-container:after, .comment[right] .contents-container:after {
+	content: '';
+	position: absolute;
+	top: 0px;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-top: 0;
+	margin-top: -2px;
+}
+
+.comment .contents-container:after {
+	left: 0;
+	right: auto;
+	border-right-color: var(--border-color);
+	border-left: 0;
+	margin-left: -20px;
+}
+
+.comment[right] .contents-container:after {
+	left: auto;
+	right: 0;
+	border-left-color: var(--border-color);
+	border-right: 0;
+	margin-right: -20px;
+}
+
+.comment #details {
+	font-size: 12px;
+	border-bottom: 1px solid var(--lighter-border-color);
+	padding-bottom: 5px;
+	color: #CCC;
+	font-size: 11px;
+	font-style: italic;
+}
+
+.comment #contents {
+	padding: 5px;
+	max-width: 730px;
+	max-height: 101px;
+	overflow: auto;
+	overflow-wrap: break-word;
+}
+
+.comment[right] #contents {
+	text-align: right;
+}

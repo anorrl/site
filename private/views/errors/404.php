@@ -2,9 +2,8 @@
 	use anorrl\Page;
 
 	$page = new Page("404");
-	$page->clearAll();
 	$page->addStylesheet("/css/error.css");
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <div class="box" id="error-container">
 	<div id="main">
@@ -23,4 +22,4 @@
 		</form>
 	</div>
 </div>
-<?php $page->loadFooter2() ?>
+<?php $page->loadFooter() ?>

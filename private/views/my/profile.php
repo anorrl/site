@@ -1,5 +1,5 @@
 <?php
-	use anorrl\Page;
+	use anorrl\PageOld;
 
 	$user = SESSION->user;
 	$settings = SESSION->settings;
@@ -100,7 +100,7 @@
 		$bgm = null;
 	}
 
-	$page = new Page("Profile", "my/profile");
+	$page = new PageOld("Profile", "my/profile");
 	$page->addStylesheet("/css/new/forms.css");
 
 	$page->loadHeader();

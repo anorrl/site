@@ -6,7 +6,7 @@
     $randomsplash = new FileSplasher("titles/about")->getRandomSplash();
 
 	$page = new Page("About ANORRL", "about");
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <style>
 	h1 {
@@ -99,4 +99,4 @@
 	<p>We are open.</p>
 </div>
 
-<?php $page->loadFooter2(); ?>
+<?php $page->loadFooter(); ?>

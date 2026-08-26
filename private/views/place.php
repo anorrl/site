@@ -55,51 +55,15 @@
 	}
 
 	$page = new Page(htmlspecialchars($place->name, ENT_QUOTES));
-	$page->clearAll();
-	$page->addScript("/js/core/jquery.js");
+	$page->addStylesheet("/css/comments.css");
 	$page->addScript("/js/comments.js");
 	$page->addScript("/js/ratings.js");
 	$page->addValue("asset", $place->id);
 	$place->loadEmbed($page);
 	
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
-<div class="comment" template>
-	<div class="profile-container">
-		<a target="__blank"><img width="100"></a>
-	</div>
-	<div class="contents-flex-container">
-		<div class="contents-container box">
-			<div style="padding: 10px">
-				<div id="details">
-					<div style="float: left">posted <span id="date"></span> by <a id="name"></a></div>
-					<div style="display: inline-block; width: 15px">&nbsp;</div>
-					<div style="float: right"><a>.report</a></div>
-					<div style="clear:both"></div>
-				</div>
-				<div id="contents"></div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="comment-right" template>
-	<div class="contents-flex-container">
-		<div class="contents-container box">
-			<div style="padding: 10px">
-				<div id="details">
-					<div style="float: left">posted <span id="date"></span> by <a id="name"></a></div>
-					<div style="display: inline-block; width: 15px">&nbsp;</div>
-					<div style="float: right"><a>.report</a></div>
-					<div style="clear:both"></div>
-				</div>
-				<div id="contents"></div>
-			</div>
-		</div>
-	</div>
-	<div class="profile-container">
-		<a target="__blank"><img width="100"></a>
-	</div>
-</div>
+<?php $page->loadTemplate("layouts/comments"); ?>
 <style>
 		.cog img {
 		margin-bottom: -3px;
@@ -492,114 +456,7 @@
 	</div>
 </div>
 <div style="margin-top: 5px;">
-	<h4 class="page-title">.commentary</h4>
-	<div class="box" style="padding: 10px 20px" id="comment-post-container">
-		<h3 class="page-slogan">.post_something_cool_about_this!</h3>
-		<textarea maxlength="256" minlength="4" class="box input" style="width: 914px" placeholder="hurr durr i love this thing!"></textarea>
-		<div class="comment-error">you did something bad: <span></span></div>
-		<button class="button" style="margin-top: 5px">submit</button>
-	</div>
-	<style>
-		.comment-error {
-			padding: 5px 2px;
-			padding-top: 8px;
-			font-weight: bold;
-			color: red;
-			display: none;
-		}
-		.comment {
-			padding: 5px;
-			display: flex;
-			font-family: "Fira Mono", monospace;
-		}
-
-		.comment .profile-container img {
-			border: 2px solid var(--border-color);
-		}
-
-		.comment .contents-flex-container {
-			flex: 1;
-			padding: 0px 5px;
-			padding-left: 22px;
-		}
-
-		.comment .contents-container, .comment[right] .contents-container {
-			border: 2px solid var(--border-color);
-			max-height: 150px;
-			position: relative;
-			width: fit-content;
-		}
-
-		.comment[right] .contents-container {
-			margin-left: auto;
-			margin-right: 20px;
-		}
-
-		.comment .contents-container:after, .comment[right] .contents-container:after {
-			content: '';
-			position: absolute;
-			top: 0px;
-			width: 0;
-			height: 0;
-			border: 20px solid transparent;
-			border-top: 0;
-			margin-top: -2px;
-		}
-
-		.comment .contents-container:after {
-			left: 0;
-			right: auto;
-			border-right-color: var(--border-color);
-			border-left: 0;
-			margin-left: -20px;
-		}
-
-		.comment[right] .contents-container:after {
-			left: auto;
-			right: 0;
-			border-left-color: var(--border-color);
-			border-right: 0;
-			margin-right: -20px;
-		}
-
-		.comment #details {
-			font-size: 12px;
-			border-bottom: 1px solid var(--lighter-border-color);
-			padding-bottom: 5px;
-			color: #CCC;
-			font-size: 11px;
-			font-style: italic;
-		}
-
-		.comment #contents {
-			padding: 5px;
-			max-width: 730px;
-			max-height: 101px;
-			overflow: auto;
-			overflow-wrap: break-word;
-		}
-	</style>
-	<div style="padding: 5px">
-		<div id="statuses">
-			<div class="status" id="loading-status">
-				<img src="/public/images/ProgressIndicator4White.gif" width="90">
-				<br>
-				<b>loading comments...</b>
-			</div>
-			<div class="status" id="nothing-status">
-				<img src="/public/images/noassets.png" width="110">
-				<br>
-				<b>there's no discussion here!</b>
-			</div>
-		</div>
-		<div id="comments-container"></div>
-		<div id="comments-pager" style="margin: 0 auto;text-align: center">
-			<hr>
-			<a href="javascript:ANORRL.Comments.PrevPage()" id="back-pager">&lt;&lt; back</a>
-			<input class="box input" type="text" maxlength="3" value="1" style="width: 25px;text-align: center;padding: 2px 4px;"> of <span id="page-counter">1</span>
-			<a href="javascript:ANORRL.Comments.NextPage()" id="next-pager">next &gt;&gt;</a>
-		</div>
-	</div>
+	<?php $page->loadTemplate("layouts/comment_poster"); ?>
 </div>
 <script>
 	$(window).click(function() {
@@ -684,4 +541,4 @@
 		ANORRL.Ratings.Rate(false);
 	})
 </script>
-<?php $page->loadFooter2(); ?>
+<?php $page->loadFooter(); ?>

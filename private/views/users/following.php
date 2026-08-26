@@ -1,6 +1,6 @@
 <?php
 	use anorrl\User;
-	use anorrl\Page;
+	use anorrl\PageOld;
 	use anorrl\utilities\UtilUtils;
 
 	if(!UtilUtils::HasBeenRewritten()) {
@@ -24,7 +24,7 @@
 	
 	$following = $get_user->getFollowing();
 
-	$page = new Page("{$get_user->name}'s Following");
+	$page = new PageOld("{$get_user->name}'s Following");
 	$page->addStylesheet("/css/new/my/friends.css?v=1");
 
 	$page->loadHeader();

@@ -53,15 +53,9 @@
 	if(count($comments) != 0) {
 		foreach($comments as $comment) {
 			if($comment instanceof anorrl\Comment) {
-				$result[] = [
-					"id" => $comment->id,
-					"creator" => [
-						"id" => $comment->poster->id,
-						"name" => $comment->poster->name,
-					],
-					"contents" => $comment->contents,
-					"date" => UtilUtils::GetTimeAgo($comment->postdate)
-				];
+				$response = $comment->getJSON();
+				$response["creator"] = $comment->poster->id == $id;
+				$result[] = $response;
 			}
 		}
 	}

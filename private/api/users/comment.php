@@ -8,7 +8,7 @@
 
 	$result = ["success" => false, "reason" => "Request failed."];
 
-	if(!$user || !isset($id) || !isset($_POST['ANORRL$Comments$Contents']))
+	if(!$user || !isset($id) || !isset($_POST['ANORRL$Comment$Contents']))
 		die(json_encode($result));
 
 	$user = User::FromID($id);
@@ -18,5 +18,5 @@
 		die(json_encode($result));
 	}
 
-	die(json_encode(Comment::Post($user, trim($_POST['ANORRL$Comments$Contents']))));
+	die(json_encode(Comment::Post($user, trim($_POST['ANORRL$Comment$Contents']))));
 ?>

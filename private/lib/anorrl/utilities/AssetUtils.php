@@ -22,7 +22,7 @@
 				return [];*/
 			
 			$query_filter = "AND `public` = 1 AND `nevershow` = 0";
-			/*if($user->isAdmin()) {
+			/*if($user->admin) {
 				$query_filter = "AND `nevershow` = 0";
 			}*/
 			
@@ -60,7 +60,7 @@
 					$asset = Asset::FromID($row->id);
 				}
 
-				//if($user->isAdmin() || !$asset->notcatalogueable && $asset->public) {}
+				//if($user->admin || !$asset->notcatalogueable && $asset->public) {}
 				$result_array[] = $asset;
 			}
 
@@ -84,7 +84,7 @@
 				return [];*/
 			
 			$query_filter = "AND `assets`.`public` = 1 AND `nevershow` = 0";
-			// if($user->isAdmin()) { $query_filter = "AND `nevershow` = 0"; }
+			// if($user->admin) { $query_filter = "AND `nevershow` = 0"; }
 
 			$sql_types = "`type` = :type";
 
@@ -136,7 +136,7 @@
 				} else {
 					$asset = Asset::FromID($row->id);
 				}
-				//if($user->isAdmin() || !$asset->notcatalogueable && $asset->public) {}
+				//if($user->admin || !$asset->notcatalogueable && $asset->public) {}
 				$result_array[] = $asset;
 			}
 			return $result_array;
@@ -155,7 +155,7 @@
 				return 0;*/
 			
 			$query_filter = "AND `public` = 1 AND `nevershow` = 0";
-			// if($user->isAdmin()) { $query_filter = "AND `nevershow` = 0"; }
+			// if($user->admin) { $query_filter = "AND `nevershow` = 0"; }
 
 			$sql_types = "`type` = :type";
 

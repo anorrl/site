@@ -23,6 +23,8 @@
 		public string $blurb;
 		public string $password;
 		public string $security_key;
+		public string $application_id;
+		public bool $admin;
 		public bool $has_pfp_set;
 		public bool $has_banner_set;
 		public string $currentoutfitmd5;
@@ -111,6 +113,8 @@
 			$this->last_banner_change_date = \DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->last_banner_time);
 			$this->password = $rowdata->password;
 			$this->security_key = $rowdata->security;
+			$this->admin = boolval($rowdata->admin);
+			$this->application_id = $rowdata->appid;
 		}
 
 
@@ -330,6 +334,9 @@
 
 			$badges = [];
 
+			if($this->admin)
+				$badges[] = ANORRLBadge::ADMINISTRATOR;
+
 			foreach($rows as $row) {
 				$badges[] = ANORRLBadge::index($row->badgeid);
 			}
@@ -341,8 +348,12 @@
 		 * Returns badges created by the users (from games)
 		 * @return array
 		 */
-		function getUserBadges(): array {
-			return $this->getOwnedAssets(AssetType::BADGE);
+		function getUserBadges(int $count = 7): array {
+			return $this->getOwnedAssets(AssetType::BADGE, '', false, false, [], 1, $count);
+		}
+
+		function getUserBadgesTotalCount(): int {
+			return $this->getOwnedAssetsCount(AssetType::BADGE, '', false, false, []);
 		}
 
 		function getLatestStatus(): Status|null {
@@ -533,6 +544,90 @@
 			$row = Database::singleton()->run($sql, $params)->fetch(\PDO::FETCH_ASSOC);
 
 			return $row ? $row['COUNT(`transactions`.`id`)'] : -1;
+		}
+
+		/**
+		 * This is a catch all function to grab the user's owned assets.
+		 * 
+		 * Should be easier to do shit now...
+		 * 
+		 * @param AssetType $type
+		 * @param string $query
+		 * @param int $page
+		 * @param int $count
+		 * @return void
+		 */
+		function getFavouritedAssets(AssetType $type, string $query = "", bool $show_all = true, int $page = -1, int $count = -1): array {
+		
+			$sql_query = trim($query);
+			if(strlen($sql_query) > 0) {
+				$sql_query = "%$sql_query%";
+			} else {
+				$sql_query = "%";
+			}
+			
+			$sql_extra = "";
+
+			if(!$show_all) {
+				$sql_extra .= " AND `public` = 1";
+			}
+
+			//  assetid 	userid 	assettype 	date 	
+
+			$sql_types = "AND `assets`.`type` = :type";
+			if($type == AssetType::GAME || $type == AssetType::PLACE) {
+				$sql_types = "";
+			}
+			else if($type == AssetType::BODYPARTS) {
+				$type_head = AssetType::HEAD->ordinal();
+				$type_torso = AssetType::TORSO->ordinal();
+				$type_leftarm = AssetType::LEFTARM->ordinal();
+				$type_rightarm = AssetType::RIGHTARM->ordinal();
+				$type_leftleg = AssetType::LEFTLEG->ordinal();
+				$type_rightleg = AssetType::RIGHTLEG->ordinal();
+
+				$sql_types = "(`type` = $type_head OR `type` = $type_torso OR `type` = $type_leftarm OR `type` = $type_rightarm OR `type` = $type_leftleg OR `type` = $type_rightleg)";
+			}
+
+			$sql_select = "SELECT assets.id FROM `favourites`, `assets`";
+			$sql_where = "WHERE `favourites`.`assetid` = `assets`.`id` AND `userid` = :user $sql_types AND `assets`.`name` LIKE :query $sql_extra ORDER BY `date` DESC";
+
+			if($type == AssetType::PLACE)
+				$sql_select .= " INNER JOIN `places`    ON `assets`.`id` = `places`.`id`";
+			elseif($type == AssetType::GAME)
+				$sql_select .= " INNER JOIN `universes` ON `assets`.`id` = `universes`.`starting_place`";
+		
+			$sql = "$sql_select $sql_where";
+
+			$db = Database::singleton();
+
+			$params = [ ":user" => $this->id, ":query" => $sql_query ];
+
+			if($page > 0 && $count > 0) {
+				$sql = "$sql LIMIT :page, :count";
+				$params[":page"] = (($page-1)*$count);
+				$params[":count"] = $count;
+			}
+
+			if($type != AssetType::GAME && $type != AssetType::PLACE && $type != AssetType::BODYPARTS)
+				$params[":type"] = $type->ordinal();			
+
+			$rows = $db->run(
+				$sql,
+				$params
+			)->fetchAll(\PDO::FETCH_OBJ);
+
+			$result_array = [];
+
+			foreach($rows as $row) {
+				if($type != AssetType::PLACE && $type != AssetType::GAME) {
+					$result_array[] = Asset::FromID($row->id);
+				}
+				else {
+					$result_array[] = Place::FromID($row->id);
+				}
+			}
+			return $result_array;
 		}
 
 		function getAllOwnedAssets(): array {
@@ -1049,10 +1144,6 @@
 			)->rowCount() != 0;
 		}
 
-		function isAdmin(): bool {
-			return $this->hasProfileBadgeOf(ANORRLBadge::ADMINISTRATOR);
-		}
-
 		function isBanned(): bool {
 			return false;
 		}
@@ -1268,7 +1359,7 @@
 					($settings->headshots ? "headshot" : "profile")
 					: "headshot");
 			$path = "/profiles/{$this->id}.png";
-			if($type == "headshot")
+			if($type == "headshot" && file_exists(get_path_file("users/renders/headshots/{$this->currentoutfitmd5}")))
 				$path = "/renders/headshots/{$this->currentoutfitmd5}";
 			
 			if(!file_exists(get_path_file("users{$path}")))
@@ -1315,8 +1406,22 @@
 			return (\CONFIG->prefer_https ? "https":"http")."://cdn.".\CONFIG->baseurl."/renders/{$this->currentoutfitmd5}/image.png";
 		}
 
+		function getTypedURL(string $path) {
+			return "/users/{$this->id}/{$path}";
+		}
+
 		function getURL() {
-			return "/users/{$this->id}/profile";
+			return $this->getTypedURL("profile");
+		}
+
+		function getAllPlaceVisits() {
+			$visits = 0;
+
+			foreach($this->getOwnedAssets(AssetType::PLACE, '', true, true) as $place) {
+				$visits += $place->visit_count;
+			}
+
+			return $visits;
 		}
 
 		function getAccountAge(): int {
@@ -1636,6 +1741,14 @@
 
 			return ["success" => true];
 
+		}
+
+		function getWipeouts(): int {
+			return 0;
+		}
+
+		function getKnockouts(): int {
+			return 0;
 		}
 	}
 ?>

@@ -56,18 +56,9 @@
 	if(count($comments) != 0) {
 		foreach($comments as $comment) {
 			if($comment instanceof anorrl\Comment) {
-				$result[] = [
-					"id" => $comment->id,
-					"poster" => [
-						"id" => $comment->poster->id,
-						"url" => $comment->poster->getURL(),
-						"name" => $comment->poster->name,
-						"img" => $comment->poster->getThumbsUrl()
-					],
-					"creator" => $asset->isOwner($comment->poster, true),
-					"contents" => str_replace(PHP_EOL, "<br>", $comment->contents),
-					"date" => UtilUtils::GetTimeAgo($comment->postdate)
-				];
+				$response = $comment->getJSON();
+				$response["creator"] = $asset->isOwner($this->poster, true);
+				$result[] = $response;
 			}
 		}
 

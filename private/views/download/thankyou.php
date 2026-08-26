@@ -1,7 +1,7 @@
 <?php
-	use anorrl\Page;
+	use anorrl\PageOld;
 
-	$page = new Page("Thanks for downloading...");
+	$page = new PageOld("Thanks for downloading...");
 	$page->addStylesheet("/css/new/download.css");
 	$page->loadHeader();
 ?>

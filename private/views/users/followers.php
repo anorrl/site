@@ -1,8 +1,6 @@
 <?php
 	use anorrl\User;
-	use anorrl\utilities\UserUtils;
-	use anorrl\UserSettings;
-	use anorrl\Page;
+	use anorrl\PageOld;
 	use anorrl\utilities\UtilUtils;
 
 	
@@ -27,7 +25,7 @@
 
 	$followers = $get_user->getFollowers();
 
-	$page = new Page("{$get_user->name}'s Followers");
+	$page = new PageOld("{$get_user->name}'s Followers");
 	$page->addStylesheet("/css/new/my/friends.css?v=1");
 
 	$page->loadHeader();

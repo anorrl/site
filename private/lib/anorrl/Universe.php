@@ -296,7 +296,7 @@
 		}
 
 		function isOwner(User $user) {
-			return $user->id == $this->creator->id || $user->isAdmin();
+			return $user->id == $this->creator->id || $user->admin;
 		}
 
 		function hasAccess(User|null $user = null) {

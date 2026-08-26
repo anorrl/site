@@ -273,7 +273,7 @@
 			bool $comments_enabled = true,
 			User $user
 		): array {
-			if($user->id != $asset->creator->id && !$user->isAdmin()) {
+			if($user->id != $asset->creator->id && !$user->admin) {
 				return ["success" => false, "reason" => "User is not authorised to perform this action!"];
 			}
 			$db = Database::singleton();
@@ -346,7 +346,7 @@
 				$comments_enabled = $asset->comments_enabled;
 				
 				if($asset->type == AssetType::IMAGE && $asset->type == AssetType::LUA) {
-					if(!$user->isAdmin()) {
+					if(!$user->admin) {
 						return ["success" => false, 'reason' => "You are not authorised to perform this action!"];
 					}
 				}
@@ -544,7 +544,7 @@
 			if($user != null && !$user->isBanned()) {
 
 				if($type == AssetType::IMAGE && $type == AssetType::LUA) {
-					if(!$user->isAdmin()) {
+					if(!$user->admin) {
 						return ["success" => false, 'reason' => "You are not authorised to perform this action!"];
 					}
 				}

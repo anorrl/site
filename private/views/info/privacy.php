@@ -4,7 +4,7 @@
 	$page = new Page("ANORRL Privacy Policy");
 	$page->setIgnoreANORRL(false);
 
-	$page->loadHeader2();
+	$page->loadHeader();
 
 	$domain = CONFIG->baseurl;
 ?>
@@ -30,5 +30,5 @@
 	</p>
 </div>		
 <?php
-	$page->loadFooter2();
+	$page->loadFooter();
 ?>

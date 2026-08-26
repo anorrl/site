@@ -3,7 +3,7 @@
 
 	$page = new Page("Develop", "develop");
 
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <style>
 	#cards {
@@ -81,5 +81,5 @@
 	<p>add popular games to this area!</p>
 </div>-->
 <?php
-	$page->loadFooter2();
+	$page->loadFooter();
 ?>

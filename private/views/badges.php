@@ -1,8 +1,8 @@
 <?php
 	use anorrl\enums\ANORRLBadge;
-	use anorrl\Page;
+	use anorrl\PageOld;
 
-	$page = new Page("Badges");
+	$page = new PageOld("Badges");
 
 	$page->loadHeader();
 

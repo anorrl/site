@@ -1,8 +1,7 @@
 <?php
-	use anorrl\Page;
+	use anorrl\PageOld;
 	use anorrl\User;
-	use anorrl\utilities\UtilUtils;
-
+	
 	// No id parameter? GET OUT!
 	if(!isset($id)) {
 		redirect("/my/home");
@@ -32,7 +31,7 @@
 
 	$friends = $get_user->getFriends();
 
-	$page = new Page("{$get_user->name}'s Friends");
+	$page = new PageOld("{$get_user->name}'s Friends");
 	$page->addStylesheet("/css/new/my/friends.css?v=1");
 
 	$page->loadHeader();

@@ -10,13 +10,9 @@
 	$user = SESSION->user;
 
 	$page = new Page("Creations", "develop");
+	$page->addScript("/js/creations.js");
 
-	$page->clearAll();
-	$page->addScript("/js/core/jquery.js");
-
-	$page->addScript("/js/creations.js?t=1777052041");
-
-	$page->loadHeader2();
+	$page->loadHeader();
 
 	function generate($type, array $items = []) {
 
@@ -197,7 +193,7 @@
 				"body_type",
 				"emotes"
 			]); ?>
-			<?php if($user->isAdmin()): ?>
+			<?php if($user->admin): ?>
 			<div class="heading"><hr><h3>admin</h3><hr></div>
 			<li data-category="19"class="button"><span>.gears</span></li>
 			<li data-category="1" class="button"><span>.images</span></li>
@@ -208,5 +204,5 @@
 	<?php require __DIR__."/library/$type.php" ?>
 </div>		
 <?php
-	$page->loadFooter2();
+	$page->loadFooter();
 ?>

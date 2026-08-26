@@ -6,15 +6,11 @@
 	$randomsplash = new FileSplasher("titles/games", false, 'Games$Random$Splash')->getRandomSplash();
 
 	$page = new Page("Games", "games");
-	$page->clearAll();
-
-	$page->addScript("/js/core/jquery.js");
 	$page->addScript("/js/jquery.lazy.min.js");
-
-	$page->addScript("/js/games.js?t=1777052041");
+	$page->addScript("/js/games.js");
 	$page->addStylesheet("/css/games.css");
 
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <div class="game" title="" template>
 	<a href="">
@@ -77,4 +73,4 @@
 		</div>
 	</div>
 </div>
-<?php $page->loadFooter2() ?>
+<?php $page->loadFooter() ?>

@@ -714,7 +714,7 @@
 		}
 
 		function isOwner(User|null $user, bool $explicit = false) {
-			return $user && ($user->id == $this->creator->id || ($user->isAdmin() && !$explicit));
+			return $user && ($user->id == $this->creator->id || ($user->admin && !$explicit));
 		}
 
 		function setUniverse(Universe|int|null $universe = null) {
@@ -751,7 +751,7 @@
 			);
 		}
 
-		function loadEmbed(Page $page) {
+		function loadEmbed(Page|PageOld $page) {
 			$item = $this->type == AssetType::PLACE ? "a place" : "an item";
 			$embed_title = htmlspecialchars("\"{$this->name}\" {$item} by {$this->creator->name}", ENT_QUOTES);
 			$desc = substr($this->description, 0, 128);

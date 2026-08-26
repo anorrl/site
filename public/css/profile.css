@@ -1,0 +1,279 @@
+div[data-tab] {
+	display: none;
+}
+
+#profile-container {
+	position:relative;
+	width: 970px;
+	height: 220px;
+	background-color:black;
+	border: 2px solid var(--border-color);
+	background-size: 100%;
+}
+
+#profile-picture {
+	width: 161px;
+	height: 161px;
+	position: relative;
+}
+
+#profile-picture #controls {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+
+	position: absolute;
+	background-color: rgba(0,0,0, 0.3);
+	transition: opacity 0.25s;
+	opacity: 0;
+	inset: -3px;
+	left: 3px;
+	top: 3px;
+}
+
+#profile-picture:hover #controls {
+	opacity: 1;
+	cursor: pointer;
+	pointer-events: none;
+}
+
+#profile-picture:hover #controls * {
+	pointer-events: all;
+}
+
+#profile-picture img {
+	border-image: repeating-linear-gradient(
+		-55deg,
+		#000,
+		#000 10px,
+		#ffb101 10px,
+		#ffb101 20px
+	) 10;
+	border-style: solid;
+	width: 100%;
+}
+
+#profile-stats {
+	user-select: none;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	gap: 3px;
+	margin-left: 15px;
+}
+
+#profile-stats div {
+	background: rgba(0,0,0, 0.6);
+	font-family: "Fira Mono";
+	letter-spacing: 2px;
+	padding: 5px 10px;
+	width:fit-content;
+}
+
+#profile-stats a {
+	color: white;
+	transition: 0.5s font-size;
+}
+
+#profile-stats a:hover {
+	font-weight: bold;
+	display:inline-block;
+	margin-left: -1px;
+	margin-right: -1px;
+}
+
+#profile-stats #profile-name {
+	font-size: 18px;
+	font-style: italic;
+	font-weight: bold;
+}
+
+#profile-stats #profile-name img {
+	image-rendering:pixelated;
+}
+
+.quote {
+	font-weight: bold;
+	font-size: 15px;
+	margin-top: -5px;
+	display: inline-block;
+}
+
+#banner-controls {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	top:15px;
+	right:15px;
+	gap: 5px;
+	opacity: 0;
+	transition: opacity 0.25s;
+}
+
+#profile-container:hover #banner-controls {
+	opacity: 1;
+}
+
+#report-banner {
+	font-size: 11px;
+	text-align: center;
+	padding: 8px 16px; 
+	width: fit-content;
+	margin: 0 auto;
+	letter-spacing: 2px;
+	font-weight: bolder;
+	font-style: italic;
+	color: #ddd;
+	margin-top:5px;
+}
+
+.page-title {
+	margin-top: 15px;
+	font-size: 13px
+}
+
+#character-container {
+	padding: 5px; display: flex;
+}
+
+#character-container > div {
+	flex: 1;
+	padding: 10px;
+}
+
+[modal] {
+	margin-top: 27px !important;
+	margin: 0px !important;
+	transform: translate(-50%, -50%);
+	z-index: 10000 !important;
+	padding: 10px;
+	text-align: center;
+	display: none;
+}
+
+[modal] a[rel] {
+	text-transform: none;
+	text-decoration: none;
+}
+
+.jquery-modal.blocker {
+	z-index: 9999 !important;
+}
+
+#profile-bio {
+	padding: 15px 30px;
+	font-size: 13px; 
+	font-family: 'Fira Mono';
+	max-height: 300px;
+	overflow: auto;
+	max-width:596px;
+	overflow-wrap: break-word;
+}
+
+.accoutrement-item {
+	text-align: center;
+	height: 100px;
+	width: 100px;
+	margin: 0 auto;
+}
+
+.accoutrement-item:hover {
+	border: 2px solid var(--border-color);
+	margin: -2px auto;
+	background: linear-gradient(0deg,#9c37df 0%, #512270 100%);
+}
+
+.accoutrement-item img {
+	object-fit: cover;
+}
+
+#character-items {
+	display: grid; grid-template-columns: repeat(4, 1fr);
+	gap: 5px;
+	height: 300px;
+	overflow: auto;
+	border-left: 1px solid var(--lighter-border-color);
+}
+
+#no-character-items {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-left: 1px solid var(--lighter-border-color);
+	font-size: 16px;
+	font-family: 'Fira Mono'
+}
+
+.badge, .game {
+	text-align: center;
+	width: fit-content;
+	font-size: 12px;
+	font-family: 'Fira Mono';
+	font-weight: bold;
+	padding: 5px;
+}
+
+.badge:hover, .game:hover {
+	border: 2px solid var(--border-color);
+	margin: -2px;
+	background: linear-gradient(0deg,#9c37df 0%, #512270 100%);
+}
+
+.badge img, .game img {
+	object-fit: cover;
+	width:115px;
+	height:115px;
+}
+
+.game #name {
+	width: 115px;
+	white-space: pre;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+
+ul.horizontal {
+	height: 150px;
+	overflow: hidden;
+}
+
+#buttons {
+	display: flex;
+	gap: 5px;
+	margin-top: 5px;
+	text-align: center;
+}
+
+#buttons .button {
+	flex: 1;
+	text-decoration: none;
+}
+
+.cropper-container {
+	max-height: 90vh;
+}
+
+#statistics {
+	font-size: 12px;
+	font-family: 'Fira Mono';
+	padding: 15px 10px;
+	text-align: center;
+}
+
+#statistics table {
+	width: 100%;
+}
+
+#statistics div {
+	margin: 0 auto;
+}
+
+.stat-title {
+	background: black;
+	padding: 5px 10px;
+	width:fit-content;
+	margin-bottom: 5px !important;
+	font-weight: bold;
+}

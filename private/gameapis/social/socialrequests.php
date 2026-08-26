@@ -25,7 +25,7 @@
 			$user = User::FromID(intval($_GET['playerid']));
 
 			if($user != null) {
-				$value = $user->isAdmin() ? "true" : "false";
+				$value = $user->admin ? "true" : "false";
 			}
 		}
 		echo '<Value Type="boolean">'.$value.'</Value>';

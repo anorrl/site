@@ -1,6 +1,5 @@
 <?php
 	use anorrl\Page;
-	use anorrl\Status;
 	use anorrl\utilities\FileSplasher;
 	use anorrl\utilities\UtilUtils;
 
@@ -10,7 +9,6 @@
 	$hello = new FileSplasher("home/hello", false, "Home\$Random\$Hello")->getRandomSplash();
 
 	$rand_status = str_replace("\"", "&quot;", $rand_status);
-
 	
 	$recentlyplayed = $user->getRecentlyPlayedGames(2);
 
@@ -18,7 +16,7 @@
 
 	$friends = $user->getFriends();
 	$friends_count = count($friends);
-	$has_friends = $friends_count != 0;
+	$has_friends = $friends_count > 0;
 	$too_many_friends = $friends_count > $friends_upper_limit;
 
 	shuffle($friends);
@@ -33,12 +31,10 @@
 	}
 
 	$page = new Page("Home", "my/home");
-	$page->clearAll();
-	$page->addScript("/js/core/jquery.js"); // remove this after revamping all pages
 	$page->addStylesheet("/css/home.css");
-	$page->addScript("/js/home.js?t=1776011774");
+	$page->addScript("/js/home.js");
 
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <table class="feed-item" template style="display: none">
 	<td id="user">
@@ -121,7 +117,7 @@
 			<hr style="margin: 5px -25px;margin-top: 15px;clear: both;">
 			<div id="friends">
 				<h2>.friends <div><a href="/my/friends">[manage]</a></div></h2>
-				<?php if(count($friends) > 0): ?>
+				<?php if($has_friends): ?>
 				<div style="margin: 0px -5px;">
 					<?php foreach($friends as $friend): 
 						$status = $friend->getOnlineActivity(); ?>
@@ -157,6 +153,6 @@
 	</div>
 </div>
 <?php
-	$page->loadFooter2();
+	$page->loadFooter();
 	unset($_SESSION['ANORRL$Home$StatusResult']);
 ?>

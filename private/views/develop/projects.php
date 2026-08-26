@@ -1,5 +1,5 @@
 <?php
-	use anorrl\Page;
+	use anorrl\PageOld;
 	use anorrl\Universe;
 	use anorrl\utilities\FileSplasher;
 	use anorrl\utilities\ClientDetector;
@@ -61,9 +61,7 @@
 
 	$splash = new FileSplasher("didyouknow")->getRandomSplash();
 
-	$page = new Page($universe ? $universe->starting_place->name : "ANORRL Studio", "ide/projects");
-	$page->clearAll();
-	$page->addScript("/js/core/jquery.js");
+	$page = new PageOld($universe ? $universe->starting_place->name : "ANORRL Studio", "ide/projects");
 	$page->addStylesheet("/css/new/my/places.css?v=1");
 	$page->loadBasicHeader();
 ?>

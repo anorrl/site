@@ -3,7 +3,7 @@
 
 	$page = new Page("Page");
 
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <h2 class="page-title">.page</h2>
 <div class="box">
@@ -11,5 +11,5 @@
 	<p>hi hi hi hi hi hi</p>
 </div>		
 <?php
-	$page->loadFooter2();
+	$page->loadFooter();
 ?>

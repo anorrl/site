@@ -29,12 +29,9 @@
 	$updateable = AssetTypeUtils::IsUpdateable($asset->type);
 
 	$page = new Page("editing: ".htmlspecialchars($asset->name, ENT_QUOTES), "develop");
-	$page->clearAll();
-	$page->addScript("/js/core/jquery.js");
-
 	$page->addScript("/js/versions.js");
 
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <script>
 	function loadTab(type) {
@@ -221,4 +218,4 @@
 		<?php endif ?>
 	</div>
 </div>		
-<?php $page->loadFooter2(); ?>
+<?php $page->loadFooter(); ?>

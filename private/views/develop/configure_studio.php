@@ -8,7 +8,7 @@
 
 	use anorrl\Asset;
 	use anorrl\AssetVersion;
-	use anorrl\Page;
+	use anorrl\PageOld;
 	use anorrl\Place;
 	use anorrl\Universe;
 	use anorrl\utilities\UtilUtils;
@@ -178,7 +178,7 @@
 
 	}
 
-	$page = new Page("Editing: ".htmlspecialchars($asset->name, ENT_QUOTES), "ide/edit");
+	$page = new PageOld("Editing: ".htmlspecialchars($asset->name, ENT_QUOTES), "ide/edit");
 
 	$page->addStylesheet("/css/new/forms.css");
 	$page->addStylesheet("/css/new/item/edit.css?v=1");

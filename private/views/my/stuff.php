@@ -1,7 +1,7 @@
 <?php
-	use anorrl\Page;
+	use anorrl\PageOld;
 
-	$page = new Page("Your Stuff", "my/stuff");
+	$page = new PageOld("Your Stuff", "my/stuff");
 	$page->addStylesheet("/css/new/stuff.css?v=2");
 	$page->addStylesheet("/css/new/forms.css");
 	$page->addScript("/js/stuff.js?t=1776537578");

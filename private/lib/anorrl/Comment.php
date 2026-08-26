@@ -183,5 +183,19 @@
 
 			return $row ? $row['COUNT(`id`)'] : -1;
 		}
+
+		function getJSON() {
+			return [
+				"id" => $this->id,
+				"poster" => [
+					"id" => $this->poster->id,
+					"url" => $this->poster->getURL(),
+					"name" => $this->poster->name,
+					"img" => $this->poster->getThumbsUrl()
+				],
+				"contents" => str_replace(PHP_EOL, "<br>", $this->contents),
+				"date" => UtilUtils::GetTimeAgo($this->postdate)
+			];
+		}
 	}
 ?>

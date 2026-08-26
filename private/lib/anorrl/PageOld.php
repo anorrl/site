@@ -3,25 +3,24 @@
 	namespace anorrl;
 
 	use anorrl\UserSettings;
-	use anorrl\utilities\ClientDetector;
 
-	class Page {
+	/**
+	 * Temp class
+	 * @author aberdeen
+	 * @copyright (c) 2026
+	 */
+	class PageOld {
 
 		private array $scripts = [];
 		private array $stylesheets = [];
 		private array $metas = [];
-		private array $data_values = [];
-
-		private string $icon = "/favicon.ico";
 		private string $title;
 		private string $internal_name;
 		private int $lucky_number;
 		private bool $bad_apple = false;
 		private UserSettings $settings;
 
-		private bool $ignore_anorrl = false;
-
-		function __construct(string $title, string|null $internal_name = null, bool $ignore_anorrl = true) {
+		function __construct(string $title, string|null $internal_name = null) {
 //			if(ClientDetector::IsAClient() && $title != "Login" && !str_starts_with($internal_name, "ide")) // assume studio
 //				redirect("/develop/projects");
 
@@ -31,13 +30,13 @@
 			else
 				$this->internal_name = $internal_name;
 
-			$this->ignore_anorrl = $ignore_anorrl;
-
 			$this->lucky_number = rand(0, 100000);
 			$this->bad_apple = $this->lucky_number > 6500 && $this->lucky_number < 6515;
 
-			$this->addStylesheet("/css/base.css?v=2026");
 			$this->addScript("/js/core/jquery.js");
+			$this->addScript("/js/old/main.js?t=1776250887");
+			$this->addScript("/wimpy/wimpy.js");
+			$this->addStylesheet("/css/new/main.css?v=5");
 
 			if(SESSION) {
 				$this->settings = SESSION->settings;
@@ -46,35 +45,26 @@
 				$this->settings = UserSettings::Get();
 			}
 
-			/*if(SESSION && SESSION->user && $_SERVER['SCRIPT_NAME'] != "/users/profile.php") {
+			if($this->settings->teto) {
+				$this->addStylesheet("/css/new/teto.css?v=1");
+			}
+
+			if(SESSION && SESSION->user && $_SERVER['SCRIPT_NAME'] != "/users/profile.php") {
 				$user_id = SESSION->user->id;
 				$time = time();
 
-				$this->addStylesheet(SESSION->user->getTypedURL("css?t=$time"), false);
-			}*/
-		}
-
-		function setTitle(string $title) {
-			$this->title = $title;
-		}
-
-		function setInternalName(string $name) {
-			$this->internal_name = $name;
-		}
-
-		function setIgnoreANORRL(bool $value) {
-			$this->ignore_anorrl = $value;
+				$this->addStylesheet("/users/$user_id/css?t=$time", false);
+			}
 		}
 
 		function load3DScripts() {
-			$this->addStylesheet("/css/thumbnail.css");
-			$this->addScript("/js/3D/ThreeDeeThumbnails.js");
+			$this->addScript("/js/3D/ThumbnailView.js");
 			$this->addScript("/js/3D/three.min.js");
 			$this->addScript("/js/3D/MTLLoader.js");
 			$this->addScript("/js/3D/OBJMTLLoader.js");
 			$this->addScript("/js/3D/tween.js");
+			$this->addScript("/js/3D/ThumbnailView.js");
 			$this->addScript("/js/3D/PolygonOrbitControls.js");
-			$this->addScript("/js/thumbnails.js");
 		}
 
 		function clearAll() {
@@ -119,27 +109,33 @@
 			}
 		}
 
-		function addValue(string $name, $value) {
-			$this->data_values[] = [
-				"name" => $name,
-				"value" => $value
-			];
-		}
-
 		function loadTemplate(string $template) {
 			include $_SERVER['DOCUMENT_ROOT'] . "/private/templates/{$template}.php";
 		}
 
+		function loadBasicHeader() {
+			$this->loadTemplate("basicheader");
+		}
+
+		function loadBasicFooter() {
+			echo <<<EOT
+				</body>
+			</html>
+			EOT;
+		}
+
 		function loadHeader() {
-			$this->loadTemplate("layouts/header");
+			$this->loadTemplate("header");
 		}
 
 		function loadFooter() {
-			$this->loadTemplate("layouts/footer");
-		}
-
-		function setIcon(string $icon) {
-			$this->icon = $icon;
+			echo <<<EOT
+							</div>
+						</div>
+					</div>
+				</body>
+			</html>
+			EOT;
 		}
 	}
 ?>

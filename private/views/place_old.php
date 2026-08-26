@@ -4,7 +4,7 @@
 
 	use anorrl\Asset;
 	use anorrl\Comment;
-	use anorrl\Page;
+	use anorrl\PageOld;
 	use anorrl\Place;
 	use anorrl\Universe;
 
@@ -67,7 +67,7 @@
 	}
 	$header_data = $place;
 
-	$page = new Page(htmlspecialchars($place->name, ENT_QUOTES));
+	$page = new PageOld(htmlspecialchars($place->name, ENT_QUOTES));
 	$page->addStylesheet("/css/new/comments.css?v=1");
 	$page->addStylesheet("/css/new/item/item.css?v=2");
 	$page->addStylesheet("/css/new/item/place.css?v=5");

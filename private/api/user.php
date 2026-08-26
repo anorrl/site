@@ -41,7 +41,7 @@
 				die(json_encode(["badges" => $badges_raw, "page" => $page, "total_pages" => floor(count($user->getOwnedAssets(AssetType::BADGE))/12)]));
 			}
 			else if($_GET['request'] == "isadmin") {
-				die(json_encode(["success" => true, 'isadmin' => $user->isAdmin()]));
+				die(json_encode(["success" => true, 'isadmin' => $user->admin]));
 			}
 			
 			else {

@@ -6,7 +6,7 @@
 	
 	use anorrl\Asset;
 	use anorrl\Comment;
-	use anorrl\Page;
+	use anorrl\PageOld;
 	
 	if(!isset($id))
 		redirect("/my/stuff");
@@ -69,13 +69,13 @@
 
 	$sales = $asset->getSales();
 
-	$page = new Page(htmlspecialchars($asset->name, ENT_QUOTES));
+	$page = new PageOld(htmlspecialchars($asset->name, ENT_QUOTES));
 	
 	$page->addStylesheet("/css/new/item/item.css?v=2");
 	$page->addStylesheet("/css/new/comments.css?v=1");
 	$page->addStylesheet("/css/new/my/home.css?v=2");
 	$page->addStylesheet("/css/new/thumbnail.css");
-	$page->addScript("/js/item.js?t=1776708791");
+	$page->addScript("/js/item.js");
 
 	$asset->loadEmbed($page);
 

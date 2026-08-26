@@ -3,13 +3,10 @@
 	use anorrl\utilities\FileSplasher;
 
 	$page = new Page("Vandals", "vandals");
-	$page->clearAll();
-
-	$page->addScript("/js/core/jquery.js");
-	$page->addScript("/js/vandals.js?t=1776253888");
+	$page->addScript("/js/vandals.js");
 	$page->addStylesheet("/css/vandals.css");
 
-	$page->loadHeader2();
+	$page->loadHeader();
 ?>
 <h2 class="page-title">.vandals</h2>
 <h3 class="page-slogan"><?= new FileSplasher("titles/vandals")->getRandomSplash() ?></h3>
@@ -35,4 +32,4 @@
 		<a href="javascript:ANORRL.Vandals.NextPage()" id="next-pager">next &gt;&gt;</a>
 	</div>
 </div>
-<?php $page->loadFooter2(); ?>
+<?php $page->loadFooter(); ?>
