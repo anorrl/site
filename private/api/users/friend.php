@@ -17,6 +17,9 @@
 		die(json_encode($result));
 	}
 
+	if($user->id == $session->id || $session->isBanned() || $user->isBanned())
+		die(json_encode($result));
+
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$session->friend($user);
 

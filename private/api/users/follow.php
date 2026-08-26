@@ -5,7 +5,7 @@
 
 	$session = ARLAUTH ? SESSION->user : null;
 
-	$result = ["success" => false, "reason" => "Request failed.", "result" => 0];
+	$result = ["success" => false, "reason" => "Request failed.", "result" => false];
 
 	if(!$session || !isset($id))
 		die(json_encode($result));
@@ -16,6 +16,9 @@
 		$result['reason'] = "Failed to find user.";
 		die(json_encode($result));
 	}
+
+	if($user->id == $session->id || $session->isBanned() || $user->isBanned())
+		die(json_encode($result));
 
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		if(!$session->isFollowing($user))
