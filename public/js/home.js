@@ -15,11 +15,19 @@ ANORRL.Home = {
 			page = 1;
 		}
 
+		var loadingMessage = $("#loading-status");
+		var emptyMessage   = $("#nothing-status");
+
+		emptyMessage.css("display", "none");
+		loadingMessage.css("display", "block");
+
 		var feedscontainer = $("#feeds");
 
 		feedscontainer.children().each(function() {
 			$(this).remove();
 		});
+
+		
 
 		var pagercontainer = $("#pager");
 		
@@ -27,65 +35,127 @@ ANORRL.Home = {
 		var nextPager = pagercontainer.find("#next-pager");
 
 		$.get("/api/feeds", {p : page}, function(data) {
-			if(pagercontainer.css("display") == "none") {
-				pagercontainer.css("display", "block");
-			}
+
 			var statuses = data['feed'];
-			ANORRL.Home.CurrentStatusPage = data['page'];
-			var current_page = ANORRL.Home.CurrentStatusPage;
-			var total_pages = data['total_pages'];
 
-			var index = 0;
-			
-			for (var key in statuses) {
-				var status = statuses[key];
-
-				var template = $($(".feed-item[template]").clone().prop('outerHTML'));
-				template.removeAttr("template");
-				template.removeAttr("style");
-
-				if(index % 2 == 0) {
-					template.attr("other", "");
+			if(statuses.length == 0) {
+				if(pagercontainer.css("display") == "block") {
+					pagercontainer.css("display", "none");
 				}
+				loadingMessage.css("display", "none");
+				emptyMessage.css("display", "block");
 				
-				var content = template.find("#content code");
+			} else {
+				loadingMessage.css("display", "none");
+				if(pagercontainer.css("display") == "none") {
+					pagercontainer.css("display", "block");
+				}
 
-				content.html(status['content']);
-				template.find("#user a").attr("href", "/users/"+status['poster']['id']+"/profile");
-				template.find("#user a").find("img").attr("data-src", status['poster']['thumbnail']);
-				template.find("#user a").find("img").lazy();
-				template.find("#content #name").html(status['poster']['name']);
-				template.find("#content #name").parent().attr("href", "/users/"+status['poster']['id']+"/profile");
-				template.find("#content #date-posted #date").html(status['time_posted_label']);
-				template.find("#content #date-posted #report").attr("href", "/report?statusid="+status['id']);
-
-				feedscontainer.append($(template));
 				
-				// this code is AFTER appending because the required properties get calculated when they are finally displayed - grace
-				var is_overflowing = content.prop("scrollHeight") > content.innerHeight();
-				if(!is_overflowing)
-					template.find("#content #scroll-arrow").css("opacity", 0)
+				ANORRL.Home.CurrentStatusPage = data['page'];
+				var current_page = ANORRL.Home.CurrentStatusPage;
+				var total_pages = data['total_pages'];
 
-				index += 1;
+				var index = 0;
+				
+				for (var key in statuses) {
+					var status = statuses[key];
+
+					var template = $($(".feed-item[template]").clone().prop('outerHTML'));
+					template.removeAttr("template");
+					template.removeAttr("style");
+
+					if(index % 2 == 0) {
+						template.attr("other", "");
+					}
+					
+					var content = template.find("#content code");
+
+					content.html(status['content']);
+					template.find("#user a").attr("href", "/users/"+status['poster']['id']+"/profile");
+					template.find("#user a").find("img").attr("data-src", status['poster']['thumbnail']);
+					template.find("#user a").find("img").lazy();
+					template.find("#content #name").html(status['poster']['name']);
+					template.find("#content #name").parent().attr("href", "/users/"+status['poster']['id']+"/profile");
+					template.find("#content #date-posted #date").html(status['time_posted_label']);
+					template.find("#content #date-posted #report").attr("href", "/report?statusid="+status['id']);
+
+					feedscontainer.append($(template));
+					
+					// this code is AFTER appending because the required properties get calculated when they are finally displayed - grace
+					var is_overflowing = content.prop("scrollHeight") > content.innerHeight();
+					if(!is_overflowing)
+						template.find("#content #scroll-arrow").css("opacity", 0)
+
+					index += 1;
+				}
+
+				if(current_page == 1) {
+					backPager.css("display", "none");
+				} else {
+					backPager.css("display", "inline");
+				}
+
+				if(current_page == total_pages) {
+					nextPager.css("display", "none");
+				} else {
+					nextPager.css("display", "inline");
+				}
+
+				pagercontainer.find("#page-counter").html("" + current_page + " of " + total_pages);
+			}
+		});
+	},
+	IsButtonDisabled: function() {
+		return typeof($("#feeds-post-container").find("button").attr("disabled")) != "undefined"
+	},
+	IsInputValid: function() {
+		var contents = $("#feeds-post-container").find("textarea").val().trim();
+		return contents.length <= 256 && contents.length >= 4;
+	},
+	ShowResultMessage: function(error) {
+		if(!error) {
+			$("#result-post").css("display", "none");
+			return;
+		}
+		$("#result-post").css("display", "block");
+		if(error == true) {
+			$("#result-post").attr("class", "success-text");
+			$("#result-post").html("Success!");
+		}
+		else {
+			$("#result-post").attr("class", "error-text");
+			$("#result-post").html(error);
+		}
+	},
+	Submit: function(event) {
+		if(ANORRL.Home.IsButtonDisabled() || !ANORRL.Home.IsInputValid())
+			return;
+
+		ANORRL.Home.GrabFeed();
+
+		$.post("/api/home", {'ANORRL$Home$Status$Text': $("#feeds-post-container").find("textarea").val()}, function(data) {
+			ANORRL.Home.GrabFeed();
+			
+			if(data['success']) {
+				document.querySelector("#feeds-post-container textarea").value = "";
 			}
 
-			if(current_page == 1) {
-				backPager.css("display", "none");
-			} else {
-				backPager.css("display", "inline");
-			}
-
-			if(current_page == total_pages) {
-				nextPager.css("display", "none");
-			} else {
-				nextPager.css("display", "inline");
-			}
-
-			pagercontainer.find("#page-counter").html("" + current_page + " of " + total_pages);
+			ANORRL.Home.ShowResultMessage(data['success'] ? true : data['reason']);
 		});
 	}
 }
 
 $(function(){
 	ANORRL.Home.GrabFeed();
+
+	$("#feeds-post-container").find("button").click(ANORRL.Home.Submit)
+
+	$("#feeds-post-container").find("textarea").on("keyup keydown change", function() {
+		var contents = $(this).val().trim();
+		var disabled = contents.length < $(this).attr("minlength");
+
+		$(this).css("border-color", disabled ? "red" : "")
+		$("#feeds-post-container").find("button").attr("disabled", disabled);
+	})
 });

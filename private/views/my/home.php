@@ -11,26 +11,7 @@
 
 	$rand_status = str_replace("\"", "&quot;", $rand_status);
 
-	if(isset($_POST['ANORRL$Home$Status$Text']) &&
-	   isset($_POST['ANORRL$Home$Status$Submit'])) {
-		$text = trim($_POST['ANORRL$Home$Status$Text']);
-		$result = Status::Send($user->id, trim($_POST['ANORRL$Home$Status$Text']));
-
-		if(!$result['success']) {
-			$_SESSION['ANORRL$Home$StatusResult'] = [
-				"success" => false,
-				"reason" => $result['reason'],
-				"text" => trim($_POST['ANORRL$Home$Status$Text'])
-			];
-		} else {
-			$_SESSION['ANORRL$Home$StatusResult'] = [
-				"success" => true
-			];
-		}
-
-		redirect("/my/home");
-	}
-
+	
 	$recentlyplayed = $user->getRecentlyPlayedGames(2);
 
 	$friends_upper_limit = 4;
@@ -78,21 +59,34 @@
 </div>
 <div class="box" style="margin-bottom: 5px;">
 	<h2 style="margin-bottom: 5px; margin-left: 25px;">.add_status</h2>
-	
-	<div style="margin: 0px 25px; margin-bottom: 20px;">
+	<div style="margin: 0px 25px; margin-bottom: 20px;" id="feeds-post-container">
 		<div id="result-post"></div>
-		<textarea class="box input" name="ANORRL$Home$Status$Text" type="text" minlength="4" maxlength="256" placeholder="<?= $rand_status ?>"></textarea>
-		<input style="margin-top: 5px" class="button" name="ANORRL$Home$Status$Submit" type="submit" value="submit_status"></div>
+		<textarea class="box input" type="text" minlength="4" maxlength="256" placeholder="<?= $rand_status ?>"></textarea>
+		<button class="button" style="margin-top: 5px">submit_status</button>
 	</div>
 </div>
 <div style="display: flex; gap: 5px; align-items: flex-start;">
 	<div class="box" style="flex: 1; padding: 0px 25px">
 		<h2 style="margin-left: -8px;margin-bottom: 8px;">.feed</h2>
+		<div id="statuses">
+			<div class="status" id="loading-status">
+				<img src="/public/images/ProgressIndicator4White.gif" width="90">
+				<br>
+				<b>loading feed...</b>
+			</div>
+			<div class="status" id="nothing-status">
+				<img src="/public/images/noassets.png" width="110">
+				<br>
+				<b>couldn't find anyone!</b>
+			</div>
+		</div>
+
 		<div id="feeds">
 			
 		</div>
-		<hr style="margin-bottom: 0px;">
+		
 		<div id="pager" style="display:none">
+			<hr style="margin-bottom: 15px;">
 			<a href="javascript:ANORRL.Home.DeadvanceFeed()" id="back-pager">&lt;&lt; back</a>
 			<span id="page-counter">1 of 1</span>
 			<a href="javascript:ANORRL.Home.AdvanceFeed()" id="next-pager">next &gt;&gt;</a>
@@ -102,7 +96,8 @@
 		<div>
 			<div id="recently-played">
 				<h2>.recently_played</h2>
-				<table style="">
+				<?php if(count($recentlyplayed) > 1): ?>
+				<table>
 					<?php foreach($recentlyplayed as $game): ?>
 					<td>
 						<div class="game">
@@ -116,11 +111,17 @@
 					</td>
 					<?php endforeach ?>
 				</table>
+				<?php else: ?>
+				<div style="font-size: 14px;text-align: center;margin: 10px;margin-top: 30px;font-family: 'Fira Mono';">
+					go play sum games kid!
+				</div>
+				<?php endif ?>
 			</div>
 			<br style="clear: both;">
 			<hr style="margin: 5px -25px;margin-top: 15px;clear: both;">
 			<div id="friends">
 				<h2>.friends <div><a href="/my/friends">[manage]</a></div></h2>
+				<?php if(count($friends) > 0): ?>
 				<div style="margin: 0px -5px;">
 					<?php foreach($friends as $friend): 
 						$status = $friend->getOnlineActivity(); ?>
@@ -142,8 +143,12 @@
 						</table>
 					<?php endforeach ?>
 				</div>
-				<hr>
+				<?php else: ?>
+				<div style="font-size: 14px;text-align: center;margin: 35px 0px;/*! margin-top: 30px; */font-family: 'Fira Mono';">you have no friends :(</div>
+				<?php endif ?>
+				
 				<?php if($too_many_friends): ?>
+					<hr>
 					<div id="view-all"><a href="/my/friends">view all (<?= $friends_count ?>)</a></div>
 				<?php endif ?>
 			</div>

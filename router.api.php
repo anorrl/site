@@ -12,6 +12,7 @@
 	route_api("GET",      "vandals");
 	route_api("GET|POST", "character");
 	route_api("GET",      "gameservers/get");
+	route_api("POST",     "home");
 
 	route("GET", "/thumbnail/avatar/[*:hash]/mtl",           "/private/api/thumbnail/avatar/getters/mtl.php", false);
 	route("GET", "/thumbnail/avatar/[*:hash]/obj",           "/private/api/thumbnail/avatar/getters/obj.php", false);
