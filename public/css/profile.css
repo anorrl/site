@@ -206,7 +206,7 @@ div[data-tab] {
 	font-family: 'Fira Mono'
 }
 
-.badge, .game {
+.badge, .game, .item {
 	text-align: center;
 	width: fit-content;
 	font-size: 12px;
@@ -215,23 +215,32 @@ div[data-tab] {
 	padding: 5px;
 }
 
-.badge:hover, .game:hover {
+.badge:hover, .game:hover, .item:hover {
 	border: 2px solid var(--border-color);
 	margin: -2px;
 	background: linear-gradient(0deg,#9c37df 0%, #512270 100%);
 }
 
-.badge img, .game img {
+.badge img, .game img, .item img {
 	object-fit: cover;
 	width:115px;
 	height:115px;
 }
 
-.game #name {
+.item img {
+	width:139px;
+	height:139px;
+}
+
+.game #name, .item #name {
 	width: 115px;
 	white-space: pre;
 	overflow:hidden;
 	text-overflow: ellipsis;
+}
+
+.item #name {
+	width: 139px;
 }
 
 ul.horizontal {

@@ -25,6 +25,42 @@
 	$friends_count = count($friends);
 	$followers_count = $user->getFollowersCount();
 	$following_count = $user->getFollowingCount();
+	$profile_badges = $user->getProfileBadges();
+	$badges = $user->getUserBadges();
+	$badges_count = $user->getUserBadgesTotalCount();
+	$favourited_places = $user->getFavouritedAssets(AssetType::PLACE, '', false, 1, 7);
+	$fav_places_count = count($favourited_places);
+	$random_items = $user->getOwnedAssets(null, '', false, false, [], 1, 6);
+
+	$friends_upper_limit = 7;
+	$has_friends = $friends_count > 0;
+	$too_many_friends = $friends_count > $friends_upper_limit;
+
+	shuffle($friends);
+	
+	if(count($friends) > $friends_upper_limit) {
+		$new_friends = [];
+		for($i = 1; $i <= $friends_upper_limit; $i++) {
+			$new_friends[] = $friends[count($friends)-$i];
+		}
+
+		$friends = $new_friends;
+	}
+
+	$places = $user->getOwnedAssets(AssetType::GAME, '', true, false);
+	$places_count = count($places);
+	$place_split_point = 7*2;
+
+	if($places > $place_split_point) {
+		$first_places = array_splice($places, 0, $place_split_point);
+		$next_places = $places;
+	}
+	else {
+		$first_places = $places;
+		$next_places = [];
+	}
+
+	
 
 	if(ARLAUTH) {
 		$settings = SESSION->settings;
@@ -35,10 +71,6 @@
 
 	if($bgm && !$bgm->isUsable() || !$settings->profile_music)
 		$bgm = null;
-
-	
-
-	//str_replace("\n", "<br>", UtilUtils::RecurseRemove(UtilUtils::TurnUrlIntoHyperlink($user->blurb), "\r\n\r\n\r\n", "\n\n"))
 
 	$bio = MarkdownExtra::defaultTransform($user->blurb);
 
@@ -76,29 +108,6 @@
 		
 		if($_SESSION['ANORRL$Owner$StopLooking'] > 20)
 			$owner_look = "you must really like yourself...";
-	}
-
-	$profile_badges = $user->getProfileBadges();
-	$badges = $user->getUserBadges();
-	$badges_count = $user->getUserBadgesTotalCount();
-	$favourited_places = $user->getFavouritedAssets(AssetType::PLACE, '', false, 1, 7);
-	$fav_places_count = count($favourited_places);
-
-	$friends_upper_limit = 7;
-	$friends = $user->getFriends();
-	$friends_count = count($friends);
-	$has_friends = $friends_count > 0;
-	$too_many_friends = $friends_count > $friends_upper_limit;
-
-	shuffle($friends);
-	
-	if(count($friends) > $friends_upper_limit) {
-		$new_friends = [];
-		for($i = 1; $i <= $friends_upper_limit; $i++) {
-			$new_friends[] = $friends[count($friends)-$i];
-		}
-
-		$friends = $new_friends;
 	}
 ?>
 <?php $page->loadTemplate("layouts/comments"); ?>
@@ -152,8 +161,8 @@
 			</div>
 			<?php endif ?>
 			<div style="padding-top: 5px;">
-				<a href="<?= $user->getTypedURL("friends")   ?>"><b><?= $friends_count   ?></b> Friend<?=   $friends_count   == 1 ? "" : "s"  ?></a> |
-				<a href="<?= $user->getTypedURL("followers") ?>"><b><?= $followers_count ?></b> Follower<?= $followers_count == 1 ? "" : "s"  ?></a> |
+				<a href="<?= $user->getTypedURL("friends")   ?>"><b id="friends-count"><?= $friends_count   ?></b> <span id="friends-label">Friend<?=   $friends_count   == 1 ? "" : "s"  ?></span></a> |
+				<a href="<?= $user->getTypedURL("followers") ?>"><b id="followers-count"><?= $followers_count ?></b> <span id="followers-label">Follower<?= $followers_count == 1 ? "" : "s"  ?></span></a> |
 				<a href="<?= $user->getTypedURL("following") ?>"><b><?= $following_count ?></b> Following</a>
 			</div>
 			
@@ -161,9 +170,9 @@
 				<?php if($owner): ?>
 					<button class="button"><?= $owner_look ?></button>
 				<?php else: ?>
-					<button class="button">follow</button>
-					<button class="button">friend</button>
-					<button class="button">block</button>
+					<button class="button" id="follow-btn">follow</button>
+					<button class="button" id="friend-btn">friend</button>
+					<button class="button" id="block-btn" >block</button>
 				<?php endif ?>
 			</div>
 			<?php if($owner): ?>
@@ -177,12 +186,10 @@
 	</div>
 </div>
 
-
 <div class="box" id="buttons">
 	<a class="button" href="#about" data-tab="about">about</a>
 	<a class="button" href="#creations" data-tab="creations">creations</a>
 </div>
-
 <div data-tab="about">
 	<div style="display: flex; gap: 10px;">
 		<?php if($user->blurb != ""): ?>
@@ -224,12 +231,12 @@
 	<h4 class="page-title">.friends (<?= $friends_count ?>) <a href="<?= $user->getTypedURL("friends") ?>">(show more)</a></h4>
 	<div class="box">
 		<ul class="horizontal" style="height: auto;">
-	<?php foreach($friends as $user): ?>
+	<?php foreach($friends as $friend): ?>
 			<li>
-				<div class="badge" title="<?= $user->name ?>">
-					<a href="<?=$user->getURL() ?>">
-						<img src="<?= $user->getThumbsURL() ?>">
-						<div><?= $user->name ?></div>
+				<div class="badge" title="<?= $friend->name ?>">
+					<a href="<?=$friend->getURL() ?>">
+						<img src="<?= $friend->getThumbsURL() ?>">
+						<div><?= $friend->name ?></div>
 					</a>
 				</div>
 			</li>
@@ -287,6 +294,25 @@
 		</div>
 		<?php endif ?>
 	</div>
+	
+	<?php if(count($random_items) > 0): ?>
+	<h4 class="page-title">.collection <a href="<?= $user->getTypedURL("inventory") ?>">(show more)</a></h4>
+	<div class="box">
+		<ul class="horizontal" style="height: auto;">
+	<?php foreach($random_items as $item): ?>
+			<li>
+				<div class="item" title="<?= $item->name ?>">
+					<a href="<?=$item->getURL() ?>">
+						<img src="<?= $item->getThumbsURL() ?>">
+						<div id="name"><?= $item->name ?></div>
+					</a>
+					<div>by <a href="<?= $item->creator->getURL() ?>"><?= $item->creator->name ?></a></div>
+				</div>
+			</li>
+	<?php endforeach ?>
+		</ul>
+	</div>
+	<?php endif ?>
 	
 	<?php if(count($profile_badges) > 0): ?>
 	<h4 class="page-title">.profile_badges (<?= count($profile_badges) ?>) <?php if(count($profile_badges) > 7): ?><a href="ANORRL.Users.ToggleProfileBadges()">(show more)</a><?php endif ?></h4>
@@ -348,12 +374,48 @@
 	</div>
 </div>
 <div data-tab="creations">
-
+	<?php if($places_count > 0): ?>
+	<h4 class="page-title">.games (<?= $places_count ?>)</h4>
+	<div class="box">
+		<ul class="horizontal" style="height: auto;">
+	<?php foreach($first_places as $place): ?>
+			<li>
+				<div class="game" title="<?= $place->name ?>">
+					<a href="<?=$place->getURL() ?>">
+						<img src="<?= $place->getThumbsURL() ?>">
+						<div id="name"><?= $place->name ?></div>
+					</a>
+					<div>by <a href="<?= $place->creator->getURL() ?>"><?= $place->creator->name ?></a></div>
+				</div>
+			</li>
+	<?php endforeach ?>
+		</ul>
+	<?php if(count($next_places) > 0): ?>
+		<button id="open-more-games" class="button">load_more</button>
+		<ul class="horizontal" id="more-games-panel" style="height: auto; display: none;">
+	<?php foreach($next_places as $place): ?>
+			<li>
+				<div class="game" title="<?= $place->name ?>">
+					<a href="<?=$place->getURL() ?>">
+						<img src="<?= $place->getThumbsURL() ?>">
+						<div id="name"><?= $place->name ?></div>
+					</a>
+					<div>by <a href="<?= $place->creator->getURL() ?>"><?= $place->creator->name ?></a></div>
+				</div>
+			</li>
+	<?php endforeach ?>
+		</ul>
+	<?php endif ?>
+	</div>
+	<?php endif ?>
 </div>
 <?php $page->loadTemplate("layouts/comment_poster"); ?>
 <div id="report-banner" class="box">
 	got something to report about this user? <a href="<?= $user->getTypedURL("report#profile") ?>">click here!</a>
 </div>
+<script>
+	
+</script>
 <?php
 	$page->loadFooter();
 ?>

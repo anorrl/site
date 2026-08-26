@@ -690,6 +690,10 @@
 			if($this->type == AssetType::EMOTE)
 				return "/public/images/thumbnails/emotes.png";
 
+			if($this->type == AssetType::ANIMATION)
+				return "/public/images/thumbnails/animation.png";
+
+
 			if($this->type == AssetType::BADGE && !file_exists(get_path_file("assets/thumbs/$thumbsmd5"))) {
 				copy(get_path_file("assets/$md5"), get_path_file("assets/thumbs/$thumbsmd5"));
 			}

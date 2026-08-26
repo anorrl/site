@@ -3,7 +3,82 @@ if(typeof(ANORRL) == "undefined") {
 }
 
 ANORRL.User = {
+	/*
+		0: send friend req
+		1: pending req (sent)
+		2: pending req (incom)
+		2: friends
+	*/
+	GetURL: function(endpoint) {
+		return "/users/"+$("body").data("profile")+"/"+endpoint;
+	},
+	UpdateFriendButton: function() {
+		$.get(this.GetURL("friend"), function(data) {
+			if(!data['success'])
+				alert(data['reason']);
+			
+			$("#friends-count").html(data['count']);
+			$("#friends-label").html(data['count'] == 1 ? "Friend" : "Friends");
+			ANORRL.User.SetStateOfFriendButton(data['result']);
+			
+		});
+	},
+	SetStateOfFriendButton: function(state) {
+		var btn = $("#friend-btn");
 
+		switch(state) {
+			case 0:
+				btn.html("friend");
+				break;
+			case 1:
+				btn.html("cancel");
+				break;
+			case 2:
+				btn.html("accept");
+				break;
+			case 3:
+				btn.html("unfriend");
+				break;
+		}
+	},
+	Friend: function() {
+		$.post(this.GetURL("friend"), {'ANORRL$Friend$Request': true}, function(data) {
+			if(!data['success'])
+				alert(data['reason']);
+
+			$("#friends-count").html(data['count']);
+			$("#friends-label").html(data['count'] == 1 ? "Friend" : "Friends");
+			ANORRL.User.SetStateOfFriendButton(data['result']);
+			
+		});
+	},
+
+	UpdateFollowButton: function() {
+		$.get(this.GetURL("follow"), function(data) {
+			if(!data['success'])
+				alert(data['reason']);
+			
+			$("#followers-count").html(data['count']);
+			$("#followers-label").html(data['count'] == 1 ? "Follower" : "Followers");
+			ANORRL.User.SetStateOfFollowButton(data['result']);
+			
+		});
+	},
+	SetStateOfFollowButton: function(state) {
+		$("#follow-btn").html(state ? "unfollow" : "follow");
+	},
+	Follow: function() {
+		$.post(this.GetURL("follow"), {'ANORRL$Follow$Request': true}, function(data) {
+			if(!data['success'])
+				alert(data['reason']);
+
+			$("#followers-count").html(data['count']);
+			$("#followers-label").html(data['count'] == 1 ? "Follower" : "Followers");
+			ANORRL.User.SetStateOfFollowButton(data['result']);
+			
+		});
+	},
+	
 }
 
 $(function(){
@@ -114,4 +189,24 @@ $(function(){
 		hash = hash.substring(1);
 
 	setType(hash);
+
+	$("#open-more-games").click(function() {
+		$("#more-games-panel").show();
+		$(this).hide();
+	})
+
+
+	ANORRL.User.UpdateFriendButton();
+	$("#friend-btn").click(function() {
+		ANORRL.User.Friend();
+	});
+
+	ANORRL.User.UpdateFollowButton();
+	$("#follow-btn").click(function() {
+		ANORRL.User.Follow();
+	});
+
+	$("#block-btn").click(function() {
+		alert("blocking not implemented YET");
+	})
 });

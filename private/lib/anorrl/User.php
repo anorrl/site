@@ -378,7 +378,7 @@
 		 * @param int $count
 		 * @return void
 		 */
-		function getOwnedAssets(AssetType $type, string $query = "", bool $creator_only = false, bool $show_all = true, array $excludedids = [], int $page = -1, int $count = -1): array {
+		function getOwnedAssets(AssetType|null $type, string $query = "", bool $creator_only = false, bool $show_all = true, array $excludedids = [], int $page = -1, int $count = -1): array {
 		
 			$sql_query = trim($query);
 			if(strlen($sql_query) > 0) {
@@ -411,13 +411,17 @@
 			}
 
 			if(!$show_all) {
-				$sql_extra .= " AND `public` = 1";
+				$sql_extra .= " AND `assets`.`public` = 1";
 			}
 
 			$sql_types = "AND `assets`.`type` = :type";
 			if($type == AssetType::GAME || $type == AssetType::PLACE) {
 				$sql_types = "";
 			}
+
+			if(!$type)
+				$sql_types = "AND `assets`.`nevershow` = 0";
+
 			else if($type == AssetType::BODYPARTS) {
 				$type_head = AssetType::HEAD->ordinal();
 				$type_torso = AssetType::TORSO->ordinal();
@@ -449,7 +453,7 @@
 				$params[":count"] = $count;
 			}
 
-			if($type != AssetType::GAME && $type != AssetType::PLACE && $type != AssetType::BODYPARTS)
+			if($type != AssetType::GAME && $type != AssetType::PLACE && $type != AssetType::BODYPARTS && $type)
 				$params[":type"] = $type->ordinal();			
 
 			$rows = $db->run(
