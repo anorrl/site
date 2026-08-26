@@ -70,6 +70,7 @@
 				return ["success" => false, "errors" => $errors];
 			}
 
+			// rewrite this stuff to use application system
 			$discordid = self::useAccessKey($accesskey);
 			$hashedpass = password_hash($password, PASSWORD_ARGON2ID);
 			$securitykey = self::generateSecurityKey();
@@ -79,6 +80,30 @@
 				[
 					":name" => $username,
 					":discord" => $discordid,
+					":password" => $hashedpass,
+					":security" => $securitykey
+				]
+			)->errorInfo()[0] == SQL_ALLOK) {
+				self::setCookies($securitykey);
+				User::FromNamePercise($username)->updateOutfitHash();
+				return ["success" => true];
+			}
+
+			return ["success" => false, "errors" => ['unknown'=>"Something went wrong!"]];
+		}
+
+		/**
+		 * ONLY USED WHEN THERE ARE NO ACCOUNTS ON SITE.
+		 */
+		public static function registerAdmin(string $username, string $password): string|array {
+
+			$hashedpass = password_hash($password, PASSWORD_ARGON2ID);
+			$securitykey = self::generateSecurityKey();
+			
+			if(Database::singleton()->run(
+				"INSERT INTO `users`(`name`, `password`, `security`, `admin`) VALUES (:name,:password,:security, 1);",
+				[
+					":name" => $username,
 					":password" => $hashedpass,
 					":security" => $securitykey
 				]

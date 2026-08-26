@@ -23,7 +23,12 @@
 	require __DIR__ . "/vendor/autoload.php";
 
 	use anorrl\Session;
-	
+	use anorrl\Database;
+
+	if(Database::singleton()->run("SELECT `id` FROM `users`")->rowCount() == 0)
+		Session::registerAdmin("ANORRL", md5(rand()));
+		
+
 	$session_user = Session::retrieveUser();
 
 	if(session_status() != PHP_SESSION_ACTIVE) {
