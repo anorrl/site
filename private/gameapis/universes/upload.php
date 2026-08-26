@@ -77,7 +77,7 @@
 
 		$result = AssetUploader::UploadAsset($contents, $asset_type, $asset_name, $asset_description, $public, false);
 
-		if(!$result['error']) {
+		if($result['success']) {
 			if($asset_type == AssetType::BADGE) {
 				Asset::FromID($result['id'])->setUniverse($universe);
 			}

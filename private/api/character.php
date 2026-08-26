@@ -1,13 +1,7 @@
 <?php
-
-use anorrl\User;
 	set_content_type(ARLTYPEJSON);
 
 	use anorrl\enums\AssetType;
-	use anorrl\Asset;
-	use anorrl\utilities\Renderer;
-
-	$user = SESSION ? SESSION->user : null;
 
 	function sanitizeBodyColourID($rawcolour) {
 		$colour = intval($_POST[$rawcolour]);
@@ -165,102 +159,137 @@ use anorrl\User;
 			return $colour;
 		}
 	}
-
-
-	if($user != null) {
-		if(isset($_GET['r'])) {
-			$request = $_GET['r'];
-			if($request == "getwardrobe") {
-				$type = AssetType::HAT->ordinal();
-				if(isset($_GET['c'])) {
-					if($_GET['c'] != "outfits") {
-						$type = intval($_GET['c']);
-					}
-				}
-				$page = 1;
-				if(isset($_GET['p'])) {
-					$page = intval($_GET['p']);
-				}
-
-				if($page < 1) {
-					redirect("/api/character?r=getwardrobe&c=$type&p=1");
-				}
-
-				// REWRITE.
+	
+	if(isset($_GET['r']) && SESSION) {
+		
+		$request = $_GET['r'];
+		$user = SESSION->user;
+		
+		if($request == "getwardrobe") {
+			$type = AssetType::HAT->ordinal();
+			if(isset($_GET['c'])) {
 				if($_GET['c'] != "outfits") {
-					$wearing_array = $user->getWearingArray();
-
-					$pre_total_pages_v2 = $user->getOwnedAssetsCount(AssetType::index($type), "", false, true, $wearing_array)/8;
-					$pre_total_pages = $pre_total_pages_v2;
-					$uhmbullshitcalc = ((float)((int) $pre_total_pages))-$pre_total_pages;
-					if($uhmbullshitcalc < 0.5 && $uhmbullshitcalc != 0) {
-						$pre_total_pages += 0.5;
-					}
-
-					$total_pages = round($pre_total_pages);
-
-					if($total_pages < 1) {
-						$total_pages++;
-					}
-
-					if($total_pages < $page) {
-						redirect("/api/character?r=getwardrobe&c=$type&p=1");
-					}
-
-					$assets = $user->getOwnedAssets(AssetType::index($type), "", false, true, $wearing_array, $page, 8);
-
-					$assets_raw = [];
-
-					if(count($assets) != 0) {
-						foreach($assets as $asset) {
-							if($asset instanceof anorrl\Asset) {
-								$assets_raw[] = [
-									"id" => $asset->id,
-									"name" => $asset->name,
-									"creator" => [
-										"id" => $asset->creator->id,
-										"name" => $asset->creator->name
-									],
-									"thumbnail" => $asset->getThumbsUrl(130)
-								];
-							}
-						}
-					}
-					die(json_encode([
-						"assets" => $assets_raw,
-						"page" => $page,
-						"total_pages" => $total_pages
-					]));
-				} else {
-					die(json_encode(["assets" => [], "page" => 1, "total_pages" => 1, "comment"=> "Hi, outfits haven't been added yet (congrats on finding this lol)"]));
+					$type = intval($_GET['c']);
 				}
-			} else if($request == "search") {
-				// coded by skylerclock
-				// rewritten by grace (18/03/2026)
-				$query = isset($_GET['q']) ? trim($_GET['q']) : "";
-				$category = AssetType::index(intval($_GET['c'])) ?? AssetType::HAT;
-				$page = isset($_GET['p']) ? intval($_GET['p']) : 1;
-				if($page < 1) $page = 1;
-				
+			}
+			$page = 1;
+			if(isset($_GET['p'])) {
+				$page = intval($_GET['p']);
+			}
+
+			if($page < 1) {
+				redirect("/api/character?r=getwardrobe&c=$type&p=1");
+			}
+
+			// REWRITE.
+			if($_GET['c'] != "outfits") {
 				$wearing_array = $user->getWearingArray();
-				$all_assets = $user->getOwnedAssets($category, $query, false, true, $wearing_array, $page, 8);
 
-				$pre_total_pages = $user->getOwnedAssetsCount($category, $query, false, true, $wearing_array)/8;
-
-				if(((int) $pre_total_pages)-$pre_total_pages < 0.5) {
+				$pre_total_pages_v2 = $user->getOwnedAssetsCount(AssetType::index($type), "", false, true, $wearing_array)/8;
+				$pre_total_pages = $pre_total_pages_v2;
+				$uhmbullshitcalc = ((float)((int) $pre_total_pages))-$pre_total_pages;
+				if($uhmbullshitcalc < 0.5 && $uhmbullshitcalc != 0) {
 					$pre_total_pages += 0.5;
 				}
 
-				$total_pages = floor($pre_total_pages);
-				
+				$total_pages = round($pre_total_pages);
+
 				if($total_pages < 1) {
 					$total_pages++;
 				}
 
+				if($total_pages < $page) {
+					redirect("/api/character?r=getwardrobe&c=$type&p=1");
+				}
+
+				$assets = $user->getOwnedAssets(AssetType::index($type), "", false, true, $wearing_array, $page, 8);
+
 				$assets_raw = [];
 
-				foreach($all_assets as $asset) {
-					$assets_raw[] = [
+				if(count($assets) != 0) {
+					foreach($assets as $asset) {
+						if($asset instanceof anorrl\Asset) {
+							$assets_raw[] = [
+								"id" => $asset->id,
+								"name" => $asset->name,
+								"creator" => [
+									"id" => $asset->creator->id,
+									"name" => $asset->creator->name
+								],
+								"thumbnail" => $asset->getThumbsUrl(130)
+							];
+						}
+					}
+				}
+				die(json_encode([
+					"assets" => $assets_raw,
+					"page" => $page,
+					"total_pages" => $total_pages
+				]));
+			} else {
+				die(json_encode(["assets" => [], "page" => 1, "total_pages" => 1, "comment"=> "Hi, outfits haven't been added yet (congrats on finding this lol)"]));
+			}
+		} else if($request == "search") {
+			// coded by skylerclock
+			// rewritten by grace (18/03/2026)
+			$query = isset($_GET['q']) ? trim($_GET['q']) : "";
+			$category = AssetType::index(intval($_GET['c'])) ?? AssetType::HAT;
+			$page = isset($_GET['p']) ? intval($_GET['p']) : 1;
+			if($page < 1) $page = 1;
+			
+			$wearing_array = $user->getWearingArray();
+			$all_assets = $user->getOwnedAssets($category, $query, false, true, $wearing_array, $page, 8);
+
+			$pre_total_pages = $user->getOwnedAssetsCount($category, $query, false, true, $wearing_array)/8;
+
+			if(((int) $pre_total_pages)-$pre_total_pages < 0.5) {
+				$pre_total_pages += 0.5;
+			}
+
+			$total_pages = floor($pre_total_pages);
+			
+			if($total_pages < 1) {
+				$total_pages++;
+			}
+
+			$assets_raw = [];
+
+			foreach($all_assets as $asset) {
+				$assets_raw[] = [
+					"id" => $asset->id,
+					"name" => $asset->name,
+					"creator" => [
+						"id" => $asset->creator->id,
+						"name" => $asset->creator->name
+					],
+					"thumbnail" => $asset->getThumbsUrl(130)
+				];
+			}
+			die(json_encode([
+				"assets" => $assets_raw,
+				"page" => $page,
+				"total_pages" => $total_pages
+			]));
+		} else if($request == "wear" && isset($_POST['assetid'])) {
+			$asset = intval($_POST['assetid']);
+
+			if($user->owns($asset)) {
+				die(json_encode($user->wear($asset)));
+			}				
+		} else if($request == "remove" && isset($_POST['assetid'])) {
+			$asset = intval($_POST['assetid']);
+
+			if($user->owns($asset)) {
+				die(json_encode($user->takeOff($asset)));
+			}				
+		} else if($request == "getwearing") {
+			$items = $user->getWearing();
+
+			$assets = [];
+
+			foreach($items as $asset) {
+				if($asset instanceof anorrl\Asset) {
+					$assets[] = [
 						"id" => $asset->id,
 						"name" => $asset->name,
 						"creator" => [
@@ -270,84 +299,39 @@ use anorrl\User;
 						"thumbnail" => $asset->getThumbsUrl(130)
 					];
 				}
-				die(json_encode([
-					"assets" => $assets_raw,
-					"page" => $page,
-					"total_pages" => $total_pages
-				]));
-			} else if($request == "wear" && isset($_POST['assetid'])) {
-				$asset = Asset::FromID(intval($_POST['assetid']));
-
-				if($asset != null && $user->owns($asset)) {
-					die(json_encode($user->wear($asset)));
-				}				
-			} else if($request == "remove" && isset($_POST['assetid'])) {
-				$asset = Asset::FromID(intval($_POST['assetid']));
-
-				if($asset != null && $user->owns($asset)) {
-					die(json_encode($user->takeOff($asset)));
-				}				
-			} else if($request == "getwearing") {
-				$items = $user->getWearing();
-
-				$assets = [];
-
-				foreach($items as $asset) {
-					if($asset instanceof anorrl\Asset) {
-						$assets[] = [
-							"id" => $asset->id,
-							"name" => $asset->name,
-							"creator" => [
-								"id" => $asset->creator->id,
-								"name" => $asset->creator->name
-							],
-							"thumbnail" => $asset->getThumbsUrl(130)
-						];
-					}
-				}
-
-				die(json_encode(["assets" => $assets]));
-			} else if($request == "getbodycolours") {
-				die(json_encode(["colours" => $user->getBodyColours()]));
-			} else if($request == "setbodycolours" &&
-				isset($_POST['head']) &&
-				isset($_POST['torso']) &&
-				isset($_POST['leftarm']) &&
-				isset($_POST['rightarm']) &&
-				isset($_POST['leftleg']) &&
-				isset($_POST['rightleg'])
-			) {
-				$head = sanitizeBodyColourID('head');
-				$torso = sanitizeBodyColourID('torso');
-				$leftarm = sanitizeBodyColourID('leftarm');
-				$rightarm = sanitizeBodyColourID('rightarm');
-				$leftleg = sanitizeBodyColourID('leftleg');
-				$rightleg = sanitizeBodyColourID('rightleg');
-
-				$user->setBodyColours($head, $torso, $leftarm, $rightarm, $leftleg, $rightleg);
-				die(json_encode(["error" => false]));
-			} else if($request == "rendercharacter") {
-				
-				if(get_user_render_path($user->getCharacterAppearanceHash(), ARLRENDER)) {
-					$user->updateOutfitHash();
-					die(json_encode(["error" => false]));
-				}
-
-				$user->render(false);
-				$user->render(true);
-				
-				die(json_encode(["error" => false, "reason" => "Wow we rendered!"]));
-			} else if($request == "rerendercharacter") {
-				// sure
-				$user->render(false);
-				$user->render(true);
-
-				die(json_encode(["error" => false, "reason" => "Wow we rendered!"]));
 			}
+
+			die(json_encode(["assets" => $assets]));
+		} else if($request == "getbodycolours") {
+			die(json_encode(["colours" => $user->getBodyColours()]));
+		} else if($request == "setbodycolours" &&
+			isset($_POST['head']) &&
+			isset($_POST['torso']) &&
+			isset($_POST['leftarm']) &&
+			isset($_POST['rightarm']) &&
+			isset($_POST['leftleg']) &&
+			isset($_POST['rightleg'])
+		) {
+			$head = sanitizeBodyColourID('head');
+			$torso = sanitizeBodyColourID('torso');
+			$leftarm = sanitizeBodyColourID('leftarm');
+			$rightarm = sanitizeBodyColourID('rightarm');
+			$leftleg = sanitizeBodyColourID('leftleg');
+			$rightleg = sanitizeBodyColourID('rightleg');
+
+			$user->setBodyColours($head, $torso, $leftarm, $rightarm, $leftleg, $rightleg);
+			die(json_encode(["success" => true]));
+		} else if(str_ends_with($request, "rendercharacter")) {
+			
+			if(!str_starts_with($request, "rere") && get_user_render_path($user->getCharacterAppearanceHash(), ARLRENDER)) {
+				$user->updateOutfitHash();
+				die(json_encode(["success" => true]));
+			}
+			
+			$user->render(false);
+			
+			die(json_encode(["success" => true, "reason" => "Wow we rendered!"]));
 		}
-		die(json_encode(["error" => true, "reason" => "Invalid request."]));
-	} else {
-		die(json_encode(["error" => true, "reason" => "User not logged in."]));
 	}
-	
+	die(json_encode(["success" => false, "reason" => "Invalid request."]));
 ?>

@@ -7,7 +7,7 @@ ANORRL.Item = {
 	State: 0,
 	Favourite: function(assetid) {
 		$.post("/api/favourite", { asset : assetid }, function(data) {
-			if(data['error']) {
+			if(!data['success']) {
 				alert("Error: " + data['reason']);
 			} else {
 				window.location.reload();
@@ -28,7 +28,7 @@ ANORRL.Item = {
 				$("#ModalPopup #PurchaseProcessing").css("display", "block");
 				window.setTimeout(function() {
 					$.post("/api/purchase", { asset_id: Number($("#ModalPopup").data("assetid")) }, function(data) {
-						if(data['error']) {
+						if(!data['success']) {
 							ANORRL.Item.Purchasing.PresentError(data['message']);
 						} else {
 							$("#ModalPopup > div:visible").each(function() {

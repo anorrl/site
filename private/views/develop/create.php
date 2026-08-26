@@ -79,7 +79,7 @@
 				$result = AssetUploader::UploadAsset($_FILES['ANORRL$CreateAsset$File'], $asset_type, $name, $description, $public, $on_sale, $comments_enabled);
 				
 				if(isset($result)) {
-					if($result['error']) {
+					if(!$result['success']) {
 						$_SESSION['ANORRL$CreateAsset$Error'] = true;
 						$_SESSION['ANORRL$CreateAsset$Result'] = $result['reason'];
 					} else {

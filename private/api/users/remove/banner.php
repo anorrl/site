@@ -1,7 +1,7 @@
 <?php
 	set_content_type(ARLTYPEJSON);
 
-	$result = ["error" => true, "reason" => "Request failed."];
+	$result = ["success" => false, "reason" => "Request failed."];
 
 	$user = SESSION ? SESSION->user : null;
 

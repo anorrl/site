@@ -79,19 +79,11 @@
 <div class="box" style="margin-bottom: 5px;">
 	<h2 style="margin-bottom: 5px; margin-left: 25px;">.add_status</h2>
 	
-	<form method="POST" style="margin: 0px 25px; margin-bottom: 20px;">
-		<?php // this lowk ass but it works so whatever ?>
-		<?php if(isset($_SESSION['ANORRL$Home$StatusResult'])):
-			$result = $_SESSION['ANORRL$Home$StatusResult']; ?>
-			<?php if(!$result['success']): ?>
-				<div class="error-text"><?= $result['reason'] ?></div>
-			<?php else: ?>
-				<div class="success-text">Success!</div>
-			<?php endif ?>
-		<?php endif ?>
-		<textarea class="box input" name="ANORRL$Home$Status$Text" type="text" minlength="4" maxlength="256" placeholder="<?= $rand_status ?>"><?= (isset($_SESSION['ANORRL$Home$StatusResult']) && !$_SESSION['ANORRL$Home$StatusResult']["success"]) ? $_SESSION['ANORRL$Home$StatusResult']["text"] : "" ?></textarea>
-		<input style="margin-top: 5px" class="button" name="ANORRL$Home$Status$Submit" type="submit" value="submit_status">
-	</form>
+	<div style="margin: 0px 25px; margin-bottom: 20px;">
+		<div id="result-post"></div>
+		<textarea class="box input" name="ANORRL$Home$Status$Text" type="text" minlength="4" maxlength="256" placeholder="<?= $rand_status ?>"></textarea>
+		<input style="margin-top: 5px" class="button" name="ANORRL$Home$Status$Submit" type="submit" value="submit_status"></div>
+	</div>
 </div>
 <div style="display: flex; gap: 5px; align-items: flex-start;">
 	<div class="box" style="flex: 1; padding: 0px 25px">

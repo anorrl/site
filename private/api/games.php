@@ -57,7 +57,7 @@
 						"favouritescount" => $asset->favourites_count,
 						"activeplayers" => $asset->current_playing_count,
 						"visits" => $asset->visit_count,
-						"original" => Universe::FromID($asset->universe)->original,
+						"original" => Universe::IsOriginal($asset->universe),
 						"thumbnail" => $asset->getThumbsUrl(189, 106)
 					];
 				}
@@ -92,10 +92,10 @@
 
 		$place = Place::FromID($placeid);
 		if($place == null) {
-			die(json_encode(["error" => true, "reason" => "Place not found!"]));
+			die(json_encode(["success" => false, "reason" => "Place not found!"]));
 		} else {
 			die(json_encode([
-				"error" => false,
+				"success" => true,
 				"place" => [
 					"id" => $place->id,
 					"name" => $place->name,

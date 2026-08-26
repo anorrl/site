@@ -10,7 +10,7 @@
 
 		$domain = CONFIG->domain;
 
-		if(!$result["error"]) {
+		if($result["success"]) {
 			echo json_encode([
 				"Status" => "OK", 
 				"UserInfo" => [

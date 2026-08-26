@@ -8,15 +8,14 @@
 	if(isset($_GET['userId'])) {
 		$userid = intval($_GET['userId']);
 	} else {
-		if(SESSION)
+		if(ARLAUTH)
 			$userid = SESSION->user->id;
 	}
 	if(!$userid) {
-		echo json_encode([
+		die(json_encode([
 			"success" => false,
 			"reason" => "the fuck is ur user doofus?"
-		]);
-		exit;
+		]));
 	}
 
 	// even if the user is null, it will return a null asset by default

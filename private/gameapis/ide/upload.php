@@ -113,7 +113,7 @@
 							// If the user owns this asset, then allow publishing.
 							$result = AssetUploader::UpdateAsset($asset, $recieveddata, $asset->creator);
 
-							if($result['error']) {
+							if(!$result['success']) {
 								exit_http(500, $result['reason']);
 							}
 							die("Uploaded successfully!");

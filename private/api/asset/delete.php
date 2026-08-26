@@ -5,7 +5,7 @@
 
 	set_content_type(ARLTYPEJSON);
 
-	$result = ["error" => true, "reason" => "Request failed."];
+	$result = ["success" => false, "reason" => "Request failed."];
 	
 	if(!isset($_POST['id'])) {
 		die(json_encode($result));
@@ -26,6 +26,6 @@
 	$asset->delete();
 
 	die(json_encode([
-		"error" => false
+		"success" => true
 	]));
 ?>

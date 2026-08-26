@@ -9,9 +9,9 @@
 	use anorrl\utilities\AssetTypeUtils;
 	use anorrl\utilities\ImageUtils;
 
-	define("INVALIDFILE", ["error" => true, "reason" => "File format not valid!"]);
-	define("INTERNALERROR", ["error" => true, "reason" => "Something went wrong idfk bitch about it to grace... (FILE UPLOAD ERROR)"]);
-	define("INTERNALSQLERROR", ["error" => true, "reason" => "Something went wrong idfk bitch about it to grace... (SQL ERROR!)"]);
+	define("INVALIDFILE", ["success" => false, "reason" => "File format not valid!"]);
+	define("INTERNALERROR", ["success" => false, "reason" => "Something went wrong idfk bitch about it to grace... (FILE UPLOAD ERROR)"]);
+	define("INTERNALSQLERROR", ["success" => false, "reason" => "Something went wrong idfk bitch about it to grace... (SQL ERROR!)"]);
 
 	class AssetUploader {
 		
@@ -225,7 +225,7 @@
 						[":aid" => $id]
 					);
 
-					return ["error" => true, "reason" => "Something went wrong idfk bitch about it to grace... (SQLERROR$error)"];
+					return ["success" => false, "reason" => "Something went wrong idfk bitch about it to grace... (SQLERROR$error)"];
 				}
 			}
 
@@ -239,7 +239,7 @@
 				self::PushWebhook($asset);
 			}
 			
-			return ["error" => false, "id" => $id];
+			return ["success" => true, "id" => $id];
 		}
 
 		public static function EditAsset(
@@ -260,7 +260,7 @@
 				return self::CommitUpdateAsset($asset, null, $name, $description, $public, $on_sale, $comments_enabled, $user);
 			}
 
-			return ["error" => true, "reason" => "User is not authorised to perform this action!"];
+			return ["success" => false, "reason" => "User is not authorised to perform this action!"];
 		}
 
 		private static function CommitUpdateAsset(
@@ -274,7 +274,7 @@
 			User $user
 		): array {
 			if($user->id != $asset->creator->id && !$user->isAdmin()) {
-				return ["error" => true, "reason" => "User is not authorised to perform this action!"];
+				return ["success" => false, "reason" => "User is not authorised to perform this action!"];
 			}
 			$db = Database::singleton();
 
@@ -289,7 +289,7 @@
 				$md5 = self::GetMD5OfData($data);
 
 				if($md5 == $asset->getLatestVersionDetails()->md5sig) { 
-					return ["error" => true, "reason" => "I'm pretty sure you've already uploaded this?"];
+					return ["success" => false, "reason" => "I'm pretty sure you've already uploaded this?"];
 				}
 
 				$new_versionid = $asset->getAllVersionsCount()+1;
@@ -326,7 +326,7 @@
 				]
 			);
 		
-			return ["error" => false, "versionid" => $versionid];
+			return ["success" => true, "versionid" => $versionid];
 		}
 
 		public static function UpdateAsset(
@@ -347,7 +347,7 @@
 				
 				if($asset->type == AssetType::IMAGE && $asset->type == AssetType::LUA) {
 					if(!$user->isAdmin()) {
-						return ['error' => true, 'reason' => "You are not authorised to perform this action!"];
+						return ["success" => false, 'reason' => "You are not authorised to perform this action!"];
 					}
 				}
 
@@ -357,11 +357,11 @@
 					}
 
 					if($file['size'] > 26214400) {
-						return ["error" => true, "reason" => "File was too large! Only 25MB maximum is allowed!"];
+						return ["success" => false, "reason" => "File was too large! Only 25MB maximum is allowed!"];
 					}
 
 					if($file['size'] <= 0) {
-						return ["error" => true, "reason" => "File was empty! Hello???"];
+						return ["success" => false, "reason" => "File was empty! Hello???"];
 					}
 
 					$data = file_get_contents($file['tmp_name']);
@@ -370,11 +370,11 @@
 					$data = $file;
 
 					if($filesize > 26214400) {
-						return ["error" => true, "reason" => "File was too large! Only 25MB maximum is allowed!"];
+						return ["success" => false, "reason" => "File was too large! Only 25MB maximum is allowed!"];
 					}
 
 					if($filesize <= 0) {
-						return ["error" => true, "reason" => "File was empty! Hello???"];
+						return ["success" => false, "reason" => "File was empty! Hello???"];
 					}
 				}
 
@@ -383,7 +383,7 @@
 				$type = $asset->type;
 
 				if(strlen($name) <= 0) {
-					return ["error" => true, "reason" => "You need to enter a name doofus!"];
+					return ["success" => false, "reason" => "You need to enter a name doofus!"];
 				}
 
 				if(strlen($name) > 110) {
@@ -397,7 +397,7 @@
 
 					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
 					
-					if(!$result['error'] && $type != AssetType::PLACE) {
+					if($result["success"] && $type != AssetType::PLACE) {
 						self::ExecuteRender($asset->id, $type, $data);
 					}
 
@@ -410,7 +410,7 @@
 					if(!self::IsSupportedMesh($data)) {
 						$mesh_result = MeshConverter::Convert($data);
 
-						if(!$mesh_result['error'])
+						if($mesh_result['success'])
 							$data = $mesh_result['mesh'];
 						else
 							return $mesh_result;
@@ -419,7 +419,7 @@
 
 					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
 
-					if(!$result['error']) {
+					if($result['success']) {
 						if(AssetTypeUtils::IsRenderable($type)) {
 							self::ExecuteRender($asset->id, $type, $data);
 						}
@@ -431,11 +431,11 @@
 					return self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
 
 				} else {
-					return ["error" => true, "reason" => "Invalid asset type found!"];
+					return ["success" => false, "reason" => "Invalid asset type found!"];
 				}
 			}
 
-			return ["error" => true, "reason" => "User is not authorised to perform this action!"];
+			return ["success" => false, "reason" => "User is not authorised to perform this action!"];
 		}
 
 		public static function CreatePlace(
@@ -450,7 +450,7 @@
 		): array {
 			$result = self::UploadAsset(null, AssetType::PLACE, $name, $description, $public, false, $comments_enabled, $user);
 
-			if(!$result['error']) {
+			if($result['success']) {
 				$db = Database::singleton();
 
 				try {
@@ -481,11 +481,11 @@
 		): array {
 			$place = $universe->starting_place;
 
-			$name = $place->name . " Sub Place";
+			$name = "{$place->name} Sub Place";
 
 			$result = self::UploadAsset(file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/baseplate.arl"), AssetType::PLACE, $name, "", false, false, false, $user);
 
-			if(!$result['error']) {
+			if($result['success']) {
 				$db = Database::singleton();
 
 				try {
@@ -538,14 +538,14 @@
 			$type = AssetTypeUtils::HandleType($passed_type);
 
 			if($file == null && $type != AssetType::PLACE && $type != AssetType::PACKAGE) {
-				return ["error" => true, "reason" => "Invalid action!"];
+				return ["success" => false, "reason" => "Invalid action!"];
 			}
 
 			if($user != null && !$user->isBanned()) {
 
 				if($type == AssetType::IMAGE && $type == AssetType::LUA) {
 					if(!$user->isAdmin()) {
-						return ['error' => true, 'reason' => "You are not authorised to perform this action!"];
+						return ["success" => false, 'reason' => "You are not authorised to perform this action!"];
 					}
 				}
 
@@ -557,22 +557,22 @@
 					}
 
 					if($file['size'] > 26214400) {
-						return ["error" => true, "reason" => "File was too large! Only 25MB maximum is allowed!"];
+						return ["success" => false, "reason" => "File was too large! Only 25MB maximum is allowed!"];
 					}
 
 					if($file['size'] <= 0) {
-						return ["error" => true, "reason" => "File was empty! Hello???"];
+						return ["success" => false, "reason" => "File was empty! Hello???"];
 					}
 					
 					$data = file_get_contents($file['tmp_name']);
 				}
 				else if(is_string($file)) {
 					if(strlen($file) > 26214400) {
-						return ["error" => true, "reason" => "File was too large! Only 25MB maximum is allowed!"];
+						return ["success" => false, "reason" => "File was too large! Only 25MB maximum is allowed!"];
 					}
 
 					if(strlen($file) <= 0) {
-						return ["error" => true, "reason" => "File was empty! Hello???"];
+						return ["success" => false, "reason" => "File was empty! Hello???"];
 					}
 					
 					$data = $file;
@@ -586,7 +586,7 @@
 					$name = trim($name);
 
 					if(strlen($name) <= 0) {
-						return ["error" => true, "reason" => "You need to enter a name doofus!"];
+						return ["success" => false, "reason" => "You need to enter a name doofus!"];
 					}
 
 					if(strlen($name) > 110) {
@@ -601,7 +601,7 @@
 
 							$result = self::CommitAsset($data, $passed_type, $name, $description, $public, $on_sale, $comments_enabled, $user);
 							
-							if(!$result['error'] && $type != AssetType::PLACE) {
+							if($result['success'] && $type != AssetType::PLACE) {
 								self::ExecuteRender($result['id'], $type, $data);
 							}
 
@@ -653,7 +653,7 @@
 									$height = imagesy($original_image);
 
 									if($width != 585 || $height != 559) {
-										return ["error" => true, "reason" => "Image size was not correct! Did you mean to upload a t-shirt or decal? Expected: 585 x 559."];
+										return ["success" => false, "reason" => "Image size was not correct! Did you mean to upload a t-shirt or decal? Expected: 585 x 559."];
 									}
 
 									ob_start();
@@ -766,7 +766,7 @@
 
 
 								$result = self::CommitAsset($data, $type == AssetType::BADGE ? $type : AssetType::IMAGE, $name, "", $public, false, $comments_enabled, $user);
-								if($result["error"]) {
+								if(!$result["success"]) {
 									return $result;
 								}
 								
@@ -785,7 +785,7 @@
 
 									$result = self::CommitAsset($data, $type, $name, $description, $public, $on_sale, $comments_enabled, $user);
 
-									if(!$result['error']) {
+									if($result['success']) {
 										Database::singleton()->run(
 											"UPDATE `assets` SET `relatedid` = :raid WHERE `id` = :aid",
 											[
@@ -817,7 +817,7 @@
 								if(!self::IsSupportedMesh($data)) {
 									$mesh_result = MeshConverter::Convert($data);
 
-									if(!$mesh_result['error'])
+									if($mesh_result['success'])
 										$data = $mesh_result['mesh'];
 									else
 										return $mesh_result;
@@ -825,7 +825,7 @@
 
 								$result = self::CommitAsset($data, $passed_type, $name, $description, $public, $on_sale, $comments_enabled, $user);
 
-								if(!$result['error']) {
+								if($result['success']) {
 									if(AssetTypeUtils::IsRenderable($type)) {
 										self::ExecuteRender($result['id'], $type, $data);
 									}
@@ -843,7 +843,7 @@
 									$audio_mime_type != "audio/vorbis" &&
 									$audio_mime_type != "audio/x-wav"
 								) {
-									return ["error" => true, "reason" => "Audio file was not a valid format! (found $audio_mime_type instead)"];
+									return ["success" => false, "reason" => "Audio file was not a valid format! (found $audio_mime_type instead)"];
 								}
 
 								return self::CommitAsset($data, $passed_type, $name, $description, $public, $on_sale, $comments_enabled, $user);
@@ -863,7 +863,7 @@
 								if(!self::IsSupportedMesh($data)) {
 									$mesh_result = MeshConverter::Convert($data);
 
-									if(!$mesh_result['error'])
+									if($mesh_result['success'])
 										$data = $mesh_result['mesh'];
 									else
 										return $mesh_result;
@@ -871,13 +871,13 @@
 
 								$mesh_asset_result = self::CommitAsset($data, AssetType::MESH, $name, $description, false, false, false, $user);
 
-								if(!$mesh_asset_result['error']) {
+								if($mesh_asset_result['success']) {
 									
-								self::ExecuteRender($mesh_asset_result['id'], AssetType::MESH, $data);
+									self::ExecuteRender($mesh_asset_result['id'], AssetType::MESH, $data);
 									$data = AssetTypeUtils::GenerateCharacterMeshRBXM($mesh_asset_result['id'], $type);
 									$result = self::CommitAsset($data, $type, $name, $description, $public, $on_sale, $comments_enabled, $user);
 
-									if(!$result['error']) {
+									if($result['success']) {
 										self::ExecuteRender($result['id'], $type, $data);
 									}
 
@@ -886,7 +886,7 @@
 									return $mesh_asset_result;
 								}
 							} else {
-								return ["error" => true, "reason" => "Invalid asset type found!"];
+								return ["success" => false, "reason" => "Invalid asset type found!"];
 							}
 						}
 					} else {
@@ -897,11 +897,11 @@
 
 				}
 				else {
-					return ["error" => true, "reason" => $canupload];
+					return ["success" => false, "reason" => $canupload];
 				}
 			}
 
-			return ["error" => true, "reason" => "User is not authorised to perform this action!"];
+			return ["success" => false, "reason" => "User is not authorised to perform this action!"];
 		}
 	}
 ?>

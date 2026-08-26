@@ -34,7 +34,7 @@
 			) {
 				$result = Comment::Post($place, $_POST['ANORRL$Comment$Post$Contents']);
 				
-				if($result['error']) {
+				if(!$result['success']) {
 					$_SESSION['ANORRL$Comment$Post$Error'] = $result['reason'];
 				}
 
@@ -131,7 +131,7 @@
 		if(window.confirm("Are you sure you want to render this asset?")) {
 			$("#RenderButton").html("Rendering...");
 			$.post( "/api/asset/render", { id: <?= $place->id ?> }).done(function( data ) {
-				if(data['error']) {
+				if(!data['success']) {
 					window.alert(data['reason']);
 				}
 				window.location.reload();
@@ -142,7 +142,7 @@
 	function Delete() {
 		if(window.confirm("Are you sure you want to delete this??")) {
 			$.post( "/api/asset/delete", { id: <?= $place->id ?> }).done(function( data ) {
-				if(data['error']) {
+				if(!data['success']) {
 					window.alert(data['reason']);
 				}
 				window.location.reload();
@@ -155,7 +155,7 @@
 			$.post( "/api/gameservers/shutdown", { placeID: <?= $place->id ?> }).done(function( data ) {
 				ANORRL.PlaceLauncher.GrabGameservers(<?= $place->id ?>);
 				toggleToolbar();
-				if(data['error']) {
+				if(!data['success']) {
 					window.alert(data['reason']);
 				}
 			});

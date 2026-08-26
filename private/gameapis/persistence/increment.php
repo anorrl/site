@@ -8,7 +8,7 @@
 
 	function dieOff(string $message = "Method Not Allowed", int $response_code = 500) {
 		http_response_code($response_code);
-		exit(json_encode(["error"=>$message]));
+		exit(json_encode(["error" => $message]));
 	}
 
 	function startsWith ($string, $startString) {

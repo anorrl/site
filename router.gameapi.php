@@ -4,13 +4,13 @@
 	route('GET',      '/asset/', '/private/gameapis/assetdeliverer.php');
 	route('GET',      '/Asset/', '/private/gameapis/assetdeliverer.php');
 	
-	route('GET',      '/users/', '/private/views/users/index.php');
-	route('GET',      '/Users/[i:userId]', '/private/api/users/data.php');
-	route('GET',      '/users/[i:userId]/canmanage/[i:placeId]', '/private/api/users/canmanage.php');
-	route('GET',      '//users/[i:userId]/canmanage/[i:placeId]', '/private/api/users/canmanage.php');
-	route('GET',      '/users/get-by-username', '/private/api/users/get-by-username.php');
-	route('GET',      '/users/emotes', '/private/api/users/emotes.php');
-	route('GET',      '/users/get-icon', '/private/api/users/get-icon.php');
+	//route('GET',      '/users/', '/private/views/users/index.php');
+	route('GET',      '/Users/[i:userId]', '/private/gameapis/users/data.php');
+	route('GET',      '/users/[i:userId]/canmanage/[i:placeId]', '/private/gameapis/users/canmanage.php');
+	route('GET',      '//users/[i:userId]/canmanage/[i:placeId]', '/private/gameapis/users/canmanage.php');
+	route('GET',      '/users/get-by-username', '/private/gameapis/users/get-by-username.php');
+	route('GET',      '/users/emotes', '/private/gameapis/users/get-emotes.php');
+	route('GET',      '/users/get-icon', '/private/gameapis/users/get-icon.php');
 
 	route('GET',      '/IDE/Upload.aspx', '/private/views/ide/publish.php');
 	route('GET|POST', '/IDE/PublishNewPlace.aspx', '/private/views/ide/publishnewplace.php');
@@ -79,8 +79,8 @@
 	route('GET',      '/game/logout.aspx', '/private/api/logout.php');
 	route('GET',      '/Game/logout.aspx', '/private/api/logout.php');
 
-	route('GET',      '/game/players/[i:id]', '/private/api/users/players.php');
-	route('GET',      '/game/players/[i:id]/', '/private/api/users/players.php');
+	route('GET',      '/game/players/[i:id]', '/private/gameapis/users/players.php');
+	route('GET',      '/game/players/[i:id]/', '/private/gameapis/users/players.php');
 	
 	route('GET|POST', '/persistence/getV2', '/private/gameapis/persistence/getv2.php');
 	route('POST',     '/persistence/getSortedValues', '/private/gameapis/persistence/getsortedvalues.php');

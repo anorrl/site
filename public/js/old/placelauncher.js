@@ -154,7 +154,7 @@ ANORRL.PlaceLauncher  = {
 				if(window.confirm("Are you sure you want to shutdown this server?")) {
 					$.post("/api/gameservers/shutdown", {serverID: serverId}, function(data) {
 						ANORRL.PlaceLauncher.GrabGameservers(placeID);
-						if(data['error'])
+						if(!data['success'])
 							window.alert("Error: " + data['reason']);
 					});
 				}

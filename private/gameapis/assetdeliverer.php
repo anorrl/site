@@ -160,7 +160,7 @@
 						
 						if(!AssetUploader::IsSupportedMesh($contents)) {
 							$mesh_result = MeshConverter::Convert($contents);
-							if($mesh_result && !$mesh_result['error'])
+							if($mesh_result && $mesh_result['success'])
 								$contents = $mesh_result['mesh'];
 						}
 						

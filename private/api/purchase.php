@@ -5,7 +5,7 @@
 	set_content_type(ARLTYPEJSON);
 
 	if(!SESSION)
-		die(json_encode(["error" => true, "message" => "User is not logged in."]));
+		die(json_encode(["success" => false, "message" => "User is not logged in."]));
 
 
 	$user = SESSION->user;
@@ -14,11 +14,11 @@
 
 		// nuh uh no badge buying for you!
 		if(!$asset || $asset && $asset->type == AssetType::BADGE)
-			die(json_encode(["error" => true, "message" => "Invalid purchase method."]));
+			die(json_encode(["success" => false, "message" => "Invalid purchase method."]));
 		
-		die(json_encode($asset->purchase(/*$type, */$user)));
+		die(json_encode($user->purchase($asset)));
 	} else {
-		die(json_encode(["error" => true, "message" => "User is not authorised to perform this action."]));
+		die(json_encode(["success" => false, "message" => "User is not authorised to perform this action."]));
 	}
 
 ?>

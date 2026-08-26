@@ -43,6 +43,18 @@
 		public \DateTime    $last_updatetime;
 		public \DateTime    $created_at;
 
+		public static function Exists(?int $id): bool {
+			if(!is_int($id))
+				return false;
+			
+			$row = Database::singleton()->run(
+				"SELECT `id` FROM `assets` WHERE `id` = :id LIMIT 1",
+				[ ":id" => $id ]
+			)->fetchObject();
+
+			return !is_null($row);
+		}
+
 		/**
 		 * Attempts to grab an asset given from ID (yes)
 		 * 
@@ -137,57 +149,6 @@
 				"thumbnail" => $this->getThumbsUrl(130),
 				"url" => $this->getURL()
 			];
-		}
-
-		function purchase(User|null $user = null): array {
-			
-			if(!$user)
-				return ["error" => true, "reason" => "User not authorised to perform this action!"];
-			
-			if($this->type == AssetType::BADGE) {
-				TransactionUtils::CommitTransaction($user, $this);
-
-				return ["error" => false];
-			}
-			
-			if($user->owns($this))
-				if(!$this->onsale)
-					return ["error" => true, "reason" => "Item is off-sale and beside you already own this?!"];
-				else
-					return ["error" => true, "reason" => "You already own this item!"];
-			
-			if(!$this->isUsable())
-				return ["error" => true, "reason" => "Item is unusable at this time!"];
-
-			if(!$this->onsale || !AssetTypeUtils::IsSellable($this->type))
-				if(!$this->onsale)
-					return ["error" => true, "reason" => "Item is off-sale sorry not sorry..."];
-				else
-					return ["error" => true, "reason" => "Item is not purchasable!"];
-
-			TransactionUtils::CommitTransaction($user, $this);
-
-			return ["error" => false];
-		}
-
-		function removeFrom(User|null $user = null): array {
-			
-			if(!$user)
-				return ["success" => false, "reason" => "User not authorised to perform this action!"];
-			
-			if($this->type == AssetType::BADGE) {
-				return ["success" => true];
-			}
-			
-			if(!$user->owns($this))
-				return ["error" => false, "reason" => "You don't own this item!"];
-
-			if($this->isOwner($user, false))
-				return ["error" => false, "reason" => "Hang on a second you CREATED this."];
-
-			TransactionUtils::UndoTransaction($user, $this);
-
-			return ["error" => true];
 		}
 
 		function getFileContents(int $version = -1) {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 23, 2026 at 03:32 PM
+-- Generation Time: Aug 25, 2026 at 07:07 PM
 -- Server version: 12.3.2-MariaDB
 -- PHP Version: 8.5.8
 
@@ -108,7 +108,7 @@ CREATE TABLE `assets` (
   `id` int(11) NOT NULL,
   `creator` int(11) NOT NULL,
   `type` int(11) NOT NULL,
-  `name` varchar(128) NOT NULL,
+  `name` varchar(110) NOT NULL,
   `description` text NOT NULL,
   `public` int(11) NOT NULL DEFAULT 0,
   `favourites_count` int(11) NOT NULL DEFAULT 0,
@@ -285,11 +285,13 @@ CREATE TABLE `places` (
   `copylocked` int(11) NOT NULL DEFAULT 1,
   `serversize` int(11) NOT NULL DEFAULT 12,
   `visit_count` int(11) NOT NULL DEFAULT 0,
+  `weekly_visits` int(11) NOT NULL,
   `currently_playing_count` int(11) NOT NULL DEFAULT 0,
   `gears_enabled` int(1) NOT NULL DEFAULT 0,
   `allowed_gears` int(11) NOT NULL DEFAULT -1,
   `chat_option` int(1) NOT NULL DEFAULT 2,
-  `genre` int(2) NOT NULL DEFAULT 0
+  `genre` int(2) NOT NULL DEFAULT 0,
+  `ratings` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -304,6 +306,21 @@ CREATE TABLE `profilebadges` (
   `badgeid` int(2) NOT NULL,
   `userid` int(10) NOT NULL,
   `recieved_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings`
+--
+
+DROP TABLE IF EXISTS `ratings`;
+CREATE TABLE `ratings` (
+  `id` int(11) NOT NULL,
+  `placeid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `rating` int(11) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -519,6 +536,12 @@ ALTER TABLE `profilebadges`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `ratings`
+--
+ALTER TABLE `ratings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `requests`
 --
 ALTER TABLE `requests`
@@ -592,6 +615,12 @@ ALTER TABLE `cloudeditors`
 -- AUTO_INCREMENT for table `profilebadges`
 --
 ALTER TABLE `profilebadges`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `ratings`
+--
+ALTER TABLE `ratings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

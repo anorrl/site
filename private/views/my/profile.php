@@ -9,7 +9,7 @@
 		
 		$result = $user->updateBio(trim($_POST['ANORRL$Update$Profile$Bio']));
 
-		if($result['error']) {
+		if(!$result['success']) {
 			$_SESSION['ANORRL$Update$ProfileError'] = true;
 			$_SESSION['ANORRL$Update$ProfileResult'] = $result['reason'];
 			redirect("/my/profile");
@@ -53,7 +53,7 @@
 
 		$result = $user->setProfilePicture($file);
 		
-		if($result['error']) {
+		if(!$result['success']) {
 			$_SESSION['ANORRL$Update$ProfileError'] = true;
 			$_SESSION['ANORRL$Update$ProfileResult'] = $result['reason'];
 			redirect("/my/profile");
@@ -85,7 +85,7 @@
 
 		$result = $user->updateUsername($_POST['ANORRL$Update$Settings$Username']);
 
-		if($result['error']) {
+		if(!$result['success']) {
 			$_SESSION['ANORRL$Update$ProfileError'] = true;
 			$_SESSION['ANORRL$Update$ProfileResult'] = $result['reason'];
 		}

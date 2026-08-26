@@ -19,7 +19,7 @@
 				// could be a valid obj
 			}
 
-			return ["error" => true, "reason" => "Unimplemented"];
+			return ["success" => false, "reason" => "Unimplemented"];
 		}
 
 		/**
@@ -32,6 +32,7 @@
 		 * - v4.01
 		 * - v5.00
 		 * 
+		 * @deprecated Client supports this stuff now
 		 * @param string $contents
 		 * @return array{error: bool, mesh: string|array{error: bool, reason: string}}
 		 */
@@ -42,7 +43,7 @@
 			$is_a_mesh = ($reader->String(8)) == "version ";
 
 			if(!$is_a_mesh)
-				return ["error" => true, "reason" => "Invalid mesh file!"];
+				return ["success" => false, "reason" => "Invalid mesh file!"];
 
 			$version = ($reader->String(4));
 			switch($version) {
@@ -52,7 +53,7 @@
 				case "4.01":
 				case "5.00":
 					$newline = $reader->Byte();
-					if (!($newline == 0x0A | ($newline == 0x0D && $reader->Byte() == 0x0A))) return ["error" => true, "reason" => "Bad newline"];
+					if (!($newline == 0x0A | ($newline == 0x0D && $reader->Byte() == 0x0A))) return ["success" => false, "reason" => "Bad newline"];
 
 					$begin = $reader->GetIndex();
 					$headerSize = 0;
@@ -70,7 +71,7 @@
 					switch (substr($version, 0, 2)) {
 						case "3.":
 							$headerSize = $reader->UInt16LE();
-							if ($headerSize < 16) return ["error" => true, "reason" => "Invalid header size"];
+							if ($headerSize < 16) return ["success" => false, "reason" => "Invalid header size"];
 							$vertexSize = $reader->Byte();
 							$faceSize = $reader->Byte();
 							$lodSize = $reader->UInt16LE();
@@ -80,7 +81,7 @@
 							break;
 						case "4.":
 							$headerSize = $reader->UInt16LE();
-							if ($headerSize < 24) return ["error" => true, "reason" => "Invalid header size"];
+							if ($headerSize < 24) return ["success" => false, "reason" => "Invalid header size"];
 							$reader->Jump(2); // uint16 lodType;
 							$vertexCount = $reader->UInt32LE();
 							$faceCount = $reader->UInt32LE();
@@ -93,7 +94,7 @@
 							break;
 						case "5.":
 							$headerSize = $reader->UInt16LE();
-							if ($headerSize < 32) return ["error" => true, "reason" => "Invalid header size"];
+							if ($headerSize < 32) return ["success" => false, "reason" => "Invalid header size"];
 							$reader->Jump(2); // uint16 meshCount;
 							$vertexCount = $reader->UInt32LE();
 							$faceCount = $reader->UInt32LE();
@@ -109,9 +110,9 @@
 					}
 					$reader->SetIndex($begin + $headerSize);
 
-					if ($vertexSize < 36) return ["error" => true, "reason" => "Invalid vertex size"]; // This triggers for version 2.00 pre-PBR (2016), so BTRoblox's implementation is wrong.
-					if ($faceSize < 12) return ["error" => true, "reason" => "Invalid face size"];
-					if ($lodSize < 4) return ["error" => true, "reason" => "Invalid lod size"];
+					if ($vertexSize < 36) return ["success" => false, "reason" => "Invalid vertex size"]; // This triggers for version 2.00 pre-PBR (2016), so BTRoblox's implementation is wrong.
+					if ($faceSize < 12) return ["success" => false, "reason" => "Invalid face size"];
+					if ($lodSize < 4) return ["success" => false, "reason" => "Invalid lod size"];
 
 					$fileEnd = $reader->GetIndex()
 						+ ($vertexCount * $vertexSize)
@@ -123,7 +124,7 @@
 						+ ($subsetCount * 72)
 						+ ($facsDataSize);
 
-					if ($fileEnd != $reader->GetLength()) return ["error" => true, "reason" => "Invalid file size"];
+					if ($fileEnd != $reader->GetLength()) return ["success" => false, "reason" => "Invalid file size"];
 
 					$faces = [];
 					$vertices = [];
@@ -208,13 +209,10 @@
 					// Faces
 					$writer->String(implode($faceArray));
 
-					return ["error" => false, "mesh" => $writer->buffer];
+					return ["success" => true, "mesh" => $writer->buffer];
 				default:
-					return ["error" => true, "reason" => "Invalid mesh version found. [ $version ]"];
+					return ["success" => false, "reason" => "Invalid mesh version found. [ $version ]"];
 			}
-
-			return ["error" => true, "reason" => "Mesh failed to convert I guess."];
-			
 		}
 	}
 ?>

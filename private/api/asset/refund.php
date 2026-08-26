@@ -18,5 +18,5 @@
 		die(json_encode($result));
 	}
 
-	die(json_encode($asset->removeFrom($user)));
+	die(json_encode($user->remove($asset)));
 ?>

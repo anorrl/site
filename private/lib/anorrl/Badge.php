@@ -32,7 +32,7 @@
 				return false;
 			}
 
-			return !$this->purchase($user)["error"];
+			return $user->purchase($this)["success"];
 		}
 
 		function toggleSecret() {

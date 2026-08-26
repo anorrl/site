@@ -18,7 +18,7 @@ ANORRL.Thumbnails = {
 		if(!this.Has3DEnabled())
 			return false;
 
-		return $(".thumbnail-holder button").data("3d") == "true";
+		return $(".thumbnail-holder button").attr("data-3d") == "true";
 	},
 	Has3DEnabled: function() {
 		return $(".thumbnail-span").length != 0 && this.Supports3D();
@@ -58,7 +58,7 @@ ANORRL.Thumbnails = {
 $(function() {
 	if(ANORRL.Thumbnails.Has3DEnabled()) {
 		$(".thumbnail-holder button").on("click", function() {
-			if($(this).data("3d") == "true") {
+			if($(this).attr("data-3d") == "true") {
 				ANORRL.Thumbnails.Load2D();
 			} else {
 				$(this).attr("data-3d", true);

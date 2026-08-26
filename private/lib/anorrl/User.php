@@ -11,6 +11,7 @@
 	use anorrl\utilities\UtilUtils;
 	use anorrl\utilities\ImageUtils;
 	use anorrl\utilities\Renderer;
+	use anorrl\utilities\TransactionUtils;
 	use anorrl\enums\ANORRLBadge;
 
 	/**
@@ -110,6 +111,62 @@
 			$this->last_banner_change_date = \DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->last_banner_time);
 			$this->password = $rowdata->password;
 			$this->security_key = $rowdata->security;
+		}
+
+
+		function purchase(Asset|int|null $asset = null): array {
+			if(is_int($asset))
+				$asset = Asset::FromID($asset);
+
+			if(!$asset)
+				return ["success" => false, "reason" => "Item could not be found!"];
+			
+			if($asset->type == AssetType::BADGE) {
+				TransactionUtils::CommitTransaction($this, $asset);
+
+				return ["success" => true];
+			}
+			
+			if($this->owns($asset))
+				if(!$asset->onsale)
+					return ["success" => false, "reason" => "Item is off-sale and beside you already own this?!"];
+				else
+					return ["success" => false, "reason" => "You already own this item!"];
+			
+			if(!$asset->isUsable())
+				return ["success" => false, "reason" => "Item is unusable at this time!"];
+
+			if(!$asset->onsale || !AssetTypeUtils::IsSellable($asset->type))
+				if(!$asset->onsale)
+					return ["success" => false, "reason" => "Item is off-sale sorry not sorry..."];
+				else
+					return ["success" => false, "reason" => "Item is not purchasable!"];
+
+			TransactionUtils::CommitTransaction($this, $asset);
+
+			return ["success" => true];
+		}
+
+		function remove(Asset|int|null $asset = null): array {
+			if(is_int($asset))
+				$asset = Asset::FromID($asset);
+
+			if(!$asset)
+				return ["success" => false, "reason" => "Item could not be found!"];
+			
+			if($asset->type == AssetType::BADGE) {
+				return ["success" => true];
+			}
+			
+			if(!$this->owns($asset))
+				return ["success" => false, "reason" => "You don't own this item!"];
+
+			if($asset->isOwner($this, false))
+				return ["success" => false, "reason" => "Hang on a second you CREATED this."];
+
+			TransactionUtils::UndoTransaction($this, $asset); // `refunded` = 1
+
+			return ["success" => true];
 		}
 
 		function getFriends(): array {
@@ -540,13 +597,13 @@
 			}
 			
 			if(!$this->owns($asset) || Asset::FromID($assetid) == null) {
-				return ["error"=>true, "reason"=>"Invalid item"];
+				return ["success" => false, "reason"=>"Invalid item"];
 			}
 
 			$db = Database::singleton();
 
 			if($this->isWearing($asset)) {
-				return ["error" => false];
+				return ["success" => true];
 			} else {
 				$item = Asset::FromID($assetid);
 				$type = AssetTypeUtils::HandleType($item->type);
@@ -609,16 +666,16 @@
 								]
 							);
 						} else {
-							return ["error" => true, "reason" => "Too many fucking ".strtolower($type->label())."s on"];
+							return ["success" => false, "reason" => "Too many fucking ".strtolower($type->label())."s on"];
 						}
 					}
 				} else {
-					return ["error" => true, "reason" => "Invalid item"];
+					return ["success" => false, "reason" => "Invalid item"];
 				}
 
 			}
 
-			return ["error" => false];
+			return ["success" => true];
 		}
 
 		private function forceTakeOff(int $id, bool $wearone = true) {
@@ -640,19 +697,19 @@
 			}
 			
 			if(!$this->owns($asset) || Asset::FromID($assetid) == null)
-				return ["error"=>true, "reason"=>"Invalid item"];
+				return ["success" => false, "reason" => "Invalid item"];
 
 			if(!$this->isWearing($asset))
-				return ["error" => false];
+				return ["success" => true];
 			
 			$item = Asset::FromID($assetid);
 
 			if(!$item->type->wearable())
-				return ["error" => true, "reason" => "Invalid item"];
+				return ["success" => false, "reason" => "Invalid item"];
 			
 			$this->forceTakeOff($item->type->wearone() ? $item->type->ordinal() : $item->id, $item->type->wearone());
 
-			return ["error" => false];
+			return ["success" => true];
 		}
 
 		function getBodyColoursXML() {
@@ -960,7 +1017,7 @@
 				$bio_content = UtilUtils::StripUnicode($bio);
 
 				if(strlen($bio_content) > 1000) {
-					return ["error"=> true, "reason" => "Status was too long! (1000 characters maximum)"];
+					return ["success" => false, "reason" => "Status was too long! (1000 characters maximum)"];
 				}
 
 				Database::singleton()->run(
@@ -971,9 +1028,9 @@
 					]
 				);
 
-				return ["error" => false];
+				return ["success" => true];
 			} else {
-				return ["error"=> true, "reason" => "Unauthorized."];
+				return ["success" => false, "reason" => "Unauthorized."];
 			}
 		}
 
@@ -1528,14 +1585,14 @@
 			$processed_new_name = trim($new_name);
 
 			if(strcmp($processed_new_name, $this->name) == 0) {
-				return ["error" => false];
+				return ["success" => true];
 			}
 
 			if(!Session::isUsernameValid($processed_new_name))
-				return ["error" => true, "reason" => "Username must be a-z A-Z 0-9 and 3-20 characters only!"];
+				return ["success" => false, "reason" => "Username must be a-z A-Z 0-9 and 3-20 characters only!"];
 
 			if(!Session::isUsernameAvailable($processed_new_name))
-				return ["error" => true, "reason" => "Username has already been taken!"];
+				return ["success" => false, "reason" => "Username has already been taken!"];
 
 			$difference = UtilUtils::GetSecondsElapsedFrom(UserSettings::Get($this)->last_username_change);
 
@@ -1561,7 +1618,7 @@
 			$calculated_time = round($calculated_time);
 
 			if($difference < $day) {
-				return ["error"=> true, "reason" => "You need to wait $calculated_time $label before updating again."];
+				return ["success" => false, "reason" => "You need to wait $calculated_time $label before updating again."];
 			}
 
 			Database::singleton()->run(
@@ -1577,7 +1634,7 @@
 				]
 			);
 
-			return ["error" => false];
+			return ["success" => true];
 
 		}
 	}

@@ -67,6 +67,18 @@
 			return $row ? new self($row) : null;
 		}
 
+		public static function IsOriginal(int $id): bool {
+			$row = Database::singleton()->run(
+				"SELECT `original` FROM `universes` WHERE `id` = :id",
+				[ ":id" => $id ]
+			)->fetchObject();
+
+			if(!$row)
+				throw new Exception("Universe failed to load.");
+
+			return boolval($row->original);
+		}
+
 		private function __construct($data) {
 			$this->id = $data->id;
 			$this->starting_place = Place::FromID($data->starting_place);

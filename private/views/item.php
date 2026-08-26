@@ -35,7 +35,7 @@
 			) {
 				$result = Comment::Post($asset, $_POST['ANORRL$Comment$Post$Contents']);
 				
-				if($result['error']) {
+				if(!$result['success']) {
 					$_SESSION['ANORRL$Comment$Post$Error'] = $result['reason'];
 				}
 
@@ -109,7 +109,7 @@
 		if(window.confirm("Are you sure you want to render this asset?")) {
 			$("#RenderButton").html("Rendering...");
 			$.post( "/api/asset/render", { id: <?= $asset->id ?> }).done(function( data ) {
-				if(data['error']) {
+				if(!data['success']) {
 					window.alert(data['reason']);
 				}
 				window.location.reload();
@@ -120,7 +120,7 @@
 	function Delete() {
 		if(window.confirm("Are you sure you want to delete this??")) {
 			$.post( "/api/asset/delete", { id: <?= $asset->id ?> }).done(function( data ) {
-				if(data['error']) {
+				if(!data['success']) {
 					window.alert(data['reason']);
 				}
 				window.location.reload();
@@ -131,7 +131,7 @@
 	function Refund() {
 		if(window.confirm("Are you sure you want to remove this item from your inventory???")) {
 			$.post( "/api/asset/refund", { id: <?= $asset->id ?> }).done(function( data ) {
-				if(data['error']) {
+				if(!data['success']) {
 					window.alert(data['reason']);
 				}
 				window.location.reload();

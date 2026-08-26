@@ -380,7 +380,7 @@ ANORRL.Character  = {
 	},
 	WearAsset: function(assetid) {
 		$.post("/api/character?r=wear", { assetid: assetid }, function(data) {
-			if(!data['error']) {
+			if(data['success']) {
 				ANORRL.Character.LoadWardrobe();
 				ANORRL.Character.LoadCurrentlyWearing();
 				ANORRL.Character.RenderPlayer();
@@ -392,7 +392,7 @@ ANORRL.Character  = {
 	},
 	RemoveAsset: function(assetid) {
 		$.post("/api/character?r=remove", { assetid: assetid }, function(data) {
-			if(!data['error']) {
+			if(data['success']) {
 				ANORRL.Character.LoadWardrobe();
 				ANORRL.Character.LoadCurrentlyWearing();
 				ANORRL.Character.RenderPlayer();
@@ -494,7 +494,7 @@ ANORRL.Character  = {
 
 		$.get("/api/character?r="+(forcerender ? "re" : "")+"rendercharacter", function(data) {
 			
-			if(data['error']) {
+			if(!data['success']) {
 				alert(data['reason']);
 			}
 

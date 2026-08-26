@@ -58,6 +58,6 @@
 
 		die(json_encode(["feed" => $statuses_raw, "page" => $page, "total_pages" => $total_pages]));
 	} else {
-		die(json_encode(["error" => true, "reason" => "User not logged in."]));
+		die(json_encode(["success" => false, "reason" => "User not logged in."]));
 	}
 ?>

@@ -106,7 +106,7 @@
 
 		$result = AssetUploader::EditAsset($asset, $name, $description, $public, $on_sale, $comments_enabled);
 		
-		if($result['error']) {
+		if(!$result['success']) {
 			$_SESSION['ANORRL$EditItem$Error'] = $result['reason'];
 			$_SESSION['ANORRL$EditItem$Success'] = false;
 
@@ -170,7 +170,7 @@
 		if(AssetTypeUtils::IsUpdateable($asset->type)) {
 			$result = AssetUploader::UpdateAsset($asset, $_FILES['ANORRL$PublishAsset$File']);
 			
-			if($result['error']) {
+			if(!$result['success']) {
 				$_SESSION['ANORRL$EditItem$Error'] = $result['reason'];
 				$_SESSION['ANORRL$EditItem$Success'] = false;
 
@@ -200,7 +200,7 @@
 			$(this).attr("title", "click to make this the current version");
 			$(this).on("click", function() {
 				$.post("", {"action": "ANORRL$EditItem$SelectVersion", "versionid": vid}, function(data) {
-					if(data['error']) {
+					if(!data['success']) {
 						alert(data['reason']);
 					}
 					window.location.reload();

@@ -72,6 +72,20 @@
 			}
 		}
 
+		public static function Exists(int|null $id): bool {
+			if(!is_int($id))
+				return false;
+
+			$row = Database::singleton()->run(
+				"SELECT `id` FROM `places` WHERE `id` = :id",
+				[
+					":id" => $id
+				]
+			)->fetchObject();
+
+			return !is_null($row);;
+		}
+
 		public static function FromID(int|null $id, bool $dont_create_universe = false): Place|null {
 			if(!is_int($id))
 				return null;

@@ -317,7 +317,7 @@
 				var type = method.replaceAll("upload-", "");
 				var file = $("input[type='file'][hidden]");
 
-				file.data("type", type);
+				file.attr("data-type", type);
 				file.trigger("click");
 			}
 			else if(method.startsWith("remove-")) {
@@ -454,7 +454,8 @@
 	.thumbnail-span {
 		width: 100%;
 		height: 100%;
-		display: block;
+		display: none;
+		margin: 0 auto;
 	}
 
 	.thumbnail-spinner {
@@ -478,12 +479,25 @@
 		background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
 	}
 
+	.accoutrement-item img {
+		object-fit: cover;
+	}
+
 	#character-items {
 		display: grid; grid-template-columns: repeat(4, 1fr);
 		gap: 5px;
 		height: 300px;
 		overflow: auto;
 		border-left: 1px solid var(--lighter-border-color);
+	}
+
+	#no-character-items {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-left: 1px solid var(--lighter-border-color);
+		font-size: 16px;
+		font-family: 'Fira Mono'
 	}
 </style>
 <div class="multi-titles">
@@ -498,7 +512,7 @@
 	<div style="text-align: center;">
 		<div class="thumbnail-holder" width="300" height="300">
 			<button id="thumbnail-switcher" data-3d></button>
-			<span class="thumbnail-span" data-3d-url="/thumbnail/get?user=<?= $user->id ?>" style="display: none;"></span>
+			<span class="thumbnail-span" data-3d-url="/thumbnail/get?user=<?= $user->id ?>" style="width:300px;height:300px"></span>
 			<img src="<?= $user->getThumbsUrlAvatar() ?>" width="300">
 		</div>
 	</div>
@@ -513,7 +527,7 @@
 		<?php endforeach ?>
 	</div>
 	<?php else :?>
-	<div style="display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--lighter-border-color); font-size: 16px; font-family: 'Fira Mono'">
+	<div id="no-character-items">
 		<b><?= $user->name ?> has no items!</b>
 	</div>
 	<?php endif ?>

@@ -5,7 +5,7 @@ if(typeof(ANORRL) == "undefined") {
 ANORRL.Friends = {
 	Remove: function(id) {
 		$.post("/api/user", { id: id, request: "unfriend"}, function(data) {
-			if(data['error']) {
+			if(!data['success']) {
 				alert(data['reason']);
 			} else {
 				window.location.reload();
@@ -20,7 +20,7 @@ ANORRL.Friends = {
 	},
 	Accept: function(id) {
 		$.post("/api/user", { id: id, request: "friend"}, function(data) {
-			if(data['error']) {
+			if(!data['success']) {
 				alert(data['reason']);
 			} else {
 				window.location.reload();

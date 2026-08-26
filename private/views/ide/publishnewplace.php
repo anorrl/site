@@ -54,7 +54,7 @@
 	
 		$result = AssetUploader::CreatePlace($name, $description, $isPublic, $commentsEnabled, $server_size, $isCopylocked, $gears, $user);
 		
-		if(!$result['error']) {
+		if($result['success']) {
 			$place = Place::FromID($result['id'], true);
 			if($place) {
 				Universe::Create($place, $isPublic, $original);

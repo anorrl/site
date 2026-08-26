@@ -41,15 +41,15 @@
 				die(json_encode(["badges" => $badges_raw, "page" => $page, "total_pages" => floor(count($user->getOwnedAssets(AssetType::BADGE))/12)]));
 			}
 			else if($_GET['request'] == "isadmin") {
-				die(json_encode(['error' => false, 'isadmin' => $user->isAdmin()]));
+				die(json_encode(["success" => true, 'isadmin' => $user->isAdmin()]));
 			}
 			
 			else {
-				die(json_encode(["error" => true, "reason" => "Invalid request"]));
+				die(json_encode(["success" => false, "reason" => "Invalid request"]));
 			}
 			
 		} else {
-			die(json_encode(["error" => true, "reason" => "User not found."]));
+			die(json_encode(["success" => false, "reason" => "User not found."]));
 		}
 	} else if(isset($_POST['id']) && isset($_POST['request'])) {
 		$user = User::FromID(intval($_POST['id']));
@@ -73,7 +73,7 @@
 							$founduser->unfollow($user);
 						}
 						
-						die(json_encode(['error' => false]));
+						die(json_encode(["success" => true]));
 					}
 				}
 			} else if($_POST['request'] == "friend" && !$selfuser) {
@@ -87,7 +87,7 @@
 							$founduser->friend($user);
 						}
 						
-						die(json_encode(['error' => false]));
+						die(json_encode(["success" => true]));
 					}
 				}
 			} else if($_POST['request'] == "unfriend" && !$selfuser) {
@@ -97,15 +97,15 @@
 					if($founduser->id != $user->id) {
 						$founduser->unfriend($user);
 						
-						die(json_encode(['error' => false]));
+						die(json_encode(["success" => true]));
 					}
 				}
 			}
 		} else {
-			die(json_encode(["error" => true, "reason" => "User not found."]));
+			die(json_encode(["success" => false, "reason" => "User not found."]));
 		}
 		 
 	}
 	
-	die(json_encode(["error" => true, "reason" => "Invalid request"]));
+	die(json_encode(["success" => false, "reason" => "Invalid request"]));
 ?>

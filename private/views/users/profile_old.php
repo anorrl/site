@@ -33,7 +33,7 @@
 	) {
 		$result = Comment::Post($get_user, $_POST['ANORRL$Comment$Post$Contents']);
 		
-		if($result['error']) {
+		if(!$result['success']) {
 			$_SESSION['ANORRL$Comment$Post$Error'] = $result['reason'];
 		}
 

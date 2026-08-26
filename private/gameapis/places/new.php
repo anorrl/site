@@ -15,7 +15,7 @@
 
 	$result = AssetUploader::CreateSubPlace($universe);
 
-	if($result['error']) {
+	if(!$result['success']) {
 		http_response_code(500);
 		error_log($result['reason']);
 		die($result['reason']);
