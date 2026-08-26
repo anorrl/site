@@ -1,5 +1,5 @@
 <?php
-	use anorrl\PaPageOldge;
+	use anorrl\PageOld;
 	use anorrl\User;
 	use anorrl\Database;
 
