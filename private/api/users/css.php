@@ -1,29 +1,20 @@
 <?php
+	set_content_type(ARLTYPECSS);
+
 	use anorrl\User;
 	use anorrl\utilities\UtilUtils;
 
-	if(!UtilUtils::HasBeenRewritten()) {
-		redirect("/my/home");
-	}
-
-	// No id parameter? GET OUT!
-	if(!isset($id)) {
-		redirect("/my/home");
-	}
+	if(!isset($id))
+		die();
 
 	$get_user = User::FromID(intval($id));
 
-	if($get_user == null) {
-		redirect("/my/home");
-	}
+	if($get_user == null || ($user && $user->isBanned()))
+		die();
 
-	$header_data = $get_user;
-
-	set_content_type(ARLTYPECSS);
+	$settings = $get_user->getSettings();
 	
-	if(UtilUtils::IsValidCSS(SESSION->settings->css) || isset($_GET['force'])) {
-		die(SESSION->settings->css);
-	}
+	if(UtilUtils::IsValidCSS($settings->css) || isset($_GET['force']))
+		die($settings->css);
 
-	die();
 ?>
