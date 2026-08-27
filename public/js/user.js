@@ -165,30 +165,32 @@ $(function(){
 
 	$("a[href='open-modal']").removeAttr("href");
 
-	$(".button[data-tab]").click(function() {
-		var type = $(this).data("tab");
-		$("div[data-tab]").hide();
-		$("div[data-tab='"+type+"']").show();
-		$(".button[data-tab]").removeAttr("selected");
-		$(this).attr("selected", "yes");
-	})
-
-	function setType(type) {
-		if($(".button[data-tab='"+type+"']").length != 0) {
-			$(".button[data-tab='"+type+"']").attr("selected", "yes");
+	if($("[data-tab]").length > 0) {
+		$(".button[data-tab]").click(function() {
+			var type = $(this).data("tab");
+			$("div[data-tab]").hide();
 			$("div[data-tab='"+type+"']").show();
+			$(".button[data-tab]").removeAttr("selected");
+			$(this).attr("selected", "yes");
+		})
+
+		function setType(type) {
+			if($(".button[data-tab='"+type+"']").length != 0) {
+				$(".button[data-tab='"+type+"']").attr("selected", "yes");
+				$("div[data-tab='"+type+"']").show();
+			}
+			else {
+				setType("about");
+				window.location.hash = "about";
+			}
 		}
-		else {
-			setType("about");
-			window.location.hash = "about";
-		}
+
+		var hash = window.location.hash;
+		if(hash.startsWith("#"))
+			hash = hash.substring(1);
+
+		setType(hash);
 	}
-
-	var hash = window.location.hash;
-	if(hash.startsWith("#"))
-		hash = hash.substring(1);
-
-	setType(hash);
 
 	$("#open-more-games").click(function() {
 		$("#more-games-panel").show();
