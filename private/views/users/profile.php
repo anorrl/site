@@ -49,14 +49,22 @@
 
 	$places = $user->getOwnedAssets(AssetType::GAME, '', true, false);
 	$places_count = count($places);
-	$place_split_point = 7*2;
+	$has_creations = $places_count > 0;
 
-	if($places > $place_split_point) {
-		$first_places = array_splice($places, 0, $place_split_point);
-		$next_places = $places;
+	if($has_creations) {
+		$place_split_point = 7*2;
+
+		if($places > $place_split_point) {
+			$first_places = array_splice($places, 0, $place_split_point);
+			$next_places = $places;
+		}
+		else {
+			$first_places = $places;
+			$next_places = [];
+		}
 	}
 	else {
-		$first_places = $places;
+		$first_places = [];
 		$next_places = [];
 	}
 
@@ -186,11 +194,14 @@
 	</div>
 </div>
 
+<?php if($has_creations): ?>
 <div class="box" id="buttons">
 	<a class="button" href="#about" data-tab="about">about</a>
 	<a class="button" href="#creations" data-tab="creations">creations</a>
 </div>
+
 <div data-tab="about">
+<?php endif ?>
 	<div style="display: flex; gap: 10px;">
 		<?php if($user->blurb != ""): ?>
 		<div style="flex: 1;">
@@ -372,7 +383,10 @@
 			</tr>
 		</table>
 	</div>
+<?php if($has_creations): ?>
 </div>
+
+
 <div data-tab="creations">
 	<?php if($places_count > 0): ?>
 	<h4 class="page-title">.games (<?= $places_count ?>)</h4>
@@ -409,6 +423,7 @@
 	</div>
 	<?php endif ?>
 </div>
+<?php endif ?>
 <?php $page->loadTemplate("layouts/comment_poster"); ?>
 <div id="report-banner" class="box">
 	got something to report about this user? <a href="<?= $user->getTypedURL("report#profile") ?>">click here!</a>

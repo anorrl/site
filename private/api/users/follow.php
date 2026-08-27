@@ -17,10 +17,10 @@
 		die(json_encode($result));
 	}
 
-	if($user->id == $session->id || $session->isBanned() || $user->isBanned())
+	if($session->isBanned() || $user->isBanned())
 		die(json_encode($result));
 
-	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && $user->id != $session->id) {
 		if(!$session->isFollowing($user))
 			$session->follow($user);
 		else
@@ -32,5 +32,6 @@
 		die(json_encode(['success' => true, 'result' => $session->isFollowing($user), 'count' => $user->getFollowersCount()]));
 	}
 
+	$result['count'] = $user->getFollowersCount();
 	die(json_encode($result));
 ?>
