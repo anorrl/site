@@ -96,8 +96,8 @@
 	</p>
 	<h3>.log_files</h3>
 	<p>
-		As a natural behaviour of all webservers, our webserver which runs on <a href="">NGINX</a>; logs information such as access times and errors created on site.
-		Rest assured, sensitive information such as IP addresses are proxied via <a href="">Cloudflare</a> so we do not know where requests are coming from.
+		As a natural behaviour of all webservers, our webserver which runs on <a href="https://nginx.org/">NGINX</a>; logs information such as access times and errors created on site.
+		Rest assured, sensitive information such as IP addresses are proxied via <a href="https://www.cloudflare.com/">Cloudflare</a> so we do not know where requests are coming from.
 		It does however, store the date time and user agent the site was accessed with and we clear our log files every month.
 	</p>
 </div>
