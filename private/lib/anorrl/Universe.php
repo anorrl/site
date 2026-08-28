@@ -116,13 +116,13 @@
 		function getDeveloperProducts(AssetType|null $type = null) {
 			if($type != null) {
 				$rows = Database::singleton()->run(
-					"SELECT `id` FROM `assets` WHERE `universe` = :id AND `type` != :placetype AND `type` = :type",
-					[ ":id" => $this->id, ":placetype" => AssetType::PLACE->ordinal(), ":type" => $type->ordinal() ]
+					"SELECT `id` FROM `assets` WHERE `universe` = :id AND (`type` != 9 AND `type` != 21) AND `type` = :type",
+					[ ":id" => $this->id, ":type" => $type->ordinal() ]
 				)->fetchAll(\PDO::FETCH_OBJ);
 			} else {
 				$rows = Database::singleton()->run(
-					"SELECT `id` FROM `assets` WHERE `universe` = :id AND `type` != :placetype",
-					[ ":id" => $this->id, ":placetype" => AssetType::PLACE->ordinal() ]
+					"SELECT `id` FROM `assets` WHERE `universe` = :id AND (`type` != 9 AND `type` != 21)",
+					[ ":id" => $this->id,  ]
 				)->fetchAll(\PDO::FETCH_OBJ);
 			}
 
@@ -333,6 +333,17 @@
 			);
 
 			return true;
+		}
+
+		function setActive(bool $value) {
+			if($value == $this->active) return;
+
+			Database::singleton()->run("UPDATE `universes` SET `active` = :active WHERE `id` = :id", [ ":id" => $this->id, ":active" => $value ]);
+			$this->active = $value;
+		}
+
+		function toggleActive() {
+			$this->setActive(!$this->active);
 		}
 	}
 ?>

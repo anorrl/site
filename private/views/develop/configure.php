@@ -25,10 +25,12 @@
 	if(!$asset->isOwner($user))
 		redirect("/develop/creations");
 
+	$_SESSION['ANORRL$Asset$ID'] = $asset->id;
+
 	$sellable = AssetTypeUtils::IsSellable($asset->type) && !$asset->owner_only;
 	$updateable = AssetTypeUtils::IsUpdateable($asset->type);
 
-	$page = new Page("editing: ".htmlspecialchars($asset->name, ENT_QUOTES), "develop");
+	$page = new Page("editing: ".htmlspecialchars($asset->name, ENT_QUOTES), "anorrl_asset");
 	$page->addScript("/js/versions.js");
 
 	$page->loadHeader();
@@ -131,15 +133,15 @@
 			<div class="box" style="padding: 15px;">
 				<h3 id="filter-name">.basic_settings</h3>
 				<hr>
-				<form method="POST" action="/develop/<?= $asset->id ?>/configure/settings">
+				<div data-action="/develop/<?= $asset->id ?>/configure/settings">
 					<div style="padding: 5px;">
 						<div class="fields">
 							<span>name</span>
-							<input class="box input" type="text" placeholder="whats a cool name" minlength="2" value="<?= $asset->name ?>" style="width:662px">
+							<input class="box input" name="ANORRL$EditItem$Name" type="text" placeholder="whats a cool name" minlength="2" maxlength="110" value="<?= $asset->name ?>" style="width:662px">
 						</div>
 						<div class="fields">
 							<span>description</span>
-							<textarea class="box input" style="width:662px; max-width: 662px; height:60px"><?= $asset->description ?></textarea>
+							<textarea class="box input" name="ANORRL$EditItem$Description" style="width:662px; max-width: 662px; height:60px"><?= $asset->description ?></textarea>
 						</div>
 					</div>
 					<?php if($asset->type != AssetType::BADGE): ?>
@@ -156,11 +158,11 @@
 					<?php else: ?>
 					<div class="fields">
 						<span>secret</span>
-						<input type="checkbox" name="ANORRL$EditItem$PublicBox" <?php if(!$asset->public): ?>checked<?php endif ?>>
+						<input type="checkbox" name="ANORRL$EditItem$PublicBox" <?php if($asset->secret): ?>checked<?php endif ?>>
 					</div>
 					<?php endif ?>
 					<input class="button" type="submit" value="update" style="margin-top:5px;">
-				</form>
+				</div>
 			</div>
 		</div>
 		<?php if($sellable): ?>
@@ -168,7 +170,7 @@
 			<div class="box" style="padding: 15px;">
 				<h4 id="filter-name">.pricing</h4>
 				<hr>
-				<form method="POST" action="/develop/<?= $asset->id ?>/configure/pricing">
+				<form data-action="/develop/<?= $asset->id ?>/configure/pricing">
 					<input class="button" type="submit" value="update" style="margin-top:5px;">
 				</form>
 			</div>

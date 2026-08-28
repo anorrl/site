@@ -28,9 +28,12 @@ ANORRL.Vandals = {
 		$userprofilelink.attr("title", data['name']);
 
 		var image = $("<img>");
-		image.attr("src", data["thumbnail"]);
+		image.attr("data-src", data["thumbnail"]);
+		image.attr("src", "/public/images/spinner100x100_white.gif");
 		image.attr("width", "64");
 		image.attr("height", "64");
+
+		image.lazy();
 
 		$userprofilelink.append(image);
 		$userprofile.append($userprofilelink);
@@ -97,45 +100,58 @@ ANORRL.Vandals = {
 		var fetchingCell = $("<td colspan='4' style='text-align:center;padding:20px;font-weight:bold;'></td>");
 		fetchingCell.text("Loading vandals...");
 		fetchingRow.append(fetchingCell);
-		tbody.append(fetchingRow);;
+		tbody.append(fetchingRow);
 		
 		var backPager = pagercontainer.find("#back-pager");
 		var nextPager = pagercontainer.find("#next-pager");
 
 		$.get("/api/vandals", {q: query, p : page}, function(data) {
-			fetchingRow.remove();
-			if(pagercontainer.css("display") == "none") {
-				pagercontainer.css("display", "block");
-			}
-			var users = data['users'];
-			ANORRL.Vandals.CurrentStatusPage = data['page'];
-			var current_page = ANORRL.Vandals.CurrentStatusPage;
-			var total_pages = data['total_pages'];
-
-			var index = 0;
 			
-			for (var key in users) {
-				var user = users[key];
-
-				feedscontainer.append(ANORRL.Vandals.CreatePlayerRow(user));
-
-				index += 1;
-			}
-
-			if(current_page == 1) {
-				backPager.css("display", "none");
+			
+			var users = data['users'];
+			if(users.length == 0) {
+				fetchingCell.text("No vandals found!");
 			} else {
-				backPager.css("display", "inline");
-			}
+				if(data['total_pages'] > 1) {
+					if(pagercontainer.css("display") == "none") {
+						pagercontainer.css("display", "block");
+					}
+				} else {
+					if(pagercontainer.css("display") == "block") {
+						pagercontainer.css("display", "none");
+					}
+				}
+				fetchingRow.remove();
+				ANORRL.Vandals.CurrentStatusPage = data['page'];
+				var current_page = ANORRL.Vandals.CurrentStatusPage;
+				var total_pages = data['total_pages'];
 
-			if(current_page == total_pages) {
-				nextPager.css("display", "none");
-			} else {
-				nextPager.css("display", "inline");
-			}
+				var index = 0;
+				
+				for (var key in users) {
+					var user = users[key];
 
-			pagercontainer.find("#page-counter").html(total_pages);
-			pagercontainer.find("input").val(current_page);
+					feedscontainer.append(ANORRL.Vandals.CreatePlayerRow(user));
+
+					index += 1;
+				}
+
+				if(current_page == 1) {
+					backPager.css("display", "none");
+				} else {
+					backPager.css("display", "inline");
+				}
+
+				if(current_page == total_pages) {
+					nextPager.css("display", "none");
+				} else {
+					nextPager.css("display", "inline");
+				}
+
+				pagercontainer.find("#page-counter").html(total_pages);
+				pagercontainer.find("input").val(current_page);
+			}
+			
 		});
 	}
 }
@@ -143,11 +159,11 @@ ANORRL.Vandals = {
 $(function(){
 	ANORRL.Vandals.GrabFeed();
 
-	$("#UsersNavLinks").find("input").on("change", function() {
+	$("#pager").find("input").on("change", function() {
 		ANORRL.Vandals.GrabFeed(ANORRL.Vandals.CurrentStatusQuery, Number($(this).val()));
 	});
 
-	$("#SearchBox").on("keypress", function(e) {
+	$("#search-box[name=query]").on("keypress", function(e) {
 		if(e.keyCode == 13) {
 			ANORRL.Vandals.Submit();
 		}

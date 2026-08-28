@@ -32,16 +32,6 @@
 	[privacy] ul li {
 		margin: 5px 0px;
 	}
-
-	[alert] {
-		animation: blinker 1s linear infinite;
-	}
-
-	@keyframes blinker {
-		50% {
-			border-color: red;
-		}
-	}
 </style>
 <h2 class="page-title">.terms_of_service</h2>
 <h3 class="page-slogan">(last updated: 28nd August 2026)</h3>
@@ -51,7 +41,7 @@
 		By using this site, every user agree to abide by the following terms and conditions along with its rules of conduct.
 		ANORRL reserves the right to change our terms and conditions at any time.
 	</p>
-	<p><b>UNDER 13s ARE NOT ALLOWED ON OUR SITE, OUR BASE MINIMUM IS 15 YEARS OF AGE.</b></p>
+	<p><b title="by &quot;base minimum&quot; we mean, we dont allow under 15s but if you are mature enough we might let you in, no under 13s at all tho.">UNDER 13s ARE NOT ALLOWED ON OUR SITE, OUR BASE MINIMUM IS 15 YEARS OF AGE.</b></p>
 </div>
 <br>
 <div class="box" privacy>

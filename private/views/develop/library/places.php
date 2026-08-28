@@ -1,9 +1,8 @@
 <style>
 	.game {
-		*text-align: center;
-		*padding: 10px;
 		user-select: none;
 		width: 100%;
+		transition: transform 0.25s;
 	}
 
 	.game td {
@@ -27,6 +26,8 @@
 
 	.game #thumbnail {
 		width: 140px;
+		height: 80px;
+		object-fit: contain;
 	}
 
 	.game:hover {
@@ -34,7 +35,12 @@
 		padding: 2px;
   		margin: -4px;
 		padding-right: 0px;
-		background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+		background: linear-gradient(180deg,#1a0c23 0%, #492265 100%);
+
+		transform: scale(1.05);
+		position: relative;
+		right: -2px;
+		z-index: 99;
 	}
 
 	.game #info {
@@ -53,12 +59,6 @@
 		margin-left: -5px;
 		margin-right: 2px;
 	}
-
-	.game #slot[src="inactive"] span#picture {
-		background-image: url("/public/images/OnlineStatusIndicator_IsOffline.png");
-	}
-
-
 	
 </style>
 <script>
@@ -87,7 +87,7 @@
 	<tr>
 		<td width="145">
 			<a id="url" href>
-				<img id="thumbnail" src>
+				<img id="thumbnail" src="/public/images/spinner100x100_white.gif">
 			</a>
 		</td>
 		<td width="232">

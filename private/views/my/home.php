@@ -98,7 +98,7 @@
 					<td>
 						<div class="game">
 							<a href="<?= $game->getUrl() ?>">
-								<img src="<?= $game->getThumbsUrl(160, 90) ?>" width="160" height="90">
+								<img data-src="<?= $game->getThumbsUrl(160, 90) ?>">
 								<div id="name"><?= $game->name ?></div>
 							</a>
 							<div id="creator"><a href="<?= $game->creator->getUrl() ?>"><?= $game->creator->name?></a></div>
@@ -124,7 +124,7 @@
 						<table class="friend">
 							<td id="user">
 								<a href="<?= $friend->getUrl() ?>">
-									<img src="<?= $friend->getThumbsUrl() ?>" width="50">
+									<img data-src="<?= $friend->getThumbsUrl() ?>" width="50">
 								</a>
 							</td>
 							<td id="content" style="vertical-align: top;">

@@ -21,6 +21,7 @@
 		}
 
 		$universe = Universe::FromID($place->universe);
+		$is_starting_place = $universe->starting_place->id == $place->id;
 
 		if($user != null) {
 			$is_creator = $place->isOwner($user);
@@ -31,6 +32,8 @@
 		
 		$place_creator_name = $place->creator->name;
 		$place_description = $place->description;
+		$place_thumbnail = $is_starting_place ? $place->getThumbsUrl() : $universe->starting_place->getThumbsUrl();
+		$place_playable_id = $is_starting_place ? $place->id : $universe->starting_place->id;
 		if(strlen(trim($place_description)) == 0) {
 			$place_description = <<<EOT
 			<b>Seems like $place_creator_name hasn't put anything here...</b>
@@ -47,7 +50,14 @@
 			redirect($new_asset->getURL());
 		}
 	}
-	$header_data = $place;
+
+	if(ARLAUTH) {
+		$_SESSION['ANORRL$Asset$ID'] = $place->id;
+	}
+	else {
+		if(isset($_SESSION['ANORRL$Asset$ID']))
+			unset($_SESSION['ANORRL$Asset$ID']);
+	}
 
 	$place_short_name = null;
 	if(strlen($place->name) > 35 ) {
@@ -59,76 +69,15 @@
 	$page->addScript("/js/comments.js");
 	$page->addScript("/js/ratings.js");
 	$page->addValue("asset", $place->id);
+	$page->addValue("launch", $place_playable_id);
 	$place->loadEmbed($page);
 	
 	$page->loadHeader();
 ?>
-<?php $page->loadTemplate("layouts/comments"); ?>
+<?php $page->loadTemplate("layouts/comments/templates"); ?>
 <style>
-		.cog img {
-		margin-bottom: -3px;
-		transition: transform 0.4s;
-	}
-
-	.cog[active] img {
-		transform: rotate(90deg)
-	}
-
-	.cog[active] {
-		background: linear-gradient(0deg,rgb(156, 55, 223) 0%, rgb(81, 34, 112) 100%);
-	}
-
-	.cog-dropdown {
-		position: relative;
-	}
-
 	.cog-dropdown ul {
-		display:none;
-		position: absolute;
-		list-style: none;
-		text-align: left;
-		width: 130px;
-		min-width:fit-content;
-		background: magenta;
-		margin: 0px;
-		padding: 0px;
-		z-index: 10;
-		border: 2px solid var(--border-color);
 		left: 30px;
-		top: 0px;
-	}
-
-	.cog-dropdown li {
-		padding: 5px;
-		user-select: none;
-		background: linear-gradient(0deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
-		border-top: 1px solid var(--border-color);
-		cursor: pointer;
-	}
-
-	.cog-dropdown li span.title {
-		display: inline;
-	} 
-
-	.cog-dropdown li span {
-		display: none;
-	}
-
-	.cog-dropdown li:hover span {
-		display: inline;
-	}
-
-	.cog-dropdown li:first-child {
-		border-top: none;
-	}
-
-
-	.cog-dropdown li:active {
-		background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
-	}
-
-	.cog-dropdown li:hover {
-		filter: brightness(1.5)
 	}
 </style>
 <style>
@@ -268,12 +217,19 @@
 		
 	}
 </style>
+
 <h2 class="page-title">.place</h2>
+<?php if(!$is_starting_place): ?>
+<div class="box" alert="" style="font-family: 'Fira Mono';padding: 15px;font-size: 13px;margin-bottom: 5px;">
+	This place is part of <?= $universe->starting_place->name ?>! <a href="<?= $universe->starting_place->getURL() ?>" style="float: right;">Take me there!</a>
+</div>
+<?php endif ?>
+
 <div class="box" style="display: flex; padding: 10px; position: relative;">
 	<div style="flex: 1">
 		<div class="image-container">
-			<a href="<?= $place->getThumbsUrl() ?>" target="__blank">
-				<img src="<?= $place->getThumbsUrl() ?>">
+			<a href="<?= $place_thumbnail ?>" target="__blank">
+				<img src="<?= $place_thumbnail ?>">
 			</a>
 		</div>
 	</div>
@@ -291,7 +247,7 @@
 					<h2 id="place-name" style="background: none; border: none; flex: 1"><?= $place->name ?></h2>
 				<?php endif ?>
 			</div>
-			<div style="font-size: 14px; font-style: italic; margin-bottom: 15px;">created by <a href=""><?= $place->creator->name ?></a></div>
+			<div style="font-size: 14px; font-style: italic; margin-bottom: 15px;">created by <a href="<?= $place->creator->getURL() ?>"><?= $place_creator_name ?></a></div>
 		</div>
 		<hr>
 		<div style="
@@ -355,6 +311,7 @@
 	</div>
 	<?php endif ?>
 </div>
+<?php if($is_starting_place): ?>
 <style>
 	#buttons {
 		display: flex;
@@ -403,6 +360,19 @@
 		letter-spacing: 2px;
 		text-decoration: underline !important;
 	}
+
+	div[data-tab] hr {
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+
+	.nothing {
+		margin: 25px auto;
+		font-size: 14px;
+		font-family:monospace;
+		text-align: center;
+		color: #EFD8FF;
+	}
 </style>
 <div class="box" id="buttons">
 	<a class="button" href="#info" data-tab="info">info</a>
@@ -413,11 +383,11 @@
 <div style="margin-top: 5px;">
 	<div class="box" data-tab="info" >
 		<h3 style="margin: 5px;">.description</h3>
-		<hr style="margin-left: 5px; margin-right: 5px;">
+		<hr>
 		<div style="margin: 10px 15px; line-height: 1.5em; font-family: monospace; font-size: 11px; color: #EFD8FF">
 			<?= $place_description ?>
 		</div>
-		<hr style="margin-left: 5px; margin-right: 5px;">
+		<hr>
 		<table id="place-stats">
 			<td>
 				<b>.created</b>
@@ -447,27 +417,51 @@
 	</div>
 	<div class="box" data-tab="store">
 		<h3 style="margin: 5px;">.store</h3>
+		<hr>
+		<?php if(count($universe->getDeveloperProducts()) > 0): ?>
+			<?php // foreach loop them and make em buyable ?>
+		<?php else: ?>
+			<div class="nothing">This place has no items!</div>
+		<?php endif ?>
 	</div>
 	<div class="box" data-tab="badges">
 		<h3 style="margin: 5px;">.badges</h3>
+		<hr>
+		<?php if(count($universe->getBadges()) > 0): ?>
+			<?php // foreach loop them and make em buyable ?>
+		<?php else: ?>
+			<div class="nothing">This place has no badges!</div>
+		<?php endif ?>
 	</div>
 	<div class="box" data-tab="servers">
 		<h3 style="margin: 5px;">.servers</h3>
+		<hr>
 	</div>
 </div>
 <div style="margin-top: 5px;">
-	<?php $page->loadTemplate("layouts/comment_poster"); ?>
+	<?php $page->loadTemplate("layouts/comments/main"); ?>
 </div>
+<?php endif ?>
 <script>
-	$(window).click(function() {
-		$(".cog").each(function() {
-			$(this).removeAttr("active");
-		})
-		$(".cog-dropdown ul").each(function() {
-			$(this).css("display", "none");
-		})
-	});
-	<?php if($place->isStartingPlace()): ?>
+	function cogDisable() {
+		$(".cog").removeAttr("active");
+		$(".cog-dropdown ul").css("display", "none");
+	}
+
+	$(window).click(cogDisable);
+
+	$(".cog").click(function(event) {
+		event.stopPropagation();
+		var was_active = typeof($(this).attr("active")) == "undefined";
+		
+		cogDisable();
+		if(was_active) {
+			$(this).attr("active",true);
+			$(this).parent().find("ul").css("display", "block");
+		}
+	})
+
+	<?php if($is_starting_place): ?>
 	$(".cog-dropdown li").click(function() {
 		var action = $(this).data("actionid");
 
@@ -488,17 +482,6 @@
 	});
 	<?php endif ?>
 
-	$(".cog").click(function() {
-		event.stopPropagation();
-
-		$(".cog").each(function() {
-			$(this).removeAttr("active");
-			$(this).parent().find("ul").css("display", "none");
-		});
-
-		$(this).attr("active",true);
-		$(this).parent().find("ul").css("display", "block");
-	})
 	$(".button[data-tab]").click(function() {
 		var type = $(this).data("tab");
 		$(".box[data-tab]").hide();

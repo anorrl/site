@@ -102,7 +102,7 @@
 	$page->addStylesheet("/css/new/forms.css?v=1");
 	$page->addStylesheet("/css/new/window.css");
 
-	$page->addScript("/js/create.js?t=1776537578");
+	$page->addScript("/js/old/create.js?t=1776537578");
 	$page->loadHeader();
 ?>
 <div class="Asset" template>

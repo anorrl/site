@@ -2,13 +2,14 @@
 	use anorrl\Asset;
 	use anorrl\Comment;
 
-	$user = SESSION ? SESSION->user : null;
-
 	set_content_type(ARLTYPEJSON);
 
 	$result = ["success" => false, "reason" => "Request failed."];
 
-	if(!$user || !isset($id) || !isset($_POST['ANORRL$Comment$Contents']))
+	if(!ARLAUTH || !isset($id) || !isset($_POST['ANORRL$Comment$Contents']) || !isset($_SESSION['ANORRL$Asset$ID']))
+		die(json_encode($result));
+
+	if(intval($_SESSION['ANORRL$Asset$ID']) != $id)
 		die(json_encode($result));
 
 	$asset = Asset::FromID($id);

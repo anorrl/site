@@ -25,7 +25,10 @@
 		$total_pages--;
 	}
 
-	if($total_pages < $page) {
+	if($total_pages <= 0)
+		$total_pages = 1;
+
+	if($total_pages < $page && $total_pages > 0) {
 		redirect("/api/vandals?q=$query&p=1");
 	}
 

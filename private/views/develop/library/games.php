@@ -1,9 +1,8 @@
 <style>
 	.game {
-		*text-align: center;
-		*padding: 10px;
 		user-select: none;
 		width: 100%;
+		transition: transform 0.25s;
 	}
 
 	.game td {
@@ -27,6 +26,8 @@
 
 	.game #thumbnail {
 		width: 140px;
+		height: 80px;
+		object-fit: contain;
 	}
 
 	.game:hover {
@@ -34,7 +35,12 @@
 		padding: 2px;
   		margin: -4px;
 		padding-right: 0px;
-		background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+		background: linear-gradient(180deg,#1a0c23 0%, #492265 100%);
+
+		transform: scale(1.05);
+		position: relative;
+		right: -2px;
+		z-index: 99;
 	}
 
 	.game #info {
@@ -74,8 +80,16 @@
 		if(action == 1) {
 			window.location.href = "/develop/universes/"+universe+"/configure";
 		}
+		else if(action == 2) {
+			$.post("/universes/"+universe+"/setactive", function(data) {
+				if(!data['success'])
+					alert(data['reason']);
+				
+				ANORRL.Creations.Refresh();
+			})
+		}
 		else if(action == 5) {
-			$.post("/api/universes/"+universe+"/shutdown", function(data) {
+			$.post("/universes/"+universe+"/shutdown", function(data) {
 				if(!data['success'])
 					alert(data['reason']);
 				else
@@ -91,14 +105,14 @@
 	<tr>
 		<td width="145">
 			<a id="url" href>
-				<img id="thumbnail" src>
+				<img id="thumbnail" src="/public/images/spinner100x100_white.gif">
 			</a>
 		</td>
 		<td width="232">
 			<a id="url" href><span id="name"></span></a>
 			<table style="margin-top:10px;width: 100%">
 				<tr>
-					<td id="slot" src=""><span id="picture">&nbsp;</span><span id="slot" html></span></td>
+					<td id="slot" src><span id="picture">&nbsp;</span><span id="slot" html></span></td>
 					<td>Updated <span id="updated"></span></td>
 				</tr>
 			</table>
@@ -116,7 +130,7 @@
 				<button class="button cog" style="padding: 5px 10px" class=""><img src="/public/images/icons/cog.png" ></button>
 				<ul>
 					<li data-actionid="1"><span>&gt;</span> configure</li>
-					<li data-actionid="2"><span>&gt;</span> make active</li>
+					<li data-actionid="2"><span>&gt;</span> toggle active</li>
 					<li data-actionid="3"><span>&gt;</span> advertise</li>
 					<li data-actionid="4"><span>&gt;</span> create badge</li>
 					<li data-actionid="5"><span>&gt;</span> shutdown all servers</li>
@@ -128,12 +142,15 @@
 </table>
 <div id="panel">
 	<div class="box" style="padding: 15px;">
-		<h2>.games</h2>
-		<hr>
-		<input type="submit" class="button" value="create a game"> <span style="font-family: road; font-size: 14px;">(5 slots left)</span>
-	</div>
-	<div class="box" style="padding: 15px; margin-top: 10px;">
-		<h2>.games <input class="box input" id="search-box" style="padding: 0px 5px;" placeholder="search whatever dude..."></h2>
+		<table style="width: 100%">
+			<td>
+				<h2>.games <input class="box input" id="search-box" style="padding: 0px 5px;" placeholder="search whatever dude..."></h2>
+			</td>
+			<td style="text-align: right;">
+				<input type="submit" class="button" value="create a game">
+			</td>
+		</table>
+		
 		<hr>
 		<?php generate_statuses() ?>
 		<div data-loadtype="98" data-limit="10"></div>
@@ -141,6 +158,6 @@
 </div>
 <script>
 	$("input[type]").click(function() {
-		alert("noarrl say hi");
+		window.location.href="/develop/create/game";
 	})
 </script>

@@ -402,7 +402,7 @@
 			}
 
 			// places are not buyable and never should be!
-			if($type == AssetType::PLACE) {
+			if($type == AssetType::PLACE || $type == AssetType::GAME) {
 				$creator_only = true;
 			}
 
@@ -412,6 +412,10 @@
 
 			if(!$show_all) {
 				$sql_extra .= " AND `assets`.`public` = 1";
+
+				if($type == AssetType::GAME){
+					$sql_extra .= " AND `universes`.`active` = 1";
+				}
 			}
 
 			$sql_types = "AND `assets`.`type` = :type";
@@ -513,7 +517,12 @@
 			}
 
 			if(!$show_all) {
-				$sql_extra .= " AND `public` = 1";
+				if($type == AssetType::GAME){
+					$sql_extra .= " AND `universes`.`active` = 1";
+				}
+				else {
+					$sql_extra .= " AND `assets`.`public` = 1";
+				}
 			}
 
 			$sql_types = "AND `assets`.`type` = :type";

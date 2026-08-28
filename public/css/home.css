@@ -14,7 +14,7 @@ textarea.box.input {
 }
 
 .feed-item #content #date-posted {
-	color: rgb(159, 124, 184);
+	color: #9f7cb8;
 	font-style: italic;
 	margin-top: 2px;
 }
@@ -71,9 +71,9 @@ textarea.box.input {
 
 #recently-played .game:hover {
 	background: #0004;
-	border: 2px solid rgb(141, 29, 216);
+	border: 2px solid #8d1dd8;
 	margin: -2px;
-	background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+	background: linear-gradient(180deg,#1a0c23 0%, #492265 100%);
 }
 
 #recently-played .game #name {
@@ -91,8 +91,14 @@ textarea.box.input {
 
 #recently-played .game #played {
 	font-family: "arial-rounded";
-	color: rgb(159, 124, 184);
+	color: #9f7cb8;
 	font-style:italic;
+}
+
+#recently-played .game img {
+	width: 160px;
+	height: 90px;
+	object-fit: contain;
 }
 
 #friends h2 {

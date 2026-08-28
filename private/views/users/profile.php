@@ -126,7 +126,7 @@
 			unset($_SESSION['ANORRL$Profile$ID']);
 	}
 ?>
-<?php $page->loadTemplate("layouts/comments"); ?>
+<?php $page->loadTemplate("layouts/comments/templates"); ?>
 
 <div id="crop-modal" class="box" modal>
 	<h2>crop yo shit!</h2>
@@ -141,7 +141,7 @@
 </div>
 <div id="image-modal" class="box" modal>
 	<h2>viewing <?= $user->name ?>!</h2>
-	<a href="<?= $user->getThumbsUrl()?>" target="__blank"><img src="<?= $user->getThumbsUrl()?>" width="420" height="420"></a>
+	<a href="<?= $user->getThumbsUrl()?>" target="__blank"><img data-src="<?= $user->getThumbsUrl()?>" width="420" height="420"></a>
 	<div style="margin-top: 5px;">
 		<!-- evil -->
 		<a href="#" rel="modal:close" style="color:white">
@@ -160,7 +160,7 @@
 				<button class="button" data-method="remove-pfp">delete</button>
 			</div>
 			<?php endif ?>
-			<a title="<?= $owner ? "your" : "{$user->name}'s" ?> profile pic!" href="open-modal" target="__blank"><img src="<?= $user->getThumbsUrl(161)?>"></a>
+			<a title="<?= $owner ? "your" : "{$user->name}'s" ?> profile pic!" href="open-modal" target="__blank"><img data-src="<?= $user->getThumbsUrl(161)?>"></a>
 		</div>
 
 		<div id="profile-stats"> 
@@ -225,7 +225,7 @@
 					<div class="box" style="margin-left:-2px; text-align: center;">
 						<a href="<?= $bgm->getURL() ?>">
 							<div style="border-bottom: 1px solid var(--lighter-border-color); padding: 5px 0px;">
-								<img src="<?= $bgm->getThumbsUrl(); ?>" style="width: 206px;">
+								<img data-src="<?= $bgm->getThumbsUrl(); ?>" style="width: 206px;">
 							</div>
 							<div >
 								<h4 style="margin: 5px 0px; margin-bottom: 3px;"><?= $bgm->name ?></h4>
@@ -254,7 +254,7 @@
 			<li>
 				<div class="badge" title="<?= $friend->name ?>">
 					<a href="<?=$friend->getURL() ?>">
-						<img src="<?= $friend->getThumbsURL() ?>">
+						<img data-src="<?= $friend->getThumbsURL() ?>">
 						<div><?= $friend->name ?></div>
 					</a>
 				</div>
@@ -271,7 +271,7 @@
 			<li>
 				<div class="game" title="<?= $place->name ?>">
 					<a href="<?=$place->getURL() ?>">
-						<img src="<?= $place->getThumbsURL() ?>">
+						<img data-src="<?= $place->getThumbsURL() ?>">
 						<div id="name"><?= $place->name ?></div>
 					</a>
 					<div>by <a href="<?= $place->creator->getURL() ?>"><?= $place->creator->name ?></a></div>
@@ -294,7 +294,7 @@
 			<div class="thumbnail-holder" width="300" height="300">
 				<button id="thumbnail-switcher" data-3d></button>
 				<span class="thumbnail-span" data-3d-url="/thumbnail/get?user=<?= $user->id ?>" style="width:300px;height:300px"></span>
-				<img src="<?= $user->getThumbsUrlAvatar() ?>" width="300">
+				<img data-src="<?= $user->getThumbsUrlAvatar() ?>" width="300">
 			</div>
 		</div>
 		<?php if(count($items) > 0): ?>
@@ -302,7 +302,7 @@
 			<?php foreach($items as $item): ?>
 				<div class="accoutrement-item">
 					<a href="<?= $item->getURL() ?>" title="<?= $item->name ?>">
-						<img src="<?= $item->getThumbsUrl() ?>" width="100" height="100">
+						<img data-src="<?= $item->getThumbsUrl() ?>" width="100" height="100">
 					</a>
 				</div>
 			<?php endforeach ?>
@@ -322,7 +322,7 @@
 			<li>
 				<div class="item" title="<?= $item->name ?>">
 					<a href="<?=$item->getURL() ?>">
-						<img src="<?= $item->getThumbsURL() ?>">
+						<img data-src="<?= $item->getThumbsURL() ?>">
 						<div id="name"><?= $item->name ?></div>
 					</a>
 					<div>by <a href="<?= $item->creator->getURL() ?>"><?= $item->creator->name ?></a></div>
@@ -359,7 +359,7 @@
 			<li>
 				<div class="badge">
 					<a href="<?=$badge->getURL() ?>">
-						<img src="<?= $badge->getThumbsUrl() ?>">
+						<img data-src="<?= $badge->getThumbsUrl() ?>">
 						<div><?= $badge->name ?></div>
 					</a>
 				</div>
@@ -404,7 +404,7 @@
 			<li>
 				<div class="game" title="<?= $place->name ?>">
 					<a href="<?=$place->getURL() ?>">
-						<img src="<?= $place->getThumbsURL() ?>">
+						<img data-src="<?= $place->getThumbsURL() ?>">
 						<div id="name"><?= $place->name ?></div>
 					</a>
 					<div>by <a href="<?= $place->creator->getURL() ?>"><?= $place->creator->name ?></a></div>
@@ -419,7 +419,7 @@
 			<li>
 				<div class="game" title="<?= $place->name ?>">
 					<a href="<?=$place->getURL() ?>">
-						<img src="<?= $place->getThumbsURL() ?>">
+						<img data-src="<?= $place->getThumbsURL() ?>">
 						<div id="name"><?= $place->name ?></div>
 					</a>
 					<div>by <a href="<?= $place->creator->getURL() ?>"><?= $place->creator->name ?></a></div>
@@ -432,7 +432,7 @@
 	<?php endif ?>
 </div>
 <?php endif ?>
-<?php $page->loadTemplate("layouts/comment_poster"); ?>
+<?php $page->loadTemplate("layouts/comments/main"); ?>
 <div id="report-banner" class="box">
 	got something to report about this user? <a href="<?= $user->getTypedURL("report#profile") ?>">click here!</a>
 </div>

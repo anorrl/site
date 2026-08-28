@@ -5,7 +5,10 @@
 
 	$result = ["success" => false, "reason" => "Request failed."];
 
-	if(!isset($id))
+	if(!ARLAUTH || !isset($id) || !isset($_SESSION['ANORRL$Asset$ID']))
+		die(json_encode($result));
+
+	if(intval($_SESSION['ANORRL$Asset$ID']) != $id)
 		die(json_encode($result));
 
 	$asset = Place::FromID($id);

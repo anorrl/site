@@ -1,10 +1,15 @@
+
 <h4 class="page-title">.commentary</h4>
+<?php if(ARLAUTH): ?>
 <div class="box" style="padding: 10px 20px" id="comment-post-container">
 	<h3 class="page-slogan">.post_something_cool!</h3>
 	<textarea maxlength="256" minlength="4" class="box input" style="width: 914px" placeholder="hurr durr i love this!!!"></textarea>
 	<div class="comment-error">you did something bad: <span></span></div>
 	<button class="button" style="margin-top: 5px">submit</button>
 </div>
+<?php else: ?>
+<hr>
+<?php endif ?>
 <div style="padding: 5px">
 	<div id="statuses">
 		<div class="status" id="loading-status">

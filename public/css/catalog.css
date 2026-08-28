@@ -57,7 +57,7 @@
 .asset:hover {
 	border: 2px solid var(--border-color);
 	margin: -2px;
-	background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+	background: linear-gradient(180deg,#1a0c23 0%, #492265 100%);
 	margin-bottom: -83px;
 	z-index: 9999;
 }

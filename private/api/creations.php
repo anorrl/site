@@ -1,19 +1,10 @@
 <?php
 	set_content_type(ARLTYPEJSON);
 
-	use anorrl\User;
+	use anorrl\Universe;
 	use anorrl\enums\AssetType;
 
-	$user_id = $_GET['id'] ?? null;
-	$is_auth = false;
-
-	if($user_id == null) {
-		$user = ARLAUTH ? SESSION->user : null;
-		$is_auth = true;
-	}
-	else {
-		$user = User::FromID(intval($_GET['id']));
-	}
+	$user = SESSION ? SESSION->user : null;
 
 	if($user != null) {
 		$type = AssetType::HAT->ordinal();
@@ -39,24 +30,30 @@
 			redirect("/api/stuff?c=$type&p=1");
 		}
 
-		$showcreatoronly = false;
+		$total_pages = floor($user->getOwnedAssetsCount(AssetType::index($type), $query, true)/$limit)+1;
 
-		if(isset($_GET['showcreatoronly'])) {
-			$showcreatoronly = true;
-		}
-
-		$total_pages = floor($user->getOwnedAssetsCount(AssetType::index($type), $query, $showcreatoronly, $is_auth)/$limit)+1;
+		if($total_pages <= 0)
+			$total_pages = 1;
 
 		if($total_pages < $page) {
-			redirect("/api/stuff?c=$type&p=1&q=$query&l=$limit".($showcreatoronly ? "&showcreatoronly" : ""));
+			redirect("/api/creations?c=$type&p=1&q=$query&l=$limit");
 		}
 
-		$assets = $user->getOwnedAssets(AssetType::index($type), $query, $showcreatoronly, $is_auth, [], $page, $limit);
+		$reset_mafacking_actives = false;
+
+		if($type == AssetType::GAME->ordinal()) {
+			$reset_mafacking_actives = $user->getOwnedAssetsCount(AssetType::index($type), $query, true, false, []) > 5;
+		}
+
+		$assets = $user->getOwnedAssets(AssetType::index($type), $query, true, true, [], $page, $limit);
 
 		$assets_raw = [];
 
 		if(count($assets) != 0) {
 			foreach($assets as $asset) {
+				if($reset_mafacking_actives)
+					Universe::FromID($asset->universe)->setActive(false);
+
 				$assets_raw[] = $asset->getStuffResponse();
 			}
 		}

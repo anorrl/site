@@ -27,8 +27,6 @@ ANORRL.Home = {
 			$(this).remove();
 		});
 
-		
-
 		var pagercontainer = $("#pager");
 		
 		var backPager = pagercontainer.find("#back-pager");

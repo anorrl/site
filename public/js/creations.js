@@ -8,6 +8,9 @@ ANORRL.Creations  = {
 	CurrentlyLoadingCrapBruh: false,
 	CurrentQuery: "",
 	CurrentLimit: 12,
+	Refresh: function() {
+		this.GrabAssets(this.CurrentCategory, this.CurrentPage, this.CurrentQuery);
+	},
 	Submit: function() {
 		this.GrabAssets(this.CurrentCategory, this.CurrentPage, $("#search-box").val());
 	},
@@ -21,7 +24,14 @@ ANORRL.Creations  = {
 		if(typeof(element.attr("href")) != "undefined") {
 			element.attr("href", value);
 		} else if(typeof(element.attr("src")) != "undefined") {
-			element.attr("src", value);
+			if(element.attr("src").length > 0) {
+				element.attr("data-src", value);
+				element.lazy();
+			}
+			else {
+				element.attr("src", value);
+			}
+			
 		} else if(typeof(element.attr("title")) != "undefined") {
 			element.attr("title", value);
 		} else {
@@ -32,16 +42,21 @@ ANORRL.Creations  = {
 			element.html(value);
 		}
 	},
+	HandleWindowClick: function() {
+		$(".cog").removeAttr("active");
+		$(".cog-dropdown ul").css("display", "none");
+	},
 	HandleCogClick: function(event) {
 		event.stopPropagation();
 
-		$(".cog").each(function() {
-			$(this).removeAttr("active");
-			$(this).parent().find("ul").css("display", "none");
-		});
+		var was_active = typeof($(this).attr("active")) == "undefined";
 
-		$(this).attr("active",true);
-		$(this).parent().find("ul").css("display", "block");
+		ANORRL.Creations.HandleWindowClick();
+
+		if(was_active) {
+			$(this).attr("active",true);
+			$(this).parent().find("ul").css("display", "block");
+		}
 	},
 	HandleDropdownClick: function(event) {
 		/* override */
@@ -93,7 +108,7 @@ ANORRL.Creations  = {
 		var backPager = pagercontainer.find("#back-pager");
 		var nextPager = pagercontainer.find("#next-pager");
 
-		$.get("/api/stuff?showcreatoronly", {c: category, p : page, q: query, l: this.CurrentLimit}, function(data) {
+		$.get("/api/creations", {c: category, p : page, q: query, l: this.CurrentLimit}, function(data) {
 			
 			var assets = data['assets'];
 			ANORRL.Creations.CurrentPage = data['page'];
@@ -211,12 +226,5 @@ $(function(){
 		alert("no feckin container to load m8")
 	}
 
-	$(window).click(function() {
-		$(".cog").each(function() {
-			$(this).removeAttr("active");
-		})
-		$(".cog-dropdown ul").each(function() {
-			$(this).css("display", "none");
-		})
-	});
+	$(window).click(ANORRL.Creations.HandleWindowClick);
 });

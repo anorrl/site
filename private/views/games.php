@@ -6,7 +6,6 @@
 	$randomsplash = new FileSplasher("titles/games", false, 'Games$Random$Splash')->getRandomSplash();
 
 	$page = new Page("Games", "games");
-	$page->addScript("/js/jquery.lazy.min.js");
 	$page->addScript("/js/games.js");
 	$page->addStylesheet("/css/games.css");
 

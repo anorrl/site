@@ -1,8 +1,10 @@
 /** todo: add variables */
 
 :root {
-	--border-color: #8d1dd8;
+	--border-color: #c2740f;
 	--lighter-border-color: #9f60c9;
+	--button-border-color: #8d1dd8;
+	--line-border-color: #9f60c9;
 }
 
 @font-face {
@@ -58,7 +60,7 @@ h1, h2, h3, h4, h5 {
 }
 
 hr {
-	color: var(--border-color);
+	color: var(--line-border-color);
 }
 
 @keyframes bgScroll {
@@ -224,7 +226,6 @@ hr {
 	width: 100%;
 	padding: 20px 0;
 	text-align: center;
-	/*background: rgb(82, 19, 123);*/
 	border-top: 1px solid #ab46ee;
 	margin-bottom: 60px;
 }
@@ -281,6 +282,10 @@ hr {
 	background: linear-gradient(0deg,#1a0c23 0%, #492265 100%);
 }
 
+.box.input  {
+	border-color: var(--button-border-color);
+}
+
 .box.rounded {
 	border-radius: 8px;
 }
@@ -291,7 +296,7 @@ hr {
 }
 
 .button {
-	border: 2px solid var(--border-color);
+	border: 2px solid var(--button-border-color);
 	font-size: 14px;
 	padding: 5px 15px;
 	font-weight: bold;
@@ -464,4 +469,80 @@ ul.horizontal  {
 ul.horizontal li {
 	float: left;
 	padding: 5px;
+}
+
+[alert] {
+	animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+	50% {
+		border-color: red;
+	}
+}
+
+.cog img {
+	margin-bottom: -3px;
+	transition: transform 0.4s;
+}
+
+.cog[active] img {
+	transform: rotate(90deg)
+}
+
+.cog[active] {
+	background: linear-gradient(0deg,#9c37df 0%, #512270 100%);
+}
+
+.cog-dropdown {
+	position: relative;
+}
+
+.cog-dropdown ul {
+	display:none;
+	position: absolute;
+	list-style: none;
+	text-align: left;
+	width: 130px;
+	min-width:fit-content;
+	background: magenta;
+	margin: 0px;
+	padding: 0px;
+	z-index: 10;
+	border: 2px solid var(--border-color);
+	left: 49px;
+	top: 0px;
+}
+
+.cog-dropdown li {
+	padding: 5px;
+	user-select: none;
+	background: linear-gradient(0deg,#1a0c23 0%, #492265 100%);
+	border-top: 1px solid var(--border-color);
+	cursor: pointer;
+}
+
+.cog-dropdown li span.title {
+	display: inline;
+} 
+
+.cog-dropdown li span {
+	display: none;
+}
+
+.cog-dropdown li:hover span {
+	display: inline;
+}
+
+.cog-dropdown li:first-child {
+	border-top: none;
+}
+
+
+.cog-dropdown li:active {
+	background: linear-gradient(180deg,#1a0c23 0%, #492265 100%);
+}
+
+.cog-dropdown li:hover {
+	filter: brightness(1.5)
 }

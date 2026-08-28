@@ -98,7 +98,7 @@ $(function(){
 			$("#crop-modal").modal({showClose: false});
 			$('#cropper-img').attr('src', e.target.result).width(500);
 			$('#cropper-img').cropper({
-				aspectRatio: type == "banner" ? 970 / 220 : 1/1,
+				aspectRatio: type == "banner" ? 97 / 22 : 1/1,
 				viewMode: 1
 			});
 			$('#cropper-img').data("cropper").replace(e.target.result);	

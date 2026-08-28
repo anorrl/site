@@ -23,8 +23,7 @@
 
 .game img {
 	width: 180px;
-	min-height:101px;
-	max-height:101px;
+	height:101px;
 }
 
 .game img[loading], .game img[data-src] {
@@ -34,7 +33,7 @@
 .game:hover {
 	border: 2px solid var(--border-color);
 	margin: -2px;
-	background: linear-gradient(180deg,rgb(26, 12, 35) 0%, rgb(73, 34, 101) 100%);
+	background: linear-gradient(180deg,#1a0c23 0%, #492265 100%);
 	margin-bottom: -31px;
 	z-index: 9999;
 }

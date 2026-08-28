@@ -10,6 +10,9 @@
 	if($this->internal_name != "anorrl_profile")
 		unset($_SESSION['ANORRL$Profile$ID']);
 
+	if($this->internal_name != "anorrl_asset")
+		unset($_SESSION['ANORRL$Asset$ID']);
+
 	$this->addValue("authenticated", ARLAUTH);
 ?>
 <!DOCTYPE html>
@@ -64,7 +67,7 @@
 					<a href="/my/profile" <?php                 if($this->internal_name == "my/profile"):    ?>selected<?php endif ?>>Account</a>
 					<a href="/my/character" <?php               if($this->internal_name == "my/character"):  ?>selected<?php endif ?>>Character</a>
 					<a href="/my/friends" <?php                 if($this->internal_name == "my/friends"):    ?>selected<?php endif ?>>Friends</a>
-					<a href="/create/" <?php                    if($this->internal_name == "my/create"):     ?>selected<?php endif ?>>Create</a>
+					<a href="/develop/create/" <?php            if($this->internal_name == "my/create"):     ?>selected<?php endif ?>>Create</a>
 					<a href="/my/stuff" <?php                   if($this->internal_name == "my/stuff"):      ?>selected<?php endif ?>>Stuff</a>
 				</div>
 				<div id="billboard" style="z-index: 10;">

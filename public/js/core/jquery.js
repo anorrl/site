@@ -292,3 +292,9 @@ jQuery.browser = browser;
 jQuery.fn.tagName = function() {
   return this.prop("tagName").toLowerCase();
 };
+
+/** ANORRL FUNCTIONS BECAUSE IM FUCKING LAZY!!! */
+$(function() {
+	$("img[data-src]").attr("src", "/public/images/spinner100x100_white.gif");
+	$("img[data-src]").lazy();
+});

@@ -14,6 +14,8 @@
 	route_api("GET",      "gameservers/get");
 	route_api("POST",     "home");
 
+	route("GET", "/api/creations",  "/private/api/creations.php");
+
 	route("GET", "/thumbnail/avatar/[*:hash]/mtl",           "/private/api/thumbnail/avatar/getters/mtl.php", false);
 	route("GET", "/thumbnail/avatar/[*:hash]/obj",           "/private/api/thumbnail/avatar/getters/obj.php", false);
 	route("GET", "/thumbnail/avatar/[*:hash]/img/[*:image]", "/private/api/thumbnail/avatar/getters/img.php", false);
@@ -48,6 +50,7 @@
 	route("POST", "/users/remove/pfp",       "/private/api/users/remove/pfp.php");
 	route("POST", "/users/remove/banner",    "/private/api/users/remove/banner.php");
 	
+	route("POST", "/universes/[i:id]/setactive", "/private/api/universes/setactive.php");
 	route("POST", "/universes/[i:id]/shutdown", "/private/api/universes/shutdown.php");
 	route("POST", "/place/[i:id]/shutdown",     "/private/api/gameservers/shutdown.php");
 

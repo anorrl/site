@@ -126,7 +126,6 @@
 		}
 
 		function getStuffResponse() {
-			
 			return [
 				"id" => $this->id,
 				"name" => $this->name,
