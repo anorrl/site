@@ -7,6 +7,9 @@
 	if($this->internal_name != "user_profile")
 		unset($_SESSION['ANORRL$Owner$StopLooking']);
 
+	if($this->internal_name != "anorrl_profile")
+		unset($_SESSION['ANORRL$Profile$ID']);
+
 	$this->addValue("authenticated", ARLAUTH);
 ?>
 <!DOCTYPE html>

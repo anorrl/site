@@ -2,13 +2,16 @@
 	use anorrl\User;
 	use anorrl\Comment;
 
-	$user = SESSION ? SESSION->user : null;
+	$session = SESSION ? SESSION->user : null;
 
 	set_content_type(ARLTYPEJSON);
 
 	$result = ["success" => false, "reason" => "Request failed."];
 
-	if(!$user || !isset($id) || !isset($_POST['ANORRL$Comment$Contents']))
+	if(!$session || !isset($id) || !isset($_POST['ANORRL$Comment$Contents']) || !isset($_SESSION['ANORRL$Profile$ID']))
+		die(json_encode($result));
+
+	if(intval($_SESSION['ANORRL$Profile$ID']) != $id)
 		die(json_encode($result));
 
 	$user = User::FromID($id);

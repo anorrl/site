@@ -7,7 +7,9 @@ ANORRL.User = {
 		0: send friend req
 		1: pending req (sent)
 		2: pending req (incom)
-		2: friends
+		3: friends
+
+		these states are only for frontend purposes, its basically binary backend wise
 	*/
 	GetURL: function(endpoint) {
 		return "/users/"+$("body").data("profile")+"/"+endpoint;
@@ -43,7 +45,7 @@ ANORRL.User = {
 	},
 	Friend: function() {
 		$.post(this.GetURL("friend"), {'ANORRL$Friend$Request': true}, function(data) {
-			if(!data['success'])
+			if(!data['success'] && data.includes("reason"))
 				alert(data['reason']);
 
 			$("#friends-count").html(data['count']);
@@ -55,7 +57,7 @@ ANORRL.User = {
 
 	UpdateFollowButton: function() {
 		$.get(this.GetURL("follow"), function(data) {
-			if(!data['success'])
+			if(!data['success'] && data.includes("reason"))
 				alert(data['reason']);
 			
 			$("#followers-count").html(data['count']);
@@ -69,7 +71,7 @@ ANORRL.User = {
 	},
 	Follow: function() {
 		$.post(this.GetURL("follow"), {'ANORRL$Follow$Request': true}, function(data) {
-			if(!data['success'])
+			if(!data['success'] && data.includes("reason"))
 				alert(data['reason']);
 
 			$("#followers-count").html(data['count']);
@@ -197,18 +199,20 @@ $(function(){
 		$(this).hide();
 	})
 
+	if($("body").data("authenticated")) {
+		ANORRL.User.UpdateFriendButton();
+		$("#friend-btn").click(function() {
+			ANORRL.User.Friend();
+		});
 
-	ANORRL.User.UpdateFriendButton();
-	$("#friend-btn").click(function() {
-		ANORRL.User.Friend();
-	});
+		ANORRL.User.UpdateFollowButton();
+		$("#follow-btn").click(function() {
+			ANORRL.User.Follow();
+		});
 
-	ANORRL.User.UpdateFollowButton();
-	$("#follow-btn").click(function() {
-		ANORRL.User.Follow();
-	});
-
-	$("#block-btn").click(function() {
-		alert("blocking not implemented YET");
-	})
+		$("#block-btn").click(function() {
+			alert("blocking not implemented YET");
+		})
+	}
+	
 });

@@ -11,32 +11,28 @@
 	];
 
 	function createProfile(int $id, string $description) {
-		$profileUser = User::FromID($id);
+		global $excludelist;
 
-		if(!$profileUser) {
-			return;
-		}
+		$profileUser = User::FromID($id);
+		if(!$profileUser) return;
 		
 		$name = $profileUser->name;
 		$thumbs = $profileUser->getThumbsUrl();
-
-		if($profileUser != null) {
-			global $excludelist;
-			$excludelist[] = $id;
-			echo <<<EOT
-			<td>
-				<div>
-					<a href="/users/$id/profile">
-						<img src="$thumbs&sxy=128" width="128" height="128">
-						<span>$name</span>
-					</a>
-				</div>
-				<div style="text-align: center; border: 2px solid black; background: #1a1a1a; padding: 10px;">
-					$description
-				</div>
-			</td>
-			EOT;
-		}
+		
+		$excludelist[] = $id;
+		echo <<<EOT
+		<td>
+			<div>
+				<a href="/users/$id/profile">
+					<img src="$thumbs&sxy=128" width="128" height="128">
+					<span>$name</span>
+				</a>
+			</div>
+			<div style="text-align: center; border: 2px solid black; background: #1a1a1a; padding: 10px;">
+				$description
+			</div>
+		</td>
+		EOT;
 	}
 
 	$page = new PageOld("The Contributors!");
@@ -113,17 +109,9 @@
 	<p>But these aren't the only ones, no.</p>
 	<p>Thank you everyone (in this list below) for playing on/participating in the community for this project!</p>
 	<div style="text-align: center; word-spacing: 10px;">
-	<?php
-		foreach(UserUtils::GetAllUsers() as $user) {
-			if(in_array($user->id, $excludelist)) {
-				continue;
-			}
-			
-			echo <<<EOT
-			<a href="{$user->getURL()}">{$user->name},</a> 
-			EOT;
-		}
-	?>
+	<?php foreach(UserUtils::GetAllUsers() as $user): if(in_array($user->id, $excludelist)) continue; ?>
+		<a href="<?= $user->getURL() ?>"><?= $user->name ?></a>,
+	<?php endforeach ?>
 	</div>
 	<p>Even if you don't say much, even if you don't play that much. Just knowing you like and play on this at all means enough to me :]</p>
 </div>

@@ -82,7 +82,7 @@
 
 	$bio = MarkdownExtra::defaultTransform($user->blurb);
 
-	$page = new Page($owner ? "Your Profile" : "{$user->name}'s Profile", $owner ? "user_profile" : null);
+	$page = new Page($owner ? "Your Profile" : "{$user->name}'s Profile", $owner ? "user_profile" : "anorrl_profile");
 	if($user->has_pfp_set)
 		$page->setIcon($user->getThumbsUrlProfile());
 	$page->addScript("/wimpy/wimpy.js");
@@ -116,6 +116,14 @@
 		
 		if($_SESSION['ANORRL$Owner$StopLooking'] > 20)
 			$owner_look = "you must really like yourself...";
+	}
+
+	if(ARLAUTH) {
+		$_SESSION['ANORRL$Profile$ID'] = $user->id;
+	}
+	else {
+		if(isset($_SESSION['ANORRL$Profile$ID']))
+			unset($_SESSION['ANORRL$Profile$ID']);
 	}
 ?>
 <?php $page->loadTemplate("layouts/comments"); ?>

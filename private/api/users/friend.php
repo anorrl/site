@@ -5,9 +5,15 @@
 
 	$session = ARLAUTH ? SESSION->user : null;
 
-	$result = ["success" => false, "reason" => "Request failed.", "result" => 0];
+	$result = ["success" => false, "result" => 0];
 
-	if(!$session || !isset($id))
+	if(!isset($id))
+		$result["reason"] = "Request failed.";
+
+	if(!$session || !isset($id) || !isset($_SESSION['ANORRL$Profile$ID']))
+		die(json_encode($result));
+
+	if(intval($_SESSION['ANORRL$Profile$ID']) != $id)
 		die(json_encode($result));
 
 	$user = User::FromID($id);
