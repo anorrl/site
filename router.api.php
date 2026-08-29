@@ -13,6 +13,7 @@
 	route_api("GET|POST", "character");
 	route_api("GET",      "gameservers/get");
 	route_api("POST",     "home");
+	route_api("POST",     "messagebox");
 
 	route("GET", "/api/creations",  "/private/api/creations.php");
 
@@ -58,4 +59,7 @@
 	route("POST", "/server/[*:jobID]/close",                "/private/api/gameservers/close.php");
 	route("POST", "/server/[*:jobID]/remove/[i:player]",    "/private/api/gameservers/player/remove.php");
 	route("POST", "/server/[*:jobID]/validate/[i:player]",  "/private/api/gameservers/player/validate.php");
+
+	route("POST", "/develop/[i:id]/configure/settings", "/private/api/develop/configure/settings.php");
+	route("POST", "/develop/[i:id]/configure/place",    "/private/api/develop/configure/place.php");
 ?>

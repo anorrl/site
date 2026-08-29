@@ -5,6 +5,7 @@
 	use anorrl\utilities\ClientDetector;
 	use anorrl\utilities\UserUtils;
 	use anorrl\utilities\UtilUtils;
+	use anorrl\enums\GearType;
 
 	if(!SESSION) {
 		die("Hey have you tried logging in before doing this? <br><a href='javascript:window.close()'>No...</a>");
@@ -44,7 +45,7 @@
 		$isPublic =        isset($_POST['ANORRL$IDE$Publish$Place$ServerSize']);
 		$commentsEnabled = isset($_POST['ANORRL$IDE$Publish$Place$ServerSize']);
 		$isCopylocked =    isset($_POST['ANORRL$IDE$Publish$Place$Copylocked']);
-		$gears =           isset($_POST['ANORRL$IDE$Publish$Place$GearsEnabled']);
+		$gears =           GearType::ALL;
 		$original =        isset($_POST['ANORRL$IDE$Publish$Place$IsOriginal']);
 		
 

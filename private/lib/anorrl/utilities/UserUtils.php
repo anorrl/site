@@ -92,6 +92,10 @@
 			
 			return $result_array;
 		}
+
+		public static function GetUserCount(): int {
+			return Database::singleton()->run("SELECT COUNT(`id`) FROM `users`")->fetch(\PDO::FETCH_ASSOC)['COUNT(`id`)'];
+		}
 	}
 
 ?>

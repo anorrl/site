@@ -38,7 +38,9 @@
 
 			$this->addStylesheet("/css/base.css");
 			$this->addScript("/js/core/jquery.js");
-			$this->addScript("/js/error.js");
+			$this->addScript("/js/core/jquery-modal.js");
+			$this->addScript("/js/messagebox.js");
+			$this->addStylesheet("https://unpkg.com/7.css/dist/7.scoped.css", false);
 
 			if(SESSION) {
 				$this->settings = SESSION->settings;
@@ -113,14 +115,14 @@
 
 		function addResource(string $type, string $path, bool $public = true) {
 			$add_path = ($public ? "/public":"").$path;
-			if(!file_exists($_SERVER['DOCUMENT_ROOT'].$add_path) && $public) {
+			if(str_starts_with($add_path, "/") && !file_exists($_SERVER['DOCUMENT_ROOT'].$add_path) && $public) {
 				error_log("Page of {$this->title} failed to load {$add_path}");
 				return;
 			}
-		
+
 			// if item is a resource on server, calculate hash and allow client to cache it
 			// any new changes can immediately be pushed out without having to risk getting the same resource everytime
-			if(str_ends_with($add_path, ".css") || str_ends_with($add_path, ".js"))
+			if(str_starts_with($add_path, "/") && (str_ends_with($add_path, ".css") || str_ends_with($add_path, ".js")))
 				$add_path .= "?hash=".md5(file_get_contents($_SERVER['DOCUMENT_ROOT'].$add_path));
 
 			if($type == "script") {

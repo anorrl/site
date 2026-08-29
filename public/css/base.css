@@ -307,15 +307,27 @@ hr {
 	user-select: none;
 }
 
-.button:hover {
+.button:hover, input::file-selector-button:hover {
 	filter: brightness(1.15);
 	color: white;
 }
 
-.button:active, .button.active, .button[selected] {
+.button:active, .button.active, .button[selected], input::file-selector-button:active {
 	background: #512270;
 	background: linear-gradient(0deg,#9c37df 0%, #512270 100%);
 	filter: brightness(1.15);
+}
+
+input::file-selector-button {
+	border: 2px solid var(--button-border-color);
+	padding: 5px 15px;
+	font-weight: bold;
+	background: #512270;
+	background: linear-gradient(180deg,#9c37df 0%, #512270 100%);
+	color: white;
+	cursor: pointer;
+	user-select: none;
+	text-transform: lowercase;
 }
 
 .button:disabled {

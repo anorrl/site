@@ -1,9 +1,11 @@
 <?php
 	use anorrl\Alias;
 	use anorrl\Asset;
+	use anorrl\Gear;
 	use anorrl\Place;
 	use anorrl\Universe;
 	use anorrl\enums\AssetType;
+	use anorrl\enums\GearType;
 	use anorrl\utilities\AssetUploader;
 	use anorrl\utilities\MeshConverter;
 	use anorrl\utilities\ClientDetector;
@@ -71,13 +73,21 @@
 				// might break who knows
 				if (isset($_GET['serverplaceid']) && isset($_GET['clientinsert'])) {
 					$serverplace = Place::FromID(intval($_GET['serverplaceid']));
+					$studio_place = intval($_GET['serverplaceid']) == 0;
 					
-					if ($serverplace == null && intval($_GET['serverplaceid']) != 0) {
+					if ($serverplace == null && !$studio_place) {
 						exit_http(400, "Bad Request");
 					}
 
-					if(intval($_GET['serverplaceid']) != 0 && !$serverplace->gears_enabled && $asset->type == AssetType::GEAR) {
-						die(file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/nothing.arlm"));
+					if(!$studio_place) {
+						if($asset->type == AssetType::GEAR) {
+							$gear = Gear::FromID($asset->id);
+							// im stupid
+							if($gear && ($serverplace->gears_allowed != GearType::ALL && $serverplace->gears_allowed != $gear->type)) {
+								die(file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/nothing.arlm"));
+							}
+
+						}
 					}
 					
 					/*$blacklist = ["MeshId", "Script", "Remote", "Service", "Model"];
@@ -202,6 +212,23 @@
 				$contents = str_replace("rbxasset", "arlasset", $contents);
 			}
 
+			if (isset($_GET['serverplaceid']) && isset($_GET['clientinsert'])) {
+				$serverplace = Place::FromID(intval($_GET['serverplaceid']));
+				$studio_place = intval($_GET['serverplaceid']) == 0;
+				
+				if ($serverplace == null && !$studio_place) {
+					exit_http(400, "Bad Request");
+				}
+
+				if(!$studio_place) {
+					if(str_contains($contents, "Gear")) {
+						if($serverplace->gears_allowed != GearType::ALL) {
+							die(file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/nothing.arlm"));
+						}
+
+					}
+				}
+			}
 			echo $contents;
 		
 		} else {
@@ -225,6 +252,24 @@
 					$contents = str_replace("<roblox", "<anorrl", $contents);
 					$contents = str_replace("roblox>", "anorrl>", $contents);
 					$contents = str_replace("rbxasset", "arlasset", $contents);
+				}
+
+				if (isset($_GET['serverplaceid']) && isset($_GET['clientinsert'])) {
+					$serverplace = Place::FromID(intval($_GET['serverplaceid']));
+					$studio_place = intval($_GET['serverplaceid']) == 0;
+					
+					if ($serverplace == null && !$studio_place) {
+						exit_http(400, "Bad Request");
+					}
+
+					if(!$studio_place) {
+						if(str_contains($contents, "Gear")) {
+							if($serverplace->gears_allowed != GearType::ALL) {
+								die(file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/nothing.arlm"));
+							}
+
+						}
+					}
 				}
 				echo $contents;
 			}

@@ -145,9 +145,6 @@ div[data-tab] {
 
 [modal] {
 	margin-top: 27px !important;
-	margin: 0px !important;
-	transform: translate(-50%, -50%);
-	z-index: 10000 !important;
 	padding: 10px;
 	text-align: center;
 	display: none;
@@ -156,10 +153,6 @@ div[data-tab] {
 [modal] a[rel] {
 	text-transform: none;
 	text-decoration: none;
-}
-
-.jquery-modal.blocker {
-	z-index: 9999 !important;
 }
 
 #profile-bio {

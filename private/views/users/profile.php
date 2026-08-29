@@ -143,10 +143,7 @@
 	<h2>viewing <?= $user->name ?>!</h2>
 	<a href="<?= $user->getThumbsUrl()?>" target="__blank"><img data-src="<?= $user->getThumbsUrl()?>" width="420" height="420"></a>
 	<div style="margin-top: 5px;">
-		<!-- evil -->
-		<a href="#" rel="modal:close" style="color:white">
-			<button class="button">close</button>
-		</a>
+		<button class="button" rel="modal:close">close</button>
 	</div>
 </div>
 <input type="file" hidden accept="image/*"/>

@@ -143,6 +143,10 @@
 		throw new Exception("Something went wrong.");
 	}
 
+	function get_asset_thumbs($id) {
+		return get_path_file("assets/thumbs/{$id}");
+	}
+
 	create_folder("../assets/thumbs");
 	create_folder("../assets/3d");
 	create_folder("../users/profiles");

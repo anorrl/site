@@ -13,7 +13,6 @@
 		public int $id;
 		public Place $starting_place;
 		public User $creator;
-		public bool $public;
 		public bool $original;
 		public bool $teamcreate;
 		public bool $active;
@@ -83,7 +82,6 @@
 			$this->id = $data->id;
 			$this->starting_place = Place::FromID($data->starting_place);
 			$this->creator = User::FromID($data->creator);
-			$this->public = $data->public;
 			$this->original = $data->original;
 			$this->teamcreate = $data->teamcreate;
 			$this->active = boolval($data->active);

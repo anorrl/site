@@ -6,6 +6,9 @@
 	use anorrl\User;
 	use anorrl\Universe;
 	use anorrl\enums\AssetType;
+	use anorrl\enums\ChatOption;
+	use anorrl\enums\Genre;
+	use anorrl\enums\GearType;
 	use anorrl\utilities\AssetTypeUtils;
 	use anorrl\utilities\ImageUtils;
 
@@ -277,6 +280,9 @@
 			}
 			$db = Database::singleton();
 
+			if(!AssetTypeUtils::IsSellable($asset->type))
+				$on_sale = false;
+
 			$id = $asset->id;
 			$parsed_public          = intval($public);
 			$parsed_onsale          = intval($on_sale);
@@ -444,7 +450,9 @@
 			bool $comments_enabled,
 			int $server_size = 12,
 			bool $copylocked = true,
-			bool $gears_enabled = false,
+			GearType $gears_enabled = GearType::NONE,
+			Genre $genre = Genre::ALL,
+			ChatOption $chat = ChatOption::BOTH,
 			User|null $user = null
 		): array {
 			$result = self::UploadAsset(null, AssetType::PLACE, $name, $description, $public, false, $comments_enabled, $user);
@@ -454,7 +462,7 @@
 
 				try {
 					$db->run(
-						"INSERT INTO `places`(`id`, `copylocked`, `serversize`, `gears_enabled`) VALUES (:id, :copylocked, :serversize, :gears);",
+						"INSERT INTO `places`(`id`, `copylocked`, `serversize`, `gears_allowed`) VALUES (:id, :copylocked, :serversize, :gears);",
 						[
 							":id" => $result['id'],
 							":copylocked" => $copylocked,

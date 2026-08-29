@@ -160,6 +160,8 @@
 					}
 				}
 			}
+
+			// $place->updateThumbnail();
 		}
 
 		redirect($asset->getURL());

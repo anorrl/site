@@ -151,8 +151,7 @@
 		  position: 'fixed',
 		  top: "50%",
 		  left: "50%",
-		  marginTop: - (this.$elm.outerHeight() / 2),
-		  marginLeft: - (this.$elm.outerWidth() / 2),
+		  transform: "translate(-50%, -50%)",
 		  zIndex: this.options.zIndex + 1
 		});
 	  },
@@ -188,7 +187,7 @@
 	$.modal.defaults = {
 	  overlay: "#000",
 	  opacity: 0.75,
-	  zIndex: 1,
+	  zIndex: 9999,
 	  escapeClose: true,
 	  clickClose: true,
 	  closeText: 'Close',
@@ -221,8 +220,8 @@
 	};
   
 	// Automatically bind links with rel="modal:close" to, well, close the modal.
-	$(document).on('click.modal', 'a[rel="modal:close"]', $.modal.close);
-	$(document).on('click.modal', 'a[rel="modal:open"]', function(event) {
+	$(document).on('click.modal', '[rel="modal:close"]', $.modal.close);
+	$(document).on('click.modal', '[rel="modal:open"]', function(event) {
 	  event.preventDefault();
 	  $(this).modal();
 	});

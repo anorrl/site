@@ -293,6 +293,27 @@ jQuery.fn.tagName = function() {
   return this.prop("tagName").toLowerCase();
 };
 
+// https://gist.github.com/oswaldoacauan/7580474
+(function($) {
+	$.fn.serializeFiles = function() {
+		var form = $(this)
+		var formData = new FormData();
+		var formParams = form.serializeArray();
+
+		$.each(form.find('input[type="file"]'), function(i, tag) {
+			$.each($(tag)[0].files, function(i, file) {
+				formData.append(tag.name, file);
+			});
+		});
+
+		$.each(formParams, function(i, val) {
+			formData.append(val.name, val.value);
+		});
+
+		return formData;
+	};
+})(jQuery);
+
 /** ANORRL FUNCTIONS BECAUSE IM FUCKING LAZY!!! */
 $(function() {
 	$("img[data-src]").attr("src", "/public/images/spinner100x100_white.gif");

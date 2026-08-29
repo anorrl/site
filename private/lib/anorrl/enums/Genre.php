@@ -34,6 +34,7 @@
 				11 => Genre::WAR,
 				12 => Genre::SKATE_PARK,
 				13 => Genre::TUTORIAL,
+				default => Genre::ALL
 			};
 		}
 
@@ -73,6 +74,25 @@
 				Genre::SKATE_PARK	 => "Skate Park",
 				Genre::TUTORIAL		 => "Tutorial",
 			};
+		}
+
+		public static function values() {
+			return [
+				Genre::ALL,
+				Genre::TOWN_AND_CITY ,
+				Genre::FANTASY,
+				Genre::SCI_FI,
+				Genre::NINJA,
+				Genre::SCARY,
+				Genre::PIRATE,
+				Genre::ADVENTURE,
+				Genre::SPORTS,
+				Genre::FUNNY,
+				Genre::WILD_WEST,
+				Genre::WAR,
+				Genre::SKATE_PARK,
+				Genre::TUTORIAL,
+			];
 		}
 	}
 ?>

@@ -1,10 +1,13 @@
 <?php 	
 	use anorrl\Asset;
+	use anorrl\enums\GearType;
 	use anorrl\Page;
 	use anorrl\Place;
 	use anorrl\Universe;
 	use anorrl\utilities\AssetTypeUtils;
 	use anorrl\enums\AssetType;
+	use anorrl\enums\ChatOption;
+	use anorrl\enums\Genre;
 
 	$user = SESSION->user;
 
@@ -32,6 +35,8 @@
 
 	$page = new Page("editing: ".htmlspecialchars($asset->name, ENT_QUOTES), "anorrl_asset");
 	$page->addScript("/js/versions.js");
+	$page->addScript("/js/configure.js");
+	$page->addValue("redirect", $asset->getURL());
 
 	$page->loadHeader();
 ?>
@@ -98,9 +103,19 @@
 		*padding: 5px;
 	}
 
+	.fields > div  {
+		margin-top:5px;
+	}
+
 	[data-tabname] {
 		display: none;
 	}
+
+	input[type="file"] {
+		font-size: 12px;
+	}
+
+
 </style>
 <h2 class="page-title">.editing: <?= htmlspecialchars($asset->name, ENT_QUOTES) ?></h2>
 <div style="display: flex; align-items: flex-start; gap: 10px;">
@@ -133,7 +148,7 @@
 			<div class="box" style="padding: 15px;">
 				<h3 id="filter-name">.basic_settings</h3>
 				<hr>
-				<div data-action="/develop/<?= $asset->id ?>/configure/settings">
+				<form data-action="/develop/<?= $asset->id ?>/configure/settings">
 					<div style="padding: 5px;">
 						<div class="fields">
 							<span>name</span>
@@ -145,7 +160,7 @@
 						</div>
 					</div>
 					<?php if($asset->type != AssetType::BADGE): ?>
-					<div class="box" style="margin: 5px; padding: 10px;">
+					<div class="box" style="margin: 5px; padding: 10px; border-color: var(--button-border-color);">
 						<div class="fields" style="padding: 5px">
 							<input type="checkbox" name="ANORRL$EditItem$PublicBox" <?php if($asset->public): ?>checked<?php endif ?>>
 							<span>public</span>
@@ -162,7 +177,7 @@
 					</div>
 					<?php endif ?>
 					<input class="button" type="submit" value="update" style="margin-top:5px;">
-				</div>
+				</form>
 			</div>
 		</div>
 		<?php if($sellable): ?>
@@ -181,10 +196,42 @@
 			<div class="box" style="padding: 15px;">
 				<h3 id="filter-name">.place_settings</h3>
 				<hr>
-				<form method="POST" action="/develop/<?= $asset->id ?>/configure/place">
-					<select class="box input">
-						<option>Genre</option>
-					</select>
+				<form data-action="/develop/<?= $asset->id ?>/configure/place">
+					<div class="box" style="padding: 10px; border-color: var(--button-border-color);">
+						<!-- I FUCKING HATE HOW UGLY THIS LOOKS FRONTEND -->
+						<div>server_size</div>
+						<input type="number" class="box input" name="ANORRL$EditPlace$ServerSize" value="<?= $asset->server_size ?>">
+						
+						<div>genre</div>
+						<select class="box input" name="ANORRL$EditPlace$Genre">
+							<?php foreach(Genre::values() as $genre): ?>
+								<option value="<?= $genre->ordinal() ?>"><?= $genre->label() ?></option>
+							<?php endforeach ?>
+						</select>
+						
+						<div>allowed_gear_types</div>
+						<select class="box input" name="ANORRL$EditPlace$GearType">
+							<?php foreach(GearType::values() as $gear): ?>
+								<option value="<?= $gear->ordinal() ?>"><?= $gear->label() ?></option>
+							<?php endforeach ?>
+						</select>
+
+						<div>chat_type</div>
+						<select class="box input" name="ANORRL$EditPlace$ChatOption">
+							<?php foreach(ChatOption::values() as $chattype): ?>
+								<option value="<?= $chattype->ordinal() ?>"><?= $chattype->label() ?></option>
+							<?php endforeach ?>
+						</select>
+
+						<div class="fields" style="margin: 10px 0px;">
+							<input type="checkbox" name="ANORRL$EditPlace$Copylocked" <?php if($asset->copylocked): ?>checked<?php endif ?>>
+							<span>copylocked</span>
+						</div>
+
+						<div>thumbnail (<a href="javascript:RemoveThumbnail()">remove</a>)</div>
+						<input type="file" name="ANORRL$EditPlace$ThumbnailFile" accept="image/*">
+					</div>
+					<br>
 					<input class="button" type="submit" value="update" style="margin-top:5px;">
 				</form>
 			</div>

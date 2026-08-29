@@ -12,6 +12,7 @@
 				0  => ChatOption::CLASSIC,
 				1  => ChatOption::BUBBLE,
 				2  => ChatOption::BOTH,
+				default => ChatOption::BOTH
 			};
 		}
 
@@ -37,6 +38,14 @@
 				ChatOption::BUBBLE			 => "Bubble",
 				ChatOption::BOTH			 => "ClassicAndBubble",
 			};
+		}
+
+		public static function values() {
+			return [
+				ChatOption::CLASSIC,
+				ChatOption::BUBBLE,
+				ChatOption::BOTH,
+			];
 		}
 	}
 ?>

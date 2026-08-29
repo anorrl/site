@@ -4,22 +4,23 @@
 
 	use anorrl\Asset;
 	use anorrl\Database;
+	use anorrl\GameServer;
+	use anorrl\Universe;
 	use anorrl\enums\AssetType;
 	use anorrl\enums\ANORRLBadge;
 	use anorrl\enums\ChatOption;
 	use anorrl\enums\Genre;
 	use anorrl\enums\GearType;
 	use anorrl\utilities\AssetUtils;
-	use anorrl\GameServer;
-	use anorrl\Universe;
+	use anorrl\utilities\ImageUtils;
+	use anorrl\utilities\UserUtils;
 
 	class Place extends Asset {
 		public int  $server_size;
 		public int  $visit_count;
 		public int  $current_playing_count;
 		public bool $copylocked;
-		public bool $gears_enabled;
-		public array|null|GearType $gear_types;
+		public GearType $gears_allowed;
 		public Genre $genre;
 		public ChatOption $chat_option;
 
@@ -103,22 +104,19 @@
 		private function __construct(object $rowdata, bool $dont_create_universe = false) {
 			parent::__construct($rowdata->id);
 
-			$this->server_size = $rowdata->serversize;
 			$this->visit_count = $rowdata->visit_count;
 			$this->current_playing_count = $rowdata->currently_playing_count;
-
-			$this->copylocked = $rowdata->copylocked;
-			$this->gears_enabled = $rowdata->gears_enabled;
-
 			if($this->universe == -1 && !$dont_create_universe) {
 				$universe = Universe::Create($this);
 				if($universe)
 					$this->universe = $universe->id;
 			}
 
+			$this->server_size = $rowdata->serversize;
+			$this->copylocked = $rowdata->copylocked;
 			$this->genre = Genre::index($rowdata->genre);
 			$this->chat_option = ChatOption::index($rowdata->chat_option);
-			$this->gear_types = !$this->gears_enabled ? null : null;
+			$this->gears_allowed = GearType::index($rowdata->gears_allowed);
 		}
 
 		function isStartingPlace() {
@@ -245,17 +243,30 @@
 			return $gameserver->active() && !$gameserver->isPlayerInServer($user) ? $gameserver : null;
 		}
 
-		function update(bool $copylocked, int $server_size, bool $gears) {
+		function update(bool $copylocked, int $server_size, ChatOption $chatType, Genre $genre, GearType $gears) {
 			if($this->universe == -1) {
 				return;
 			}
 
+			if($server_size < 1) {
+				$server_size = 1;
+			}
+
+			$global_user_count = UserUtils::GetUserCount();
+			if($global_user_count > 80) {
+				$global_user_count = 80;
+			}
+			if($server_size > $global_user_count)
+				$server_size = $global_user_count;
+
 			Database::singleton()->run(
-				"UPDATE `places` SET `copylocked` = :copylocked, `serversize` = :serversize, `gears_enabled` = :gears WHERE `id` = :placeid",
+				"UPDATE `places` SET `copylocked` = :copylocked, `serversize` = :serversize, `gears_allowed` = :gears, `genre` = :genre, `chat_option` = :chattype WHERE `id` = :placeid",
 				[
 					":copylocked" => $copylocked,
 					":serversize" => $server_size,
-					":gears" => $gears,
+					":gears" => $gears->ordinal(),
+					":genre" => $genre->ordinal(),
+					":chattype" => $chatType->ordinal(),
 					":placeid" => $this->id,
 				]
 			);
@@ -271,6 +282,31 @@
 			)->fetchObject();
 
 			return $row ? \DateTime::createFromFormat("Y-m-d H:i:s", $row->time) : null;
+		}
+
+		function setThumbnail(array $file) {
+			if($file['error'] == 0 && $file['size'] <= 5242880) {
+				$contents = file_get_contents($file['tmp_name']);
+				$type = ImageUtils::checkMimeType($contents);
+
+				if(str_starts_with($type,"image/")) {
+					$image = imagecreatefromstring($contents);
+					if($image instanceof GdImage) {
+						imagesavealpha($image, true);
+
+						if(imagesx($image) > 128 && imagesy($image) > 96) {
+							if(file_exists(get_asset_thumbs($this->id))) {
+								unlink(get_asset_thumbs($this->id));
+							}
+
+							imagepng($image, get_asset_thumbs($this->id));
+
+							return true;
+						}
+					}
+				}
+			}
+			return false;
 		}
 	}
 

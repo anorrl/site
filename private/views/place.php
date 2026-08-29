@@ -64,7 +64,7 @@
 		$place_short_name = trim(substr($place->name, 0, 35)). "...";
 	}
 
-	$page = new Page(htmlspecialchars($place->name, ENT_QUOTES));
+	$page = new Page(htmlspecialchars($place->name, ENT_QUOTES), "anorrl_asset");
 	$page->addStylesheet("/css/comments.css");
 	$page->addScript("/js/comments.js");
 	$page->addScript("/js/ratings.js");
@@ -471,13 +471,11 @@
 		else if(action == 4) {
 			$.post("/api/universes/"+universe+"/shutdown", function(data) {
 				if(!data['success'])
-					alert(data['reason']);
-				else
-					alert("success!");
+					ANORRL.MessageBox.Show(ANORRL.MessageBox.Type.ERROR, data['reason']);
 			})
 		}
 		else if(action == 5) {
-			alert("not legible for sex...");
+			ANORRL.MessageBox.Show(ANORRL.MessageBox.Type.ERROR, "not legible for sex...");
 		}
 	});
 	<?php endif ?>
@@ -510,7 +508,7 @@
 	$("#fav-btn").click(function() {
 		$.post("/asset/<?= $place->id ?>/favourite", function (data) {
 			if(!data['success'])
-				alert(data['reason']);
+				ANORRL.MessageBox.Show(ANORRL.MessageBox.Type.ERROR, data['reason']);
 			else
 				$("#fav-count").html(data['count']);
 		})

@@ -1,0 +1,12 @@
+- finish configuration stuff
+- add the ability to create games
+- add more categories to creations
+- add the ability to view others inventories
+- finish the rest of the /my/ pages (profile -> account ??)
+- add the ability to change bio from the profile page
+- add moderation panels
+- replace window.alerts with new messagebox system
+- maybe do whatever is in the trello
+- add the sound effects yeah
+
+DO DA STREAM RIGHT!
