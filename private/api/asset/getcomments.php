@@ -1,7 +1,6 @@
 <?php
 	use anorrl\Asset;
 	use anorrl\Comment;
-	use anorrl\utilities\UtilUtils;
 
 	set_content_type(ARLTYPEJSON);
 
@@ -47,7 +46,7 @@
 	}
 
 	if($total_pages < $page && $page != 1) {
-		//redirect("/api/catalog?c=$type&q=$query&p=1");
+		redirect("/api/catalog?c=$type&q=$query&p=1");
 	}
 
 
@@ -57,7 +56,7 @@
 		foreach($comments as $comment) {
 			if($comment instanceof anorrl\Comment) {
 				$response = $comment->getJSON();
-				$response["creator"] = $asset->isOwner($this->poster, true);
+				$response["creator"] = $asset->isOwner($comment->poster, true);
 				$result[] = $response;
 			}
 		}

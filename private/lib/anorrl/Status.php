@@ -3,7 +3,7 @@
 
 	use anorrl\Database;
 	use anorrl\User;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 
 	class Status {
 
@@ -47,7 +47,7 @@
 				if($latest_status != null) {
 					// check if user hasn't posted one in 30s
 
-					$difference = UtilUtils::GetSecondsElapsedFrom($latest_status->time_posted);
+					$difference = Utilities::GetSecondsElapsedFrom($latest_status->time_posted);
 
 					//die(strval($difference));
 
@@ -59,7 +59,7 @@
 				}
 
 				$status_id = self::GenerateID();
-				$status_content = UtilUtils::StripUnicode($contents);
+				$status_content = Utilities::StripUnicode($contents);
 
 				if(strlen($status_content) < 4) {
 					return ["success"=> false, "reason" => "Status was too short! (4 characters minimum)"];

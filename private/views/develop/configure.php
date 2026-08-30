@@ -36,6 +36,7 @@
 	$page = new Page("editing: ".htmlspecialchars($asset->name, ENT_QUOTES), "anorrl_asset");
 	$page->addScript("/js/versions.js");
 	$page->addScript("/js/configure.js");
+	$page->addValue("asset", $asset->id);
 	$page->addValue("redirect", $asset->getURL());
 
 	$page->loadHeader();
@@ -114,8 +115,6 @@
 	input[type="file"] {
 		font-size: 12px;
 	}
-
-
 </style>
 <h2 class="page-title">.editing: <?= htmlspecialchars($asset->name, ENT_QUOTES) ?></h2>
 <div style="display: flex; align-items: flex-start; gap: 10px;">
@@ -133,6 +132,9 @@
 					<?php if($asset->isStartingPlace()): ?>
 						<li data-category="universe" title="configure the WHOLE game (external)" data-uid="<?= $asset->universe ?>" class="button"><span>-> .universe_settings</span></li>
 					<?php endif ?>
+				<?php endif ?>
+				<?php if($asset->type == AssetType::AUDIO):?>
+					<li data-category="version" class="button"><span>.metadata</span></li>
 				<?php endif ?>
 				<?php if($updateable): ?>
 					<li data-category="version" class="button"><span>.version_history</span></li>
@@ -186,6 +188,14 @@
 				<h4 id="filter-name">.pricing</h4>
 				<hr>
 				<form data-action="/develop/<?= $asset->id ?>/configure/pricing">
+					<div>price</div>
+					<input type="number" class="box input" name="ANORRL$EditItem$Price" value="<?= $asset->price ?>">
+						
+					<div class="fields" style="margin: 10px 0px;">
+						<input type="checkbox" name="ANORRL$EditItem$OnSale" <?php if($asset->onsale): ?>checked<?php endif ?>>
+						<span>on sale</span>
+					</div>
+					
 					<input class="button" type="submit" value="update" style="margin-top:5px;">
 				</form>
 			</div>
@@ -198,28 +208,28 @@
 				<hr>
 				<form data-action="/develop/<?= $asset->id ?>/configure/place">
 					<div class="box" style="padding: 10px; border-color: var(--button-border-color);">
-						<!-- I FUCKING HATE HOW UGLY THIS LOOKS FRONTEND -->
+						
 						<div>server_size</div>
 						<input type="number" class="box input" name="ANORRL$EditPlace$ServerSize" value="<?= $asset->server_size ?>">
 						
 						<div>genre</div>
 						<select class="box input" name="ANORRL$EditPlace$Genre">
 							<?php foreach(Genre::values() as $genre): ?>
-								<option value="<?= $genre->ordinal() ?>"><?= $genre->label() ?></option>
+							<option value="<?= $genre->ordinal() ?>"><?= $genre->label() ?></option>
 							<?php endforeach ?>
 						</select>
 						
 						<div>allowed_gear_types</div>
 						<select class="box input" name="ANORRL$EditPlace$GearType">
 							<?php foreach(GearType::values() as $gear): ?>
-								<option value="<?= $gear->ordinal() ?>"><?= $gear->label() ?></option>
+							<option value="<?= $gear->ordinal() ?>"><?= $gear->label() ?></option>
 							<?php endforeach ?>
 						</select>
 
 						<div>chat_type</div>
 						<select class="box input" name="ANORRL$EditPlace$ChatOption">
 							<?php foreach(ChatOption::values() as $chattype): ?>
-								<option value="<?= $chattype->ordinal() ?>"><?= $chattype->label() ?></option>
+							<option value="<?= $chattype->ordinal() ?>"><?= $chattype->label() ?></option>
 							<?php endforeach ?>
 						</select>
 
@@ -228,10 +238,9 @@
 							<span>copylocked</span>
 						</div>
 
-						<div>thumbnail (<a href="javascript:RemoveThumbnail()">remove</a>)</div>
+						<div>thumbnail (<a href="javascript:ANORRL.Configure.RemoveThumbnail()">remove</a>)</div>
 						<input type="file" name="ANORRL$EditPlace$ThumbnailFile" accept="image/*">
 					</div>
-					<br>
 					<input class="button" type="submit" value="update" style="margin-top:5px;">
 				</form>
 			</div>

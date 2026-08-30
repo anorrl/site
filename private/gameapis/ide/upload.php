@@ -6,7 +6,7 @@
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\AssetUploader;
 	use anorrl\utilities\ClientDetector;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 	
 	if(!SESSION)
 		$user = null;
@@ -15,21 +15,6 @@
 
 	function FunnyStrToBool(string $value): bool {
 		return $value == "True";
-	}
-
-	/* thank you weeg <3 */
-	function ValidateRoblox_XML(string $XML_Data): bool {
-		//FIND BETTER WAY TO DO THIS
-		$xml = new DOMDocument();
-		$xml->loadXML($XML_Data);
-
-		if(!@$xml->schemaValidate($_SERVER['DOCUMENT_ROOT']."/anorrl.xsd")){
-			//throw new Exception("Invalid LEGACY ROBLOX XML Format file");
-			return false;
-		}else{
-			//echo "Valid XML File<br>";
-			return true;
-		}
 	}
 
 	if($user == null) {
@@ -47,7 +32,7 @@
 				
 				$timer = 31;
 				if($user->getLatestAssetUploaded() != null) {
-					$difference = UtilUtils::GetSecondsElapsedFrom($user->getLatestAssetUploaded()->created_at);
+					$difference = Utilities::GetSecondsElapsedFrom($user->getLatestAssetUploaded()->created_at);
 					$timer = $difference;
 				}
 

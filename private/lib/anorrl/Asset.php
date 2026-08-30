@@ -3,9 +3,7 @@
 	namespace anorrl;
 
 	use anorrl\enums\AssetType;
-	use anorrl\utilities\AssetTypeUtils;
-	use anorrl\utilities\TransactionUtils;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 	use anorrl\utilities\Renderer;
 	use anorrl\User;
 	use anorrl\AssetVersion;
@@ -156,7 +154,7 @@
 				$asset_version = AssetVersion::GetVersionOf($this, $version);
 
 				if($asset_version != null) {
-					$filename = $_SERVER['DOCUMENT_ROOT']."/../assets/".$asset_version->md5sig;
+					$filename = get_asset($asset_version->md5sig);
 				} else {
 					return null;
 				}
@@ -164,7 +162,7 @@
 				if($this->getLatestVersionDetails() == null) {
 					return null;
 				}
-				$filename = $_SERVER['DOCUMENT_ROOT']."/../assets/".$this->getLatestVersionDetails()->md5sig;
+				$filename = get_asset($this->getLatestVersionDetails()->md5sig);
 			}
 
 			if(file_exists($filename)) {
@@ -197,7 +195,7 @@
 		function getURLTitle() {
 			$result = strtolower(trim(preg_replace('/[^a-zA-Z0-9 ]/', "", $this->name)));
 			$result = str_replace(" ", "-", $result);
-			$result = UtilUtils::RecurseRemove($result, "--", "-");
+			$result = Utilities::RecurseRemove($result, "--", "-");
 			if($result == "") {
 				$result = "unnamed";
 			}
@@ -465,8 +463,7 @@
 				$latest_version->setThumbnail($this);
 
 				if(!$is3D || $type == AssetType::PLACE) {
-					$data = base64_decode($render);
-					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/{$latest_md5}", $data);
+					file_put_contents(get_asset_thumbs($latest_md5), base64_decode($render));
 				} else {
 					$data = trim($render);
 					$data = str_replace("\"x\":+", "\"x\":-", $data);
@@ -480,13 +477,11 @@
 							$data = substr($data, 0, strlen($data)-1);
 						}
 					}
-					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/3d/{$latest_md5}.json", $data);
+					file_put_contents(get_asset_thumbs("3d/{$latest_md5}.json"), $data);
 				}
 				
 			} else {
-				if(file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/{$latest_md5}")) {
-
-				} else {
+				if(!file_exists(get_asset_thumbs($latest_md5))) {
 					Database::singleton()->run(
 						"UPDATE `asset_versions` SET `md5thumb` = 'placeholder' WHERE `id` = :versionid",
 						[
@@ -553,64 +548,10 @@
 			}
 		}
 
-		function getThumbnail(): mixed {
-
-			/*$version = AssetVersion::GetLatestVersionOf($asset);
-
-			if($version == null && $asset->type == AssetType::PLACE) {
-				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/noassets.png");
-			} else {
-				$md5hash = $version->md5sig;
-				$thumbsmd5hash = $version->md5thumb;
-
-				if($asset->type == AssetType::AUDIO && ($thumbsmd5hash == "sound" || $md5hash == $thumbsmd5hash)) {
-					$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/audio.png");
-				} else if($asset->type == AssetType::LUA) {
-					$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/script.png");
-				} else if($asset->type == AssetType::ANIMATION) {
-					$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/animation.png");
-				} else if($thumbsmd5hash == "placeholder" || !$asset->isUsable()) {
-					$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.png");
-				} else {
-					// TODO: rewrite this abomination.
-					if($asset->type == AssetType::AUDIO && $md5hash != $thumbsmd5hash) {
-						if(file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/$thumbsmd5hash")) {
-							$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/$thumbsmd5hash");
-							$specialcase = true;
-						} else {
-							$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.png");
-						}
-					} else {
-						if(count($asset->getRelatedAssets()) != 0 && ($asset->type == AssetType::DECAL || $asset->type == AssetType::FACE) || $asset->type == AssetType::IMAGE) {
-							if(count($asset->getRelatedAssets()) == 1 && $asset->getRelatedAssets()[0]->type == AssetType::IMAGE && ($asset->type == AssetType::DECAL || $asset->type == AssetType::FACE)) {
-								$thumbsmd5hash = $asset->getRelatedAssets()[0]->getLatestVersionDetails()->md5sig;
-							}
-							
-							if(file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/$thumbsmd5hash")) {
-								$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/$thumbsmd5hash");
-								$specialcase = true;
-							} else {
-								$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.png");
-							}
-						} else {
-							if(file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/$id")) {
-								$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/$id");
-							}
-							else if(file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/$thumbsmd5hash")) {
-								$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/$thumbsmd5hash");
-							}
-							else {
-								$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/public/images/unavailable.png");
-							}
-						}
-					}
-					
-				}
-			}*/
-			
-			return null;
-		}
-
+		/**
+		 * remove this and make it seem like it was deleted rather than actually deleted.
+		 * @return void
+		 */
 		private function checkAndDeleteFiles() {
 			$directory = $_SERVER['DOCUMENT_ROOT'];
 			$assetsdir = "$directory/../assets/";
@@ -717,6 +658,19 @@
 			return (\CONFIG->prefer_https ? "https":"http")."://thumbs.".\CONFIG->baseurl."/".$thumbsmd5;
 		}
 
+		function getThumbnail() {
+			$url = $this->getThumbsUrl();
+			if(str_contains($url, \CONFIG->baseurl)) {
+				$starting = (\CONFIG->prefer_https ? "https":"http")."://thumbs.".\CONFIG->baseurl."/";
+
+				$path = substr($url, strlen($starting));
+
+				return file_get_contents(get_asset_thumbs($path));
+			}
+
+			return file_get_contents($url);
+		}
+
 		function isOwner(User|null $user, bool $explicit = false) {
 			return $user && ($user->id == $this->creator->id || ($user->admin && !$explicit));
 		}
@@ -774,6 +728,46 @@
 			$page->addMeta("og:title", $embed_title);
 			$page->addMeta("og:description", $embed_description);
 			$page->addMeta("og:image", $this->getThumbsUrl());
+		}
+
+		function update(array $settings) {
+			if(count($settings) == 0)
+				return false;
+
+			$base_settings = [
+				"name"				=> "string",
+				"description"		=> "string",
+				"public"			=> "bool",
+				"comments_enabled"	=> "bool",
+				"onsale"			=> "bool",
+				"price"				=> "int",
+			];
+
+			$parsed_settings = [
+				"id" => $this->id
+			];
+
+			$sql_update = "UPDATE `assets` SET";
+			$sql_equals = "`lastedited` = now(), ";
+			$sql_where = "WHERE `id` = :id";
+
+			foreach($settings as $key => $value) {
+				if(!Utilities::ParseParameters($base_settings, $key, $value)) {
+					continue;
+				}
+
+				$parsed_settings[$key] = $value;
+				
+				$sql_equals .= "`$key` = :$key, ";
+			}
+			$sql_equals = trim($sql_equals);
+			if(str_ends_with($sql_equals, ",")) {
+				$sql_equals = substr($sql_equals, 0, strlen($sql_equals)-1);
+			}
+
+			$pdo = Database::singleton()->run("$sql_update $sql_equals $sql_where", $parsed_settings);
+
+			return $pdo->errorCode() == SQL_ALLOK;
 		}
 
 	}

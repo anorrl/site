@@ -83,7 +83,7 @@
 		else if(action == 2) {
 			$.post("/universes/"+universe+"/setactive", function(data) {
 				if(!data['success'])
-					alert(data['reason']);
+					ANORRL.MessageBox.Show(2, data['reason']);
 				
 				ANORRL.Creations.Refresh();
 			})
@@ -91,13 +91,13 @@
 		else if(action == 5) {
 			$.post("/universes/"+universe+"/shutdown", function(data) {
 				if(!data['success'])
-					alert(data['reason']);
+					ANORRL.MessageBox.Show(2, data['reason']);
 				else
-					alert("success!");
+					ANORRL.MessageBox.Show(0, "Successfully sent signal to shutdown all servers!");
 			})
 		}
 		else if(action == 6) {
-			alert("not legible for sex...");
+			ANORRL.MessageBox.Show(2, "not legible for sex...");
 		}
 	}
 </script>

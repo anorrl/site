@@ -1,11 +1,6 @@
 <?php
 	use anorrl\User;
 	use anorrl\PageOld;
-	use anorrl\utilities\UtilUtils;
-
-	if(!UtilUtils::HasBeenRewritten()) {
-		redirect("/my/home");
-	}
 
 	// No id parameter? GET OUT!
 	if(!isset($id)) {

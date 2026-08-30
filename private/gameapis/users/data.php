@@ -1,12 +1,7 @@
 <?php
 	use anorrl\User;
-	use anorrl\utilities\UtilUtils;
 
 	set_content_type(ARLTYPEJSON);
-
-	if(!UtilUtils::HasBeenRewritten()) {
-		die("{}");
-	}
 
 	// No id parameter? GET OUT!
 	if(!isset($userId)) {

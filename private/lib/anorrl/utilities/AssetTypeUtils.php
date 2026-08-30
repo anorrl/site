@@ -115,7 +115,7 @@
 		}
 
 		private static function GetTemplate(string $filename): string {
-			$file = file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/$filename.arlm");
+			$file = file_get_contents(get_path_sitefile("private/templates/assets/$filename.arlm"));
 			return self::Replace("domain", \CONFIG->domain, $file);
 		}
 

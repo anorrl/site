@@ -43,6 +43,15 @@
 			if(is_bool($data))
 				return $data ? 1 : 0;
 
+			if(is_a($data, "anorrl\\enums\\ChatOption"))
+				return $data->ordinal();
+
+			if(is_a($data, "anorrl\\enums\\Genre"))
+				return $data->ordinal();
+
+			if(is_a($data, "anorrl\\enums\\GearType"))
+				return $data->ordinal();
+
 			return $data;
 		}
 
@@ -52,10 +61,11 @@
 			$stmt = $this->pdo->prepare($sql);
 
 			foreach ($args as $param => $value) {
+				$evaluated_value = $this->evaluateValue($value);
 				$stmt->bindValue(
 					is_int($param) ? $param + 1 : (!str_starts_with($param, ":") ? ":$param" : $param),
-					$this->evaluateValue($value), 
-					$this->getPDOType($value)
+					$evaluated_value, 
+					$this->getPDOType($evaluated_value)
 				);
 			}
 

@@ -8,7 +8,7 @@
 	use anorrl\Universe;
 	use anorrl\enums\AssetType;
 	use anorrl\utilities\AssetTypeUtils;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 	use anorrl\utilities\ImageUtils;
 	use anorrl\utilities\Renderer;
 	use anorrl\utilities\TransactionUtils;
@@ -1122,7 +1122,7 @@
 
 		function updateBio(string $bio): array {
 			if(!$this->isBanned()) {
-				$bio_content = UtilUtils::StripUnicode($bio);
+				$bio_content = Utilities::StripUnicode($bio);
 
 				if(strlen($bio_content) > 1000) {
 					return ["success" => false, "reason" => "Status was too long! (1000 characters maximum)"];
@@ -1226,7 +1226,7 @@
 				$row = $db->run("SELECT `action`, `action_time` FROM `activity` WHERE `userid` = :id", [":id" => $this->id])->fetchObject();
 
 				if($row) {
-					return "Was last seen: {$row->action}, ".UtilUtils::getTimeAgo(\DateTime::createFromFormat("Y-m-d H:i:s", $row->action_time));
+					return "Was last seen: {$row->action}, ".Utilities::getTimeAgo(\DateTime::createFromFormat("Y-m-d H:i:s", $row->action_time));
 				} else {
 					return "Was never online I guess :[";
 				}
@@ -1384,7 +1384,7 @@
 		function getThumbsUrlProfile(int $size_x = -1, int $size_y = -1): string {
 
 			if(!file_exists(get_user_profile_path($this->id))) {
-				$pictures = UtilUtils::GetFilesArray("/public/images/profile_pictures/");
+				$pictures = Utilities::GetFilesArray("public/images/profile_pictures/");
 					
 				$rand_pic = 1+rand(0, count($pictures) - 1);
 				
@@ -1438,7 +1438,7 @@
 		}
 
 		function getAccountAge(): int {
-			return UtilUtils::GetTimeDifference($this->join_date);
+			return Utilities::GetTimeDifference($this->join_date);
 		}
 
 		/**
@@ -1712,7 +1712,7 @@
 			if(!Session::isUsernameAvailable($processed_new_name))
 				return ["success" => false, "reason" => "Username has already been taken!"];
 
-			$difference = UtilUtils::GetSecondsElapsedFrom(UserSettings::Get($this)->last_username_change);
+			$difference = Utilities::GetSecondsElapsedFrom(UserSettings::Get($this)->last_username_change);
 
 			$minute = 60;
 			$hour = $minute * 60;

@@ -81,8 +81,11 @@
 			);
 
 			if($this->asset->type == AssetType::PLACE) {
+				if(!file_exists(get_asset_thumbs($this->asset->id)))
+					return;
+
 				// remove place thumbnail
-				unlink($_SERVER['DOCUMENT_ROOT']."/../assets/thumbs/".$this->asset->id);
+				unlink(get_asset_thumbs($this->asset->id));
 			}
 		}
 

@@ -558,3 +558,9 @@ ul.horizontal li {
 .cog-dropdown li:hover {
 	filter: brightness(1.5)
 }
+
+@media only screen and (max-width: 1300px) {
+	#billboard {
+		display: none !important;
+	}
+}

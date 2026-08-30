@@ -44,7 +44,7 @@ ANORRL.Versions = {
 		$.get("/asset/"+this.CurrentAssetID+"/versions", {p: page}, function(data) {
 
 			if(!data['success']) {
-				alert(data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 				window.location.reload();
 				return;
 			}
@@ -85,7 +85,7 @@ ANORRL.Versions = {
 							var vid = $(this).data("versionid");
 							$.post("/asset/"+ANORRL.Versions.CurrentAssetID+"/setversion/"+vid, function(data) {
 								if(!data['success']) {
-									alert(data['reason']);
+									ANORRL.MessageBox.Show(2, data['reason']);
 								}
 								ANORRL.Versions.GrabVersions();
 							})

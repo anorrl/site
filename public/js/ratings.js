@@ -7,7 +7,7 @@ ANORRL.Ratings = {
 		var DataStyuug =  positive ? {'ANORRL$Rate$Positive' : true} : {'ANORRL$Rate$Negative': true};
 		$.post(this.GetURL().replace("ratings", "rate"), DataStyuug, function(data) {
 			if(!data['success'])
-				alert(data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 
 			ANORRL.Ratings.DooDaGet();
 		});

@@ -14,6 +14,7 @@
 	use anorrl\utilities\AssetUtils;
 	use anorrl\utilities\ImageUtils;
 	use anorrl\utilities\UserUtils;
+	use anorrl\utilities\Utilities;
 
 	class Place extends Asset {
 		public int  $server_size;
@@ -243,33 +244,63 @@
 			return $gameserver->active() && !$gameserver->isPlayerInServer($user) ? $gameserver : null;
 		}
 
-		function update(bool $copylocked, int $server_size, ChatOption $chatType, Genre $genre, GearType $gears) {
+		function update(array $settings) {
+			parent::update($settings);
+
 			if($this->universe == -1) {
 				return;
 			}
 
-			if($server_size < 1) {
-				$server_size = 1;
+			$base_settings = [
+				"copylocked"	=> "bool",
+				"serversize"	=> "int",
+				"gears_allowed" => "GearType",
+				"genre" 		=> "Genre",
+				"chat_option"	=> "ChatOption",
+			];
+
+			$parsed_settings = [
+				"id" => $this->id
+			];
+
+			$sql_update = "UPDATE `places` SET";
+			$sql_equals = "";
+			$sql_where = "WHERE `id` = :id";
+
+			foreach($settings as $key => $value) {
+				if(!Utilities::ParseParameters($base_settings, $key, $value, true)) {
+					continue;
+				}
+
+				$parsed_settings[$key] = $value;
+				$sql_equals .= "`$key` = :$key, ";
 			}
 
-			$global_user_count = UserUtils::GetUserCount();
-			if($global_user_count > 80) {
-				$global_user_count = 80;
-			}
-			if($server_size > $global_user_count)
-				$server_size = $global_user_count;
 
-			Database::singleton()->run(
-				"UPDATE `places` SET `copylocked` = :copylocked, `serversize` = :serversize, `gears_allowed` = :gears, `genre` = :genre, `chat_option` = :chattype WHERE `id` = :placeid",
-				[
-					":copylocked" => $copylocked,
-					":serversize" => $server_size,
-					":gears" => $gears->ordinal(),
-					":genre" => $genre->ordinal(),
-					":chattype" => $chatType->ordinal(),
-					":placeid" => $this->id,
-				]
-			);
+			if(isset($parsed_settings['serversize'])) {
+				$server_size = $parsed_settings['serversize'];
+
+				if($server_size < 1)
+					$server_size = 1;
+
+				$global_user_count = UserUtils::GetUserCount();
+				if($global_user_count > 80) {
+					$global_user_count = 80;
+				}
+				if($server_size > $global_user_count)
+					$server_size = $global_user_count;
+
+				$parsed_settings['serversize'] = $server_size;
+			}
+
+			$sql_equals = trim($sql_equals);
+			if(str_ends_with($sql_equals, ",")) {
+				$sql_equals = substr($sql_equals, 0, strlen($sql_equals)-1);
+			}
+
+			$pdo = Database::singleton()->run("$sql_update $sql_equals $sql_where", $parsed_settings);
+
+			return $pdo->errorCode() == SQL_ALLOK;
 		}
 
 		function getLastVisited(User $user) {
@@ -291,7 +322,7 @@
 
 				if(str_starts_with($type,"image/")) {
 					$image = imagecreatefromstring($contents);
-					if($image instanceof GdImage) {
+					if($image instanceof \GdImage) {
 						imagesavealpha($image, true);
 
 						if(imagesx($image) > 128 && imagesy($image) > 96) {

@@ -73,13 +73,13 @@
 		else if(action == 3) {
 			$.post("/universes/"+universe+"/shutdown", function(data) {
 				if(!data['success'])
-					alert(data['reason']);
+					ANORRL.MessageBox.Show(2, data['reason']);
 				else
-					alert("success!");
+					ANORRL.MessageBox.Show(0, "Success!");
 			})
 		}
 		else if(action == 4) {
-			alert("not legible for sex...");
+			ANORRL.MessageBox.Show(2, "not legible for sex...");
 		}
 	}
 </script>

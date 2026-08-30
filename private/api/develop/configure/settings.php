@@ -12,10 +12,12 @@
 	*/
 
 	use anorrl\Asset;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 	use anorrl\utilities\AssetUploader;
 
 	set_content_type(ARLTYPEJSON);
+
+	$result = ["success" => false, "reason" => "Request failed."];
 
 	if(!ARLAUTH || !isset($id) || !isset($_SESSION['ANORRL$Asset$ID']) || !isset($_POST['ANORRL$EditItem$Name']) || !isset($_POST['ANORRL$EditItem$Description']))
 		die(json_encode($result));
@@ -30,11 +32,17 @@
 		die(json_encode($result));
 	}
 
-	$name = UtilUtils::StripUnicode($_POST['ANORRL$EditItem$Name']);
-	$description = UtilUtils::StripUnicode($_POST['ANORRL$EditItem$Description']);
+	$name = Utilities::StripUnicode($_POST['ANORRL$EditItem$Name']);
+	$description = Utilities::StripUnicode($_POST['ANORRL$EditItem$Description']);
 	$public = isset($_POST['ANORRL$EditItem$PublicBox']);
 	$comments_enabled = isset($_POST['ANORRL$EditItem$CommentsBox']);
-	//$on_sale = isset($_POST['ANORRL$EditItem$OnSaleBox']);
 
-	die(json_encode(AssetUploader::EditAsset($asset, $name, $description, $public, $asset->onsale, $comments_enabled)));
+	$result = $asset->update([
+		"name" => $name,
+		"description" => $description,
+		"public" => $public,
+		"comments_enabled" => $comments_enabled
+	]);
+
+	die(json_encode(["success" => $result]));
 ?>

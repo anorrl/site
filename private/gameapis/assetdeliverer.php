@@ -84,7 +84,7 @@
 							$gear = Gear::FromID($asset->id);
 							// im stupid
 							if($gear && ($serverplace->gears_allowed != GearType::ALL && $serverplace->gears_allowed != $gear->type)) {
-								die(file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/nothing.arlm"));
+								die(file_get_contents(get_path_sitefile("private/templates/assets/nothing.arlm")));
 							}
 
 						}
@@ -129,7 +129,9 @@
 				$version = intval($_GET['version']);
 			}
 
-			if(!file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""))) {
+			$path = get_asset("rbx_$id".(isset($_GET['version']) ? "_$version" : ""));
+
+			if(!file_exists($path)) {
 				$url = "https://assetdelivery.roblox.com/v1/asset/?id=".$id.(isset($_GET['version']) ? '&version='.$version : "");
 				$ch = curl_init ($url);
 				curl_setopt($ch, CURLOPT_HTTPHEADER, ["Cookie: .ROBLOSECURITY=$roblosec"]);
@@ -150,11 +152,7 @@
 				if(str_contains($mimetype, "json")) {
 					$contents = "";
 
-					if(!isset($_GET['version'])) {
-						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id, $contents);
-					} else {
-						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id."_".$version, $contents);
-					}
+					file_put_contents($path, $contents);
 
 					exit_http(500, "Unauthorised access to this roblox asset!");
 				} else {
@@ -177,16 +175,12 @@
 						// todo: do something with $mesh_result['reason']
 					}
 					
-					if(!isset($_GET['version'])) {
-						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id, $contents);
-					} else {
-						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id."_".$version, $contents);
-					}
+					file_put_contents($path, $contents);
 				}
 				
 			} else {
 				if($id > 10420) {
-					$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""));
+					$contents = file_get_contents($path);
 					$mimetype = ImageUtils::checkMimeType($contents);
 					
 					if($mimetype == "application/gzip") {
@@ -195,7 +189,7 @@
 					}
 					set_content_type($mimetype);
 					if(str_contains(ImageUtils::checkMimeType($contents), "json")) {
-						file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""), "");
+						file_put_contents($path, "");
 						exit_http(500, "Unauthorised access to this roblox asset!");
 					}
 				} else {
@@ -220,22 +214,19 @@
 					exit_http(400, "Bad Request");
 				}
 
-				if(!$studio_place) {
-					if(str_contains($contents, "Gear")) {
-						if($serverplace->gears_allowed != GearType::ALL) {
-							die(file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/nothing.arlm"));
-						}
-
-					}
+				if(!$studio_place && str_contains($contents, "Gear") && $serverplace->gears_allowed != GearType::ALL) {
+					die(file_get_contents(get_path_sitefile("private/templates/assets/nothing.arlm")));
 				}
 			}
 			echo $contents;
 		
 		} else {
-			if(!file_exists($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""))) {
+			$path = get_asset("rbx_$id".(isset($_GET['version']) ? "_$version" : ""));
+
+			if(!file_exists($path)) {
 				exit_http(404, "Asset not found!");
 			} else {
-				$contents = file_get_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""));
+				$contents = file_get_contents($path);
 				$mimetype = ImageUtils::checkMimeType($contents);
 				
 				if($mimetype == "application/gzip") {
@@ -244,7 +235,7 @@
 				}
 				set_content_type($mimetype);
 				if(str_contains(ImageUtils::checkMimeType($contents), "json")) {
-					file_put_contents($_SERVER['DOCUMENT_ROOT']."/../assets/rbx_".$id.(isset($_GET['version']) ?  "_".$version : ""), "");
+					file_put_contents($path, "");
 					exit_http(500, "Unauthorised access to this roblox asset!");
 				}
 
@@ -262,13 +253,8 @@
 						exit_http(400, "Bad Request");
 					}
 
-					if(!$studio_place) {
-						if(str_contains($contents, "Gear")) {
-							if($serverplace->gears_allowed != GearType::ALL) {
-								die(file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/nothing.arlm"));
-							}
-
-						}
+					if(!$studio_place && str_contains($contents, "Gear") && $serverplace->gears_allowed != GearType::ALL) {
+						die(file_get_contents(get_path_sitefile("private/templates/assets/nothing.arlm")));
 					}
 				}
 				echo $contents;

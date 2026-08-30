@@ -223,7 +223,7 @@ $(function(){
 
 		ANORRL.Creations.GrabAssets($("div[data-loadtype]").data("loadtype"));
 	} else {
-		alert("no feckin container to load m8")
+		ANORRL.MessageBox.Show(2, "no feckin container to load m8")
 	}
 
 	$(window).click(ANORRL.Creations.HandleWindowClick);

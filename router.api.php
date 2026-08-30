@@ -43,7 +43,8 @@
 	route("GET|POST", "/users/[i:id]/friend",       "/private/api/users/friend.php");
 	route("GET|POST", "/users/[i:id]/follow",       "/private/api/users/follow.php");
 
-	route("POST", "/asset/[i:id]/rate",   "/private/api/asset/rate.php");
+	route("POST", "/asset/[i:id]/rate",   	   "/private/api/asset/rate.php");
+	route("POST", "/asset/[i:id]/resetthumbs",   "/private/api/asset/resetthumbs.php");
 
 	route("POST", "/users/[i:id]/comment",   "/private/api/users/comment.php");
 	route("POST", "/users/update/pfp",       "/private/api/users/update/pfp.php");
@@ -62,4 +63,5 @@
 
 	route("POST", "/develop/[i:id]/configure/settings", "/private/api/develop/configure/settings.php");
 	route("POST", "/develop/[i:id]/configure/place",    "/private/api/develop/configure/place.php");
+	route("POST", "/develop/[i:id]/configure/pricing",    "/private/api/develop/configure/pricing.php");
 ?>

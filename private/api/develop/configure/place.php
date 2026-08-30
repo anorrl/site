@@ -1,22 +1,12 @@
 <?php
-
-	// handle basic settings requests
-	// e.g `/develop/545/configure/settings`
-	
-	
-	/*
-	ANORRL$EditItem$Name	"BULLSHITLAND"
-	ANORRL$EditItem$Description	"Place where I put scripts I made."
-	ANORRL$EditItem$PublicBox	"on"
-	ANORRL$EditItem$CommentsBox	"on"
-	*/
-
 	use anorrl\Place;
 	use anorrl\enums\ChatOption;
 	use anorrl\enums\Genre;
 	use anorrl\enums\GearType;
 
 	set_content_type(ARLTYPEJSON);
+
+	$result = ["success" => false, "reason" => "Request failed."];
 
 	if(!ARLAUTH || !isset($id) || !isset($_SESSION['ANORRL$Asset$ID']) || 
 		!isset($_POST['ANORRL$EditPlace$ServerSize']) || 
@@ -28,9 +18,9 @@
 	if(intval($_SESSION['ANORRL$Asset$ID']) != $id)
 		die(json_encode($result));
 
-	$asset = Place::FromID($id);
+	$place = Place::FromID($id);
 
-	if(!$asset) {
+	if(!$place) {
 		$result['reason'] = "Failed to retrieve asset.";
 		die(json_encode($result));
 	}
@@ -43,15 +33,20 @@
 	$uploaded_thumbs = false;
 
 	if(isset($_FILES['ANORRL$EditPlace$ThumbnailFile'])) {
-		$uploaded_thumbs = $asset->setThumbnail($_FILES['ANORRL$EditPlace$ThumbnailFile']);
+		$uploaded_thumbs = $place->setThumbnail($_FILES['ANORRL$EditPlace$ThumbnailFile']);
 	}
 
-	$result = ["success" => true];
+	$result = ["success" => $place->update([
+		"copylocked" => $copylocked,
+		"serversize" => $server_size,
+		"chat_option" => $chat_type,
+		"genre" => $genre,
+		"gears_allowed" => $gear_type,
+	])];
 	
-	$asset->update($copylocked, $server_size, $chat_type, $genre, $gear_type);
 
 	if(isset($_FILES['ANORRL$EditPlace$ThumbnailFile']) && !$uploaded_thumbs) {
-		$result["reason"] = "Something went wrong with settings the thumbnail and thus was not updated.";
+		$result["reason"] = "Something went wrong with setting the thumbnail and thus was not updated.";
 	}
 
 	

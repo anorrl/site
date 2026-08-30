@@ -27,7 +27,7 @@
 		private static function CanUpload(User $user): string|null {
 			$timer = 31;
 			if($user->getLatestAssetUploaded() != null) {
-				$difference = UtilUtils::GetSecondsElapsedFrom($user->getLatestAssetUploaded()->created_at);
+				$difference = Utilities::GetSecondsElapsedFrom($user->getLatestAssetUploaded()->created_at);
 
 				$timer = $difference;
 			}
@@ -114,10 +114,9 @@
 		}
 
 		private static function ExecuteRender(int $id, AssetType $type, string $input_data) {
-			$directory = $_SERVER['DOCUMENT_ROOT'];
-
 			$md5hashfile = self::GetMD5OfData($input_data);
-			$assetsdir = "$directory/../assets/thumbs/$md5hashfile";
+
+			$assetsdir = get_asset_thumbs($md5hashfile);
 
 			if(!file_exists($assetsdir)) {
 				$render = self::GetRender($id, $type, false);
@@ -203,9 +202,7 @@
 			if($data != null) {
 				$md5 = self::GetMD5OfData($data);
 
-				$directory = $_SERVER['DOCUMENT_ROOT'];
-				$assetsdir = "$directory/../assets/";
-				$filepath = $assetsdir.$md5;
+				$filepath = get_asset($md5);
 				if(!file_exists($filepath) || (file_exists($filepath) && filesize($filepath) != strlen($data))) {
 					file_put_contents($filepath, $data);
 				}
@@ -244,35 +241,9 @@
 			return ["success" => true, "id" => $id];
 		}
 
-		public static function EditAsset(
-			Asset $asset,
-			string $name,
-			string $description,
-			bool $public = true,
-			bool $on_sale = true,
-			bool $comments_enabled = true,
-			User|null $user = null
-		): array {
-
-			if($user == null && \SESSION) {
-				$user = \SESSION->user;
-			}
-
-			if($user != null && !$user->isBanned()) {
-				return self::CommitUpdateAsset($asset, null, $name, $description, $public, $on_sale, $comments_enabled, $user);
-			}
-
-			return ["success" => false, "reason" => "User is not authorised to perform this action!"];
-		}
-
 		private static function CommitUpdateAsset(
 			Asset $asset,
 			string|null $data,
-			string $name,
-			string $description = "",
-			bool $public = true,
-			bool $on_sale = true,
-			bool $comments_enabled = true,
 			User $user
 		): array {
 			if($user->id != $asset->creator->id && !$user->admin) {
@@ -280,13 +251,7 @@
 			}
 			$db = Database::singleton();
 
-			if(!AssetTypeUtils::IsSellable($asset->type))
-				$on_sale = false;
-
 			$id = $asset->id;
-			$parsed_public          = intval($public);
-			$parsed_onsale          = intval($on_sale);
-			$parsed_commentsenabled = intval($comments_enabled);
 
 			$new_versionid = $asset->current_version;
 
@@ -308,9 +273,7 @@
 					]
 				);
 
-				$directory = $_SERVER['DOCUMENT_ROOT'];
-				$assetsdir = "$directory/../assets/";
-				$filepath = $assetsdir.$md5;
+				$filepath = get_asset($md5);
 				if(!file_exists($filepath) || (file_exists($filepath) && filesize($filepath) != strlen($data))) {
 					file_put_contents($filepath, $data);
 				}
@@ -319,14 +282,9 @@
 			$versionid = $db->lastInsertId();
 			
 			$db->run(
-				"UPDATE `assets` SET `currentversion` = :curver, `lastedited` = now(), `name` = :name, `description` = :desc, `public` = :public, `onsale` = :onsale, `comments_enabled` = :commentsenabled WHERE `id` = :assetid",
+				"UPDATE `assets` SET `currentversion` = :curver, `lastedited` = now() WHERE `id` = :assetid",
 				[
 					":curver" => $new_versionid,
-					":name" => $name,
-					":desc" => $description,
-					":public" => $parsed_public,
-					":onsale" => $parsed_onsale,
-					":commentsenabled" => $parsed_commentsenabled,
 					":assetid" => $id,
 				]
 			);
@@ -344,11 +302,6 @@
 			}
 
 			if($user != null && !$user->isBanned() && $asset->isOwner($user)) {
-				$name = $asset->name;
-				$description = $asset->description;
-				$public = $asset->public;
-				$on_sale = $asset->onsale;
-				$comments_enabled = $asset->comments_enabled;
 				
 				if($asset->type == AssetType::IMAGE && $asset->type == AssetType::LUA) {
 					if(!$user->admin) {
@@ -383,24 +336,14 @@
 					}
 				}
 
-				$name = trim($name);
-
 				$type = $asset->type;
-
-				if(strlen($name) <= 0) {
-					return ["success" => false, "reason" => "You need to enter a name doofus!"];
-				}
-
-				if(strlen($name) > 110) {
-					$name = substr($name, 0, 110);
-				}
 
 				if(AssetTypeUtils::IsRBX($type)) {
 					if(!self::IsValidXML($data)) {
 						return INVALIDFILE;
 					}
 
-					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
+					$result = self::CommitUpdateAsset($asset, $data, $user);
 					
 					if($result["success"] && $type != AssetType::PLACE) {
 						self::ExecuteRender($asset->id, $type, $data);
@@ -422,19 +365,16 @@
 					}
 					
 
-					$result = self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
+					$result = self::CommitUpdateAsset($asset, $data, $user);
 
-					if($result['success']) {
-						if(AssetTypeUtils::IsRenderable($type)) {
-							self::ExecuteRender($asset->id, $type, $data);
-						}
+					if($result["success"] && AssetTypeUtils::IsRenderable($type)) {
+						self::ExecuteRender($asset->id, $type, $data);
 					}
 
 					return $result;
 
 				} else if($asset->type == AssetType::LUA) {
-					return self::CommitUpdateAsset($asset, $data, $name, $description, $public, $on_sale, $comments_enabled, $user);
-
+					return self::CommitUpdateAsset($asset, $data, $user);
 				} else {
 					return ["success" => false, "reason" => "Invalid asset type found!"];
 				}
@@ -490,7 +430,7 @@
 
 			$name = "{$place->name} Sub Place";
 
-			$result = self::UploadAsset(file_get_contents($_SERVER['DOCUMENT_ROOT']."/private/templates/assets/baseplate.arl"), AssetType::PLACE, $name, "", false, false, false, $user);
+			$result = self::UploadAsset(file_get_contents(get_path_sitefile("private/templates/assets/baseplate.arl")), AssetType::PLACE, $name, "", false, false, false, $user);
 
 			if($result['success']) {
 				$db = Database::singleton();
@@ -713,7 +653,7 @@
 									imagefill($tshirt, 0, 0, $trans_colour);
 									
 									// paste tshirt (the icon thing) into image
-									$bg_tshirt = imagecreatefrompng($_SERVER['DOCUMENT_ROOT']."/public/images/tshirt.png");
+									$bg_tshirt = imagecreatefrompng(get_path_sitefile("public/images/tshirt.png"));
 									imagecopy($tshirt, $bg_tshirt, 0, 0, 0, 0, 420, 420);
 									// and paste the processed resizedimage on top of it
 									imagecopyresampled($tshirt, $resizedimage, 84, 84, 0, 0, 252, 252, 420, 420);
@@ -800,14 +740,6 @@
 												":aid" => $image_id
 											]
 										);
-
-										if($type == AssetType::TSHIRT) {
-											$directory = $_SERVER['DOCUMENT_ROOT'];
-											$md5hashfile = md5($data);
-											$assetsdir = "$directory/../assets/thumbs/$md5hashfile";
-											imagesavealpha($tshirt, true);
-											imagepng($tshirt, $assetsdir);
-										}
 
 										if(AssetTypeUtils::IsRenderable($type)) {
 											self::ExecuteRender($result['id'], $type, $data);

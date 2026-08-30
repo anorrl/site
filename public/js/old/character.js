@@ -386,7 +386,7 @@ ANORRL.Character  = {
 				ANORRL.Character.RenderPlayer();
 				// Render
 			} else {
-				alert("Error: " + data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 			}
 		});
 	},
@@ -398,7 +398,7 @@ ANORRL.Character  = {
 				ANORRL.Character.RenderPlayer();
 				// Render
 			} else {
-				alert("Error: " + data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 			}
 		});
 	},
@@ -495,7 +495,7 @@ ANORRL.Character  = {
 		$.get("/api/character?r="+(forcerender ? "re" : "")+"rendercharacter", function(data) {
 			
 			if(!data['success']) {
-				alert(data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 			}
 
 			//ANORRL.Character.LoadWardrobe();

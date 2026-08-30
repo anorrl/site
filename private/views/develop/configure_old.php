@@ -11,7 +11,7 @@
 	use anorrl\PageOld;
 	use anorrl\Place;
 	use anorrl\Universe;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 
 	$user = SESSION->user;
 
@@ -94,8 +94,8 @@
 	if(isset($_POST['ANORRL$EditItem$Name']) &&
 	   isset($_POST['ANORRL$EditItem$Description'])
 	) {
-		$name = UtilUtils::StripUnicode($_POST['ANORRL$EditItem$Name']);
-		$description = UtilUtils::StripUnicode($_POST['ANORRL$EditItem$Description']);
+		$name = Utilities::StripUnicode($_POST['ANORRL$EditItem$Name']);
+		$description = Utilities::StripUnicode($_POST['ANORRL$EditItem$Description']);
 		$public = isset($_POST['ANORRL$EditItem$PublicBox']);
 		$comments_enabled = isset($_POST['ANORRL$EditItem$CommentsBox']);
 		$on_sale = isset($_POST['ANORRL$EditItem$OnSaleBox']);

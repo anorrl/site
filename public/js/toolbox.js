@@ -37,10 +37,7 @@ function dragRBX(n, t) {
 	}
 }
 function handleVote(n, t) {
-	var f = $("#span_setitem_" + n),
-		i,
-		r,
-		u;
+	var f = $("#span_setitem_" + n), i, r, u;
 	f.length !== 0 &&
 		((i = $(f).find(".voting")), i.length !== 0) &&
 		((r = t ? $(i).find(".upvote") : $(i).find(".downvote")), r.length !== 0) &&

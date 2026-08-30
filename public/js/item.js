@@ -8,7 +8,7 @@ ANORRL.Item = {
 	Favourite: function(assetid) {
 		$.post("/api/favourite", { asset : assetid }, function(data) {
 			if(!data['success']) {
-				alert("Error: " + data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 			} else {
 				window.location.reload();
 			}

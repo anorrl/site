@@ -75,6 +75,7 @@
 					],
 					"url" => $asset->getURL(),
 					"onsale" => $asset->onsale,
+					"price" => $asset->price,
 					"favourites" => $asset->favourites_count,
 					"sales" => $asset->sales_count,
 					"thumbnail" => $asset->getThumbsUrl(130)					

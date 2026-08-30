@@ -2,7 +2,7 @@
 	set_content_type(ARLTYPECSS);
 
 	use anorrl\User;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 
 	if(!isset($id))
 		die();
@@ -14,7 +14,7 @@
 
 	$settings = $get_user->getSettings();
 	
-	if(UtilUtils::IsValidCSS($settings->css) || isset($_GET['force']))
+	if(Utilities::IsValidCSS($settings->css) || isset($_GET['force']))
 		die($settings->css);
 
 ?>

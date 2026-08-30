@@ -115,7 +115,7 @@
 
 		function addResource(string $type, string $path, bool $public = true) {
 			$add_path = ($public ? "/public":"").$path;
-			if(str_starts_with($add_path, "/") && !file_exists($_SERVER['DOCUMENT_ROOT'].$add_path) && $public) {
+			if(str_starts_with($add_path, "/") && !file_exists(get_path_sitefile($add_path)) && $public) {
 				error_log("Page of {$this->title} failed to load {$add_path}");
 				return;
 			}
@@ -123,7 +123,7 @@
 			// if item is a resource on server, calculate hash and allow client to cache it
 			// any new changes can immediately be pushed out without having to risk getting the same resource everytime
 			if(str_starts_with($add_path, "/") && (str_ends_with($add_path, ".css") || str_ends_with($add_path, ".js")))
-				$add_path .= "?hash=".md5(file_get_contents($_SERVER['DOCUMENT_ROOT'].$add_path));
+				$add_path .= "?hash=".md5(file_get_contents(get_path_sitefile($add_path)));
 
 			if($type == "script") {
 				$this->scripts[] = $add_path;
@@ -141,7 +141,7 @@
 		}
 
 		function loadTemplate(string $template) {
-			include $_SERVER['DOCUMENT_ROOT'] . "/private/templates/{$template}.php";
+			include get_path_sitefile("private/templates/{$template}.php");
 		}
 
 		function loadHeader() {

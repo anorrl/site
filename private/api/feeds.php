@@ -2,7 +2,7 @@
 	set_content_type(ARLTYPEJSON);
 
 	use anorrl\Status;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 
 	$user = SESSION ? SESSION->user : null;
 
@@ -33,7 +33,7 @@
 						],
 						"content" => $status->content,
 						"time_posted" => $status->time_posted->getTimestamp(),
-						"time_posted_label" => UtilUtils::GetTimeAgo($status->time_posted)
+						"time_posted_label" => Utilities::GetTimeAgo($status->time_posted)
 					];
 				}
 			}

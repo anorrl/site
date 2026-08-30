@@ -15,7 +15,7 @@
 
 	if(isset($_GET['page'])) {
 		if(intval($_GET['page']) == 1) {
-			die(include $_SERVER['DOCUMENT_ROOT']."/private/gameapis/users/friends.php");
+			die(include get_path_sitefile("private/gameapis/users/friends.php"));
 		} else {
 			set_content_type(ARLTYPEJSON);
 			die("{}");

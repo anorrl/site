@@ -1,7 +1,6 @@
 <?php
 	use anorrl\User;
 	use anorrl\Comment;
-	use anorrl\utilities\UtilUtils;
 
 	set_content_type(ARLTYPEJSON);
 

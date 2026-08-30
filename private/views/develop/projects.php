@@ -3,7 +3,7 @@
 	use anorrl\Universe;
 	use anorrl\utilities\FileSplasher;
 	use anorrl\utilities\ClientDetector;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 
 	$user = SESSION->user;
 
@@ -165,7 +165,7 @@
 		<div id="MainProjectsView">
 			<?php
 				foreach($places as $place) {
-					$place_timeago = UtilUtils::GetTimeAgo($place->last_updatetime);
+					$place_timeago = Utilities::GetTimeAgo($place->last_updatetime);
 					$place_name = $universe->starting_place->id == $place->id ? ">> Starting Place <<" : $place->name;
 
 					echo <<<EOT
@@ -185,7 +185,7 @@
 			<?php
 				foreach($places as $place) {
 
-					$place_timeago = UtilUtils::GetTimeAgo($place->last_updatetime);
+					$place_timeago = Utilities::GetTimeAgo($place->last_updatetime);
 					$universe = Universe::FromID($place->universe);
 
 					$universeplace = <<<EOT
@@ -256,7 +256,7 @@
 			<?php
 				foreach($teamplaces as $place) {
 
-					$place_timeago = UtilUtils::GetTimeAgo($place->last_updatetime);
+					$place_timeago = Utilities::GetTimeAgo($place->last_updatetime);
 
 					echo <<<EOT
 					<div class="Place" data-place-id="{$place->id}">

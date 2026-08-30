@@ -4,7 +4,7 @@
 	use anorrl\utilities\AssetUploader;
 	use anorrl\utilities\ClientDetector;
 	use anorrl\utilities\UserUtils;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 	use anorrl\enums\GearType;
 
 	if(!SESSION) {
@@ -26,8 +26,8 @@
 		isset($_POST['ANORRL$IDE$Publish$Place$Submit'])
 	) {
 
-		$name = UtilUtils::StripUnicode($_POST['ANORRL$IDE$Publish$Place$Name']);
-		$description = UtilUtils::StripUnicode($_POST['ANORRL$IDE$Publish$Place$Description']);
+		$name = Utilities::StripUnicode($_POST['ANORRL$IDE$Publish$Place$Name']);
+		$description = Utilities::StripUnicode($_POST['ANORRL$IDE$Publish$Place$Description']);
 		
 		$isclient = ClientDetector::IsAClient();
 

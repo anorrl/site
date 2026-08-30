@@ -4,7 +4,7 @@
 	use anorrl\User;
 	use anorrl\Asset;
 	use anorrl\utilities\SlurUtils;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 	use anorrl\Session;
 
 	class Comment  {
@@ -94,13 +94,13 @@
 			$lastpost = self::GetLatestCommentFromUser($user);
 			
 			if($lastpost != null) {
-				$difference_in_seconds = UtilUtils::GetSecondsElapsedFrom($lastpost->postdate);
+				$difference_in_seconds = Utilities::GetSecondsElapsedFrom($lastpost->postdate);
 			} else {
 				$difference_in_seconds = 6;
 			}
 			if($difference_in_seconds > $waittime) {
 				$comment_id = self::GenerateID();
-				$comment = UtilUtils::StripUnicode($contents);
+				$comment = Utilities::StripUnicode($contents);
 
 				$error_check = false;
 				if(strlen($comment) < 4) {
@@ -194,7 +194,7 @@
 					"img" => $this->poster->getThumbsUrl()
 				],
 				"contents" => str_replace(PHP_EOL, "<br>", $this->contents),
-				"date" => UtilUtils::GetTimeAgo($this->postdate)
+				"date" => Utilities::GetTimeAgo($this->postdate)
 			];
 		}
 	}

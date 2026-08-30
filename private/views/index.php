@@ -129,7 +129,7 @@
 		<?= print_r($_SESSION['login_errors']) ?>
 	</pre>
 <?php endif ?>
-<audio src="/public/<?= $music ?>.mp3" autoplay volume="<?= $deceptacon ? "0.1" : "0.2" ?>" loop></audio>
+<audio src="/public/sounds/<?= $music ?>.mp3" autoplay volume="<?= $deceptacon ? "0.1" : "0.2" ?>" loop></audio>
 <div style="position: fixed; background: black; padding: 10px;display:none" id="autoplay-warning">
 	Hey did you know there's music playing right now?
 	<br>

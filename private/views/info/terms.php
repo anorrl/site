@@ -68,6 +68,19 @@
 	<p><i>&quot;Treat others how you want others to treat you&quot;</i><br>&nbsp;&nbsp;- Sun Tzu</p>
 </div>
 <br>
+
+<div class="box" privacy>
+	<h2>.artifical_content</h2>
+	<hr>
+	<p>
+		<ul>
+			<li>Do not post any sort of ai generated content on our site.</li>
+			<li>Do not encourage the use of ai generation as it hurts artists and people like us.</li>
+		</ul>
+	</p>
+</div>
+<br>
+
 <div class="box" privacy>
 	<h2>.how_to_act</h2>
 	<hr>

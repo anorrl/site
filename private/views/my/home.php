@@ -1,7 +1,7 @@
 <?php
 	use anorrl\Page;
 	use anorrl\utilities\FileSplasher;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 
 	$user = SESSION->user;
 
@@ -102,7 +102,7 @@
 								<div id="name"><?= $game->name ?></div>
 							</a>
 							<div id="creator"><a href="<?= $game->creator->getUrl() ?>"><?= $game->creator->name?></a></div>
-							<div id="played"><?= UtilUtils::GetTimeAgo($game->getLastVisited($user)) ?></div>
+							<div id="played"><?= Utilities::GetTimeAgo($game->getLastVisited($user)) ?></div>
 						</div>
 					</td>
 					<?php endforeach ?>

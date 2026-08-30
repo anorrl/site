@@ -143,8 +143,12 @@
 		throw new Exception("Something went wrong.");
 	}
 
+	function get_asset(string $path = "") {
+		return get_path_file("assets/{$path}");
+	}
+
 	function get_asset_thumbs($id) {
-		return get_path_file("assets/thumbs/{$id}");
+		return get_asset("thumbs/{$id}");
 	}
 
 	create_folder("../assets/thumbs");

@@ -5,7 +5,7 @@
 	use anorrl\enums\AssetType;
 	use anorrl\Database;
 	use anorrl\utilities\AssetTypeUtils;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 	use anorrl\utilities\ClientDetector;
 
 	use CSSValidator\CSSValidator;
@@ -194,7 +194,7 @@
 
 			if($result->isValid()) {
 
-				if(!UtilUtils::IsValidCSS($data)) {
+				if(!Utilities::IsValidCSS($data)) {
 					return false;
 				}
 

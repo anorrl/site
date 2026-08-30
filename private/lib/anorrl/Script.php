@@ -27,12 +27,12 @@
 
 		private function getSignature(mixed $data) {
 			$signature = "";
-			openssl_sign($data, $signature, file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/../PrivateKey.pem"), OPENSSL_ALGO_SHA1);
+			openssl_sign($data, $signature, file_get_contents(get_path_file("PrivateKey.pem")), OPENSSL_ALGO_SHA1);
 			return base64_encode($signature);
 		}
 
 		private function loadScript($path) {
-			return file_get_contents($_SERVER["DOCUMENT_ROOT"]."/private/scripts/$path.lua");
+			return file_get_contents(get_path_sitefile("private/scripts/$path.lua"));
 		}
 
 		private static function ReplacePlaceholderStatic(mixed $data, string $valname, mixed $val) {
@@ -45,7 +45,7 @@
 			$signed_data = "\r\n".$data;
 
 			$signature = "";
-			openssl_sign($signed_data, $signature, file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/../PrivateKey.pem"), OPENSSL_ALGO_SHA1);
+			openssl_sign($signed_data, $signature, file_get_contents(get_path_file("PrivateKey.pem")), OPENSSL_ALGO_SHA1);
 			$signature = base64_encode($signature);
 
 			return "--{$header}%{$signature}%{$signed_data}";

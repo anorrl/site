@@ -8,7 +8,7 @@
 
 		// TODO: just return [Content Deleted]
 		public static function ProcessText(string $input) {
-			$profanity = file($_SERVER['DOCUMENT_ROOT']."/private/badwords.txt", FILE_IGNORE_NEW_LINES);
+			$profanity = file(get_path_sitefile("private/badwords.txt"), FILE_IGNORE_NEW_LINES);
 
 			$processed = $input;
 

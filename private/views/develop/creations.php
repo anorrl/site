@@ -112,8 +112,8 @@
 		<ul class="special">
 			<div class="heading"><hr><summary><h3>development</h3></summary><hr></div>
 			<?php generate($type, [
-				"places",
 				"games",
+				"places",
 				"decals",
 				"audio",
 				"meshes",

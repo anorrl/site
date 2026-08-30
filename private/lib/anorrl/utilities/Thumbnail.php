@@ -18,7 +18,7 @@
 		}
 
 		public static function GetPath(string $hash, string $service = "renders"): string {
-			return $_SERVER['DOCUMENT_ROOT']."/../{$service}/3d/{$hash}.json";
+			return get_path_file("{$service}/3d/{$hash}.json");
 		}
 
 		public static function Generate3D(User|Asset $item) {

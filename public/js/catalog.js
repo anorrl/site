@@ -121,10 +121,10 @@ ANORRL.Catalog  = {
 					var template = $($(".asset[template]").clone().prop('outerHTML'));
 					template.removeAttr("template");
 					
-					template.find("#Pricing").attr("oneprice", "true");
+					/*template.find("#Pricing").attr("oneprice", "true");
 					template.find("#Pricing").children().each(function() {
 						$(this).remove();
-					});
+					});*/
 					
 					if(asset['onsale']) {
 						//template.find("#Pricing").append($("<span id=\"FreeTag\">Sold: "+ salecount +"</span>"));
@@ -145,7 +145,12 @@ ANORRL.Catalog  = {
 					template.find("#creator > a").attr("href", "/users/"+asset['creator']['id']+"/profile");
 					template.find("#sales #count").html(asset['sales'] +(one_sale ? " time": " times"));
 					template.find("#favourites #count").html(asset['favourites'] +(one_favourite ? " time": " times"));
-					template.find("#price").html("Free");
+					
+					if(asset['price'] > 0) {
+						template.find("#price").html("$"+asset['price']);
+					} else {
+						template.find("#price").html("Free");
+					}
 
 					items_container.append(template);
 				}

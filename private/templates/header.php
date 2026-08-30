@@ -3,11 +3,11 @@
 	use anorrl\utilities\ClientDetector;
 	use anorrl\utilities\Splasher;
 	use anorrl\utilities\FileSplasher;
-	use anorrl\utilities\UtilUtils;
+	use anorrl\utilities\Utilities;
 
 	$header_check_user = SESSION ? SESSION->user : null;
 
-	$rand_pic = new Splasher(UtilUtils::GetFilesArray("/public/images/randoms/"), false, "RandomImages")->getRandomSplash();
+	$rand_pic = new Splasher(Utilities::GetFilesArray("public/images/randoms/"), false, "RandomImages")->getRandomSplash();
 
 	$randomsignsplash = new FileSplasher("sign")->getRandomSplash();
 

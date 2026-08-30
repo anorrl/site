@@ -7,6 +7,7 @@
 	text-align: center;
 	padding: 10px;
 	user-select: none;
+	transition: transform 0.25s;
 }
 
 .game #name {
@@ -36,6 +37,7 @@
 	background: linear-gradient(180deg,#1a0c23 0%, #492265 100%);
 	margin-bottom: -31px;
 	z-index: 9999;
+	transform: scale(1.05);
 }
 
 .game #info {

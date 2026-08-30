@@ -1,8 +1,8 @@
 <?php
 
 	namespace anorrl\utilities;
-
-	class UtilUtils {
+	
+	class Utilities {
 		public static function GetTimeAgo(\DateTime $time, bool $full = false) {
 			$now = new \DateTime;
 			$ago = $time;
@@ -48,19 +48,8 @@
 			return trim(str_replace($blockedchars, '', $input));
 		}
 
-		public static function HasBeenRewritten(): bool {
-			if(!empty($_SERVER['IIS_WasUrlRewritten']))
-				return true;
-			else if(array_key_exists('HTTP_MOD_REWRITE',$_SERVER))
-				return true;
-			else if( array_key_exists('REDIRECT_URL', $_SERVER))
-				return true;
-			else
-				return false;
-		}
-
 		public static function GetFilesArray(string $folder_location) {
-			return array_diff(scandir($_SERVER['DOCUMENT_ROOT'].$folder_location, SCANDIR_SORT_NONE), ["..", "."]);
+			return array_diff(scandir(get_path_sitefile($folder_location), SCANDIR_SORT_NONE), ["..", "."]);
 		}
 
 		/**
@@ -230,6 +219,32 @@
 
 			//Return result
 			return $string;
+		}
+
+		public static function ParseParameters(array $stats, string $name, $value, bool $special = false) {
+			if(!isset($stats[$name]))
+				return false;
+
+			switch($stats[$name]) {
+				case "string":
+					return is_string($value);
+				case "bool":
+					return is_bool($value);
+				case "int":
+					return is_int($value);
+			}
+
+			if($special) {
+				switch($stats[$name]) {
+					case "ChatOption":
+						return is_a($value, "anorrl\\enums\\ChatOption");
+					case "Genre":
+						return is_a($value, "anorrl\\enums\\Genre");
+					case "GearType":
+						return is_a($value, "anorrl\\enums\\GearType");
+				}
+			}
+			
 		}
 
 	}

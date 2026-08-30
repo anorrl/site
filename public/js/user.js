@@ -17,7 +17,7 @@ ANORRL.User = {
 	UpdateFriendButton: function() {
 		$.get(this.GetURL("friend"), function(data) {
 			if(!data['success'])
-				alert(data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 			
 			$("#friends-count").html(data['count']);
 			$("#friends-label").html(data['count'] == 1 ? "Friend" : "Friends");
@@ -46,7 +46,7 @@ ANORRL.User = {
 	Friend: function() {
 		$.post(this.GetURL("friend"), {'ANORRL$Friend$Request': true}, function(data) {
 			if(!data['success'] && data.includes("reason"))
-				alert(data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 
 			$("#friends-count").html(data['count']);
 			$("#friends-label").html(data['count'] == 1 ? "Friend" : "Friends");
@@ -58,7 +58,7 @@ ANORRL.User = {
 	UpdateFollowButton: function() {
 		$.get(this.GetURL("follow"), function(data) {
 			if(!data['success'] && data.includes("reason"))
-				alert(data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 			
 			$("#followers-count").html(data['count']);
 			$("#followers-label").html(data['count'] == 1 ? "Follower" : "Followers");
@@ -72,7 +72,7 @@ ANORRL.User = {
 	Follow: function() {
 		$.post(this.GetURL("follow"), {'ANORRL$Follow$Request': true}, function(data) {
 			if(!data['success'] && data.includes("reason"))
-				alert(data['reason']);
+				ANORRL.MessageBox.Show(2, data['reason']);
 
 			$("#followers-count").html(data['count']);
 			$("#followers-label").html(data['count'] == 1 ? "Follower" : "Followers");
@@ -87,7 +87,7 @@ $(function(){
 	$("input[type='file'][hidden]").on("change", function() {
 		var type = $(this).data("type");
 		if(type != "pfp" && type != "banner") {
-			alert("Something went wrong!");
+			ANORRL.MessageBox.Show(2, "Something went wrong!");
 			return;
 		}
 
@@ -110,7 +110,7 @@ $(function(){
 	$("#crop-modal button[rel='save']").click(function() {
 		var type = $('#cropper-img').parent().attr("type");
 		if(type != "pfp" && type != "banner") {
-			alert("Something went wrong!");
+			ANORRL.MessageBox.Show(2, "Something went wrong!");
 			return;
 		}
 		$('#cropper-img').data("cropper").getCroppedCanvas().toBlob((blob) => {
@@ -133,11 +133,11 @@ $(function(){
 						}
 					}
 					else {
-						alert("Something went wrong: " + data['reason']);
+						ANORRL.MessageBox.Show(2, "Something went wrong: " + data['reason']);
 					}
 				},
 				error() {
-					alert('Upload error');
+					ANORRL.MessageBox.Show(2, 'Upload error');
 				},
 			});
 			
@@ -211,7 +211,7 @@ $(function(){
 		});
 
 		$("#block-btn").click(function() {
-			alert("blocking not implemented YET");
+			ANORRL.MessageBox.Show(2, "blocking not implemented YET");
 		})
 	}
 	
