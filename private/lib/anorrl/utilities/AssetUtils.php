@@ -121,7 +121,7 @@
 					"$base_sql_query $sql_filter LIMIT :page, :count", 
 					[
 						":query" => "%$query%",
-						":type" => $type->ordinal(),
+						":type" => $type,
 						":page" => (($page-1)*$count),
 						":count" => $count
 					]
@@ -192,7 +192,7 @@
 					"$base_sql_query $sql_filter LIMIT :page, :count",
 					[
 						":query" => "%$query%",
-						":type" => $type->ordinal(),
+						":type" => $type,
 						":page" => (($page-1)*$count),
 						":count" => $count
 					]

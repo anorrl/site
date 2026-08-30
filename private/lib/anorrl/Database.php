@@ -52,6 +52,9 @@
 			if(is_a($data, "anorrl\\enums\\GearType"))
 				return $data->ordinal();
 
+			if(is_a($data, "anorrl\\enums\\AssetType"))
+				return $data->ordinal();
+
 			return $data;
 		}
 

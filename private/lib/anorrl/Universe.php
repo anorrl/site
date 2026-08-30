@@ -142,7 +142,7 @@
 					"SELECT `id` FROM `assets` WHERE `universe` = :id AND `type` = :badgetype LIMIT :page, :count",
 					[
 						":id" => $this->id,
-						":badgetype" => AssetType::BADGE->ordinal(),
+						":badgetype" => AssetType::BADGE,
 						":page" => (($page-1)*$count),
 						":count" => $count
 					]
@@ -152,7 +152,7 @@
 					"SELECT `id` FROM `assets` WHERE `universe` = :id AND `type` = :badgetype",
 					[
 						":id" => $this->id,
-						":badgetype" => AssetType::BADGE->ordinal()
+						":badgetype" => AssetType::BADGE
 					]
 				)->fetchAll(\PDO::FETCH_OBJ);
 			}

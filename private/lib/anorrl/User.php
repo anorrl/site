@@ -307,7 +307,7 @@
 				Database::singleton()->run(
 					"INSERT INTO `profilebadges`(`badgeid`, `userid`) VALUES (:badge, :user)",
 					[
-						":badge" => $badge->ordinal(),
+						":badge" => $badge,
 						":user" => $this->id
 					]
 				);

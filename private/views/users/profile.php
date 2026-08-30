@@ -17,6 +17,7 @@
 		redirect("/my/home");
 	}
 
+	// holy fuck
 	$bgm = $user->getSettings()->background_music;
 	$owner = false;
 	$online = $user->isOnline();
@@ -67,8 +68,6 @@
 		$first_places = [];
 		$next_places = [];
 	}
-
-	
 
 	if(ARLAUTH) {
 		$settings = SESSION->settings;
@@ -125,8 +124,9 @@
 		if(isset($_SESSION['ANORRL$Profile$ID']))
 			unset($_SESSION['ANORRL$Profile$ID']);
 	}
+	
+	$page->loadTemplate("layouts/comments/templates");
 ?>
-<?php $page->loadTemplate("layouts/comments/templates"); ?>
 
 <div id="crop-modal" class="box" modal>
 	<h2>crop yo shit!</h2>

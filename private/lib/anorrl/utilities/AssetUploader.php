@@ -189,11 +189,11 @@
 					":name" => $name,
 					":desc" => $description,
 					":uid" => $user->id,
-					":type" => $type->ordinal(),
-					":public" => intval($public),
-					":onsale" => intval($on_sale),
-					":commentsenabled" => intval($comments_enabled),
-					":hidden" => intval($hidden)
+					":type" => $type,
+					":public" => $public,
+					":onsale" => $on_sale,
+					":commentsenabled" => $comments_enabled,
+					":hidden" => $hidden
 				]
 			);
 
