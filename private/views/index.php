@@ -136,7 +136,7 @@
 	No? Well seems like you have AUTOPLAY off!
 </div>
 <div id="newfrontpage">
-	<img src="/public/images/header/logo.png" height="200">
+	<img src="/public/images/logos/main.png" height="200">
 	<br>
 	<img src="/public/images/slogan.gif" width="440" style="margin-top: -55px">
 	<div style="display: flex; width: 915px; margin: 0 auto; gap: 10px;">

@@ -42,7 +42,7 @@
 			<div id="header" <?= !SESSION ? "" : 'style="border-width: 2px;"' ?>>
 				<div id="logo" style="float: left;">
 					<a href="/">
-						<img src="/public/images/header/logo_small.png">
+						<img src="/public/images/logos/title_small.png">
 					</a>
 				</div>
 				<?php if(SESSION): ?>

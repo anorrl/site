@@ -212,7 +212,37 @@ $(function(){
 
 		$("#block-btn").click(function() {
 			ANORRL.MessageBox.Show(2, "blocking not implemented YET");
-		})
+		});
+
+		$("#profile-edit-btn").click(function() {
+			var final = $("#profile-bio #final");
+			var edit = $("#profile-bio #edit");
+
+			if(edit.length == 0) return;
+
+			if(final.is(":visible")) {
+				final.hide();
+				edit.show();
+				$("#profile-bio").css("height", "auto");
+			}
+			else {
+				final.show();
+				edit.hide();
+				$("#profile-bio").css("height", "");
+			}
+		});
+
+		$("form").submit(function(e) {
+			e.preventDefault();
+
+			$.post($(this).data("action"), $(this).serialize(), function(data) {
+				if(!data['success'])
+					ANORRL.MessageBox.Show(2, data['reason']);
+				else
+					window.location.reload();
+				
+			});
+		});
 	}
 	
 });

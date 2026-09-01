@@ -18,6 +18,7 @@
 	}
 
 	// holy fuck
+	$list_icon = $user->getSettings()->playerlisticon;
 	$bgm = $user->getSettings()->background_music;
 	$owner = false;
 	$online = $user->isOnline();
@@ -158,11 +159,14 @@
 			</div>
 			<?php endif ?>
 			<a title="<?= $owner ? "your" : "{$user->name}'s" ?> profile pic!" href="open-modal" target="__blank"><img data-src="<?= $user->getThumbsUrl(161)?>"></a>
+			<?php if($list_icon): ?>
+			<img src="<?= $list_icon->getThumbsUrl() ?>" id="icon" title="<?= $owner ? "your" : "{$user->name}'s" ?> playerlist icon">
+			<?php endif ?>
 		</div>
 
 		<div id="profile-stats"> 
 			<div id="profile-name">
-				<img <?php if(!$owner): ?>title="this means they're <?= $online ? "online" : "offline" ?>!"<?php endif ?> src="/public/images/OnlineStatusIndicator_Is<?= $online ? "Online" : "Offline" ?>.png" width="12">
+				<img <?php if(!$owner): ?>title="this means they're <?= $online ? "online" : "offline" ?>!"<?php endif ?> src="/public/images/icons/status/<?= !$online ? "online" : "offline" ?>.png" width="12">
 					<?= $user->name ?>
 					<?php if($user->admin): ?>
 					<img src="/public/images/icons/shield.png" style="height: 18px; margin-bottom: -3px;" title="this fellas is an admin!!!">
@@ -208,10 +212,24 @@
 <div data-tab="about">
 <?php endif ?>
 	<div style="display: flex; gap: 10px;">
-		<?php if($user->blurb != ""): ?>
+		<?php if($user->blurb != "" || $owner): ?>
 		<div style="flex: 1;">
-			<h4 class="page-title">.about</h4>
-			<div class="box" id="profile-bio" <?php if(!$bgm): ?>style="max-width:910px"<?php endif ?>><?= $bio ?></div>
+			<h4 class="page-title">.about <?php if($owner): ?><button id="profile-edit-btn"><img src="/public/images/icons/pencil.png"></button><?php endif ?></h4>
+			<div class="box" id="profile-bio" <?php if(!$bgm): ?>style="max-width:910px"<?php endif ?>>
+				<div id="final">
+					<?php if($user->blurb == ""): ?>
+					<i class="missing-bio">Seems like you have no bio set...<br>Did you know you can use markdown?</i>
+					<?php else: ?>
+					<?= $bio ?>
+					<?php endif ?>
+				</div>
+				<?php if($owner): ?>
+				<form id="edit" data-action="/users/update/bio" style="display: none">
+					<textarea name="ANORRL$Update$Profile$Bio" class="box input" style="width: 582px;height:200px"><?= $user->blurb ?></textarea>
+					<input style="margin-top:5px" type="submit" class="button" value="update">
+				</form>
+				<?php endif ?>
+			</div>
 		</div>
 		<?php endif ?>
 		<?php if($bgm): ?>

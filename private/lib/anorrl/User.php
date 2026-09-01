@@ -105,7 +105,7 @@
 		private function __construct(Object $rowdata) {
 			$this->id = $rowdata->id;
 			$this->name = $rowdata->name;
-			$this->blurb = str_replace("<", "&lt;", str_replace(">", "&gt;", $rowdata->blurb));
+			$this->blurb = htmlspecialchars(trim($rowdata->blurb));
 			$this->has_pfp_set = boolval($rowdata->has_pfp_set);
 			$this->has_banner_set = boolval($rowdata->has_banner_set);
 			$this->currentoutfitmd5 = $rowdata->currentappearancemd5;

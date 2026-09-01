@@ -147,7 +147,7 @@
 						"author" => [
 							"name" => "ANORRL",
 							"url" => "https://$domain/",
-							"icon_url" => "https://$domain/public/images/download/client.png"
+							"icon_url" => "https://$domain/public/images/icons/client.png"
 						],
 						"thumbnail" => [
 							"url" => "https://{$domain}{$asset->getThumbsUrl()}"
@@ -657,7 +657,7 @@
 									imagefill($tshirt, 0, 0, $trans_colour);
 									
 									// paste tshirt (the icon thing) into image
-									$bg_tshirt = imagecreatefrompng(get_path_sitefile("public/images/tshirt.png"));
+									$bg_tshirt = imagecreatefrompng(get_path_sitefile("public/images/thumbnails/tshirt.png"));
 									imagecopy($tshirt, $bg_tshirt, 0, 0, 0, 0, 420, 420);
 									// and paste the processed resizedimage on top of it
 									imagecopyresampled($tshirt, $resizedimage, 84, 84, 0, 0, 252, 252, 420, 420);

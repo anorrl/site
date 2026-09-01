@@ -55,6 +55,16 @@ div[data-tab] {
 	width: 100%;
 }
 
+#profile-picture #icon {
+	width: 48px;
+	height: 48px;
+	border-width: 2px;
+	object-fit: cover;
+	position: absolute;
+	left: -16px;
+	bottom: -16px;
+}
+
 #profile-stats {
 	user-select: none;
 	display: flex;
@@ -278,4 +288,30 @@ ul.horizontal {
 	width:fit-content;
 	margin-bottom: 5px !important;
 	font-weight: bold;
+}
+
+#profile-edit-btn {
+	background: none;
+	border: none;
+	padding: 0px;
+	cursor: pointer;
+}
+
+#profile-edit-btn img {
+	display: inline-block;
+	margin-bottom: -3px;
+	transition: transform 0.25s;
+}
+
+#profile-edit-btn:hover img {
+	transform: rotate(5deg) scale(1.05);
+}
+
+.missing-bio {
+	text-align: center;
+	color: var(--special-pink);
+	display: block;
+	font-size: 12px;
+	line-height: 20px;
+	margin: 20px;
 }

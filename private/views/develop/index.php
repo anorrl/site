@@ -40,7 +40,7 @@
 <h2 class="page-title">.develop</h2>
 <div class="box" style="text-align: center; padding: 15px;position: relative;">
 	<img src="/public/images/characters/construction.png" style="position: absolute;right: 19px;width: 130px;image-rendering: crisp-edges;" title="hey! back off!">
-	<img src="/public/images/download/studio.png" width="190">
+	<img src="/public/images/logos/studio.png" width="190">
 	<h2>up for something new? try developing a game for once!</h2>
 	<h4>what's it up for you? well me of course! get on with it!</h4>
 	<input class="button" type="submit" value="Open ANORRL Studio"><br><br>

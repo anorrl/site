@@ -51,6 +51,7 @@
 	route("POST", "/users/update/banner",    "/private/api/users/update/banner.php");
 	route("POST", "/users/remove/pfp",       "/private/api/users/remove/pfp.php");
 	route("POST", "/users/remove/banner",    "/private/api/users/remove/banner.php");
+	route("POST", "/users/update/bio",       "/private/api/users/update/bio.php");
 	
 	route("POST", "/universes/[i:id]/setactive", "/private/api/universes/setactive.php");
 	route("POST", "/universes/[i:id]/shutdown", "/private/api/universes/shutdown.php");

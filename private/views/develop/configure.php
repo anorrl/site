@@ -69,13 +69,11 @@
 
 		$("li[data-category]").on("click", function() {
 			var type = $(this).data("category");
-			
 
 			$("li[data-category]").each(function() {
 				$(this).removeAttr("selected");
 				$(this).find("img").remove();
 			});
-
 			
 			if(type != "universe") {
 				window.location.hash = type;
@@ -83,12 +81,9 @@
 				$(this).find("span").prepend('<img src="/public/images/icons/selection.png">');
 			}
 
-			
-
 			if(type == "universe") {
 				var universe = $(this).data("uid");
-				// still wondering about /develop/place/<id>/configure... i think ill scrap it...
-				// but anyways universes are different stuff i dont want to fuck with and they have their OWN options sooo
+				// universes are different stuff i dont want to fuck with and they have their OWN options sooo
 				// yeah
 				window.location.href = "/develop/universes/"+universe+"/configure";
 			} else {
@@ -145,6 +140,8 @@
 					<li data-category="version" class="button"><span>.version_history</span></li>
 				<?php endif ?>
 			</ul>
+			<hr>
+			<a href="<?= $asset->getURL() ?>" style="text-align: center;display: block;font-size: 14px;font-family: 'Fira Mono';margin-top: 15px;margin-bottom: 8px;">.go_back</a>
 		</div>
 		<div class="box" style="margin-top:5px">
 			<img src="/public/images/randoms/jermafwoomp.png" width="100%">

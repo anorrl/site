@@ -94,7 +94,7 @@
 			$this->profile_music = !isset($rowdata->profilemusic) ? self::CreateColumn("profilemusic", true) : $rowdata->profilemusic;
 			$this->background_music = $rowdata->bgm <= 0 ? null : Asset::FromID($rowdata->bgm);
 			$playericon_id = !isset($rowdata->plicon) ? self::CreateColumn("plicon", true) : $rowdata->plicon;
-			$this->playerlisticon = $playericon_id ? null : Asset::FromID($playericon_id);
+			$this->playerlisticon = $playericon_id ? Asset::FromID($playericon_id) : null;
 			$this->css = $rowdata->css;
 
 			if(!$rowdata->last_username_change) {

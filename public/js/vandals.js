@@ -39,12 +39,12 @@ ANORRL.Vandals = {
 		$userprofile.append($userprofilelink);
 
 
-		var statusLabel = data['online'] ? "Online" : "Offline";
+		var statusLabel = data['online'] ? "online" : "offline";
 		
 
 		var $username = $("<td></td>");
 		$username.attr("id", "username");
-		$username.append($("<img src='/public/images/OnlineStatusIndicator_Is"+statusLabel+".png'> <a href='/users/"+data['id']+"/profile'>"+data['name']+"</a>"))
+		$username.append($("<img src='/public/images/icons/status/"+statusLabel+".png'> <a href='/users/"+data['id']+"/profile'>"+data['name']+"</a>"))
 
 		var $userbio = $("<td></td>");
 		$userbio.attr("id", "status");
@@ -58,7 +58,7 @@ ANORRL.Vandals = {
 		
 		var $userstatus = $("<td></td>");
 		$userstatus.attr("id", "activity")
-		$userstatus.html(data['online'] ? data['status'] : "Offline");
+		$userstatus.html(data['online'] ? data['status'] : "offline");
 		if($userstatus.html().includes("In Game") || $userstatus.html().includes("In Team Create") || $userstatus.html().includes("'s profile")) {
 
 		} else {

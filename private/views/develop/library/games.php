@@ -58,18 +58,16 @@
 		background-size: 100%;
 		margin-left: -5px;
 		margin-right: 2px;
+		image-rendering: pixelated;
 	}
 
 	.game #slot[src="inactive"] span#picture {
-		background-image: url("/public/images/OnlineStatusIndicator_IsOffline.png");
+		background-image: url("/public/images/icons/status/inactive.png");
 	}
 
 	.game #slot[src="active"] span#picture {
-		background-image: url("/public/images/OnlineStatusIndicator_IsOnline.png");
+		background-image: url("/public/images/icons/status/active.png");
 	}
-
-
-	
 </style>
 <script>
 	ANORRL.Creations.HandleDropdownClick = function(event) {

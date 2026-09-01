@@ -34,14 +34,14 @@
 	}
 </style>
 <h2 class="page-title">.terms_of_service</h2>
-<h3 class="page-slogan">(last updated: 28nd August 2026)</h3>
+<h3 class="page-slogan">(last updated: 1st September 2026)</h3>
 <div class="box" privacy alert>
 	<p>
 		It's very important that every ANORRL user review the following rules so that they can know what is or is not allowed on ANORRL.
 		By using this site, every user agree to abide by the following terms and conditions along with its rules of conduct.
 		ANORRL reserves the right to change our terms and conditions at any time.
 	</p>
-	<p><acronym style="font-weight: bold" title="by &quot;base minimum&quot; we mean, we dont allow under 15s but if you are mature enough we might let you in, no under 13s at all tho.">UNDER 13s ARE NOT ALLOWED ON OUR SITE, OUR BASE MINIMUM IS 15 YEARS OF AGE.</acronym></p>
+	<p><acronym style="font-weight: bold; cursor: help;" title="by &quot;base minimum&quot; we mean, we dont allow under 15s but if you are mature enough we might let you in, no under 13s at all tho.">UNDER 13s ARE NOT ALLOWED ON OUR SITE, OUR BASE MINIMUM IS 15 YEARS OF AGE.</acronym></p>
 </div>
 <br>
 <div class="box" privacy>

@@ -1,4 +1,6 @@
 <?php
+	use anorrl\utilities\Utilities;
+	
 	if(!isset($id))
 		redirect("/my/stuff");
 
@@ -13,6 +15,7 @@
 
 	$is_creator = false;
 	$is_favourited = false;
+	$is_editable = false;
 
 	if($place != null) {
 		
@@ -26,6 +29,7 @@
 		if($user != null) {
 			$is_creator = $place->isOwner($user);
 			$is_favourited = $place->hasUserFavourited($user);
+			$is_editable = $place->isEditable($user);
 		}
 
 		$favourites_label = $place->favourites_count . " time". ($place->favourites_count != 1 ? "s" : "");
@@ -193,26 +197,32 @@
 		text-overflow:ellipsis;
 	}
 
-	#place-name {
+	#asset-short-name {
+		max-height: 69px;
+		overflow:hidden;
+		text-overflow:ellipsis;
+	}
+
+	#asset-name {
 		height: auto;
 		background: linear-gradient(0deg,#1a0c23 0%, #492265 100%);
 		border: 1px solid var(--border-color);
 		margin-top:4px;
 	}
 
-	#place-name-container:hover #place-short-name {
+	#asset-name-container:hover #asset-short-name {
 		display: none;
 	}
 
-	#place-name-container .hidden {
+	#asset-name-container .hidden {
 		display: none;
 	}
 
-	#place-name-container:hover .hidden h2 {
+	#asset-name-container:hover .hidden h2 {
 		position: absolute;
 	}
 
-	#place-name-container:hover .hidden {
+	#asset-name-container:hover .hidden {
 		display: block;
 		
 	}
@@ -236,15 +246,15 @@
 	
 	<div style="flex: 1; text-align: center; margin: 10px; position: relative;">
 		<div style="min-height:97px; height: 97px; display: flex; flex-direction: column;">
-			<div id="place-name-container" style="flex: 1">
+			<div id="asset-name-container" style="flex: 1">
 				<?php if($place_short_name): ?>
 				<h2 id="place-short-name"><?= $place_short_name ?></h2>
 				<div class="hidden">
-					<h2 id="place-name"><?= $place->name ?></h2>
+					<h2 id="asset-name"><?= $place->name ?></h2>
 					<div style="height: 78px;"></div>
 				</div>
 				<?php else: ?>
-					<h2 id="place-name" style="background: none; border: none; flex: 1"><?= $place->name ?></h2>
+					<h2 id="asset-name" style="background: none; border: none; flex: 1"><?= $place->name ?></h2>
 				<?php endif ?>
 			</div>
 			<div style="font-size: 14px; font-style: italic; margin-bottom: 15px;">created by <a href="<?= $place->creator->getURL() ?>"><?= $place_creator_name ?></a></div>
@@ -259,7 +269,7 @@
 				flex-direction: column;
 			">
 			<button class="play-btn"></button>
-			<?php if($is_creator): ?>
+			<?php if($is_editable): ?>
 			<button class="edit-btn"></button>
 			<?php endif ?>
 		</div>
@@ -371,7 +381,7 @@
 		font-size: 14px;
 		font-family:monospace;
 		text-align: center;
-		color: #EFD8FF;
+		color: var(--special-pink);
 	}
 </style>
 <div class="box" id="buttons">
@@ -384,16 +394,16 @@
 	<div class="box" data-tab="info" >
 		<h3 style="margin: 5px;">.description</h3>
 		<hr>
-		<div style="margin: 10px 15px; line-height: 1.5em; font-family: monospace; font-size: 11px; color: #EFD8FF">
+		<div style="margin: 10px 15px; line-height: 1.5em; font-family: monospace; font-size: 11px; color: var(--special-pink)">
 			<?= $place_description ?>
 		</div>
 		<hr>
 		<table id="place-stats">
-			<td>
+			<td title="<?= Utilities::GetTimeAgo($place->created_at) ?>">
 				<b>.created</b>
 				<span><?= $place->created_at->format('d/m/Y'); ?></span>
 			</td>
-			<td>
+			<td title="<?= Utilities::GetTimeAgo($place->last_updatetime) ?>">
 				<b>.updated</b>
 				<span><?= $place->last_updatetime->format('d/m/Y'); ?></span>
 			</td>

@@ -2,8 +2,7 @@
 - add the ability to create games
 - add more categories to creations
 - add the ability to view others inventories
-- finish the rest of the /my/ pages (profile -> account ??)
-- add the ability to change bio from the profile page
+- finish the rest of the /my/ pages
 - add moderation panels
 - maybe do whatever is in the trello
 
