@@ -61,7 +61,9 @@
 	route("POST", "/server/[*:jobID]/remove/[i:player]",    "/private/api/gameservers/player/remove.php");
 	route("POST", "/server/[*:jobID]/validate/[i:player]",  "/private/api/gameservers/player/validate.php");
 
-	route("POST", "/develop/[i:id]/configure/settings", "/private/api/develop/configure/settings.php");
-	route("POST", "/develop/[i:id]/configure/place",    "/private/api/develop/configure/place.php");
+	route("POST", "/develop/[i:id]/configure/settings",   "/private/api/develop/configure/settings.php");
+	route("POST", "/develop/[i:id]/configure/place",      "/private/api/develop/configure/place.php");
 	route("POST", "/develop/[i:id]/configure/pricing",    "/private/api/develop/configure/pricing.php");
+	route("POST", "/develop/[i:id]/configure/publish",    "/private/api/develop/configure/publish.php");
+	route("POST", "/develop/[i:id]/configure/audio",      "/private/api/develop/configure/audio.php");
 ?>

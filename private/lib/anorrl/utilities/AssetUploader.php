@@ -309,6 +309,10 @@
 					}
 				}
 
+				if(!AssetTypeUtils::IsUpdateable($asset->type)) {
+					return ["success" => false, "reason" => "Request failed."];
+				}
+
 				if(is_array($file)) {
 					if($file['error'] != 0) {
 						return INTERNALERROR;

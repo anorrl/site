@@ -1,5 +1,4 @@
-- finish configuration stuff
-	audio, version publishing and universes
+- finish configuration stuff (universes)
 - add the ability to create games
 - add more categories to creations
 - add the ability to view others inventories

@@ -33,7 +33,7 @@
 	$sellable = AssetTypeUtils::IsSellable($asset->type) && !$asset->owner_only;
 	$updateable = AssetTypeUtils::IsUpdateable($asset->type);
 
-	$page = new Page("editing: ".htmlspecialchars($asset->name, ENT_QUOTES), "anorrl_asset");
+	$page = new Page("editing: {$asset->name}", "anorrl_asset");
 	$page->addScript("/js/versions.js");
 	$page->addScript("/js/configure.js");
 	$page->addValue("asset", $asset->id);
@@ -45,6 +45,11 @@
 	function loadTab(type) {
 		window.location.hash = type;
 		var element = $("li[data-category=\""+type+"\"]")
+
+		if(element.length == 0) {
+			loadTab("basic");
+			return;
+		}
 
 		$("li[data-category]").each(function() {
 			$(this).removeAttr("selected");
@@ -116,7 +121,7 @@
 		font-size: 12px;
 	}
 </style>
-<h2 class="page-title">.editing: <?= htmlspecialchars($asset->name, ENT_QUOTES) ?></h2>
+<h2 class="page-title">.editing: <?= $asset->name ?></h2>
 <div style="display: flex; align-items: flex-start; gap: 10px;">
 	<div style="flex: 0.35; width:250px;min-width: 250px;max-width: 250px;">
 		<div class="box">
@@ -134,7 +139,7 @@
 					<?php endif ?>
 				<?php endif ?>
 				<?php if($asset->type == AssetType::AUDIO):?>
-					<li data-category="version" class="button"><span>.metadata</span></li>
+					<li data-category="metadata" class="button"><span>.metadata</span></li>
 				<?php endif ?>
 				<?php if($updateable): ?>
 					<li data-category="version" class="button"><span>.version_history</span></li>
@@ -145,7 +150,7 @@
 			<img src="/public/images/randoms/jermafwoomp.png" width="100%">
 		</div>
 	</div>
-	<div style="flex: 1;">
+	<div style="flex: 1; min-width:720px;width:720px;max-width:720px;">
 		<div data-tabname="basic" >
 			<div class="box" style="padding: 15px;">
 				<h3 id="filter-name">.basic_settings</h3>
@@ -190,7 +195,7 @@
 				<form data-action="/develop/<?= $asset->id ?>/configure/pricing">
 					<div>price</div>
 					<input type="number" class="box input" name="ANORRL$EditItem$Price" value="<?= $asset->price ?>">
-						
+					
 					<div class="fields" style="margin: 10px 0px;">
 						<input type="checkbox" name="ANORRL$EditItem$OnSale" <?php if($asset->onsale): ?>checked<?php endif ?>>
 						<span>on sale</span>
@@ -246,6 +251,30 @@
 			</div>
 		</div>
 		<?php endif ?>
+		
+		<?php if($asset->type == AssetType::AUDIO): ?>
+		<div data-tabname="metadata">
+			<div class="box" style="padding: 15px;">
+				<h3 id="filter-name">.metadata</h3>
+				<hr>
+				<form data-action="/develop/<?= $asset->id ?>/configure/audio">
+					<div style="text-align: center">
+						<img data-src="<?= $asset->getThumbsUrl() ?>" width="300" height="300" style="object-fit: scale-down;">
+						<br>
+						<input class="box input" type="text" name="ANORRL$EditAudio$Metadata$AlbumID" list="decalsList" placeholder="Decal/Image ID here!" />
+						<datalist id="decalsList">
+							<?php foreach(SESSION->user->getOwnedAssets(AssetType::IMAGE, '', true) as $image): ?>
+								<option value="<?= $image->id ?>"><?= $image->name ?> (<?= $image->id ?>)</option>
+							<?php endforeach ?>
+						</datalist>
+					</div>
+					<hr>
+					<input class="button" type="submit" value="update" style="margin-top:5px;">
+				</form>
+			</div>
+		</div>
+		<?php endif ?>
+
 		<?php if($updateable): ?>
 		<div data-tabname="version">
 			<div class="box" style="padding: 15px;">
@@ -267,10 +296,19 @@
 				</table>
 				<div id="pager">
 					<hr>
+					<form data-action="/develop/<?= $asset->id ?>/configure/publish" data-redirect="no" data-success="Successfully published asset!">
+						<h4 id="filter-name" style="font-size: 13px;">.publish</h4>
+						<hr style="margin: 5px 185px;">
+						<input type="file" name="ANORRL$EditItem$Version$File" accept=".arl,.arlx"><br>
+						<hr style="margin: 5px 185px;">
+						<input class="button" type="submit" value="update" style="margin-top:5px;">
+					</form>
+					<hr style="margin: 15px -15px;">
 					<a href="javascript:ANORRL.Versions.PrevPage()" id="back-pager">&lt;&lt; back</a>
 					<input class="box input" type="text" maxlength="3" value="1"> of <span id="page-counter">1</span>
 					<a href="javascript:ANORRL.Versions.NextPage()" id="next-pager">next &gt;&gt;</a>
 				</div>
+				
 			</div>
 		</div>
 		<?php endif ?>

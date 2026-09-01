@@ -4,7 +4,7 @@
 
 	$type = intval($_POST['ANORRL$MessageBox$Type']);
 
-	if(!($type <= 2 && $type >= 0))
+	if(!in_array($type, [0,1,2]))
 		die();
 
 	$contents = trim($_POST['ANORRL$MessageBox$Contents']);

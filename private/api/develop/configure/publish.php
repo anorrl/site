@@ -1,11 +1,12 @@
 <?php
 	use anorrl\Asset;
-	
+	use anorrl\utilities\AssetUploader;
+
 	set_content_type(ARLTYPEJSON);
 
 	$result = ["success" => false, "reason" => "Request failed."];
 
-	if(!ARLAUTH || !isset($id) || !isset($_SESSION['ANORRL$Asset$ID']))
+	if(!ARLAUTH || !isset($id) || !isset($_FILES['ANORRL$EditItem$Version$File']))
 		die(json_encode($result));
 
 	if(intval($_SESSION['ANORRL$Asset$ID']) != $id)
@@ -23,7 +24,5 @@
 		die(json_encode($result));
 	}
 
-	$asset->resetThumbnail();
-
-	die(json_encode(["success" => true]));
+	die(json_encode(AssetUploader::UpdateAsset($asset, $_FILES['ANORRL$EditItem$Version$File'])));
 ?>

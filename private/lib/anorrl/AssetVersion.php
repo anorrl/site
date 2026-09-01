@@ -60,7 +60,7 @@
 			$this->publish_date = \DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->publishdate);	
 		}
 
-		function ResetThumbnail() {
+		function resetThumbnail() {
 			
 			if($this->asset->type != AssetType::AUDIO && $this->asset->type != AssetType::PLACE) {
 				return;
@@ -95,7 +95,7 @@
 				$asset = $asset->getRelatedAssets()[0];
 			}
 
-			$version = AssetVersion::GetLatestVersionOf($asset);
+			$version = self::GetLatestVersionOf($asset);
 
 			if($version == null)
 				return;

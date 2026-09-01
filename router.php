@@ -29,6 +29,12 @@
 
 				exit($file);
 			} else {
+				if(!file_exists(__DIR__.$file)) {
+					header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+					require __DIR__.'/private/views/errors/404.php';
+					exit();
+				}
+
 				require __DIR__.$file;
 			}
 		});
@@ -60,6 +66,12 @@
 			foreach ($params as $key => $value) {
 				$$key = $value;
 			}
+			if(!file_exists(__DIR__.$file)) {
+				header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+				require __DIR__.'/private/views/errors/404.php';
+				exit();
+			}
+
 			require __DIR__.$file;
 		});
 	}

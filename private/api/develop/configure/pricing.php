@@ -18,6 +18,11 @@
 		die(json_encode($result));
 	}
 
+	if(!$asset->isOwner(SESSION->user)) {
+		$result['reason'] = "You are not authorised to perform this action.";
+		die(json_encode($result));
+	}
+
 	$price = intval($_POST['ANORRL$EditItem$Price']);
 	if($price < 0) {
 		$result['reason'] = "Can't have a negative price!!!!";

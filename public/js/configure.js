@@ -19,6 +19,17 @@ $(function() {
 
 	$("form[data-action]").submit(function(e) {
 		e.preventDefault();
+		console.log(typeof($(this).data("success")),  typeof($(this).data("redirect")));
+		
+		var redirect = null;
+		var success_msg = null;
+
+		if(typeof($(this).data("redirect")) != "undefined")
+			redirect = $(this).data("redirect");
+		if(typeof($(this).data("success")) != "undefined")
+			success_msg = $(this).data("success");
+
+		console.log(success_msg, redirect);
 
 		$.ajax($(this).attr("data-action"), {
 			method: 'POST',
@@ -32,7 +43,10 @@ $(function() {
 					if(data["reason"]) {
 						ANORRL.MessageBox.Show(1, data['reason']);
 					} else {
-						window.location.href = $("body").data("redirect");
+						if(redirect != null && success_msg != null)
+							ANORRL.MessageBox.Show(0, success_msg);
+						if(redirect == null || redirect == "yes")
+							window.location.href = $("body").data("redirect");
 					}
 				}
 					

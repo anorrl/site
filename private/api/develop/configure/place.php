@@ -25,6 +25,11 @@
 		die(json_encode($result));
 	}
 
+	if(!$place->isOwner(SESSION->user)) {
+		$result['reason'] = "You are not authorised to perform this action.";
+		die(json_encode($result));
+	}
+
 	$server_size = intval($_POST['ANORRL$EditPlace$ServerSize']);
 	$genre = Genre::index(intval($_POST['ANORRL$EditPlace$Genre']));
 	$gear_type = GearType::index(intval($_POST['ANORRL$EditPlace$GearType']));

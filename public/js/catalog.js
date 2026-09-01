@@ -94,6 +94,13 @@ ANORRL.Catalog  = {
 		
 		$.get("/api/catalog", {f: filter, c: category, q: query, p : page}, function(data) {
 			
+			if(!data['success']) {
+				ANORRL.MessageBox.Show(2, "Something went wrong loading catalog items!");
+				ANORRL.Catalog.CurrentlyLoadingCrapBruh = false;
+				ANORRL.Catalog.GrabAssets(undefined, 8, undefined);
+				return;
+			}
+
 			var assets = data['assets'];
 			ANORRL.Catalog.CurrentPage = data['page'];
 			var current_page = ANORRL.Catalog.CurrentPage;

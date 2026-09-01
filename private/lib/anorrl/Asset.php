@@ -186,7 +186,7 @@
 		function isUsable(): bool {
 			$contents = $this->getFileContents();
 			
-			if(AssetVersion::GetLatestVersionOf($this) == null || !$contents) {
+			if($this->getLatestVersionDetails() == null || !$contents) {
 				return false;
 			}
 			return strlen(trim($contents)) > 0;
@@ -243,6 +243,10 @@
 			}
 
 			return $result_array;
+		}
+
+		function resetThumbnail() {
+			$this->getLatestVersionDetails()->resetThumbnail();
 		}
 
 		function getLatestVersionDetails(): AssetVersion|null {
@@ -425,7 +429,7 @@
 
 		function setThumbnailTo(Asset $asset) {
 			if($this->type == AssetType::AUDIO && ($asset->type == AssetType::DECAL || $asset->type == AssetType::IMAGE)) {
-				AssetVersion::GetLatestVersionOf($this)->setThumbnail($asset);
+				$this->getLatestVersionDetails()->setThumbnail($asset);
 			}
 		}
 
@@ -452,7 +456,7 @@
 				$render = Renderer::RenderClothing($id, $is3D);
 			}
 
-			$latest_version = AssetVersion::GetLatestVersionOf($this);
+			$latest_version = $this->getLatestVersionDetails();
 
 			if(!$latest_version)
 				return;

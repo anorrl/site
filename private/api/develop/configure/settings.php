@@ -1,19 +1,6 @@
 <?php
-
-	// handle basic settings requests
-	// e.g `/develop/545/configure/settings`
-	
-	
-	/*
-	ANORRL$EditItem$Name	"BULLSHITLAND"
-	ANORRL$EditItem$Description	"Place where I put scripts I made."
-	ANORRL$EditItem$PublicBox	"on"
-	ANORRL$EditItem$CommentsBox	"on"
-	*/
-
 	use anorrl\Asset;
 	use anorrl\utilities\Utilities;
-	use anorrl\utilities\AssetUploader;
 
 	set_content_type(ARLTYPEJSON);
 
@@ -29,6 +16,11 @@
 
 	if(!$asset) {
 		$result['reason'] = "Failed to retrieve asset.";
+		die(json_encode($result));
+	}
+
+	if(!$asset->isOwner(SESSION->user)) {
+		$result['reason'] = "You are not authorised to perform this action.";
 		die(json_encode($result));
 	}
 

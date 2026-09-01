@@ -8,18 +8,6 @@
 	//if(!SESSION)
 	//	die("{}");
 
-	$types = [
-		AssetType::HAT,
-		AssetType::FACE,
-		AssetType::SHIRT,
-		AssetType::TSHIRT,
-		AssetType::PANTS,
-		AssetType::GEAR,
-		AssetType::EMOTE,
-		AssetType::PACKAGE,
-		AssetType::BODYPARTS,
-	];
-
 	$type = AssetType::HAT->ordinal();
 	$filter = CatalogFilter::MostSold->ordinal();
 	$query = "";
@@ -41,12 +29,8 @@
 		$page = intval($_GET['p']);
 	}
 
-	if(!in_array(AssetType::index($type), $types)) {
-		die(json_encode(["success" => false]));
-	}
-
 	if($page < 1) {
-		redirect("/api/catalog?c=$type&q=$query&p=1");
+		redirect("/api/library?c=$type&q=$query&p=1");
 	}
 
 	$catalog_filter = CatalogFilter::index($filter);
@@ -72,7 +56,7 @@
 	}
 
 	if($total_pages < $page && $page != 1) {
-		redirect("/api/catalog?c=$type&q=$query&p=1");
+		redirect("/api/library?c=$type&q=$query&p=1");
 	}
 
 	$assets = AssetUtils::GetFiltered($catalog_filter, $asset_type, $query, $page, 12);

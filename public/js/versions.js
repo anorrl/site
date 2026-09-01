@@ -118,7 +118,7 @@ ANORRL.Versions = {
 					nextPager.css("display", "inline");
 				}
 
-				pagercontainer.find("input").val(current_page);
+				pagercontainer.find("input[type='text']").val(current_page);
 				pagercontainer.find("#page-counter").html(total_pages);
 			}
 
