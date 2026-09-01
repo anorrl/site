@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 25, 2026 at 07:07 PM
--- Server version: 12.3.2-MariaDB
--- PHP Version: 8.5.8
+-- Generation Time: Sep 01, 2026 at 10:15 PM
+-- Server version: 12.3.3-MariaDB
+-- PHP Version: 8.5.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -247,6 +247,18 @@ CREATE TABLE `friends` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `gears`
+--
+
+DROP TABLE IF EXISTS `gears`;
+CREATE TABLE `gears` (
+  `id` int(11) NOT NULL,
+  `type` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `inventory`
 --
 
@@ -287,8 +299,7 @@ CREATE TABLE `places` (
   `visit_count` int(11) NOT NULL DEFAULT 0,
   `weekly_visits` int(11) NOT NULL,
   `currently_playing_count` int(11) NOT NULL DEFAULT 0,
-  `gears_enabled` int(1) NOT NULL DEFAULT 0,
-  `allowed_gears` int(11) NOT NULL DEFAULT -1,
+  `gears_allowed` int(1) NOT NULL DEFAULT 10,
   `chat_option` int(1) NOT NULL DEFAULT 2,
   `genre` int(2) NOT NULL DEFAULT 0,
   `ratings` int(11) NOT NULL DEFAULT 0
@@ -405,9 +416,10 @@ CREATE TABLE `users` (
   `id` int(10) NOT NULL,
   `name` varchar(20) NOT NULL,
   `blurb` varchar(1000) NOT NULL,
-  `discord` varchar(256) NOT NULL,
   `password` varchar(256) NOT NULL,
   `security` varchar(255) NOT NULL,
+  `appid` varchar(20) NOT NULL DEFAULT '',
+  `admin` int(1) NOT NULL DEFAULT 0,
   `lastprofileupdate` timestamp NOT NULL DEFAULT current_timestamp(),
   `has_pfp_set` int(1) NOT NULL DEFAULT 0,
   `has_banner_set` int(1) NOT NULL DEFAULT 0,
@@ -437,6 +449,7 @@ CREATE TABLE `users_settings` (
   `loadingscreens` int(1) NOT NULL DEFAULT 1,
   `profilemusic` int(1) NOT NULL DEFAULT 1,
   `accessibility` int(1) NOT NULL DEFAULT 0,
+  `plicon` int(11) DEFAULT 0,
   `last_username_change` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
