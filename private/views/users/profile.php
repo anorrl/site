@@ -166,7 +166,7 @@
 
 		<div id="profile-stats"> 
 			<div id="profile-name">
-				<img <?php if(!$owner): ?>title="this means they're <?= $online ? "online" : "offline" ?>!"<?php endif ?> src="/public/images/icons/status/<?= !$online ? "online" : "offline" ?>.png" width="12">
+				<img <?php if(!$owner): ?>title="this means they're <?= $online ? "online" : "offline" ?>!"<?php endif ?> src="/public/images/icons/status/<?= $online ? "online" : "offline" ?>.png" width="12">
 					<?= $user->name ?>
 					<?php if($user->admin): ?>
 					<img src="/public/images/icons/shield.png" style="height: 18px; margin-bottom: -3px;" title="this fellas is an admin!!!">

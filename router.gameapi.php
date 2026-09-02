@@ -15,7 +15,7 @@
 	route('GET',      '/IDE/Upload.aspx', '/private/views/ide/publish.php');
 	route('GET|POST', '/IDE/PublishNewPlace.aspx', '/private/views/ide/publishnewplace.php');
 	route('GET',      '/IDE/ClientToolbox.aspx', '/private/views/ide/toolbox.php');
-	route('GET',      '/ide/toolbox', '/private/views/ide/toolbox.php');
+	route('GET',      '/ide/toolbox', '/private/views/ide/toolbox.php', false);
 	route('GET|POST', '/Data/Upload.ashx', '/private/gameapis/ide/upload.php');
 	route('GET|POST', '/Game/Upload.ashx', '/private/views/ide/goingupload.php');
 

@@ -7,9 +7,6 @@
 
 	$header_check_user = SESSION ? SESSION->user : null;
 
-	$rand_pic = new Splasher(Utilities::GetFilesArray("public/images/randoms/"), false, "RandomImages")->getRandomSplash();
-
-	$randomsignsplash = new FileSplasher("sign")->getRandomSplash();
 
 	if(session_status() == PHP_SESSION_NONE)
 		session_start();
@@ -151,17 +148,6 @@
 				background: url('/public/images/badapple.gif') !important;
 			}
 		</style>
-		<?php endif ?>
-		<?php if($this->settings->randoms): ?>
-		<img src="/public/images/randoms/<?= $rand_pic ?>" style="position: fixed;bottom: 0px;left: 0px;width: 250px;z-index: 9999;pointer-events: none;">
-		<?php endif ?>
-		<?php if($this->settings->teto): ?>
-		<div id="TetoContainer">
-			<div id="TetoSplashContainer">
-				<p id="TetoSplash"><?= new FileSplasher("teto")->getRandomSplash(); ?></p>
-			</div>
-			<img id="Teto" src="/public/images/tetospeech.png">
-		</div>
 		<?php endif ?>
 		<?php if($this->settings->accessibility): ?>
 		<style>
