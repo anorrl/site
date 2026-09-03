@@ -1,11 +1,11 @@
-<anorrl xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://{domain}/anorrl.xsd" version="4">
+<anorrl xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="{scheme}://{domain}/anorrl.xsd" version="4">
 	<External>null</External>
 	<External>nil</External>
 	<Item class="Pants" referent="RBX9F2F0ED79CBE4747857ED528B4B05979">
 		<Properties>
 			<string name="Name">Clothing</string>
 			<Content name="PantsTemplate">
-			    <url>http://{domain}/asset/?id={assetid}</url>
+			    <url>arlassetid://{assetid}</url>
 			</Content>
 		</Properties>
 	</Item>

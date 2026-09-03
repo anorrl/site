@@ -11,35 +11,26 @@
 	use anorrl\utilities\ClientDetector;
 	use anorrl\utilities\ImageUtils;
 
-	if(!isset($_GET['id']) && !isset($_GET['ID']) && !isset($_GET['Id']) && !isset($_GET['assetName']) && !isset($_GET['universeId'])) {
+	$raw_id = $_GET['id'] ?? $_GET['ID'] ?? $_GET['Id'] ?? null;
+	$raw_assetname = $_GET['assetName'] ?? null;
+	$raw_universeid = $_GET['universeId'] ?? null;
+
+	if(is_null($raw_id) && is_null($raw_assetname) && is_null($raw_universeid)) {
 		exit_http(500);
 	}
-
-	if(isset($_GET['id'])) {
-		$id = intval($_GET["id"]);
-	} else if(isset($_GET['ID'])) {
-		$id = intval($_GET["ID"]);
-	} else if(isset($_GET['Id'])) {
-		$id = intval($_GET["Id"]);
-	} else {
-		$id = null;
-	}
-
-	if(isset($_GET['assetName']) && isset($_GET['universeId'])) {
-		$universe = Universe::FromID(intval($_GET['universeId']));
-		$name = urldecode($_GET['assetName']);
-	} else {
-		$name = null;
-		$universe = null;
-	}
+	
+	$id = !is_null($raw_id) ? intval($raw_id) : null;
 
 	$domain = CONFIG->domain;
 	
 	$user = SESSION ? SESSION->user : null;
 
-	if($id != null) {
+	if(!is_null($id))
 		$asset = Asset::FromID($id);
-	} else {
+	else {
+		$universe = Universe::FromID(intval($_GET['universeId']));
+		$name = urldecode($_GET['assetName']);
+
 		if($universe && $name) {
 			$alias = Alias::FromName($universe, $name);
 
@@ -137,10 +128,9 @@
 				curl_setopt($ch, CURLOPT_HTTPHEADER, ["Cookie: .ROBLOSECURITY=$roblosec"]);
 				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 				$output = curl_exec($ch);
-				curl_close($ch);
 				
 				$mimetype = ImageUtils::checkMimeType($output);
 				
@@ -158,7 +148,7 @@
 				} else {
 					set_content_type($mimetype);
 
-					if(!str_starts_with($contents, "<anorrl!") || strlen(\CONFIG->domain) == strlen("www.roblox.com")) {
+					if(strlen(\CONFIG->domain) == strlen("www.roblox.com")) {
 						$contents = str_replace("www.roblox.com", $domain, $output);
 						$contents = str_replace("api.roblox.com", $domain, $output);
 						$contents = str_replace("roblox.com",     $domain, $output);
@@ -168,11 +158,13 @@
 						
 						if(!AssetUploader::IsSupportedMesh($contents)) {
 							$mesh_result = MeshConverter::Convert($contents);
-							if($mesh_result && $mesh_result['success'])
-								$contents = $mesh_result['mesh'];
+							if($mesh_result) {
+								if($mesh_result['success'])
+									$contents = $mesh_result['mesh'];
+								else
+									exit_http(500, $mesh_result['reason']);
+							}
 						}
-						
-						// todo: do something with $mesh_result['reason']
 					}
 					
 					file_put_contents($path, $contents);

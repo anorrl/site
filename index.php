@@ -151,6 +151,9 @@
 		return get_asset("thumbs/{$id}");
 	}
 
+	if(!file_exists(get_path_file("PrivateKey.pem")))
+		throw new Exception("Please provide a PrivateKey.pem file! You cannot sign scripts without this!");
+
 	create_folder("../assets/thumbs");
 	create_folder("../assets/3d");
 	create_folder("../users/profiles");

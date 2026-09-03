@@ -9,6 +9,7 @@
 		$user = Session::retrieveUser();	
 
 		$domain = CONFIG->domain;
+		$scheme = CONFIG->prefer_https ? "https" : "http";
 
 		if($result["success"]) {
 			echo json_encode([
@@ -19,7 +20,7 @@
 					"RobuxBalance" => 69,
 					"TicketsBalance" => 420,
 					"IsAnyBuildersClubMember" => false,
-					"ThumbnailUrl" => "http://{$domain}{$user->getThumbsUrlService("player")}"
+					"ThumbnailUrl" => "{$scheme}://{$domain}{$user->getThumbsUrlService("player")}"
 				]
 			]);
 		} else {

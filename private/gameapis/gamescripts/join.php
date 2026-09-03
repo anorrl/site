@@ -18,7 +18,7 @@
 	$user_age = is_null($user) ? 0 : $user->getAccountAge();
 	$user_ticket = "";
 	$session_id = "";
-	$roblox_place = is_null($user);
+	$anorrl_place = is_null($user);
 	$place_id = 0;
 	$universe_id = $_GET['universeId'] ?? 0;
 	$place_creator_id = 0;
@@ -49,13 +49,13 @@
 			$user_age = $player->getAccountAge();
 			$session_id = base64_encode($player->security_key);
 			$user_ticket = $sessionDetails->id;
-			$roblox_place = true;
+			$anorrl_place = true;
 			$place_id = $place->id;
 			$universe_id = $place->universe;
 			$place_creator_id = $place->creator->id;
 			$unknown = false;
 			$game_id = $serverDetails->jobid;
-			$ping_url = "http://{domain}/Game/GamerPinger.ashx?serverID={$serverDetails->id}&jobID={$game_id}";
+			$ping_url = "{scheme}://{domain}/Game/GamerPinger.ashx?serverID={$serverDetails->id}&jobID={$game_id}";
 			$place_chat_type = $place->chat_option->internallabel();
 		}
 	}
@@ -70,20 +70,20 @@
 		"SeleniumTestMode" => false,
 		"UserId" => (int)$user_id,
 		"SuperSafeChat" => $unknown,
-		"CharacterAppearance" => "http://{domain}/Asset/CharacterFetch.ashx?userId={$user_id}",
+		"CharacterAppearance" => "{scheme}://{domain}/Asset/CharacterFetch.ashx?userId={$user_id}",
 		"ClientTicket" => $user_ticket,
 		"GameId" => $game_id,
 		"PlaceId" => $place_id,
 		"MeasurementUrl" => "",
 		"WaitingForCharacterGuid" => "16be1dd8-5462-4ca5-a997-0725d997708b",
-		"BaseUrl" => "http://{domain}/",
+		"BaseUrl" => "{scheme}://{domain}/",
 		"ChatStyle" => $place_chat_type,
 		"CreatorId" => $place_creator_id,
 		"CreatorTypeEnum" => "User",
 		"MembershipType" => "None", // maybe
 		"AccountAge" => $user_age,
 		"CookieStoreEnabled" => false,
-		"IsRobloxPlace" => $roblox_place,
+		"IsANORRLPlace" => $anorrl_place,
 		"GenerateTeleportJoin" => false,
 		"IsUnknownOrUnder13" => $unknown,
 		"SessionId" => $session_id,

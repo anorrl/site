@@ -9,7 +9,7 @@
 	</head>
 	<body class="Page" style="margin: 0;">
 		<input name="__RequestVerificationToken" type="hidden" value="6_eZHOjUPq8Jhw66Ug0so8DxlG33_rZY0TrLaXEc7aMbOKqRbphTsdZWYh_pBl5ud60toqWtjSAZmQHQU93ZLxukFYLaUIRjFnWCQD57CiwhlECKHNRU2ejI5FDEhDWcZ1Ru3g2"/>
-		<div id="NewToolboxContainer" data-isuserauthenticated="<?= !SESSION ? "false" : "true" ?>" data-isdecalcreationenabled="true" data-requesturl="http://<?= CONFIG->domain ?>/asset/" data-isrecentlyinsertedassetenabled="false">
+		<div id="NewToolboxContainer" data-isuserauthenticated="<?= ARLAUTH ? "true" : "false" ?>" data-isdecalcreationenabled="true" data-requesturl="<?= CONFIG->prefer_https ? "https" : "http"; ?>://<?= CONFIG->domain ?>/asset/" data-isrecentlyinsertedassetenabled="false">
 			<div id="ToolboxControls">
 				<div id="SetTabs">
 					<div id="Inventory" class="Tabs">Inventory</div>

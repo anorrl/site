@@ -18,6 +18,7 @@
 			}
 			
 			$this->replacePlaceholder("domain", \CONFIG->domain);
+			$this->replacePlaceholder("scheme", \CONFIG->prefer_https ? "https" : "http");
 
 			$signed_script = "\r\n".$this->script;
 			$signature = $this->getSignature($signed_script);
@@ -41,7 +42,8 @@
 
 		public static function SignNonScript($data, string $header = "arlsig") {
 			$data = self::ReplacePlaceholderStatic($data, "domain", \CONFIG->domain);
-		
+			$data = self::ReplacePlaceholderStatic($data, "scheme", \CONFIG->prefer_https ? "https" : "http");
+			
 			$signed_data = "\r\n".$data;
 
 			$signature = "";

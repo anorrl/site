@@ -1,10 +1,11 @@
 <?php
     
 	$domain = CONFIG->domain;
-	
-    if(SESSION) {
+	$scheme = CONFIG->prefer_https ? "https" : "http";
+
+    if(ARLAUTH) {
 		$user = SESSION->user;
-        exit("http://$domain/Login/Negotiate.ashx?suggest=".base64_encode($user->security_key));
+        exit("{$scheme}://$domain/Login/Negotiate.ashx?suggest=".base64_encode($user->security_key));
     } else {
         exit_http(401);
     }

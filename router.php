@@ -88,7 +88,7 @@
 		require $path;
 	}
 
-	route('GET',      '/test', '/private/views/test.php');
+	route('GET',      '/test', '/private/views/test.php', false);
 
 	load("main");
 	load("api");

@@ -12,6 +12,7 @@
 	}
 
 	$user = SESSION->user;
+	$scheme = CONFIG->prefer_https ? "https" : "http";
 
 	function FunnyBoolToStr(bool $value) {
 		return $value ? "True" : "False";
@@ -202,7 +203,7 @@
 				{
 					try
 					{
-						window.external.SaveUrl('http://<?= $_SERVER['SERVER_NAME'] ?>/Data/Upload.ashx?assetid=<?= $place_verified_id ?>&type=Place&name=<?= urlencode($name) ?>&description=<?= urlencode($description) ?>&ispublic=<?= FunnyBoolToStr($isPublic) ?>&commentsenabled=<?= FunnyBoolToStr($commentsEnabled) ?>&serversize=<?= $server_size ?>&iscopylocked=<?= FunnyBoolToStr($isCopylocked) ?>');
+						window.external.SaveUrl('<?= $scheme ?>://<?= $_SERVER['SERVER_NAME'] ?>/Data/Upload.ashx?assetid=<?= $place_verified_id ?>&type=Place&name=<?= urlencode($name) ?>&description=<?= urlencode($description) ?>&ispublic=<?= FunnyBoolToStr($isPublic) ?>&commentsenabled=<?= FunnyBoolToStr($commentsEnabled) ?>&serversize=<?= $server_size ?>&iscopylocked=<?= FunnyBoolToStr($isCopylocked) ?>');
 						document.getElementById("Uploading").style.display='none';
 						document.getElementById("Confirmation").style.display='block';
 					}
@@ -210,7 +211,7 @@
 					{
 						try
 						{
-							window.external.SaveUrl('http://<?= $_SERVER['SERVER_NAME'] ?>/Data/Upload.ashx?assetid=<?= $place_verified_id ?>&type=Place&name=<?= urlencode($name) ?>&description=<?= urlencode($description) ?>&ispublic=<?= FunnyBoolToStr($isPublic) ?>&commentsenabled=<?= FunnyBoolToStr($commentsEnabled) ?>&serversize=<?= $server_size ?>&iscopylocked=<?= FunnyBoolToStr($isCopylocked) ?>');
+							window.external.SaveUrl('<?= $scheme ?>://<?= $_SERVER['SERVER_NAME'] ?>/Data/Upload.ashx?assetid=<?= $place_verified_id ?>&type=Place&name=<?= urlencode($name) ?>&description=<?= urlencode($description) ?>&ispublic=<?= FunnyBoolToStr($isPublic) ?>&commentsenabled=<?= FunnyBoolToStr($commentsEnabled) ?>&serversize=<?= $server_size ?>&iscopylocked=<?= FunnyBoolToStr($isCopylocked) ?>');
 							document.getElementById("Uploading").style.display='none';
 							document.getElementById("Confirmation").style.display='block';
 						}

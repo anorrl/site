@@ -58,6 +58,7 @@
 
 
 	$domain = CONFIG->domain;
+	$scheme = CONFIG->prefer_https ? "https" : "http";
 
 	$splash = new FileSplasher("didyouknow")->getRandomSplash();
 
@@ -78,7 +79,7 @@
 			if(!Number(placeid)) {
 				window.location.href = "/develop/projects?universeId="+$(this).data("universe-id");
 			} else {
-				window.external.StartGame("http://<?= $domain ?>/","http://<?= $domain ?>/","http://<?= $domain ?>/game/edit.slua?placeId=" + placeid);
+				window.external.StartGame("<?= $scheme?>://<?= $domain ?>/","<?= $scheme ?>://<?= $domain ?>/","<?= $scheme ?>://<?= $domain ?>/game/edit.slua?placeId=" + placeid);
 			}
 		});
 

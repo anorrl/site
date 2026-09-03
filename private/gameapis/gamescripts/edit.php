@@ -22,7 +22,7 @@
 		exit_http(403);
 
 
-	$uploadurl = "http://{domain}/Data/Upload.ashx?assetid=".$place->id;
+	$uploadurl = "{scheme}://{domain}/Data/Upload.ashx?assetid=".$place->id;
 	
 	// the fuck?
 	if(!$place->copylocked && $place->creator->id != $user->id) {

@@ -1,6 +1,4 @@
 <?php
-	$auth_user = SESSION ? SESSION->user : null;
-
 	if(session_status() == PHP_SESSION_NONE)
 		session_start();
 
@@ -49,6 +47,10 @@
 				<div style="float: right;margin-top: 6px;margin-right: 6px;">
 					<a class="header-link" href="/api/logout?redirect=/" title="You sure you want to do this?">Logout</a>
 				</div>
+				<?php else: ?>
+				<div style="float: right;margin-top: 6px;margin-right: 6px;">
+					<a class="header-link" href="/" title="Cmon!">Login</a>
+				</div>
 				<?php endif ?>
 				<div id="container">
 					<div id="links">
@@ -60,15 +62,15 @@
 					</div>
 				</div>
 			</div>
-			<?php if($auth_user): ?>
+			<?php if(ARLAUTH): ?>
 			<div id="submenu">
 				<div id="container">
-					<a href="<?= $auth_user->getURL() ?>" <?php if($this->internal_name == "user_profile"):  ?>selected<?php endif ?>>Profile</a>
-					<a href="/my/profile" <?php                 if($this->internal_name == "my/profile"):    ?>selected<?php endif ?>>Account</a>
-					<a href="/my/character" <?php               if($this->internal_name == "my/character"):  ?>selected<?php endif ?>>Character</a>
-					<a href="/my/friends" <?php                 if($this->internal_name == "my/friends"):    ?>selected<?php endif ?>>Friends</a>
-					<a href="/develop/create/" <?php            if($this->internal_name == "my/create"):     ?>selected<?php endif ?>>Create</a>
-					<a href="/my/stuff" <?php                   if($this->internal_name == "my/stuff"):      ?>selected<?php endif ?>>Stuff</a>
+					<a href="<?= SESSION->user->getURL() ?>" <?php if($this->internal_name == "user_profile"):  ?>selected<?php endif ?>>Profile</a>
+					<a href="/my/profile" <?php                    if($this->internal_name == "my/profile"):    ?>selected<?php endif ?>>Account</a>
+					<a href="/my/character" <?php                  if($this->internal_name == "my/character"):  ?>selected<?php endif ?>>Character</a>
+					<a href="/my/friends" <?php                    if($this->internal_name == "my/friends"):    ?>selected<?php endif ?>>Friends</a>
+					<a href="/develop/create/" <?php               if($this->internal_name == "my/create"):     ?>selected<?php endif ?>>Create</a>
+					<a href="/my/stuff" <?php                      if($this->internal_name == "my/stuff"):      ?>selected<?php endif ?>>Stuff</a>
 				</div>
 				<div id="billboard" style="z-index: 10;">
 					<div id="container">
@@ -76,8 +78,8 @@
 							<table id="profile">
 								<tbody>
 									<tr>
-										<td width="40" title="Hey! That's you!"><img class="header-pfp-image" src="<?= $auth_user->getThumbsUrl() ?>" width="42"></td>
-										<td title="Hey! That's you!"><a href="<?= $auth_user->getURL() ?>"><?= $auth_user->name ?></a></td>
+										<td width="40" title="Hey! That's you!"><img class="header-pfp-image" src="<?= SESSION->user->getThumbsUrl() ?>" width="42"></td>
+										<td title="Hey! That's you!"><a href="<?= SESSION->user->getURL() ?>"><?= SESSION->user->name ?></a></td>
 									</tr>
 								</tbody>
 							</table>

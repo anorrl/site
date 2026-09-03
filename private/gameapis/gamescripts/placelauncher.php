@@ -29,6 +29,7 @@
 
 	function createResponse(GameServer $server, GameSession $session) {
 		$domain = CONFIG->domain;
+		$scheme = CONFIG->prefer_https ? "https" : "http";
 		$arbiter_pub_ip = CONFIG->arbiter->location->public;
 
 		$security = urlencode(base64_encode($session->player->security_key));
@@ -37,8 +38,8 @@
 			[
 				"jobId" => $server->jobid,
 				"status" => 2,
-				"joinScriptUrl" => "http://$domain/game/join.ashx?serverToken={$server->id}&sessionToken={$session->id}&server=$arbiter_pub_ip",
-				"authenticationUrl" => "https://$domain/Login/Negotiate.ashx",
+				"joinScriptUrl" => "$scheme://$domain/game/join.ashx?serverToken={$server->id}&sessionToken={$session->id}&server=$arbiter_pub_ip",
+				"authenticationUrl" => "$scheme://$domain/Login/Negotiate.ashx",
 				"authenticationTicket" => $security,
 				"message" => "HELLOOOOOOOO!!!!!"
 			]
@@ -171,6 +172,7 @@
 		if($_GET['request'] == "CloudEdit" && isset($_GET['placeId'])) {
 
 			$domain = CONFIG->domain;
+			$scheme = CONFIG->prefer_https ? "https" : "http";
 			
 			$place = Place::FromID(intval($_GET['placeId']));
 			$user = SESSION ? SESSION->user : null;
@@ -211,13 +213,13 @@
 						"UserName" => $user->name,
 						"UserId" => $user->id,
 						"SuperSafeChat" => false,
-						"CharacterAppearance" => "http://$domain/Asset/CharacterFetch.ashx?userId={$user->id}",
+						"CharacterAppearance" => "$scheme://$domain/Asset/CharacterFetch.ashx?userId={$user->id}",
 						"ClientTicket" => $session->id,
 						"GameId" =>"00000000-0000-0000-0000-000000000000",
 						"PlaceId" => $place->id,
 						"MeasurementUrl" => "",
 						"WaitingForCharacterGuid" => "16be1dd8-5462-4ca5-a997-0725d997708b",
-						"BaseUrl" => "http://$domain/",
+						"BaseUrl" => "$scheme://$domain/",
 						"ChatStyle" => "ClassicAndBubble",
 						"VendorId" => 0,
 						"CreatorId" => $place->creator->id,

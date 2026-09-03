@@ -34,7 +34,7 @@
 		 * 
 		 * @deprecated Client supports this stuff now
 		 * @param string $contents
-		 * @return array{error: bool, mesh: string|array{error: bool, reason: string}}
+		 * @return array{success: bool, mesh: string|array{success: bool, reason: string}}
 		 */
 		public static function Convert(string $contents): array {
 			$reader = new ByteReader();

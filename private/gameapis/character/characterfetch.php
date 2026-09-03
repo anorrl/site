@@ -6,9 +6,10 @@
     disable_cache();
 
 	$domain = CONFIG->domain;
+	$scheme = CONFIG->prefer_https ? "https" : "http";
 
     if(isset($_GET['assetId'])): ?>
-http://<?= $domain ?>/Asset/BodyColors.ashx?clothing;http://<?= $domain ?>/asset/?id=<?= $_GET['assetId'] ?>
+<?= $scheme ?>://<?= $domain ?>/Asset/BodyColors.ashx?clothing;<?= $scheme ?>://<?= $domain ?>/asset/?id=<?= intval($_GET['assetId']) ?>
 <?php else: 
 
 $userId = intval($_GET['userId']) ?? 1;
