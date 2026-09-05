@@ -91,21 +91,18 @@
 		text-align: center;
 		margin-bottom: 5px;
 		color: white;
-		width: 220px;
+		width: 212px;
 		padding: 0px;
 		background: none;
-		background-size: 100%;
+		background-size: 636px;
 		cursor: pointer;
-		height: 55px;
+		height: 54px;
 		border: 0px;
-	}
-
-	.play-btn {
-		background-image: url("/public/images/buttons/play.png");
+		background-image: url("/public/images/buttons/item_buttons.png");
 	}
 
 	.edit-btn {
-		background-image: url("/public/images/buttons/edit.png");
+		background-position: -212px 0px;
 	}
 
 	.play-btn:hover,
@@ -113,9 +110,12 @@
 		filter: brightness(1.15);
 	}
 
-	.play-btn:active,
+	.play-btn:active {
+		background-position: 0 54px;
+	}
+
 	.edit-btn:active {
-		background-position: 0 56px;
+		background-position: -212px 54px;
 	}
 
 	table#controls {
