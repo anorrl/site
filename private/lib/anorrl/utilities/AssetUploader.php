@@ -25,6 +25,9 @@
 		 * @return string|null null if nothing is wrong, string for a generated "Please wait [X] seconds" message
 		 */
 		private static function CanUpload(User $user): string|null {
+		    if($user->admin)
+		        return null;
+			
 			$timer = 31;
 			if($user->getLatestAssetUploaded() != null) {
 				$difference = Utilities::GetSecondsElapsedFrom($user->getLatestAssetUploaded()->created_at);
