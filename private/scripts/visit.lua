@@ -84,7 +84,7 @@ if not addedBuildTools then
 end
 
 if success then
-	pcall(function() warn("PLEASE DON'T USE THIS FOR ACTUAL TESTING BECAUSE THIS ISN'T FUCKING ACCURATE! USE THE SERVER/CLIENT TESTING WAY!!!!!") end)
+	pcall(function() warn("Play Solo is inaccurate as it doesn't have FilteringEnabled! Please use the Server/Client testing!") end)
 	message.Parent = nil
 else
 	print(err)
