@@ -1,9 +1,7 @@
 # .anorrl
 also known as ANOtherRobloxRetakeLol
 
-This uses the [ANRSAL](https://github.com/unc-nnected/ANotherRccServiceArbiterLol/) project (created by [Aria](https://github.com/unc-nnected)) as to render and start gameservers so please use that when hosting this source!
-
-However, there is a custom version of the arbiter [here](https://github.com/anorrl/arbiter) that is forked from ANRSAL.
+This project uses the second edition of ANSRAL. At least it's planned to anyways,
 
 this is a FOSS project, you can submit issues and pull requests.
 
@@ -15,7 +13,7 @@ Check out the [Trello page](https://trello.com/b/7NXCTXXp/anorrl-2016) to see wh
 
 <img width="220" height="220" alt="wait i think thats daria" src="https://github.com/user-attachments/assets/353173da-b68b-4df4-a4b6-e253ac7c7ea7" />
 
-## .about contributing
+## .about_contributing
 
 Ok hey, if you want to contribute to the site. PLEASE invest in a local webserver.
 
@@ -27,7 +25,13 @@ Also in your pull requests, mention WHAT you have done and provide screenshots o
 
 # I HEAVY ADVISE AGAINST USING GITHUB'S ON SITE EDITOR.
 
+## .usage
 
+Please be aware that when using this project, that it would be recommended that you credit us when you use the source for anything (or as a rehost).
+
+And do NOT impersonate as us, we do not like that!!!
+
+<hr>
 
 thank you :]
 
