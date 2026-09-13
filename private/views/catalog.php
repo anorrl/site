@@ -34,6 +34,54 @@
 		</table>
 	</div>
 </div>
+<!--
+<style>
+	#item-modal .tab-body  {
+		background: linear-gradient(#DDD, #BBB);
+		padding: 10px;
+		width: 700px;
+		height: 300px;
+		border: 2px solid black;
+		display: none;
+		color: black;
+	}
+
+	#item-modal ul{
+		list-style: none;
+		margin: 0px;
+	}
+	#item-modal li{
+		display: inline-block;
+		background: linear-gradient(#DDD, #CCC);
+		border: 2px solid black;
+		color: black;
+		padding: 5px;
+		width: 125px;
+		margin: 0px 5px;
+		text-align: center;
+		border-bottom: 0px;
+		cursor: pointer;
+		font-family: 'Fira Mono';
+	}
+
+	#item-modal li:hover,#item-modal li[selected] {
+		background: linear-gradient(#BBB, #DDD);
+	}
+</style>
+<div id="item-modal">
+	<ul>
+		<li selected>details</li>
+		<li>sales</li>
+		<li>comments</li>
+	</ul>
+	<div class="tab-body" data-tab="details" style="display: block">
+		<h2>test</h2>
+	</div>
+</div>
+<script>
+	$("#item-modal").modal();
+</script>
+-->
 <h2 class="page-title">.catalog</h2>
 <h3 class="page-slogan"><?= $randomsplash ?></h3>
 <div style="display: flex; gap: 10px;  align-items: flex-start;">

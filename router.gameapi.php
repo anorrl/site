@@ -1,10 +1,15 @@
 <?php
+	// studio
+	route('GET',      '/develop/projects', '/private/views/develop/projects.php', '/develop/login');
+	route('GET|POST', '/ide/publish', '/private/views/develop/projects.php');
+
 	// game apis
+	route('GET',      '/thumbs/', '/private/thumbs/index.php');
+	
 	route('GET',      '//asset/', '/private/gameapis/assetdeliverer.php');
 	route('GET',      '/asset/', '/private/gameapis/assetdeliverer.php');
 	route('GET',      '/Asset/', '/private/gameapis/assetdeliverer.php');
 	
-	//route('GET',      '/users/', '/private/views/users/index.php');
 	route('GET',      '/Users/[i:userId]', '/private/gameapis/users/data.php');
 	route('GET',      '/users/[i:userId]/canmanage/[i:placeId]', '/private/gameapis/users/canmanage.php');
 	route('GET',      '//users/[i:userId]/canmanage/[i:placeId]', '/private/gameapis/users/canmanage.php');

@@ -95,7 +95,7 @@ $(function(){
 
 		reader.onload = function (e) {
 			$("#crop-modal").attr("type", type);
-			$("#crop-modal").modal({showClose: false});
+			$("#crop-modal").modal();
 			$('#cropper-img').attr('src', e.target.result).width(500);
 			$('#cropper-img').cropper({
 				aspectRatio: type == "banner" ? 97 / 22 : 1/1,
@@ -162,7 +162,7 @@ $(function(){
 	})
 
 	$("a[href='open-modal']").click(function() {
-		$("#image-modal").modal({showClose: false});
+		$("#image-modal").modal();
 	});
 
 	$("a[href='open-modal']").removeAttr("href");
