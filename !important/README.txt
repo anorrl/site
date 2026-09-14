@@ -5,16 +5,16 @@ standard file structure should be:
 [...]/anorrl/
 
  - assets/
- - - thumbs/
- - - 3d/
+ |- thumbs/
+ L_ 3d/
 
  - site
 
  - users/
- - - renders/
- - - - headshots/
- - - - 3d/
- - - profiles/
+ |- renders/
+ |-- headshots/
+ |-- 3d/
+ L_ profiles/
 
 these folders should be generated automatically (just give the parent folder of the site same permissions as the webhost so that it can actually create them)
 
