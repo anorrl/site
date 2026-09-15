@@ -13,7 +13,7 @@
 	if(!$place)
 		exit_http(403);
 
-	die(new Script("placespecificscript")->sign([
+	die(Script::load("placespecificscript")->sign([
 		"id" => $place->id,
 		"access" => CONFIG->access->key
 	]));

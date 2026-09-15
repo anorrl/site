@@ -1,50 +1,7 @@
--- Prepended to Edit.lua and Visit.lua and Studio.lua and PlaySolo.lua--
-
--- maybe try find the placeid and creatorid?
-
-local placeID = {placeid}
-local creatorID = 0
-
-pcall(function() game:SetPlaceID(placeID) end)
-
-visit = game:GetService("Visit")
-
-local message = Instance.new("Message")
-message.Parent = workspace
-message.archivable = false
-
-game:GetService("ScriptInformationProvider"):SetAssetUrl("{scheme}://{domain}/asset/")
-game:GetService("ContentProvider"):SetThreadPool(16)
-pcall(function() game:GetService("InsertService"):SetFreeModelUrl("{scheme}://{domain}/Game/Tools/InsertAsset.ashx?type=fm&q=%s&pg=%d&rs=%d") end) -- Used for free model search (insert tool)
-pcall(function() game:GetService("InsertService"):SetFreeDecalUrl("{scheme}://{domain}/Game/Tools/InsertAsset.ashx?type=fd&q=%s&pg=%d&rs=%d") end) -- Used for free decal search (insert tool)
-
-settings().Diagnostics:LegacyScriptMode()
-
-game:GetService("InsertService"):SetBaseSetsUrl("{scheme}://{domain}/Game/Tools/InsertAsset.ashx?nsets=10&type=base")
-game:GetService("InsertService"):SetUserSetsUrl("{scheme}://{domain}/Game/Tools/InsertAsset.ashx?nsets=20&type=user&userid=%d")
-game:GetService("InsertService"):SetCollectionUrl("{scheme}://{domain}/Game/Tools/InsertAsset.ashx?sid=%d")
-game:GetService("InsertService"):SetAssetUrl("{scheme}://{domain}/asset/?id=%d")
-game:GetService("InsertService"):SetAssetVersionUrl("{scheme}://{domain}/asset/?assetversionid=%d")
-
-pcall(function() game:GetService("SocialService"):SetFriendUrl("{scheme}://{domain}/Game/LuaWebService/HandleSocialRequest.ashx?method=IsFriendsWith&playerid=%d&userid=%d") end)
-pcall(function() game:GetService("SocialService"):SetBestFriendUrl("{scheme}://{domain}/Game/LuaWebService/HandleSocialRequest.ashx?method=IsBestFriendsWith&playerid=%d&userid=%d") end)
-pcall(function() game:GetService("SocialService"):SetGroupUrl("{scheme}://{domain}/Game/LuaWebService/HandleSocialRequest.ashx?method=IsInGroup&playerid=%d&groupid=%d") end)
-pcall(function() game:SetCreatorID(creatorID, Enum.CreatorType.User) end)
-
-pcall(function() game:SetScreenshotInfo("") end)
-pcall(function() game:SetVideoInfo("") end)
-
-pcall(function() settings().Rendering.EnableFRM = false end)
-pcall(function() settings()["Task Scheduler"].PriorityMethod = Enum.PriorityMethod.AccumulatedError end)
-
-game:GetService("ChangeHistoryService"):SetEnabled(false)
 pcall(function() game:GetService("Players"):SetBuildUserPermissionsUrl("{scheme}://{domain}/Game/BuildActionPermissionCheck.ashx?assetId=0&userId=%d&isSolo=true") end)
-pcall(function() game:GetService("Players"):SetChatStyle(Enum.ChatStyle.ClassicAndBubble) end)
-
-workspace:SetPhysicsThrottleEnabled(true)
 
 local addedBuildTools = false
-local screenGui = game:GetService("CoreGui"):FindFirstChild("RobloxGui")
+local screenGui = game:GetService("CoreGui"):FindFirstChild("ANORRLGui")
 
 function doVisit()
 	message.Text = "Loading Game"

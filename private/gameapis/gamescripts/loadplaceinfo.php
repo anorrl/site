@@ -13,7 +13,7 @@
 	if(!$place)
 		exit_http(403);
 
-	die(new Script("loadplaceinfo")->sign([
+	die(Script::load("loadplaceinfo")->sign([
 		"creator" => $place->creator->id
 	]));
 		

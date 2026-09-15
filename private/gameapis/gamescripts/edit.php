@@ -23,16 +23,23 @@
 
 
 	$uploadurl = "{scheme}://{domain}/Data/Upload.ashx?assetid=".$place->id;
-	
+	$placeid = $place->id;
+	$universeid = $place->universe;
+	$creatorid = $place->creator->id;
+
 	// the fuck?
 	if(!$place->copylocked && $place->creator->id != $user->id) {
 		$uploadurl = "";
+		$placeid = 0;
+		$universeid = 0;
+		$creatorid = 0;
 	}
 
-	die(new Script("edit")->sign([
-		"placeid" => $place->id,
-		"universeid" => $place->universe,
+	die(Script::load("edit")->prepend("preload")->sign([
+		"placeid" => $placeid,
+		"universeid" => $universeid,
+		"creatorid" => $creatorid,
 		"uploadurl" => $uploadurl,
-		"creatorid" => $place->creator->id
+		"changehistory" => true,
 	]));
 ?>

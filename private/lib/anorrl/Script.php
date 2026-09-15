@@ -4,11 +4,26 @@
 	class Script {
 		public string $script;
 
-		function __construct(string $path) {
-			$this->script = $this->loadScript($path);
+		public static function load(string $path): self {
+			return new self(self::loadScript($path));
+		}
+
+		private static function loadScript($path) {
+			return file_get_contents(get_path_sitefile("private/scripts/$path.lua"));
+		}
+		
+		function __construct(string $script) {
+			$this->script = $script;
+		}
+
+		function prepend(string $path) {
+			$this->script = self::loadScript($path) . $this->script;
+			return $this;
 		}
 
 		function replacePlaceholder(string $valname, mixed $val) {
+			if(is_bool($val))
+				$val = $val ? "true" : "false";
 			$this->script = str_replace("{".$valname."}", strval($val), $this->script);
 		}
 
@@ -32,11 +47,9 @@
 			return base64_encode($signature);
 		}
 
-		private function loadScript($path) {
-			return file_get_contents(get_path_sitefile("private/scripts/$path.lua"));
-		}
-
 		private static function ReplacePlaceholderStatic(mixed $data, string $valname, mixed $val) {
+			if(is_bool($val))
+				$val = $val ? "true" : "false";
 			return str_replace("{".$valname."}", strval($val), $data);
 		}
 

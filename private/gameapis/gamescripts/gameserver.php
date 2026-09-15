@@ -3,5 +3,5 @@
 
 	set_content_type(ARLTYPEPLAIN);
 
-	die(new Script("gameserver")->sign());
+	die(Script::load("gameserver")->sign());
 ?>

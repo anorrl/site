@@ -19,7 +19,7 @@
 			$place_id = intval($pid);
 	}
 
-	die(new Script("visit")->sign(
+	die(Script::load("visit")->sign(
 	[
 		"userid" => $userid,
 		"username" => $username,

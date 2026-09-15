@@ -1,5 +1,7 @@
 <?php
 	// lifted from pixie - by parakeet
+	if(session_status() != PHP_SESSION_ACTIVE)
+		session_start();
 
 	define('CONFIG', json_decode(file_get_contents(__DIR__."/../settings.json")));
 
@@ -27,19 +29,13 @@
 
 	if(Database::singleton()->run("SELECT `id` FROM `users`")->rowCount() == 0)
 		Session::registerAdmin("ANORRL", md5(rand()));
-		
 
 	$session_user = Session::retrieveUser();
 
-	if(session_status() != PHP_SESSION_ACTIVE) {
-		session_start();
-	}
-
-	if($session_user != null) {
+	if($session_user)
 		define('SESSION', new Session($session_user));
-	} else {
+	else
 		define('SESSION', false);
-	}
 
 	/**
 	 * ARLAUTH = false/true
