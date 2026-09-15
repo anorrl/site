@@ -64,6 +64,10 @@ hr {
 	color: var(--line-border-color);
 }
 
+input[type="checkbox"] {
+	cursor: pointer;
+}
+
 @keyframes bgScroll {
 	0% {
 		background-position : 0px 0px;
@@ -151,7 +155,6 @@ hr {
 	display: inline-block;
 	background: none;
 	background: linear-gradient(90deg,#bfb500 0%, #ad8b0fc2 50%, #00000000 100%);
-	
 }
 
 #header #logo a img {
@@ -275,12 +278,16 @@ hr {
 	padding: 15px 0px;
 }
 
-.box, .box.rounded, .box.input {
+.box, .box.rounded, .box.input, .box.assetholder {
 	border: 2px solid var(--border-color);
 	padding: 5px;
 	color: white;
 	background: #492265;
 	background: linear-gradient(0deg,#1a0c23 0%, #492265 100%);
+}
+
+.box.assetholder {
+	text-align: center;
 }
 
 .box.input  {
@@ -294,6 +301,23 @@ hr {
 .box.input {
 	background: #492265;
 	background: linear-gradient(180deg,#1a0c23 0%, #492265 100%);
+}
+
+/* name */
+.box.assetholder #name {
+	margin: 5px 0px;
+	margin-bottom: 3px;
+}
+/* image container */
+.box.assetholder #img-container {
+	border-bottom: 1px solid var(--lighter-border-color);
+	padding: 5px 0px;
+}
+.box.assetholder #img-container img {
+	width: 206px;
+	height: 206px;
+	display: inline-block;
+	object-fit: cover;
 }
 
 .button {

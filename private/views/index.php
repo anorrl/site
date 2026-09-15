@@ -173,7 +173,7 @@
 			<img src="<?= $user->getThumbsUrlAvatar(250) ?>" width="250px">
 			<div style="margin-top:-20px; margin-bottom: 15px; font-weight: bold;">
 				<a href="<?= $user->getURL() ?>">.profile</a><span class="spacer">&nbsp;</span>
-				<a href="/my/profile">.settings</a><span class="spacer">&nbsp;</span>
+				<a href="/my/account">.settings</a><span class="spacer">&nbsp;</span>
 				<a href="/my/stuff">.stuff</a>
 				<br>
 				<a href="/my/friends">.friends</a><span class="spacer">&nbsp;</span>

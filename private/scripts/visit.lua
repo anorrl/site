@@ -14,10 +14,8 @@ function doVisit()
 	player = game:GetService("Players"):CreateLocalPlayer({userid})
 	pcall(function() player.Name = "{username}" end)
 	player.CharacterAppearance = "{scheme}://{domain}/Asset/CharacterFetch.ashx?userId={userid}&placeId=0"
-	local propExists, canAutoLoadChar = false
-	propExists = pcall(function()  canAutoLoadChar = game.Players.CharacterAutoLoads end)
 	
-	if (propExists and canAutoLoadChar) or (not propExists) then
+	if game:GetService("Players").CharacterAutoLoads then
 		player:LoadCharacter()
 	end
 

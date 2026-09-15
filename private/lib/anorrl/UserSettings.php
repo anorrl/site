@@ -12,32 +12,31 @@
 
 	class UserSettings {
 
-		public User|null $user;
-		public bool $randoms;
-		public bool $teto;
-		public bool $accessibility;
+		public int $user;
 		public bool $headshots;
 		public bool $nightbg;
 		public Asset|null $background_music = null;
 		public Asset|null $playerlisticon = null;
 		public string $css = "";
-		public bool $loadingscreens;
 		public bool $profile_music;
 		public \DateTime $last_username_change;
 
-		public static function Get(User|null $user = null) {
-			if($user == null) {
+		public static function Get(User|int|null $user = null) {
+			$user_id = $user;
+			if($user && !is_int($user))
+				$user_id = $user->id;
+			else
+				$user_id = -1;
+
+			if($user_id <= 0) {
 				return new self((Object)[
 					"userid" => -1,
-					"randoms" => !ClientDetector::IsAClient(),
-					"teto" => !ClientDetector::IsAClient(),
 					"accessbility" => false,
 					"headshots" => false,
 					"nightbg" => false,
 					"bgm" => -1,
 					"plicon" => -1,
 					"css" => "",
-					"loadingscreens" => !ClientDetector::IsAClient(),
 					"profilemusic" => true,
 					"last_username_change" => false,
 				]);
@@ -47,7 +46,7 @@
 
 			$raw_settings = $db->run(
 				"SELECT * FROM `users_settings` WHERE `userid` = :id",
-				[":id" => $user->id]
+				[":id" => $user_id]
 			)->fetch(\PDO::FETCH_OBJ);
 
 			if($raw_settings) {
@@ -55,7 +54,7 @@
 			} else {
 				$db->run(
 					"INSERT INTO `users_settings`(`userid`) VALUES (:id);",
-					[":id" => $user->id]
+					[":id" => $user_id]
 				);
 
 				return self::Get($user);
@@ -83,30 +82,23 @@
 				throw new \Exception("Missing user_settings table");
 			}
 
-			$this->user = User::FromID(intval($rowdata->userid));
-
-			$this->randoms = !isset($rowdata->randoms) ? self::CreateColumn("randoms", true) : $rowdata->randoms;
-			$this->teto = !isset($rowdata->teto) ? self::CreateColumn("teto", true) : $rowdata->teto;
-			$this->accessibility = !isset($rowdata->accessibility) ? self::CreateColumn("accessibility", false) : $rowdata->accessibility;
+			$this->user = intval($rowdata->userid);
 			$this->headshots = !isset($rowdata->headshots) ? self::CreateColumn("headshots", false) : $rowdata->headshots;
 			$this->nightbg = !isset($rowdata->nightbg) ? self::CreateColumn("nightbg", false) : $rowdata->nightbg;
-			$this->loadingscreens = !isset($rowdata->loadingscreens) ? self::CreateColumn("loadingscreens", true) : $rowdata->loadingscreens;
 			$this->profile_music = !isset($rowdata->profilemusic) ? self::CreateColumn("profilemusic", true) : $rowdata->profilemusic;
 			$this->background_music = $rowdata->bgm <= 0 ? null : Asset::FromID($rowdata->bgm);
 			$playericon_id = !isset($rowdata->plicon) ? self::CreateColumn("plicon", true) : $rowdata->plicon;
 			$this->playerlisticon = $playericon_id ? Asset::FromID($playericon_id) : null;
 			$this->css = $rowdata->css;
 
-			if(!$rowdata->last_username_change) {
-				$this->last_username_change = new \DateTime("@0");	
-			}
-			else {
-				$this->last_username_change = \DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->last_username_change);
-			}
+			$this->last_username_change = !$rowdata->last_username_change ? 
+				new \DateTime("@0") :
+				\DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->last_username_change);
 			
-			if($this->background_music && $this->background_music->type != AssetType::AUDIO)
+			if($this->background_music && $this->background_music->type != AssetType::AUDIO || !$this->background_music->isUsable())
 				$this->background_music = null;
-			if($this->playerlisticon && !AssetTypeUtils::IsActualImage($this->playerlisticon->type))
+			
+			if($this->playerlisticon && !AssetTypeUtils::IsActualImage($this->playerlisticon->type) || !$this->playerlisticon->isUsable())
 				$this->playerlisticon = null;
 		}
 
@@ -125,7 +117,7 @@
 					"UPDATE `users_settings` SET `$name` = :value WHERE `userid` = :id;",
 					[
 						":value" => $stmt_value,
-						":id" => $this->user->id
+						":id" => $this->user
 					]
 				);
 			} catch(\PDOException $e) {
@@ -134,34 +126,14 @@
 			}
 		}
 
-		function setRandomsEnabled(bool $value) {
-			$this->setValue("randoms", $value);
-			$this->randoms = $value;
-		}
-
-		function setTetoEnabled(bool $value) {
-			$this->setValue("teto", $value);
-			$this->teto = $value;
-		}
-
 		function setNightBGEnabled(bool $value) {
 			$this->setValue("nightbg", $value);
 			$this->nightbg = $value;
 		}
 
-		function setAccessibilityEnabled(bool $value) {
-			$this->setValue("accessibility", $value);
-			$this->accessibility = $value;
-		}
-
 		function setHeadshotsEnabled(bool $value) {
 			$this->setValue("headshots", $value);
 			$this->headshots = $value;
-		}
-
-		function setLoadingScreensEnabled(bool $value) {
-			$this->setValue("loadingscreens", $value);
-			$this->loadingscreens = $value;
 		}
 		
 		function setBackgroundMusic(Asset|int|null $asset = null) {
@@ -201,7 +173,7 @@
 				Database::singleton()->run(
 					"UPDATE `users` SET `css` = :css WHERE `id` = :id;",
 					[
-						":id" => $this->user->id,
+						":id" => $this->user,
 						":css" => $data
 					]
 				);

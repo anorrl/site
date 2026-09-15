@@ -10,5 +10,5 @@ if success then
 else
 	print(err)
 	wait(5)
-	message.Text = "Error on visit: " .. err
+	message.Text = "Error on edit: " .. err
 end

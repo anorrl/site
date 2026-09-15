@@ -66,8 +66,8 @@
 			<div id="submenu">
 				<div id="container">
 					<a href="<?= SESSION->user->getURL() ?>" <?php if($this->internal_name == "user_profile"):  ?>selected<?php endif ?>>Profile</a>
-					<a href="/my/profile" <?php                    if($this->internal_name == "my/profile"):    ?>selected<?php endif ?>>Account</a>
-					<a href="/my/character" <?php                  if($this->internal_name == "my/character"):  ?>selected<?php endif ?>>Character</a>
+					<a href="/my/account" <?php                    if($this->internal_name == "my/profile"):    ?>selected<?php endif ?>>Account</a>
+					<a href="/my/avatar" <?php                     if($this->internal_name == "my/character"):  ?>selected<?php endif ?>>Character</a>
 					<a href="/my/friends" <?php                    if($this->internal_name == "my/friends"):    ?>selected<?php endif ?>>Friends</a>
 					<a href="/develop/create/" <?php               if($this->internal_name == "my/create"):     ?>selected<?php endif ?>>Create</a>
 					<a href="/my/stuff" <?php                      if($this->internal_name == "my/stuff"):      ?>selected<?php endif ?>>Stuff</a>

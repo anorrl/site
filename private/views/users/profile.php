@@ -77,7 +77,7 @@
 		$settings = UserSettings::Get();
 	}
 
-	if($bgm && !$bgm->isUsable() || !$settings->profile_music)
+	if(!$settings->profile_music)
 		$bgm = null;
 
 	$bio = MarkdownExtra::defaultTransform($user->blurb);
@@ -237,14 +237,10 @@
 			<h4 class="page-title">.music</h4>
 			<div style="margin-bottom: 5px;">
 				<div style="width: 300px; white-space: nowrap;">
-					<div class="box" style="margin-left:-2px; text-align: center;">
+					<div class="box assetholder"  style="margin-left:-2px;">
 						<a href="<?= $bgm->getURL() ?>">
-							<div style="border-bottom: 1px solid var(--lighter-border-color); padding: 5px 0px;">
-								<img data-src="<?= $bgm->getThumbsUrl(); ?>" style="width: 206px;">
-							</div>
-							<div >
-								<h4 style="margin: 5px 0px; margin-bottom: 3px;"><?= $bgm->name ?></h4>
-							</div>
+							<div id="img-container"><img data-src="<?= $bgm->getThumbsUrl() ?>"></div>
+							<h4 id="name"><?= $bgm->name ?></h4>
 						</a>
 					</div>
 					<div 

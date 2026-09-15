@@ -44,12 +44,8 @@
 			else {
 				$this->settings = UserSettings::Get();
 			}
-
-			if($this->settings->teto) {
-				$this->addStylesheet("/css/new/teto.css?v=1");
-			}
-
-			if(SESSION && SESSION->user && $_SERVER['SCRIPT_NAME'] != "/users/profile.php") {
+			// kill
+			if(SESSION && $_SERVER['SCRIPT_NAME'] != "/users/profile.php") {
 				$user_id = SESSION->user->id;
 				$time = time();
 

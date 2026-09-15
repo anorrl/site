@@ -2,9 +2,6 @@
 
 	namespace anorrl;
 
-	use anorrl\UserSettings;
-	use anorrl\utilities\ClientDetector;
-
 	class Page {
 
 		private array $scripts = [];
@@ -15,9 +12,6 @@
 		private string $icon = "/favicon.ico";
 		private string $title;
 		private string $internal_name;
-		private int $lucky_number;
-		private bool $bad_apple = false;
-		private UserSettings $settings;
 
 		private bool $ignore_anorrl = false;
 
@@ -33,28 +27,14 @@
 
 			$this->ignore_anorrl = $ignore_anorrl;
 
-			$this->lucky_number = rand(0, 100000);
-			$this->bad_apple = $this->lucky_number > 6500 && $this->lucky_number < 6515;
-
 			$this->addStylesheet("/css/base.css");
 			$this->addScript("/js/core/jquery.js");
 			$this->addScript("/js/core/jquery-modal.js");
 			$this->addScript("/js/messagebox.js");
 			$this->addStylesheet("https://unpkg.com/7.css/dist/7.scoped.css", false);
 
-			if(SESSION) {
-				$this->settings = SESSION->settings;
-			}
-			else {
-				$this->settings = UserSettings::Get();
-			}
-
-			/*if(SESSION && SESSION->user && $_SERVER['SCRIPT_NAME'] != "/users/profile.php") {
-				$user_id = SESSION->user->id;
-				$time = time();
-
-				$this->addStylesheet(SESSION->user->getTypedURL("css?t=$time"), false);
-			}*/
+			if(SESSION && $this->internal_name != "anorrl_profile")
+				$this->addStylesheet(SESSION->user->getTypedURL("css?t=".time()), false);
 		}
 
 		function setTitle(string $title) {

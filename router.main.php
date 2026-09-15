@@ -16,8 +16,8 @@
 	route('GET',      '/users/[i:id]/friends', '/private/views/users/friends.php', false);
 
 	route('GET|POST', '/my/home', '/private/views/my/home.php');
-	route('GET|POST', '/my/profile', '/private/views/my/profile.php');
-	route('GET|POST', '/my/character', '/private/views/my/character.php');
+	route('GET|POST', '/my/account', '/private/views/my/account.php');
+	route('GET|POST', '/my/avatar', '/private/views/my/avatar.php');
 	route('GET|POST', '/my/stuff', '/private/views/my/stuff.php');
 	route('GET|POST', '/my/friends', '/private/views/my/friends.php');
 
