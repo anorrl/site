@@ -116,18 +116,21 @@
 		}
 
 		function getTicket() {
-			/*
-			string cticket = $"{userId}\n{jobId}\n{formattedDateTime}";
-			string ticketSignature = SignStringResponseForClientFromPrivateKey(cticket);
-			string ticket2 = $"{userId}\n{username}\n{characterAppearanceUrl}\n{jobId}\n{formattedDateTime}";
-			string ticketSignature2 = SignStringResponseForClientFromPrivateKey(ticket2);
-			string finalTicket = $"{formattedDateTime};{ticketSignature2};{ticketSignature}";
-			return finalTicket;
-			*/
+			if(!$this->server->active())
+				return null;
+			if(!$this->player || $this->player->isBanned())
+				return null;
 
 			// 9/16/2026 10:28:07 AM
 
-			$timestamp = new \DateTime()->format("m/d/Y H:i:s A");
+			$timestamp = new \DateTime()->format("m/d/Y H:i:s A"); // 09/16/2026 10:28:07 AM   CLOSE ENOUGH!
+			$session_ticket = "{$this->player->id}\n{$this->server->jobid}\n{$timestamp}";
+			$session_ticket_signature = Script::SignNonScript($session_ticket, null);
+
+			$ticket = "{$this->player->id}\n{$this->player->name}\n{$this->player->getCharacterFetchURL()}\n{$this->server->jobid}\n{$timestamp}";
+			$ticket_signature = Script::SignNonScript($ticket, null);
+
+			return "{$timestamp};{$ticket_signature};{$session_ticket_signature}";
 		}
 
 	}

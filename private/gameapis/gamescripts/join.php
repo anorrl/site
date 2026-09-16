@@ -26,11 +26,10 @@
 	$unknown = is_null($user);
 	$game_id = "00000000-0000-0000-0000-000000000000";
 	$ping_url = "";
+	$character_fetch_url = "{scheme}://{domain}/Asset/CharacterFetch.ashx?userId=1&placeId=0";
 	
 	$serverDetails = GameServer::Get($serverToken);
 	$sessionDetails = GameSession::Get($sessionToken);
-
-	
 
 	if($serverDetails && $sessionDetails) {
 		
@@ -38,17 +37,15 @@
 		$place = $serverDetails->place;
 		
 		if($player && !$player->isBanned() && $place) {
-
-			if(Session::retrieveUser() == null) {
+			if(!Session::retrieveUser())
 				Session::setCookies($player->security_key);
-			}
 
 			$port = $serverDetails->port;
 			$user_name = $player->name;
 			$user_id = $player->id;
 			$user_age = $player->getAccountAge();
-			$session_id = base64_encode($player->security_key);
-			$user_ticket = $sessionDetails->id;
+			$session_id = $sessionDetails->id; //base64_encode($player->security_key);
+			$user_ticket = $sessionDetails->getTicket();
 			$anorrl_place = true;
 			$place_id = $place->id;
 			$universe_id = $place->universe;
@@ -57,38 +54,35 @@
 			$game_id = $serverDetails->jobid;
 			$ping_url = "{scheme}://{domain}/Game/GamerPinger.ashx?serverID={$serverDetails->id}&jobID={$game_id}";
 			$place_chat_type = $place->chat_option->internallabel();
+			$character_fetch_url = $player->getCharacterFetchURL();
 		}
 	}
 	
 	$joinscript = [
-		"ClientPort" => 0,
 		"MachineAddress" => $server,
 		"ServerPort" => $port,
 		"PingUrl" => $ping_url,
 		"PingInterval" => 120,
 		"UserName" => $user_name,
-		"SeleniumTestMode" => false,
+		"SeleniumTestMode" => false, // really only used for logging, remove from source
 		"UserId" => (int)$user_id,
 		"SuperSafeChat" => $unknown,
-		"CharacterAppearance" => "{scheme}://{domain}/Asset/CharacterFetch.ashx?userId={$user_id}",
+		"CharacterAppearance" => $character_fetch_url,
 		"ClientTicket" => $user_ticket,
 		"GameId" => $game_id,
 		"PlaceId" => $place_id,
-		"MeasurementUrl" => "",
-		"WaitingForCharacterGuid" => "16be1dd8-5462-4ca5-a997-0725d997708b",
 		"BaseUrl" => "{scheme}://{domain}/",
 		"ChatStyle" => $place_chat_type,
 		"CreatorId" => $place_creator_id,
 		"CreatorTypeEnum" => "User",
 		"MembershipType" => "None", // maybe
 		"AccountAge" => $user_age,
-		"CookieStoreEnabled" => false,
+		"CookieStoreEnabled" => true,
 		"IsANORRLPlace" => $anorrl_place,
 		"GenerateTeleportJoin" => false,
-		"IsUnknownOrUnder13" => $unknown,
+		"IsUnknownOrUnder13" => $unknown, // sets the under13 bool in Player, remove from source
 		"SessionId" => $session_id,
-		"UniverseId" => $universe_id,
-		"characterAppearanceId" => $user_id
+		"UniverseId" => (int)$universe_id,
 	];
 
 	die(Script::SignNonScript(json_encode($joinscript)));

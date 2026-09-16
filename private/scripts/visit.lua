@@ -13,7 +13,7 @@ function doVisit()
 	message.Text = "Creating Player"
 	player = game:GetService("Players"):CreateLocalPlayer({userid})
 	pcall(function() player.Name = "{username}" end)
-	player.CharacterAppearance = "{scheme}://{domain}/Asset/CharacterFetch.ashx?userId={userid}&placeId=0"
+	player.CharacterAppearance = "{charapp}&placeId=0"
 	
 	if game:GetService("Players").CharacterAutoLoads then
 		player:LoadCharacter()

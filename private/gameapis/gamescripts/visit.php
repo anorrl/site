@@ -10,12 +10,14 @@
 	$place_id = 0;
 	$universe_id = 0;
 	$creatorid = 0;
+	$character_fetch_url = "{scheme}://{domain}/Asset/CharacterFetch.ashx?userId=1&placeId=0";
 
 	if(SESSION) {
 		$user = SESSION->user;
 		$username = $user->name;
 		$userid = $user->id;
 		$userage = $user->getAccountAge();
+		$character_fetch_url = $user->getCharacterFetchURL();
 		$pid = get_header("ANORRL-Place-Id");
 
 		if($pid) {
@@ -39,6 +41,7 @@
 		"placeid" => $place_id,
 		"universeid" => $universe_id,
 		"creatorid" => $creatorid,
+		"charapp" => $character_fetch_url,
 		"changehistory" => false
 	]));
 ?>

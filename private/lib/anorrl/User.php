@@ -849,6 +849,13 @@
 			EOT;
 		}
 
+		function getCharacterFetchURL(): string {
+			$domain = \CONFIG->domain;
+			$scheme = \CONFIG->prefer_https ? "https" : "http";
+
+			return "$scheme://$domain/Asset/CharacterFetch.ashx?userId={$this->id}";
+		}
+
 		function getCharacterAppearance(): string {
 			$domain = \CONFIG->domain;
 			$getwearing = $this->getWearing();
