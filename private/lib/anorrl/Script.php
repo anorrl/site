@@ -53,17 +53,27 @@
 			return str_replace("{".$valname."}", strval($val), $data);
 		}
 
-		public static function SignNonScript($data, string $header = "arlsig") {
-			$data = self::ReplacePlaceholderStatic($data, "domain", \CONFIG->domain);
-			$data = self::ReplacePlaceholderStatic($data, "scheme", \CONFIG->prefer_https ? "https" : "http");
-			
-			$signed_data = "\r\n".$data;
+		public static function SignNonScript($data, string|null $header = "arlsig") {
+			if(!is_null($header)) {
+				$data = self::ReplacePlaceholderStatic($data, "domain", \CONFIG->domain);
+				$data = self::ReplacePlaceholderStatic($data, "scheme", \CONFIG->prefer_https ? "https" : "http");
+				
+				$signed_data = "\r\n".$data;
 
-			$signature = "";
-			openssl_sign($signed_data, $signature, file_get_contents(get_path_file("PrivateKey.pem")), OPENSSL_ALGO_SHA1);
-			$signature = base64_encode($signature);
+				$signature = "";
+				openssl_sign($signed_data, $signature, file_get_contents(get_path_file("PrivateKey.pem")), OPENSSL_ALGO_SHA1);
+				$signature = base64_encode($signature);
 
-			return "--{$header}%{$signature}%{$signed_data}";
+				return "--{$header}%{$signature}%{$signed_data}";
+			}
+			else {
+				$signature = "";
+				openssl_sign($data, $signature, file_get_contents(get_path_file("PrivateKey.pem")), OPENSSL_ALGO_SHA1);
+				$signature = base64_encode($signature);
+
+				return $signature;
+			}
+
 		}
 	}
 ?>

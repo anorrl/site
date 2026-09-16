@@ -115,5 +115,20 @@
 			);
 		}
 
+		function getTicket() {
+			/*
+			string cticket = $"{userId}\n{jobId}\n{formattedDateTime}";
+			string ticketSignature = SignStringResponseForClientFromPrivateKey(cticket);
+			string ticket2 = $"{userId}\n{username}\n{characterAppearanceUrl}\n{jobId}\n{formattedDateTime}";
+			string ticketSignature2 = SignStringResponseForClientFromPrivateKey(ticket2);
+			string finalTicket = $"{formattedDateTime};{ticketSignature2};{ticketSignature}";
+			return finalTicket;
+			*/
+
+			// 9/16/2026 10:28:07 AM
+
+			$timestamp = new \DateTime()->format("m/d/Y H:i:s A");
+		}
+
 	}
 ?>
