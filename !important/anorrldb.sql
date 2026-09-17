@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 01, 2026 at 10:15 PM
+-- Generation Time: Sep 16, 2026 at 01:40 PM
 -- Server version: 12.3.3-MariaDB
 -- PHP Version: 8.5.10
 
@@ -29,7 +29,6 @@ USE `anorrldb`;
 -- Table structure for table `accesskeys`
 --
 
-DROP TABLE IF EXISTS `accesskeys`;
 CREATE TABLE `accesskeys` (
   `key` varchar(50) NOT NULL,
   `discorduid` varchar(256) NOT NULL
@@ -41,7 +40,6 @@ CREATE TABLE `accesskeys` (
 -- Table structure for table `active_players`
 --
 
-DROP TABLE IF EXISTS `active_players`;
 CREATE TABLE `active_players` (
   `id` varchar(256) NOT NULL,
   `serverid` varchar(11) NOT NULL,
@@ -57,7 +55,6 @@ CREATE TABLE `active_players` (
 -- Table structure for table `active_servers`
 --
 
-DROP TABLE IF EXISTS `active_servers`;
 CREATE TABLE `active_servers` (
   `id` varchar(11) NOT NULL,
   `pid` int(11) NOT NULL,
@@ -76,7 +73,6 @@ CREATE TABLE `active_servers` (
 -- Table structure for table `activity`
 --
 
-DROP TABLE IF EXISTS `activity`;
 CREATE TABLE `activity` (
   `userid` int(11) NOT NULL,
   `action` text NOT NULL,
@@ -89,7 +85,6 @@ CREATE TABLE `activity` (
 -- Table structure for table `aliases`
 --
 
-DROP TABLE IF EXISTS `aliases`;
 CREATE TABLE `aliases` (
   `id` int(11) NOT NULL,
   `name` varchar(512) NOT NULL,
@@ -103,7 +98,6 @@ CREATE TABLE `aliases` (
 -- Table structure for table `assets`
 --
 
-DROP TABLE IF EXISTS `assets`;
 CREATE TABLE `assets` (
   `id` int(11) NOT NULL,
   `creator` int(11) NOT NULL,
@@ -131,7 +125,6 @@ CREATE TABLE `assets` (
 -- Table structure for table `asset_versions`
 --
 
-DROP TABLE IF EXISTS `asset_versions`;
 CREATE TABLE `asset_versions` (
   `id` int(11) NOT NULL,
   `assetid` int(11) NOT NULL,
@@ -147,7 +140,6 @@ CREATE TABLE `asset_versions` (
 -- Table structure for table `bodycolours`
 --
 
-DROP TABLE IF EXISTS `bodycolours`;
 CREATE TABLE `bodycolours` (
   `userid` int(11) NOT NULL,
   `head` int(11) NOT NULL DEFAULT 24,
@@ -164,7 +156,6 @@ CREATE TABLE `bodycolours` (
 -- Table structure for table `cloudeditors`
 --
 
-DROP TABLE IF EXISTS `cloudeditors`;
 CREATE TABLE `cloudeditors` (
   `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
@@ -178,7 +169,6 @@ CREATE TABLE `cloudeditors` (
 -- Table structure for table `comments`
 --
 
-DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `id` varchar(11) NOT NULL,
   `parent` varchar(13) NOT NULL,
@@ -193,7 +183,6 @@ CREATE TABLE `comments` (
 -- Table structure for table `datastores`
 --
 
-DROP TABLE IF EXISTS `datastores`;
 CREATE TABLE `datastores` (
   `dkey` text NOT NULL,
   `universeId` int(11) NOT NULL,
@@ -209,7 +198,6 @@ CREATE TABLE `datastores` (
 -- Table structure for table `favourites`
 --
 
-DROP TABLE IF EXISTS `favourites`;
 CREATE TABLE `favourites` (
   `assetid` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
@@ -223,7 +211,6 @@ CREATE TABLE `favourites` (
 -- Table structure for table `follows`
 --
 
-DROP TABLE IF EXISTS `follows`;
 CREATE TABLE `follows` (
   `follower` int(20) NOT NULL,
   `followed` int(20) NOT NULL,
@@ -236,7 +223,6 @@ CREATE TABLE `follows` (
 -- Table structure for table `friends`
 --
 
-DROP TABLE IF EXISTS `friends`;
 CREATE TABLE `friends` (
   `sender` varchar(20) NOT NULL,
   `reciever` varchar(20) NOT NULL,
@@ -250,7 +236,6 @@ CREATE TABLE `friends` (
 -- Table structure for table `gears`
 --
 
-DROP TABLE IF EXISTS `gears`;
 CREATE TABLE `gears` (
   `id` int(11) NOT NULL,
   `type` int(11) NOT NULL
@@ -262,7 +247,6 @@ CREATE TABLE `gears` (
 -- Table structure for table `inventory`
 --
 
-DROP TABLE IF EXISTS `inventory`;
 CREATE TABLE `inventory` (
   `userid` int(11) NOT NULL,
   `assetid` int(11) NOT NULL,
@@ -275,7 +259,6 @@ CREATE TABLE `inventory` (
 -- Table structure for table `outfits`
 --
 
-DROP TABLE IF EXISTS `outfits`;
 CREATE TABLE `outfits` (
   `outfit_id` varchar(15) NOT NULL,
   `outfit_creator` int(11) NOT NULL,
@@ -291,7 +274,6 @@ CREATE TABLE `outfits` (
 -- Table structure for table `places`
 --
 
-DROP TABLE IF EXISTS `places`;
 CREATE TABLE `places` (
   `id` int(11) NOT NULL,
   `copylocked` int(11) NOT NULL DEFAULT 1,
@@ -311,7 +293,6 @@ CREATE TABLE `places` (
 -- Table structure for table `profilebadges`
 --
 
-DROP TABLE IF EXISTS `profilebadges`;
 CREATE TABLE `profilebadges` (
   `id` int(11) NOT NULL,
   `badgeid` int(2) NOT NULL,
@@ -325,7 +306,6 @@ CREATE TABLE `profilebadges` (
 -- Table structure for table `ratings`
 --
 
-DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE `ratings` (
   `id` int(11) NOT NULL,
   `placeid` int(11) NOT NULL,
@@ -340,7 +320,6 @@ CREATE TABLE `ratings` (
 -- Table structure for table `requests`
 --
 
-DROP TABLE IF EXISTS `requests`;
 CREATE TABLE `requests` (
   `id` int(11) NOT NULL,
   `placeid` int(11) NOT NULL,
@@ -353,7 +332,6 @@ CREATE TABLE `requests` (
 -- Table structure for table `statuses`
 --
 
-DROP TABLE IF EXISTS `statuses`;
 CREATE TABLE `statuses` (
   `id` varchar(20) NOT NULL,
   `poster` int(10) NOT NULL,
@@ -367,7 +345,6 @@ CREATE TABLE `statuses` (
 -- Table structure for table `subscriptions`
 --
 
-DROP TABLE IF EXISTS `subscriptions`;
 CREATE TABLE `subscriptions` (
   `userid` int(11) NOT NULL,
   `lastpaytime` timestamp NOT NULL DEFAULT current_timestamp()
@@ -379,7 +356,6 @@ CREATE TABLE `subscriptions` (
 -- Table structure for table `transactions`
 --
 
-DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE `transactions` (
   `id` varchar(15) NOT NULL,
   `userid` int(11) NOT NULL,
@@ -394,7 +370,6 @@ CREATE TABLE `transactions` (
 -- Table structure for table `universes`
 --
 
-DROP TABLE IF EXISTS `universes`;
 CREATE TABLE `universes` (
   `id` int(11) NOT NULL,
   `starting_place` int(11) NOT NULL,
@@ -411,7 +386,6 @@ CREATE TABLE `universes` (
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) NOT NULL,
   `name` varchar(20) NOT NULL,
@@ -435,18 +409,13 @@ CREATE TABLE `users` (
 -- Table structure for table `users_settings`
 --
 
-DROP TABLE IF EXISTS `users_settings`;
 CREATE TABLE `users_settings` (
   `userid` int(11) NOT NULL,
-  `randoms` int(1) NOT NULL DEFAULT 1,
-  `teto` int(1) NOT NULL DEFAULT 1,
   `emotesounds` int(1) NOT NULL DEFAULT 1,
-  `accessbility` int(1) NOT NULL DEFAULT 0,
   `headshots` int(1) NOT NULL DEFAULT 1,
   `nightbg` int(1) NOT NULL DEFAULT 0,
   `bgm` int(11) NOT NULL DEFAULT -1,
   `css` text NOT NULL DEFAULT '',
-  `loadingscreens` int(1) NOT NULL DEFAULT 1,
   `profilemusic` int(1) NOT NULL DEFAULT 1,
   `accessibility` int(1) NOT NULL DEFAULT 0,
   `plicon` int(11) DEFAULT 0,
@@ -459,7 +428,6 @@ CREATE TABLE `users_settings` (
 -- Table structure for table `visits`
 --
 
-DROP TABLE IF EXISTS `visits`;
 CREATE TABLE `visits` (
   `place` int(11) NOT NULL,
   `player` int(11) NOT NULL,
