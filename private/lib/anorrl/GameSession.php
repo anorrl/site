@@ -122,7 +122,6 @@
 				return null;
 
 			// 9/16/2026 10:28:07 AM
-
 			$timestamp = new \DateTime()->format("m/d/Y H:i:s A"); // 09/16/2026 10:28:07 AM   CLOSE ENOUGH!
 			$session_ticket = "{$this->player->id}\n{$this->server->jobid}\n{$timestamp}";
 			$session_ticket_signature = Script::SignNonScript($session_ticket, null);

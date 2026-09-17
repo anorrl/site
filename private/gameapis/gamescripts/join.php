@@ -27,7 +27,8 @@
 	$game_id = "00000000-0000-0000-0000-000000000000";
 	$ping_url = "";
 	$character_fetch_url = "{scheme}://{domain}/Asset/CharacterFetch.ashx?userId=1&placeId=0";
-	
+	$chatfont = "VCR";
+
 	$serverDetails = GameServer::Get($serverToken);
 	$sessionDetails = GameSession::Get($sessionToken);
 
@@ -64,7 +65,6 @@
 		"PingUrl" => $ping_url,
 		"PingInterval" => 120,
 		"UserName" => $user_name,
-		"SeleniumTestMode" => false, // really only used for logging, remove from source
 		"UserId" => (int)$user_id,
 		"SuperSafeChat" => $unknown,
 		"CharacterAppearance" => $character_fetch_url,
@@ -80,9 +80,9 @@
 		"CookieStoreEnabled" => true,
 		"IsANORRLPlace" => $anorrl_place,
 		"GenerateTeleportJoin" => false,
-		"IsUnknownOrUnder13" => $unknown, // sets the under13 bool in Player, remove from source
 		"SessionId" => $session_id,
 		"UniverseId" => (int)$universe_id,
+		"ChatFont" => $chatfont,
 	];
 
 	die(Script::SignNonScript(json_encode($joinscript)));
