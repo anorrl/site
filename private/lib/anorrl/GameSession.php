@@ -116,7 +116,7 @@
 		}
 
 		function getTicket() {
-			if(!$this->server->active())
+			if(!$this->server ||!$this->server->active())
 				return null;
 			if(!$this->player || $this->player->isBanned())
 				return null;

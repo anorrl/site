@@ -68,10 +68,11 @@
 			}
 			else {
 				$signature = "";
-				openssl_sign($data, $signature, file_get_contents(get_path_file("PrivateKey.pem")), OPENSSL_ALGO_SHA1);
-				$signature = base64_encode($signature);
-
-				return $signature;
+				$result = openssl_sign($data, $signature, file_get_contents(get_path_file("PrivateKey.pem")), OPENSSL_ALGO_SHA1);
+				if(!$result)
+					throw new \Exception("something went completely fucking wrong");
+				
+				return base64_encode($signature);
 			}
 
 		}
