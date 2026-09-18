@@ -1032,7 +1032,7 @@
 	"FFlagRenderLightGridShadows": "True",
 	"FFlagRenderLightGridShadowsSmooth": "True",
 	"FFlagRenderLoopExplicit": "True",
-	"FFlagRenderLowerLatencyLoop": "True",
+	"FFlagRenderLowerLatencyLoop": "False",
 	"FFlagRenderLowLatencyLoop": "False",
 	"FFlagRenderMeshReturnsCorrectly": "False",
 	"FFlagRenderMoreFonts": "True",

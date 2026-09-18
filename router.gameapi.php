@@ -83,9 +83,10 @@
 
 	route('GET',      '/game/logout.aspx', '/private/api/logout.php');
 	route('GET',      '/Game/logout.aspx', '/private/api/logout.php');
-
-	route('GET',      '/game/players/[i:id]', '/private/gameapis/users/players.php');
-	route('GET',      '/game/players/[i:id]/', '/private/gameapis/users/players.php');
+	
+	// kinda useless tbh
+	route('GET',      '/game/players/[*:id]', '/private/gameapis/users/players.php');
+	route('GET',      '/game/players/[*:id]/', '/private/gameapis/users/players.php');
 	
 	route('GET|POST', '/persistence/getV2', '/private/gameapis/persistence/getv2.php');
 	route('POST',     '/persistence/getSortedValues', '/private/gameapis/persistence/getsortedvalues.php');

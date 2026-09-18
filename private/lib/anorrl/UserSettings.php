@@ -95,10 +95,10 @@
 				new \DateTime("@0") :
 				\DateTime::createFromFormat("Y-m-d H:i:s", $rowdata->last_username_change);
 			
-			if($this->background_music && $this->background_music->type != AssetType::AUDIO || !$this->background_music->isUsable())
+			if($this->background_music && ($this->background_music->type != AssetType::AUDIO || !$this->background_music->isUsable()))
 				$this->background_music = null;
 			
-			if($this->playerlisticon && !AssetTypeUtils::IsActualImage($this->playerlisticon->type) || !$this->playerlisticon->isUsable())
+			if($this->playerlisticon && (!AssetTypeUtils::IsActualImage($this->playerlisticon->type) || !$this->playerlisticon->isUsable()))
 				$this->playerlisticon = null;
 		}
 
