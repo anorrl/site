@@ -4,7 +4,7 @@
 	use anorrl\UserSettings;
 	use anorrl\enums\AssetType;
 
-	use Michelf\Markdown;
+	use Michelf\MarkdownExtra;
 
 	// No id parameter? GET OUT!
 	if(!isset($id)) {
@@ -80,7 +80,7 @@
 	if(!$settings->profile_music)
 		$bgm = null;
 
-	$bio = Markdown::defaultTransform($user->blurb);
+	$bio = MarkdownExtra::defaultTransform($user->blurb);
 
 	$page = new Page($owner ? "Your Profile" : "{$user->name}'s Profile", $owner ? "user_profile" : "anorrl_profile");
 	if($user->has_pfp_set)

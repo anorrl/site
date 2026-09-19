@@ -1,4 +1,5 @@
 {
+	"FFlagEnableModuleScriptLoadingOnACC": "False",
 	"DFFlagScriptExecutionContextApi": "True",
 	"DFFlagCleanUpInterpolationTimestamps": "False",
 	"DFFlagMinMaxDistanceEnabled": "True",

@@ -29,6 +29,15 @@
 	$character_fetch_url = "{scheme}://{domain}/Asset/CharacterFetch.ashx?userId=1&placeId=0";
 	$chatfont = "VCR";
 
+	$debug = true;
+	if($debug) {
+		$user_id = rand(1,1818);
+		$user_ticket = md5(rand());
+		$session_id = md5(rand());
+		$place_id = 1818;
+		$universe_id = 1;
+	}
+
 	$serverDetails = GameServer::Get($serverToken);
 	$sessionDetails = GameSession::Get($sessionToken);
 

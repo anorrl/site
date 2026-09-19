@@ -1,4 +1,5 @@
 {
+	"FFlagEnableModuleScriptLoadingOnACC": "False",
 	"FFlagStudioUseNewToolbox": "True",
 	"FIntFontSizePadding": "3",
 	"FFlagTypesettersReleaseResources": "False",
