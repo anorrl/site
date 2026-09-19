@@ -932,6 +932,10 @@ class MarkdownExtra extends \Michelf\Markdown {
 		return $this->hashPart($result);
 	}
 
+	protected function str_contains_any(string $haystack, array $needles): bool {
+		return array_reduce($needles, fn($a, $n) => $a || str_contains($haystack, $n), false);
+	}
+
 	/**
 	 * Turn Markdown image shortcuts into <img> tags.
 	 * @param  string $text
@@ -1004,6 +1008,9 @@ class MarkdownExtra extends \Michelf\Markdown {
 		$alt_text = $this->encodeAttribute($alt_text);
 		if (isset($this->urls[$link_id])) {
 			$url = $this->encodeURLAttribute($this->urls[$link_id]);
+			if($this->str_contains_any(strtolower($url),["base64", "http", "://", "data"]))
+				return $whole_match;
+
 			$result = "<img src=\"$url\" alt=\"$alt_text\"";
 			if (isset($this->titles[$link_id])) {
 				$title = $this->titles[$link_id];
@@ -1030,11 +1037,14 @@ class MarkdownExtra extends \Michelf\Markdown {
 	 * @return string
 	 */
 	protected function _doImages_inline_callback($matches) {
+		$whole_match = $matches[1];
 		$alt_text		= $matches[2];
 		$url			= $matches[3] === '' ? $matches[4] : $matches[3];
 		$title_quote		=& $matches[6];
 		$title			=& $matches[7];
 		$attr  = $this->doExtraAttributes("img", $dummy =& $matches[8]);
+		if($this->str_contains_any(strtolower($url),["base64", "http", "://", "data"]))
+			return $whole_match;
 
 		$alt_text = $this->encodeAttribute($alt_text);
 		$url = $this->encodeURLAttribute($url);

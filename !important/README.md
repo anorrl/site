@@ -23,7 +23,7 @@ these folders should be generated automatically (just give the parent folder of 
 ### what needs to be in the root...
 
 - `settings.json`
-- `PrivateKey.pem` (generated from RBXSIGTOOLS but any rsa private key generator works)
+- `PrivateKey.pem` (generated from RBXSIGTOOLS)
 
 ### info..
 
