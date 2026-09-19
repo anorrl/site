@@ -830,10 +830,6 @@ class Markdown implements MarkdownInterface {
 		return $text;
 	}
 
-	protected function str_contains_any(string $haystack, array $needles): bool {
-		return array_reduce($needles, fn($a, $n) => $a || str_contains($haystack, $n), false);
-	}
-
 	/**
 	 * Callback to parse references image tags
 	 * @param  array $matches
@@ -852,9 +848,9 @@ class Markdown implements MarkdownInterface {
 		if (isset($this->urls[$link_id])) {
 			$url = $this->encodeURLAttribute($this->urls[$link_id]);
 			
-			if($this->str_contains_any(strtolower($url),["base64", "http", "://", "data"]))
+			if(!str_starts_with_any($url, ALLOWED_URLS) && str_contains_any(strtolower($url),BLOCKED_MD))
 				return $whole_match;
-
+			
 			$result = "<img src=\"$url\" alt=\"$alt_text\"";
 			if (isset($this->titles[$link_id])) {
 				$title = $this->titles[$link_id];
@@ -882,7 +878,7 @@ class Markdown implements MarkdownInterface {
 		$url			= $matches[3] == '' ? $matches[4] : $matches[3];
 		$title			=& $matches[7];
 		
-		if($this->str_contains_any(strtolower($url),["base64", "http", "://", "data"]))
+		if(!str_starts_with_any($url, ALLOWED_URLS) && str_contains_any(strtolower($url),BLOCKED_MD))
 			return $whole_match;
 
 		$alt_text = $this->encodeAttribute($alt_text);

@@ -4,7 +4,7 @@
 	use anorrl\UserSettings;
 	use anorrl\enums\AssetType;
 
-	use Michelf\MarkdownExtra;
+	use Michelf\Markdown;
 
 	// No id parameter? GET OUT!
 	if(!isset($id)) {
@@ -80,7 +80,7 @@
 	if(!$settings->profile_music)
 		$bgm = null;
 
-	$bio = MarkdownExtra::defaultTransform($user->blurb);
+	$bio = Markdown::defaultTransform($user->blurb);
 
 	$page = new Page($owner ? "Your Profile" : "{$user->name}'s Profile", $owner ? "user_profile" : "anorrl_profile");
 	if($user->has_pfp_set)
@@ -225,7 +225,7 @@
 				</div>
 				<?php if($owner): ?>
 				<form id="edit" data-action="/users/update/bio" style="display: none">
-					<textarea name="ANORRL$Update$Profile$Bio" class="box input" style="width: 582px;height:200px"><?= $user->blurb ?></textarea>
+					<textarea name="ANORRL$Update$Profile$Bio" class="box input" style="width: <?php if($bgm): ?>582px<?php else: ?>900px<?php endif ?>;height:200px"><?= $user->blurb ?></textarea>
 					<input style="margin-top:5px" type="submit" class="button" value="update">
 				</form>
 				<?php endif ?>

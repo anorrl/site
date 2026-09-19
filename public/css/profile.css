@@ -175,6 +175,13 @@ div[data-tab] {
 	overflow-wrap: break-word;
 }
 
+#profile-bio img {
+	max-width: 312px;
+	max-height: 312px;
+	/*float: right;*/
+	object-fit: contain;
+}
+
 .accoutrement-item {
 	text-align: center;
 	height: 100px;

@@ -22,6 +22,17 @@
 	date_default_timezone_set('Europe/London');
 	error_reporting(E_ALL ^ E_DEPRECATED);
 
+	$scheme = CONFIG->prefer_https ? "https" : "http";
+	$domain = CONFIG->baseurl;
+
+	define("BLOCKED_MD", ["base64", "http", "://", "data"]);
+	define("ALLOWED_URLS", [
+		"$scheme://$domain/",
+		"$scheme://www.$domain/",
+		"$scheme://cdn.$domain/",
+		"$scheme://thumbs.$domain/",
+	]);
+
 	require __DIR__ . "/vendor/autoload.php";
 
 	use anorrl\Session;
@@ -145,6 +156,14 @@
 
 	function get_asset_thumbs($id) {
 		return get_asset("thumbs/{$id}");
+	}
+
+	function str_contains_any(string $haystack, array $needles): bool {
+		return array_reduce($needles, fn($a, $n) => $a || str_contains($haystack, $n), false);
+	}
+
+	function str_starts_with_any(string $haystack, array $needles): bool {
+		return array_reduce($needles, fn($a, $n) => $a || str_starts_with($haystack, $n), false);
 	}
 
 	if(!file_exists(get_path_file("PrivateKey.pem")))
