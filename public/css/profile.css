@@ -182,6 +182,10 @@ div[data-tab] {
 	object-fit: contain;
 }
 
+#profile-bio table {
+	width: 100%;
+}
+
 .accoutrement-item {
 	text-align: center;
 	height: 100px;

@@ -69,7 +69,7 @@
 					<a href="/my/account" <?php                    if($this->internal_name == "my/profile"):    ?>selected<?php endif ?>>Account</a>
 					<a href="/my/avatar" <?php                     if($this->internal_name == "my/character"):  ?>selected<?php endif ?>>Character</a>
 					<a href="/my/friends" <?php                    if($this->internal_name == "my/friends"):    ?>selected<?php endif ?>>Friends</a>
-					<a href="/develop/create/" <?php               if($this->internal_name == "my/create"):     ?>selected<?php endif ?>>Create</a>
+					<a href="/develop/creations/" <?php            if($this->internal_name == "develop"):     ?>selected<?php endif ?>>Create</a>
 					<a href="/my/stuff" <?php                      if($this->internal_name == "my/stuff"):      ?>selected<?php endif ?>>Stuff</a>
 				</div>
 				<div id="billboard" style="z-index: 10;">
