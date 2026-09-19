@@ -15,7 +15,10 @@
 				<img src="/public/images/hankdanceloop.gif" style="float:left; height: 60px;margin-top:-5px;">
 				<div class="legalese">
 					<p style="width: 420px;">ANORRL (ANOther Roblox Retake LOL) is made for a friends-only userbase and thus we won't be accepting anyone that we don't know directly.</p>
-					<p><b>Made by kuro with love &lt;3</b></p>
+					<p>
+						<b>Made by kuro with love &lt;3 </b> |
+						<i>pssttt!!!</i> we're open source! <b><a href="https://github.com/anorrl">check it!</a></b>
+					</p>
 				</div>
 			</div>
 		</div>
