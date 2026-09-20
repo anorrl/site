@@ -27,9 +27,6 @@ game:GetService("SocialService"):SetGroupUrl("{scheme}://{domain}/Game/LuaWebSer
 game:GetService("SocialService"):SetGroupRankUrl("{scheme}://{domain}/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRank&playerid=%d&groupid=%d")
 game:GetService("SocialService"):SetGroupRoleUrl("{scheme}://{domain}/Game/LuaWebService/HandleSocialRequest.ashx?method=GetGroupRole&playerid=%d&groupid=%d")
 game:GetService("GamePassService"):SetPlayerHasPassUrl("{scheme}://{domain}/Game/GamePass/GamePassHandler.ashx?Action=HasPass&UserID=%d&PassID=%d")
-game:GetService("MarketplaceService"):SetProductInfoUrl("{scheme}://{domain}/marketplace/productinfo?assetId=%d")
-game:GetService("MarketplaceService"):SetDevProductInfoUrl("{scheme}://{domain}/marketplace/productDetails?productId=%d")
-game:GetService("MarketplaceService"):SetPlayerOwnsAssetUrl("{scheme}://{domain}/ownership/hasasset?userId=%d&assetId=%d")
 game:SetCreatorID({creatorid}, Enum.CreatorType.User)
 -- workspace:SetPhysicsThrottleEnabled(true)
 
