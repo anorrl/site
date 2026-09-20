@@ -283,6 +283,11 @@
 					</button>
 				</td>
 				<td>
+					<button style="color: #ed4b4b;" id="report-btn">
+						<img src="/public/images/buttons/report_flag.gif" width="32">
+					</button>
+				</td>
+				<td>
 					<div style="display: flex;align-items: center" class="ratings-container">
 						<button style="color: #19ac19;" id="up-btn">
 							<span id="up-count">--</span>	

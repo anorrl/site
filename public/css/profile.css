@@ -186,6 +186,11 @@ div[data-tab] {
 	width: 100%;
 }
 
+#profile-viewsrc-btn {
+	user-select: none;
+	cursor: pointer;
+}
+
 .accoutrement-item {
 	text-align: center;
 	height: 100px;

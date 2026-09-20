@@ -1,4 +1,5 @@
 <?php
+	use anorrl\utilities\AssetTypeUtils;
 	use anorrl\utilities\Utilities;
 	
 	if(!isset($id))
@@ -63,7 +64,6 @@
 	$page->addStylesheet("/css/comments.css");
 	$page->addStylesheet("/css/thumbnail.css");
 	$page->addScript("/js/comments.js");
-	$page->addScript("/js/ratings.js");
 	$page->addScript("/js/thumbnails.js");
 	$page->addValue("asset", $asset->id);
 	$asset->loadEmbed($page);
@@ -91,6 +91,12 @@
 		height: 54px;
 		border: 0px;
 		background-image: url("/public/images/buttons/item_buttons.png");
+	}
+
+	.play-btn:disabled,.play-btn[disabled],
+	.edit-btn:disabled,.edit-btn[disabled],
+	.purchase-btn:disabled, .purchase-btn[disabled] {
+		filter: grayscale(1);
 	}
 
 	.edit-btn {
@@ -219,16 +225,23 @@
 	<div style="flex: 1">
 		<div style="text-align: center;">
 			<div class="thumbnail-holder" width="300" height="300" style="width: 300px;height: 300px;">
+				<?php if(AssetTypeUtils::IsRenderable($asset->type)): ?>
 				<button id="thumbnail-switcher" data-3d></button>
 				<span class="thumbnail-span" data-3d-url="/thumbnail/get?asset=<?= $asset->id ?>" style="width:300px;height:300px"></span>
+				<?php endif ?>
 				<img data-src="<?= $asset->getThumbsUrl() ?>" width="240">
 			</div>
-			<table id="controls">
+			<table id="controls" style="width: auto">
 			<tr>
 				<td width="90">
 					<button style="color: #ffdb5b;" id="fav-btn">
 						<img src="/public/images/buttons/favourite_star.gif" width="32">
 						<span id="fav-count">0</span>
+					</button>
+				</td>
+				<td width="90">
+					<button style="color: #ed4b4b;" id="report-btn">
+						<img src="/public/images/buttons/report_flag.gif" width="32">
 					</button>
 				</td>
 			</tr>
@@ -243,7 +256,7 @@
 		</div>
 		<hr>
 
-		<button class="purchase-btn"></button>
+		<button class="purchase-btn" disabled></button>
 		
 		<hr>
 		<div style="text-align: left">
@@ -331,6 +344,7 @@
 	<?php $page->loadTemplate("layouts/comments/main"); ?>
 </div>
 <script>
+	<?php if($is_creator): ?>
 	function cogDisable() {
 		$(".cog").removeAttr("active");
 		$(".cog-dropdown ul").css("display", "none");
@@ -356,6 +370,7 @@
 			window.location.href = "/develop/<?= $asset->id ?>/configure";
 		}
 	});
+	<?php endif ?>
 
 	$("#fav-btn").click(function() {
 		$.post("/asset/<?= $asset->id ?>/favourite", function (data) {

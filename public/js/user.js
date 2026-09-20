@@ -232,6 +232,24 @@ $(function(){
 			}
 		});
 
+		$("#profile-viewsrc-btn").click(function() {
+			var final = $("#profile-bio #final");
+			var srctab = $("#profile-bio #src");
+
+			if(srctab.length == 0) return;
+
+			if(final.is(":visible")) {
+				final.hide();
+				srctab.show();
+				$(this).html("(close)");
+			}
+			else {
+				final.show();
+				srctab.hide();
+				$(this).html("(view)");
+			}
+		});
+
 		$("form").submit(function(e) {
 			e.preventDefault();
 

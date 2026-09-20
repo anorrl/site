@@ -214,7 +214,7 @@
 	<div style="display: flex; gap: 10px;">
 		<?php if($user->blurb != "" || $owner): ?>
 		<div style="flex: 1;">
-			<h4 class="page-title">.about <?php if($owner): ?><button id="profile-edit-btn"><img src="/public/images/icons/pencil.png"></button><?php endif ?></h4>
+			<h4 class="page-title">.about <?php if($owner): ?><button id="profile-edit-btn"><img src="/public/images/icons/pencil.png"></button><?php else: ?><a id="profile-viewsrc-btn">(view)</a><?php endif ?></h4>
 			<div class="box" id="profile-bio" <?php if(!$bgm): ?>style="max-width:910px"<?php endif ?>>
 				<div id="final">
 					<?php if($user->blurb == ""): ?>
@@ -228,6 +228,12 @@
 					<textarea name="ANORRL$Update$Profile$Bio" class="box input" style="width: <?php if($bgm): ?>582px<?php else: ?>900px<?php endif ?>;height:200px"><?= $user->blurb ?></textarea>
 					<input style="margin-top:5px" type="submit" class="button" value="update">
 				</form>
+				<?php else: ?>
+					<div id="src" style="display: none">
+						<h4 style="margin-bottom: 5px;margin-top: 5px;margin-left: 5px;">viewing <?= $user->name ?>'s markdown!</h4>
+						<hr>
+						<code class="box input" style="width: 582px;max-height:200px;display: block;white-space: pre;overflow: auto;"><?= $user->blurb ?></code>
+					</div>
 				<?php endif ?>
 			</div>
 		</div>
