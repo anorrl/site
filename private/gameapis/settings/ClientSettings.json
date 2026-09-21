@@ -1,8 +1,10 @@
 {
-	"DFFlagJobCyclicExecutiveRendering": "True",
-    "FFlagTextFieldUTF8": "True",
-    "FFlagStudioPropertyErrorOutput": "True",
-
+	"FFlagUseOldPhysicsForFunny": "True",
+	"DFFlagEnableRetinaOnTypesetters": "True",
+	"DFFlagJobCyclicExecutiveRendering": "False",
+	"FFlagTextFieldUTF8": "True",
+	"FFlagStudioPropertyErrorOutput": "True",
+	"DFFlagUserInputViewportSizeFixStudio": "True",
 	"FFlagACCSupportCloudEdit": "True",
 	"FFlagAnalyzerGroupUIEnabled": "True",
 	"FFlagAnimationIdIsContentPropertyItem": "True",
@@ -45,6 +47,8 @@
 	"FFlagGraphicsGLReduceLatency": "True",
 	"FFlagGraphicsTextureCommitChanges": "False",
 	"FFlagHumanoidRenderBillboard": "True",
+	"FFlagHumanoidRenderBillboardVR": "True",
+	"FFlagBillboardGuiVR": "True",
 	"FFlagInsertUnderFolder": "True",
 	"FFlagJNIEnvScopeOptimization": "True",
 	"FFlagKickUsersWhenTheyLoseAccessToCloudEdit": "True",
