@@ -1,4 +1,8 @@
 {
+	"DFFlagJobCyclicExecutiveRendering": "True",
+    "FFlagTextFieldUTF8": "True",
+    "FFlagStudioPropertyErrorOutput": "True",
+
 	"FFlagACCSupportCloudEdit": "True",
 	"FFlagAnalyzerGroupUIEnabled": "True",
 	"FFlagAnimationIdIsContentPropertyItem": "True",
@@ -13,7 +17,7 @@
 	"FFlagDebugCrashEnabled": "False",
 	"FFlagDebugLocalRccServerConnection": "False",
 	"FFlagDebugUseDefaultGlobalSettings": "True",
-	"FFlagDirectX11Enable": "True",
+	"FFlagDirectX11Enable": "False",
 	"FFlagDontSwallowInputForStudioShortcuts": "True",
 	"FFLagEnableFullMonitorsResolution": "True",
 	"FFlagEnableiOSSettingsLeave": "True",
@@ -91,7 +95,7 @@
 	"FFlagTeamCreateEnableCompleterFix": "True",
 	"FFlagTeamCreateOptimizeRemoteSelection": "True",
 	"FFlagTweenCallbacksDuringRenderStep": "True",
-	"FFlagTypesettersReleaseResources": "False",
+	"FFlagTypesettersReleaseResources": "True",
 	"FFlagUseBuildGenericGameUrl": "True",
 	"FFlagUseInGameTopBar": "True",
 	"FFlagUseNewBadgesCreatePage": "False",
