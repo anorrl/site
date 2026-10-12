@@ -13,17 +13,7 @@ Check out the [Trello page](https://trello.com/b/7NXCTXXp/anorrl-2016) to see wh
 
 <img width="220" height="220" alt="wait i think thats daria" src="https://github.com/user-attachments/assets/353173da-b68b-4df4-a4b6-e253ac7c7ea7" />
 
-## .about_contributing
-
-Ok hey, if you want to contribute to the site. PLEASE invest in a local webserver.
-
-Why? It makes your life easier by allowing a local copy of anorrl on your machine to run while you work on the changes you wish to put on the site.
-
-It reduces the chance of errors occuring when creating a pull request.
-
-Also in your pull requests, mention WHAT you have done and provide screenshots of what you CHANGED.
-
-# I HEAVY ADVISE AGAINST USING GITHUB'S ON SITE EDITOR.
+Info about contributing moved to its own document.
 
 ## .usage
 
